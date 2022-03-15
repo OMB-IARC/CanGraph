@@ -1,0 +1,4 @@
+# Ignore the __pycache__ folder (unnecessary)
+__pycache__/
+# Ignore the confidential folder with the Full Database Tables
+neo4j/
