@@ -23,3 +23,5 @@ where:
 * **databasename**: the name of the database in use. If using the free version, there will only be one database per project (neo4j being the default name); if using the pro version, you can specify an alternate name here
 * **databasepassword**: the passowrd for the **databasename** DataBase. Since the arguments are passed by BaSH onto python3, you might need to escape special characters
 * **csvfolder**: The folder where the CSV files for the Exposome Explorer database are stored. This CSVs have to be manually exported from the (confidential) database itself, and are NOT equivalent to those find in [exposome-explorer download's page](http://exposome-explorer.iarc.fr/downloads)
+
+An archived version of this repository that takes into account the gitignored files can be created using: `git archive HEAD -o ${PWD##*/}.zip`
