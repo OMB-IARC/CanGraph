@@ -1,4 +1,12 @@
+# SPDX-FileCopyrightText: 2022 Pablo Marcos <software@loreak.org>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 # Ignore the __pycache__ folder (unnecessary)
 __pycache__/
 # Ignore the confidential folder with the Full Database Tables
 neo4j/
+# Ignore the confidential and outdated schema image
+database_schema.png
+# Ignore the resulting GraphML database
+graph.graphml

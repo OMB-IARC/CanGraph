@@ -1,6 +1,9 @@
 ##!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
-#© 2022 Pablo Ignacio Marcos López
+# SPDX-FileCopyrightText: 2022 Pablo Marcos <software@loreak.org>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 #This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
