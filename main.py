@@ -15,7 +15,7 @@ import create_nodes
 import create_relations
 import miscelaneous as misc
 
-with alive_bar(10) as bar:
+with alive_bar(12) as bar:
 
     instance = f"{sys.argv[1]}"; user = f"{sys.argv[2]}"; passwd = f"{sys.argv[3]}"
     driver = GraphDatabase.driver(instance, auth=(user, passwd))
@@ -49,16 +49,22 @@ with alive_bar(10) as bar:
         session.write_transaction(create_relations.metabolomic_associations)
         bar()
     with driver.session() as session:
+        session.write_transaction(create_relations.correlations)
+        bar()
+    with driver.session() as session:
+        session.write_transaction(create_relations.auto_units)
+        bar()
+    with driver.session() as session:
         session.write_transaction(create_relations.measurements_stuff)
+        bar()
+    with driver.session() as session:
+        session.write_transaction(create_relations.reproducibilities)
         bar()
     with driver.session() as session:
         session.write_transaction(create_relations.subjects)
         bar()
     with driver.session() as session:
         session.write_transaction(create_relations.samples)
-        bar()
-    with driver.session() as session:
-        session.write_transaction(create_relations.correlations)
         bar()
     with driver.session() as session:
         session.write_transaction(misc.export_function, "graph.graphml")

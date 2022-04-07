@@ -16,7 +16,7 @@ def cancer_associations(tx):
             MATCH
                 (m:measurements {{ id: line.`excretion_id` }}),
                 (c:cancers {{ id: line.`cancer_id` }})
-            MERGE (m)-[r:ASSOCIATED_WITH]-(c)
+            MERGE (m)-[r:ASSOCIATED_WITH_CANCER]-(c)
             SET r.id = line.id
         """)
 
@@ -33,7 +33,7 @@ def metabolomic_associations(tx):
             MATCH
                 (m:measurements {{ id: line.`intake_id` }}),
                 (n:measurements {{ id: line.`excretion_id` }})
-            MERGE (m)-[r:ASSOCIATED_WITH]->(n)
+            MERGE (m)-[r:ASSOCIATED_WITH_COMPOUND]->(n)
             SET r.id = line.id, r.feature_selection = line.feature_selection,
             r.author_structural_identification_level = line.author_structural_identification_level,
             r.area_under_curve_prefixe = line.area_under_curve_prefixe,
@@ -83,7 +83,6 @@ def auto_units(tx):
                 (u1:units {{ id: line.id }}),
                 (u2:units {{ id: line.converted_to_id }})
             MERGE (u1)-[r:CONVERTED_INTO]->(u2)
-            SET r.id = line.id
         """)
 
 def measurements_stuff(tx):
@@ -102,14 +101,26 @@ def measurements_stuff(tx):
                 (u:units {{ id: line.unit_id }}),
                 (c:components {{ id: line.component_id }}),
                 (s:samples {{ id: line.sample_id }}),
-                (me:experimental_methods {{ id: line.experimental_method_id }}),
-                (r:reproducibilities {{ id: line.initial_id }})
+                (me:experimental_methods {{ id: line.experimental_method_id }})
 
-            MERGE (m)-[r1:MEASURED_IN_UNITS]-(u)
-            MERGE (c)-[r2:MEASURED_AS]-(m)
+            MERGE (m)-[r1:MEASURED_IN_UNITS]->(u)
+            MERGE (c)-[r2:MEASURED_AS]->(m)
             MERGE (m)-[r3:TAKEN_FROM_SAMPLE]->(s)
             MERGE (m)-[r4:USING_METHOD]->(me)
-            MERGE (m)-[r5:REPODUCIBILE_WITH_CONDITIONS]->(r)
+        """)
+
+def reproducibilities(tx):
+    """
+    Creates relations between the "reproducibilities" and the "measurements" table,
+    using "initial_id", an old identifier, for
+    """
+    return tx.run(f"""
+        LOAD CSV WITH HEADERS FROM 'file:///reproducibilities.csv' AS line
+            MATCH
+            (re:reproducibilities {{ id: line.id }}),
+                (m:measurements {{ id: line.initial_id }})
+
+            MERGE (m)-[r:REPODUCIBILE_WITH_CONDITIONS]->(re)
         """)
 
 def subjects(tx):
