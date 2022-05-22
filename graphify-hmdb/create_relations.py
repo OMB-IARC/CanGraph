@@ -10,7 +10,7 @@
 def add_protein_associations(tx, filename):
     """
     Creates "Protein" nodes based on XML files obtained from the HMDB website.
-    NOTE: Unlike the "self.add_protein" function, this creates Proteins based on info on the
+    NOTE: Unlike the "create_nodes.add_protein" function, this creates Proteins based on info on the
     "Metabolite" files, not on the "Protein" files themselves. This could mean node duplication, but,
     hopefully, the MERGE by Acession will mean that this duplicates will be catched.
     """
@@ -23,7 +23,7 @@ def add_protein_associations(tx, filename):
             [X in metabolite._children WHERE X._type = "accession"][0]._text AS accession,
             [X in metabolite._children WHERE X._type = "protein_associations"] AS protein_associations
 
-        MATCH (m:Metabolite {{Accession:accession}})
+        MERGE (m:Metabolite {{Accession:accession}})
 
         WITH protein_associations, m
         UNWIND protein_associations AS protein_association
@@ -46,8 +46,10 @@ def add_protein_associations(tx, filename):
 
 def add_metabolite_associations(tx, filename):
     """
-    WARNING HACEER PROTEIN Y METYBOLITE ASSOCIATIONS NO DIRECCIONALES PARA PDOER BORRAR REPES
-    name might overwrite byt necessary on reate
+    Adds associations contained in the "protein" file, between proteins and metabolites.
+    NOTE: Like he "create_nodes.add_metabolite_associations" function, this creates non-directional
+    relationships (m)-[r:ASSOCIATED_WITH]-(p) ; this helps duplicates be detected.
+    NOTE: The "ON CREATE SET" clause for the "Name" param ensures no overwriting
     """
     return tx.run(f"""
         CALL apoc.load.xml("file:///{filename}")
@@ -58,7 +60,7 @@ def add_metabolite_associations(tx, filename):
             [X in metabolite._children WHERE X._type = "accession"][0]._text AS accession,
             [X in metabolite._children WHERE X._type = "metabolite_associations"] AS metabolite_associations
 
-        MATCH (p:Protein {{ Acession:accession }})
+        MERGE (p:Protein {{ Acession:accession }})
 
         WITH metabolite_associations, p
         UNWIND metabolite_associations AS metabolite_association
@@ -66,49 +68,66 @@ def add_metabolite_associations(tx, filename):
         UNWIND metabolite_association["_children"] AS my_metabolite
 
         WITH
-            [X in my_metabolite._children WHERE X._type = "accession"][0]._text AS accession,
+            [X in my_metabolite._children WHERE X._type = "accession"][0]._text AS metabolite_accession,
             [X in my_metabolite._children WHERE X._type = "name"][0]._text AS name,
             p
 
-        MERGE (m:Metabolite {{ Acession:protein_accession }})
-        ON CREATE SET p.Name = name
+        MERGE (m:Metabolite {{ Acession:metabolite_accession }})
+        ON CREATE SET m.Name = name
 
         MERGE (m)-[r:ASSOCIATED_WITH]-(p)
         """)
 
 def add_metabolite_references(tx, filename):
     """
-
-
-
-    TERMINAR ESTO
-
+    Creates references for relations betweens Protein nodes and Metabolite nodes
+    WARNING: Unfortunately, Neo4J makes it really, really, really difficult to work with XML,
+    and so, this time, a r.Pubmed_ID list with the references could not be created. Nonetheless,
+    I considered adding this useful.
     """
     return tx.run(f"""
-        CALL apoc.load.xml("file:///{filename}")
+        CALL apoc.load.xml("file:///test2.xml")
         YIELD value
         WITH [x in value._children WHERE x._type = "protein"] AS metabolites
         UNWIND metabolites AS metabolite
         WITH
             [X in metabolite._children WHERE X._type = "accession"][0]._text AS accession,
-            [X in metabolite._children WHERE X._type = "metabolite_reference"] AS metabolite_reference
+            [X in metabolite._children WHERE X._type = "metabolite_references"] AS metabolite_references
 
-        MATCH (p:Protein {{ Acession:accession }})
+        MERGE (p:Protein {{ Acession:accession }})
 
+        WITH metabolite_references, p
+        UNWIND metabolite_references AS metabolite_reference
         WITH metabolite_reference, p
-        UNWIND metabolite_reference AS metabolite_ref
-        WITH metabolite_ref, p
-        UNWIND metabolite_ref["_children"] AS my_refs
+        UNWIND metabolite_reference["_children"] AS my_reference
+        WITH my_reference, p
+        UNWIND my_reference["_children"] AS my_ref
 
         WITH
-            [X in my_metabolite._children WHERE X._type = "accession"][0]._text AS accession,
-            [X in my_metabolite._children WHERE X._type = "name"][0]._text AS name,
+            [X in my_ref._children WHERE X._type = "accession"][0]._text AS metabolite_accession,
+            [X in my_ref._children WHERE X._type = "name"][0]._text AS name,
+            [X in my_ref._children WHERE X._type = "reference_text"][0]._text AS reference_text,
+            [X in my_ref._children WHERE X._type = "pubmed_id"][0]._text AS pubmed_id,
             p
 
-        MERGE (m:Metabolite {{ Acession:protein_accession }})
-        ON CREATE SET p.Name = name
+        FOREACH(ignoreMe IN CASE WHEN metabolite_accession IS NOT null THEN [1] ELSE [] END |
+            MERGE (m:Metabolite {{ Accession:metabolite_accession }})
+            ON CREATE SET m.name = name
+            MERGE (m)-[r:ASSOCIATED_WITH]-(p)
+            )
 
-        MERGE (m)-[r:ASSOCIATED_WITH]-(p)
+        FOREACH(ignoreMe IN CASE WHEN reference_text IS NOT null THEN [1] ELSE [] END |
+            MERGE (pu:Publication {{Authors:split(reference_text, ":")[0]}})
+            SET pu.Abstract = split(replace(reference_text, split(reference_text, ":")[0]+": ", ""), ".")[0]
+            SET pu.Publication = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[0]
+            SET pu.Notes = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[2]
+            SET pu.Date = split(split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[1],";")[0]
+            SET pu.Volume = split(split(reference_text, ";")[1], "(")[0]
+            SET pu.Number = split(split(reference_text, "(")[1], ")")[0]
+            SET pu.Pages = split(split(reference_text, ":")[-1], ".")[0]
+            SET pu.Pubmed_ID = pubmed_id
+            MERGE (p)-[r1:CITED_IN]->(pu)
+            )
         """)
 
 

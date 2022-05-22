@@ -4,9 +4,9 @@ SPDX-FileCopyrightText: 2022 Pablo Marcos <software@loreak.org>
 SPDX-License-Identifier: GPL-3.0-or-later
 -->
 
-# query-wikidata
+# graphify-hmdb
 
-This script, created as part of my Master's Intenship at IARC, imports nodes from the [WikiData SPARQL Service](https://query.wikidata.org), creating a high-quality representation of the data therein. Although wikidata is manually curated using [the Wiki principles](https://en.wikipedia.org/wiki/Wiki), [some publications have found](https://pubmed.ncbi.nlm.nih.gov/32180547/) it might be a good source of information for life sciences, specially due to the breadth of information it contains. It also provides an export in GraphML format.
+This script, created as part of my Master's Intenship at IARC, imports nodes from the [Human Metabolome Database](https://hmdb.ca/) (a high quality, database containing a list of metabolites and proteins associated to different diseases) to Neo4J format in an automated way, providing an export in GraphML format.
 
 To run, it uses `alive_progress` to generate an interactive progress bar (that shows the script is still running through its most time-consuming parts) and the `neo4j` python driver. This requirements can be installed using: `pip install -r requirements.txt`.
 
@@ -24,21 +24,8 @@ Please note that there are two kinds of functions in the associated code: those 
 
 An archived version of this repository that takes into account the gitignored files can be created using: `git archive HEAD -o ${PWD##*/}.zip`
 
-Finally, please node that the general philosophy and approach of the queries have been taken from [Towards Data Science](https://towardsdatascience.com/lord-of-the-wiki-ring-importing-wikidata-into-neo4j-and-analyzing-family-trees-da27f64d675e), a genuinely useful web site.
+## Important Notices
 
+* There are two kinds of high-level nodes stored in this database: "Metabolites", which are individual compounds present in the Human Metabolome; and "Proteins", which are normally enzimes and are related to one or multiple metabolites. There are different types of metabolites, but they were all imported in the same way; their origin can be differenced by the "<biospecimen>" field on the corresponding "Concentration" nodes. You could run a query such as: ```MATCH (n:Metabolite)-[r:MEASURED_AT]-(c:Concentration) RETURN DISTINCT c.Biospecimen```
 
-TEST con otros que no sean orina
-ONTOLOGY No hace na
-I found substituent to be too much useless info
-propiedades añado las que quiero
-espectra pasando que ni se que es ni parece muy util
-AÑADIR PATHWAYS
-
-WE HAVE
-/metabolite_associations -> Just a relation
-go_classifications
-gene_properties
-protein_properties
-general_references
-metabolite_references -> Duplicated, are just references
-
+* Some XML tags have been intentionally not processed; for example, the <substituents> tag seemed like too much info unrelated to our project, or the <spectra> tags, which could be useful but seemed to only link to external DBs

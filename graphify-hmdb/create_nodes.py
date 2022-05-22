@@ -134,7 +134,7 @@ def add_diseases(tx, filename):
 
             [X in metabolite._children WHERE X._type = "diseases"] AS diseases
 
-        MATCH (m:Metabolite {{Accession:accession}})
+        MERGE (m:Metabolite {{Accession:accession}})
 
         WITH diseases, m
         UNWIND diseases AS disease
@@ -192,7 +192,7 @@ def add_concentrations_normal(tx, filename):
             [X in metabolite._children WHERE X._type = "accession"][0]._text AS accession,
             [X in metabolite._children WHERE X._type = "normal_concentrations"] AS normal_concentrations
 
-        MATCH (m:Metabolite {{Accession:accession}})
+        MERGE (m:Metabolite {{Accession:accession}})
 
         WITH normal_concentrations, m
         UNWIND normal_concentrations AS normal_concentration
@@ -261,7 +261,7 @@ def add_concentrations_abnormal(tx, filename):
             [X in metabolite._children WHERE X._type = "accession"][0]._text AS accession,
             [X in metabolite._children WHERE X._type = "abnormal_concentrations"] AS abnormal_concentrations
 
-        MATCH (m:Metabolite {{Accession:accession}})
+        MERGE (m:Metabolite {{Accession:accession}})
 
         WITH abnormal_concentrations, m
         UNWIND abnormal_concentrations AS abnormal_concentration
@@ -328,7 +328,7 @@ def add_taxonomy(tx, filename):
             [X in metabolite._children WHERE X._type = "accession"][0]._text AS accession,
             [X in metabolite._children WHERE X._type = "taxonomy"] AS taxonomy
 
-        MATCH (m:Metabolite {{Accession:accession}})
+        MERGE (m:Metabolite {{Accession:accession}})
 
         WITH taxonomy, m
         UNWIND taxonomy as my_nodes
@@ -395,7 +395,7 @@ def add_experimental_properties(tx, filename):
             [X in metabolite._children WHERE X._type = "accession"][0]._text AS accession,
             [X in metabolite._children WHERE X._type = "experimental_properties"] AS experimental_properties
 
-        MATCH (m:Metabolite {{Accession:accession}})
+        MERGE (m:Metabolite {{Accession:accession}})
 
         UNWIND experimental_properties as experimental_property
         WITH experimental_property, m
@@ -429,7 +429,7 @@ def add_predicted_properties(tx, filename):
             [X in metabolite._children WHERE X._type = "accession"][0]._text AS accession,
             [X in metabolite._children WHERE X._type = "predicted_properties"] AS predicted_properties
 
-        MATCH (m:Metabolite {{Accession:accession}})
+        MERGE (m:Metabolite {{Accession:accession}})
 
         UNWIND predicted_properties as predicted_property
         WITH predicted_property, m
@@ -470,7 +470,7 @@ def add_biological_properties(tx, filename):
             [X in metabolite._children WHERE X._type = "accession"][0]._text AS accession,
             [X in metabolite._children WHERE X._type = "biological_properties"] AS biological_properties
 
-        MATCH (m:Metabolite {{Accession:accession}})
+        MERGE (m:Metabolite {{Accession:accession}})
 
         WITH biological_properties, m
         UNWIND biological_properties AS biological_property
@@ -519,7 +519,7 @@ def add_proteins(tx, filename):
     return tx.run(f"""
         CALL apoc.load.xml("file:///{filename}")
         YIELD value
-        WITH [x in value._children WHERE x._type = "metabolite"] AS metabolites
+        WITH [x in value._children WHERE x._type = "protein"] AS metabolites
         UNWIND metabolites AS metabolite
         WITH
             [X in metabolite._children WHERE X._type = "version"][0]._text AS version,
@@ -551,7 +551,7 @@ def add_proteins(tx, filename):
             p.Uniprot_Name = uniprot_name, p.GenBank_Gene_ID = genbank_gene_id, p.GeneCard_ID = genecard_id,
             p.GeneAtlas_ID = geneatlas_id, p.HGNC_ID = hgnc_id
 
-        WITH secondary_accessions, synonyms, subcellular_locations, p
+        WITH secondary_accessions, synonyms, pdb_ids, subcellular_locations, p
 
         FOREACH(element in subcellular_locations|
             FOREACH(location in element._children|
@@ -578,6 +578,121 @@ def add_proteins(tx, filename):
         )
         """)
 
+def add_go_classifications(tx, filename):
+    """
+    Creates "Gene Ontology" nodes based on XML files obtained from the HMDB website.
+    This relates each protein to some GO-Terms
+    """
+    return tx.run(f"""
+        CALL apoc.load.xml("file:///{filename}")
+        YIELD value
+        WITH [x in value._children WHERE x._type = "protein"] AS metabolites
+        UNWIND metabolites AS metabolite
+        WITH
+            [X in metabolite._children WHERE X._type = "accession"][0]._text AS accession,
+            [X in metabolite._children WHERE X._type = "go_classifications"] AS go_classifications
+
+        MERGE (p:Protein {{ Acession:accession }})
+
+        WITH go_classifications, p
+        UNWIND go_classifications AS go_class
+        WITH go_class, p
+        UNWIND go_class["_children"] AS my_class
+
+        WITH
+            [X in my_class._children WHERE X._type = "category"][0]._text AS category,
+            [X in my_class._children WHERE X._type = "description"][0]._text AS description,
+            [X in my_class._children WHERE X._type = "go_id"][0]._text AS go_id,
+            p
+
+        MERGE (g:Gene_Ontology {{ Description:description }})
+        SET g.GO_ID = go_id, g.Category = category
+
+        MERGE (p)-[r:PART_OF_GENE_ONTOLOGY]-(g)
+        """)
+
+def add_gene_properties(tx, filename):
+    """
+    Adds some properties to existing "Protein" nodes based on XML files obtained from the HMDB website.
+    In this case, properties will mostly relate to the gene from which the protein originates.
+    NOTE: We are not creating "Gene" nodes (even though each protein comes from a given gene)
+    because we believe not enough information is being given about them.
+    """
+    return tx.run(f"""
+        CALL apoc.load.xml("file:///{filename}")
+        YIELD value
+        WITH [x in value._children WHERE x._type = "protein"] AS metabolites
+        UNWIND metabolites AS metabolite
+        WITH
+            [X in metabolite._children WHERE X._type = "accession"][0]._text AS accession,
+            [X in metabolite._children WHERE X._type = "gene_properties"] AS gene_properties
+
+        MERGE (p:Protein {{ Acession:accession }})
+
+        WITH gene_properties, p
+        UNWIND gene_properties AS gene_property
+
+        WITH
+            [X in gene_property._children WHERE X._type = "chromosome_location"][0]._text AS chromosome_location,
+            [X in gene_property._children WHERE X._type = "locus"][0]._text AS locus,
+            [X in gene_property._children WHERE X._type = "gene_sequence"][0]._text AS gene_sequence,
+            p
+
+        SET p.Chromosome_Location = chromosome_location, p.Locus = locus,
+            p.Sequence_Length = replace(split(gene_sequence, "bp")[0], ">", "")+" bp",
+            p.Gene_Sequence = replace(replace(gene_sequence, split(gene_sequence, "bp")[0]+"bp", ""), " ", "")
+        """)
+
+def add_protein_properties(tx, filename):
+    """
+    Adds some properties to existing "Protein" nodes based on XML files obtained from the HMDB website.
+    In this case, properties will mostly relate to the protein itself.
+    NOTE: The "signal_regions" and the "transmembrane_regions" properties were left out
+    because, after a preliminary search, they were mostly empty
+    """
+    return tx.run(f"""
+        CALL apoc.load.xml("file:///{filename}")
+        YIELD value
+        WITH [x in value._children WHERE x._type = "protein"] AS metabolites
+        UNWIND metabolites AS metabolite
+        WITH
+            [X in metabolite._children WHERE X._type = "accession"][0]._text AS accession,
+            [X in metabolite._children WHERE X._type = "protein_properties"] AS protein_properties
+
+        MERGE (p:Protein {{ Acession:accession }})
+
+        WITH protein_properties, p
+        UNWIND protein_properties AS protein_property
+
+        WITH
+            [X in protein_property._children WHERE X._type = "residue_number"][0]._text AS residue_number,
+            [X in protein_property._children WHERE X._type = "molecular_weight"][0]._text AS molecular_weight,
+            [X in protein_property._children WHERE X._type = "theoretical_pi"][0]._text AS theoretical_pi,
+            [X in protein_property._children WHERE X._type = "pfams"] AS pfams,
+            [X in protein_property._children WHERE X._type = "polypeptide_sequence"][0]._text AS polypeptide_sequence,
+            p
+
+        SET p.Residue_Number = residue_number, p.Molecular_Weight = molecular_weight,
+            p.Theoretical_PI = theoretical_pi,
+            p.Polypeptide_Sequence = split(polypeptide_sequence, "\n")[0],
+            p.Polypeptide_Sequence = replace(polypeptide_sequence, split(polypeptide_sequence, "\n")[0], "")
+
+        WITH p, pfams
+        UNWIND pfams AS pfam
+        WITH p, pfam
+        UNWIND pfam["_children"] AS my_pfam
+
+        WITH
+            [X in my_pfam._children WHERE X._type = "name"][0]._text AS name,
+            [X in my_pfam._children WHERE X._type = "pfam_id"][0]._text AS pfam_id,
+            p
+
+        MERGE (pf:pfam {{ PFAM_ID:pfam_id }})
+        SET pf.Name = name
+        MERGE (p)-[r:EXPRESSED_IN]->(pf)
+
+        """)
+
 def add_general_references(tx, filename, type_of):
     """
     Creates "Publication" nodes based on XML files obtained from the HMDB website.
@@ -595,7 +710,7 @@ def add_general_references(tx, filename, type_of):
             [X in metabolite._children WHERE X._type = "accession"][0]._text AS accession,
             [X in metabolite._children WHERE X._type = "general_references"] AS general_references
 
-        MATCH (m) WHERE (m:Metabolite OR m:Protein)
+        MATCH (m) WHERE (m:Metabolite OR m:Protein) AND m.Accession = accession
 
         WITH general_references, m
         UNWIND general_references AS general_reference
@@ -620,126 +735,9 @@ def add_general_references(tx, filename, type_of):
         MERGE (m)-[r:CITED_IN]->(p)
         """)
 
-def add_go_classifications(tx, filename):
+def remove_duplicate_accessions(tx):
     """
-    Creates "Gene Ontology" nodes based on XML files obtained from the HMDB website.
-    This relates each protein to some GO-Terms
-    """
-    return tx.run(f"""
-        CALL apoc.load.xml("file:///{filename}")
-        YIELD value
-        WITH [x in value._children WHERE x._type = "protein"] AS metabolites
-        UNWIND metabolites AS metabolite
-        WITH
-            [X in metabolite._children WHERE X._type = "accession"][0]._text AS accession,
-            [X in metabolite._children WHERE X._type = "go_classifications"] AS go_classifications
-
-        MATCH (p:Protein {{ Acession:accession }})
-
-        WITH go_classifications, p
-        UNWIND go_classifications AS go_class
-        WITH go_class, p
-        UNWIND go_class["_children"] AS my_class
-
-        WITH
-            [X in my_class._children WHERE X._type = "category"][0]._text AS category,
-            [X in my_class._children WHERE X._type = "description"][0]._text AS description,
-            [X in my_class._children WHERE X._type = "go_id"][0]._text AS go_id,
-            p
-
-        MERGE (g:Gene_Ontology {{ GO_ID:go_id }})
-        SET g.Description = description, g.Category = category
-
-        MERGE (m)-[r:PART_OF_GENE_ONTOLOGY]-(p)
-        """)
-
-def add_gene_properties(tx, filename):
-    """
-    Adds some properties to existing "Protein" nodes based on XML files obtained from the HMDB website.
-    In this case, properties will mostly relate to the gene from which the protein originates.
-    NOTE: We are not creating "Gene" nodes (even though each protein comes from a given gene)
-    because we believe not enough information is being given about them.
-    """
-    return tx.run(f"""
-        CALL apoc.load.xml("file:///{filename}")
-        YIELD value
-        WITH [x in value._children WHERE x._type = "protein"] AS metabolites
-        UNWIND metabolites AS metabolite
-        WITH
-            [X in metabolite._children WHERE X._type = "accession"][0]._text AS accession,
-            [X in metabolite._children WHERE X._type = "go_classifications"] AS gene_properties
-
-        MATCH (p:Protein {{ Acession:accession }})
-
-        WITH go_classifications, p
-        UNWIND gene_properties AS gene_property
-
-        WITH
-            [X in gene_property._children WHERE X._type = "chromosome_location"][0]._text AS chromosome_location,
-            [X in gene_property._children WHERE X._type = "locus"][0]._text AS locus,
-            [X in gene_property._children WHERE X._type = "gene_sequence"][0]._text AS gene_sequence,
-            p
-
-        SET p.Chromosome_Location = chromosome_location, p.Locus = locus,
-            p.Sequence_Length = split(gene_sequence, "\n")[0],
-            p.Gene_Sequence = replace(gene_sequence, split(gene_sequence, "\n")[0], "")
-        """)
-
-def add_protein_properties(tx, filename):
-    """
-    Adds some properties to existing "Protein" nodes based on XML files obtained from the HMDB website.
-    In this case, properties will mostly relate to the protein itself.
-    NOTE: The "signal_regions" and the "transmembrane_regions" properties were left out
-    because, after a preliminary search, they were mostly empty
-    """
-    return tx.run(f"""
-        CALL apoc.load.xml("file:///{filename}")
-        YIELD value
-        WITH [x in value._children WHERE x._type = "protein"] AS metabolites
-        UNWIND metabolites AS metabolite
-        WITH
-            [X in metabolite._children WHERE X._type = "accession"][0]._text AS accession,
-            [X in metabolite._children WHERE X._type = "protein_properties"] AS protein_properties
-
-        MATCH (p:Protein {{ Acession:accession }})
-
-        WITH protein_properties, p
-        UNWIND protein_properties AS protein_property
-
-        WITH
-            [X in protein_property._children WHERE X._type = "residue_number"][0]._text AS residue_number,
-            [X in protein_property._children WHERE X._type = "molecular_weight"][0]._text AS molecular_weight,
-            [X in protein_property._children WHERE X._type = "theoretical_pi"][0]._text AS theoretical_pi,
-            [X in protein_property._children WHERE X._type = "pfams"][0]._text AS pfams,
-            [X in protein_property._children WHERE X._type = "polypeptide_sequence"][0]._text AS polypeptide_sequence,
-            p
-
-        SET p.Residue_Number = residue_number, p.Molecular_Weight = molecular_weight,
-            p.Theoretical_PI = theoretical_pi,
-            p.Polypeptide_Sequence = split(polypeptide_sequence, "\n")[0],
-            p.Polypeptide_Sequence = replace(polypeptide_sequence, split(polypeptide_sequence, "\n")[0], "")
-
-        UNWIND pfams AS pfam
-        WITH p, pfam
-        UNWIND pfam["_children"] AS my_pfam
-
-        WITH
-            [X in my_pfam._children WHERE X._type = "name"][0]._text AS name,
-            [X in my_pfam._children WHERE X._type = "pfam_id"][0]._text AS pfam_id,
-            p
-
-        MATCH (pf:pfam {{ PFAM_ID:pfam_id }})
-        SET pf.Name = name
-        MERGE (p)-[r:EXPRESSED_IN]->(pf)
-        """)
-
-def remove_duplicate_nodes(tx):
-    """
-    Removes duplicated nodes in the following ways:
-        * Any Metabolites or Proteins (or both) that share the same "Accession" code
-        * Any Publications with the same "Pubmed_ID" or "Abstract", in case some error appeared
-        * In the case of concentrations, nothing could be done since they present so many
-          different, often non-present, characteristics (thus used CREATE).
+    Removes any duplicated Metabolites or Proteins (or both) that share the same "Accession" code
     NOTE: Since we only have the "Name" field as mandatory for "Disease" nodes, since no omin-id is
     mandatory and since nodes where created using "MERGE", no need to do more for "Disease" nodes.
     Source: https://community.neo4j.com/t/merge-all-nodes-with-the-same-property-name/4509
@@ -750,16 +748,32 @@ def remove_duplicate_nodes(tx):
             WITH n.Accession as ac, COLLECT(n) AS ns
             WHERE size(ns) > 1
                     CALL apoc.refactor.mergeNodes(ns) YIELD node
-            WITH node
+            RETURN node
+        """)
+
+def remove_duplicate_pubmed_ids(tx):
+    """
+    Removes any two Publications with the same "Pubmed_ID", in case some error appeared
+    """
+    return tx.run("""
             MATCH (p:Publication)
             WHERE (p.Pubmed_ID IS NOT null)
-            WITH n.Pubmed_ID as pb, COLLECT(n) AS ns
+            WITH p.Pubmed_ID as pb, COLLECT(p) AS ns
             WHERE size(ns) > 1
                     CALL apoc.refactor.mergeNodes(ns) YIELD node
-            WITH node
-            MATCH (p:Publication)
-            WHERE (p.Pubmed_ID IS NOT null)
-            WITH n.Abstract as abs, COLLECT(n) AS ns
+            RETURN node
+        """)
+
+def remove_duplicate_abstracts(tx):
+    """
+    Removes any two Publications with the same "Abstract", in case some error appeared
+    NOTE: In the case of concentrations, nothing could be done since they present so many
+          different, often non-present, characteristics (thus used CREATE).
+    """
+    return tx.run("""
+            MATCH (pu:Publication)
+            WHERE (pu.Pubmed_ID IS NOT null)
+            WITH pu.Abstract as abs, COLLECT(pu) AS ns
             WHERE size(ns) > 1
                     CALL apoc.refactor.mergeNodes(ns) YIELD node
             RETURN node;

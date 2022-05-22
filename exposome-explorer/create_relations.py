@@ -14,8 +14,8 @@ def cancer_associations(tx):
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///cancer_associations.csv' AS line
             MATCH
-                (m:measurements {{ id: line.`excretion_id` }}),
-                (c:cancers {{ id: line.`cancer_id` }})
+                (m:Measurements {{ id: line.`excretion_id` }}),
+                (c:Cancers {{ id: line.`cancer_id` }})
             MERGE (m)-[r:ASSOCIATED_WITH_CANCER]-(c)
             SET r.id = line.id
         """)
@@ -31,8 +31,8 @@ def metabolomic_associations(tx):
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///metabolomic_associations.csv' AS line
             MATCH
-                (m:measurements {{ id: line.`intake_id` }}),
-                (n:measurements {{ id: line.`excretion_id` }})
+                (m:Measurements {{ id: line.`intake_id` }}),
+                (n:Measurements {{ id: line.`excretion_id` }})
             MERGE (m)-[r:ASSOCIATED_WITH_COMPOUND]->(n)
             SET r.id = line.id, r.feature_selection = line.feature_selection,
             r.author_structural_identification_level = line.author_structural_identification_level,
@@ -55,8 +55,8 @@ def correlations(tx):
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///correlations.csv' AS line
             MATCH
-                (m:measurements {{ id: line.`intake_id` }}),
-                (n:measurements {{ id: line.`excretion_id` }})
+                (m:Measurements {{ id: line.`intake_id` }}),
+                (n:Measurements {{ id: line.`excretion_id` }})
 
             MERGE (m)-[r:ASSOCIATED_WITH]->(n)
             SET r.id = line.id, r.coefficient_type = line.coefficient_type,
@@ -80,8 +80,8 @@ def auto_units(tx):
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///units.csv' AS line
             MATCH
-                (u1:units {{ id: line.id }}),
-                (u2:units {{ id: line.converted_to_id }})
+                (u1:Units {{ id: line.id }}),
+                (u2:Units {{ id: line.converted_to_id }})
             MERGE (u1)-[r:CONVERTED_INTO]->(u2)
         """)
 
@@ -97,11 +97,11 @@ def measurements_stuff(tx):
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///measurements.csv' AS line
             MATCH
-                (m:measurements {{ id: line.id }}),
-                (u:units {{ id: line.unit_id }}),
-                (c:components {{ id: line.component_id }}),
-                (s:samples {{ id: line.sample_id }}),
-                (me:experimental_methods {{ id: line.experimental_method_id }})
+                (m:Measurements {{ id: line.id }}),
+                (u:Units {{ id: line.unit_id }}),
+                (c:Components {{ id: line.component_id }}),
+                (s:Samples {{ id: line.sample_id }}),
+                (me:Experimental_methods {{ id: line.experimental_method_id }})
 
             MERGE (m)-[r1:MEASURED_IN_UNITS]->(u)
             MERGE (c)-[r2:MEASURED_AS]->(m)
@@ -117,8 +117,8 @@ def reproducibilities(tx):
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///reproducibilities.csv' AS line
             MATCH
-            (re:reproducibilities {{ id: line.id }}),
-                (m:measurements {{ id: line.initial_id }})
+                (re:Reproducibilities {{ id: line.id }}),
+                (m:Measurements {{ id: line.initial_id }})
 
             MERGE (m)-[r:REPODUCIBILE_WITH_CONDITIONS]->(re)
         """)
@@ -131,9 +131,9 @@ def subjects(tx):
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///subjects.csv' AS line
             MATCH
-                (s:subjects {{ id: line.id }}),
-                (p:publications {{ id: line.publication_id }}),
-                (c:cohorts {{ id: line.cohort_id }})
+                (s:Subjects {{ id: line.id }}),
+                (p:Publications {{ id: line.publication_id }}),
+                (c:Cohorts {{ id: line.cohort_id }})
             MERGE (s)-[r1:PART_OF]->(c)
             MERGE (s)-[r2:REPORTED_IN]->(p)
         """)
@@ -146,9 +146,29 @@ def samples(tx):
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///samples.csv' AS line
             MATCH
-                (s:samples {{ id: line.id }}),
-                (sp:specimens {{ id: line.specimen_id }}),
-                (sb:subjects {{ id: line.subject_id }})
+                (s:Samples {{ id: line.id }}),
+                (sp:Specimens {{ id: line.specimen_id }}),
+                (sb:Subjects {{ id: line.subject_id }})
             MERGE (s)-[r1:FOUND_IN]->(sp)
             MERGE (s)-[r2:TAKEN_FROM_SUBJECT]->(sb)
+        """)
+
+
+def microbial_metabolite_identifications(tx):
+    """
+    Imports the relations pertaining to the "microbial_metabolite_identifications" table. A component
+
+    sample will be taken from a given
+    subject and a given tissue (that is, a specimen, which will be mostly blood, urine, etc)
+    """
+    return tx.run(f"""
+        LOAD CSV WITH HEADERS FROM 'file:///microbial_metabolite_identifications.csv' AS line
+            MATCH
+                (m:Microbial_metabolite_identifications {{ id: line.id }}),
+                (c:Components {{ id: line.component_id }}),
+                (p:Publications {{ id: line.publication_id }}),
+                (s:Specimens {{ id: line.specimen_id }})
+            MERGE (m)-[r1:REPORTED_IN]->(p)
+            MERGE (c)-[r2:IDENTIFIED_AS]->(m)
+            MERGE (m)-[r3:FOUND_IN]->(s)
         """)

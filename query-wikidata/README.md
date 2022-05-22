@@ -35,7 +35,7 @@ Finally, please node that the general philosophy and approach of the queries hav
 
 * What does impact performance, however, is having different functions for adding cancers, drugs, metabolites, etc, instead of having just one match for each created cancer node. This makes WikiData have to process more queries that are less heavy, which makes it less likely to time-out, but causes the script to run more slowly.
 
-* The Neo4J server presents a somewhat unstable connection that is sometimes difficult to keep alive, as it tends to be killed by the system when you so much as look at it wrong. To prevent this from happening, you are encouraged to assign a high-priority to the server's process by using the ```renice``` command in Linux (note that the process will be called "Java", not "Neo4J"
+* The Neo4J server presents a somewhat unstable connection that is sometimes difficult to keep alive, as it tends to be killed by the system when you so much as look at it wrong. To prevent this from happening, you are encouraged to assign a high-priority to the server's process by using the ```nice``` or ```renice``` commands in Linux (note that the process will be called "Java", not "Neo4J")
 
 * Another measure taken to prevent Neo4J's unreliability from stopping the script is the ```misc.repeat_transaction``` function, which insists a given number of times until either the problem is fixed or the error persists. This is because Neo4J tends to: random disconnects, run out of java heap space, explode... and WikiData tends to give server errors, have downtimes during the **14+ hours** the script takes to run, etc.
 

@@ -40,21 +40,22 @@ def download_and_unzip(url, folder):
     zf.extractall(path = f"./{folder}/")
     zf.close()
 
-def split_xml(filename):
+
+def split_xml(filename, filetype, bigtag):
     """
     Splits a given .xml file in n smaller XML files, one for each first-level
     record on the original file. This allows for slower processing.
     """
-    splitted = open(filename).read().split('<metabolite>')
+    splitted = open(filename).read().split(f'<{filetype}>')
     for index, subunit in enumerate(splitted):
         newfile = filename.split(".")[0] + "_" + str(index) + ".xml"
         with open(newfile, "w+") as f:
             if index > 0:
                 f.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
-                f.write('<hmdb xmlns="http://www.hmdb.ca">\n')
-                f.write('<metabolite>')
+                f.write(f'<{bigtag}>\n')
+                f.write(f'<{filetype}>')
                 f.write(splitted[index])
-                if index < len(splitted) -1: f.write('</hmdb>')
+                if index < len(splitted) -1: f.write(f'</{bigtag}>')
         f.close()
     return len(splitted) - 1
 

@@ -15,22 +15,22 @@ import create_nodes
 import create_relations
 import miscelaneous as misc
 
-with alive_bar(12) as bar:
+with alive_bar(25) as bar:
 
     instance = f"{sys.argv[1]}"; user = f"{sys.argv[2]}"; passwd = f"{sys.argv[3]}"
     driver = GraphDatabase.driver(instance, auth=(user, passwd))
 
     Neo4JImportPath = misc.get_import_path(driver)
 
+    bar()
+
     with driver.session() as session:
         session.write_transaction(create_nodes.clean_database)
-
-    bar()
+        bar()
 
     all_csvs = os.listdir(sys.argv[4])
     relation_tables = ["cancer_associations.csv", "metabolomic_associations.csv", "correlations.csv"]
     node_tables = [x for x in all_csvs if x not in relation_tables]
-
     bar()
 
     for filename in node_tables:
@@ -39,16 +39,18 @@ with alive_bar(12) as bar:
 
         with driver.session() as session:
             session.write_transaction(create_nodes.import_csv, filename, filename.split(".")[0])
-
-    bar()
+            bar()
 
     with driver.session() as session:
+        shutil.copyfile(f"{sys.argv[4]}/cancer_associations.csv", f"{Neo4JImportPath}/cancer_associations.csv")
         session.write_transaction(create_relations.cancer_associations)
         bar()
     with driver.session() as session:
+        shutil.copyfile(f"{sys.argv[4]}/cancer_associations.csv", f"{Neo4JImportPath}/metabolomic_associations.csv")
         session.write_transaction(create_relations.metabolomic_associations)
         bar()
     with driver.session() as session:
+        shutil.copyfile(f"{sys.argv[4]}/cancer_associations.csv", f"{Neo4JImportPath}/correlations.csv")
         session.write_transaction(create_relations.correlations)
         bar()
     with driver.session() as session:
@@ -65,6 +67,9 @@ with alive_bar(12) as bar:
         bar()
     with driver.session() as session:
         session.write_transaction(create_relations.samples)
+        bar()
+    with driver.session() as session:
+        session.write_transaction(create_relations.microbial_metabolite_identifications)
         bar()
     with driver.session() as session:
         session.write_transaction(misc.export_function, "graph.graphml")

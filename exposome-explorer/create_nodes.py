@@ -19,6 +19,6 @@ def import_csv(tx, filename, label):
     Note: for this to work, you HAVE TO have APOC availaible on your Neo4J installation
     """
     return tx.run(f"""
-        CALL apoc.import.csv([{{fileName: 'file:/{filename}', labels: ['{label}']}}], [], {{}})
+        CALL apoc.import.csv([{{fileName: 'file:/{filename}', labels: [apoc.text.capitalize('{label}')]}}], [], {{}})
         """)
 

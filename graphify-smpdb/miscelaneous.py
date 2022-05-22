@@ -12,13 +12,13 @@ from neo4j import GraphDatabase      # The Neo4J python driver
 
 def get_neo4j_path(tx):
     """ Runs an autocommit transaction to find Neo4J's import path """
-    result= tx.run("Call dbms.listConfig() YIELD name, value WHERE name='dbms.directories.neo4j_home' RETURN value")
+    result = tx.run("Call dbms.listConfig() YIELD name, value WHERE name='dbms.directories.import' RETURN value")
     return [record["value"] for record in result]
 
 def get_import_path(current_driver):
     """ Runs the autocommit transaction and returns the Import Path """
     with current_driver.session() as session:
-        Neo4JImportPath = session.read_transaction(get_neo4j_path)[0]+'/import'
+        Neo4JImportPath = session.read_transaction(get_neo4j_path)[0]
     return Neo4JImportPath
 
 def export_function(tx, exportname):
