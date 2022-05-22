@@ -6,6 +6,9 @@ SPDX-License-Identifier: GPL-3.0-or-later
 
 # graphify-hmdb
 
+<div align="center"> <img src="header.png" width="50%"> </div>
+<br>
+
 This script, created as part of my Master's Intenship at IARC, imports nodes from the [Human Metabolome Database](https://hmdb.ca/) (a high quality, database containing a list of metabolites and proteins associated to different diseases) to Neo4J format in an automated way, providing an export in GraphML format.
 
 To run, it uses `alive_progress` to generate an interactive progress bar (that shows the script is still running through its most time-consuming parts) and the `neo4j` python driver. This requirements can be installed using: `pip install -r requirements.txt`.
