@@ -23,7 +23,7 @@ CREATE (r:Race)
 SET r.race = race,
     r.url = url,
     r.id = id
-
+FIX REQUIREMENTS: POR EJEMPLO, AÑADIR BIO. BASICALLY LEETE TODO Y LO VAS METIENDO
     URL https://github.com/neo4j-contrib/neo4j-apoc-procedures/issues/2377
 
     Maybe all sequences should be in a "SEQUENCED_AS"?

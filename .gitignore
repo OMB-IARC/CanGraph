@@ -5,13 +5,12 @@
 # Ignore the __pycache__ folder (unnecessary) in any subfolder
 **/__pycache__/
 # Ignore the confidential folder with the Full Database Tables
-exposome-explorer/csvfolder/
+**/xmlfolder/
+**/csvfolder/
 # Ignore the confidential and outdated schema image
 exposome-explorer/database_schema.png
 # Ignore the resulting GraphML databases (confidential)
 exposome-explorer/graph.graphml
 graphify-hmdb/graph.graphml
 graphify-drugbank/graph.graphml
-
-# Ignore some test folders with XML files
-**/xmlfolder/
+graphify-smpdb/graph.graphml
