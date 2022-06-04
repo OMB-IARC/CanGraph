@@ -33,7 +33,7 @@ Neo4JImportPath = misc.get_import_path(driver)
 print("Connected to Neo4J")
 
 with driver.session() as session:
-    session.write_transaction(create_nodes.clean_database)
+    session.run( misc.clean_database() )
 
 print("Cleaned DataBase")
 
@@ -124,10 +124,16 @@ for url in hmdb_urls:
                 os.remove(f"{Neo4JImportPath}/{filename.split('.')[0]}_{i}.xml")
 
 with driver.session() as session:
-    session.write_transaction(create_nodes.remove_duplicate_accessions)
-    session.write_transaction(create_nodes.remove_duplicate_pubmed_ids)
-    session.write_transaction(create_nodes.remove_duplicate_abstracts)
-    session.write_transaction(create_nodes.remove_duplicate_relationships)
+    # We first purge duplicates by merging duplicate accessions
+    # NOTE: If a Metabolite is, at the same time, a Protein, this will make sure both labels are included!
+    session.write_transaction(misc.remove_duplicate_nodes, "", "n.Accession as ac", "(n:Protein OR n:Metabolite)")
+    #Also remove duplicates by PubMed ID
+    session.write_transaction(misc.remove_duplicate_nodes, "Publication", "n.Pubmed_ID as id", "WHERE n.Pubmed_ID IS NOT null")
+    #Also remove duplicates by PubMed ID
+        session.write_transaction(misc.remove_duplicate_nodes, "Publication", "n.Abstract as abs")
+    #And we delete duplicate relationships
+    session.write_transaction(misc.remove_duplicate_relationships)
+    # Finally, we remove some database-specific thingys
     session.write_transaction(create_nodes.purge_database)
     bar()
 with driver.session() as session:

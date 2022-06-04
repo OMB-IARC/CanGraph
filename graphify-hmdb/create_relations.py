@@ -12,7 +12,7 @@ def add_protein_associations(tx, filename):
     Creates "Protein" nodes based on XML files obtained from the HMDB website.
     NOTE: Unlike the "create_nodes.add_protein" function, this creates Proteins based on info on the
     "Metabolite" files, not on the "Protein" files themselves. This could mean node duplication, but,
-    hopefully, the MERGE by Acession will mean that this duplicates will be catched.
+    hopefully, the MERGE by Accession will mean that this duplicates will be catched.
     """
     return tx.run(f"""
         CALL apoc.load.xml("file:///{filename}")
@@ -38,7 +38,7 @@ def add_protein_associations(tx, filename):
             [X in my_protein._children WHERE X._type = "protein_type"][0]._text AS protein_type,
             m
 
-        MERGE (p:Protein {{ Acession:protein_accession }})
+        MERGE (p:Protein {{ Accession:protein_accession }})
         ON CREATE SET p.Gene_Name = gene_name, p.Protein_Type = protein_type, p.Uniprot_ID = uniprot_id
 
         MERGE (m)-[r:ASSOCIATED_WITH]-(p)
@@ -60,7 +60,7 @@ def add_metabolite_associations(tx, filename):
             [X in metabolite._children WHERE X._type = "accession"][0]._text AS accession,
             [X in metabolite._children WHERE X._type = "metabolite_associations"] AS metabolite_associations
 
-        MERGE (p:Protein {{ Acession:accession }})
+        MERGE (p:Protein {{ Accession:accession }})
 
         WITH metabolite_associations, p
         UNWIND metabolite_associations AS metabolite_association
@@ -72,7 +72,7 @@ def add_metabolite_associations(tx, filename):
             [X in my_metabolite._children WHERE X._type = "name"][0]._text AS name,
             p
 
-        MERGE (m:Metabolite {{ Acession:metabolite_accession }})
+        MERGE (m:Metabolite {{ Accession:metabolite_accession }})
         ON CREATE SET m.Name = name
 
         MERGE (m)-[r:ASSOCIATED_WITH]-(p)
@@ -94,7 +94,7 @@ def add_metabolite_references(tx, filename):
             [X in metabolite._children WHERE X._type = "accession"][0]._text AS accession,
             [X in metabolite._children WHERE X._type = "metabolite_references"] AS metabolite_references
 
-        MERGE (p:Protein {{ Acession:accession }})
+        MERGE (p:Protein {{ Accession:accession }})
 
         WITH metabolite_references, p
         UNWIND metabolite_references AS metabolite_reference

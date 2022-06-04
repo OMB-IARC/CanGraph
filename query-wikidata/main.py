@@ -21,10 +21,13 @@ with alive_bar(65) as bar:
 
     Neo4JImportPath = misc.get_import_path(driver)
 
+    print("Connected to Neo4J")
+
     with driver.session() as session:
-        session.write_transaction(sparql_queries.clean_database)
+        session.run( misc.clean_database() )
         session.write_transaction(misc.create_n10s_graphconfig)
         bar()
+    print("Cleaned DataBase")
 
     with driver.session() as session:
         session.write_transaction(sparql_queries.initial_cancer_discovery)
@@ -68,15 +71,18 @@ with alive_bar(65) as bar:
             bar()
 
     with driver.session() as session:
-        session.write_transaction(sparql_queries.remove_duplicate_nodes)
-        # We will just do this once because duplicated relationships are not so important
-        session.write_transaction(sparql_queries.remove_duplicate_relationships)
+        #NOTE: We purge by merging all products with the same EMA_MA_Number or FDA_Application_Number
+        session.write_transaction(misc.remove_duplicate_nodes, "", "n.WikiData_ID as wdt")
+        # And, then, we delete duplicate relationships
+        #NOTE: We will just do this once to decrease processing time
+        session.write_transaction(misc.remove_duplicate_relationships)
         bar()
 
     with driver.session() as session:
+        # We might want to remove ExternalEquivalent nodes
         #session.write_transaction(sparql_queries.remove_ExternalEquivalent)
         session.write_transaction(misc.remove_n10s_graphconfig)
-        session.write_transaction(misc.export_function, "graph.graphml")
+        session.write_transaction(misc.export_graphml, "graph.graphml")
         bar()
 
 print(f"You can find the exported graph at {Neo4JImportPath}/graph.graphml")

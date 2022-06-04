@@ -7,30 +7,6 @@
 
 # This is just a collection of functions used by the "main" script
 
-def clean_database(tx):
-    """ Gets all the nodes in a Neo4J database and removes them """
-    return tx.run(f"""
-        MATCH (n) DETACH DELETE n;
-        """)
-
-def import_csv(tx, filename, label):
-    """
-    Imports a given CSV into Neo4J. This CSV **MUST** be present in Neo4J's Import Path
-    Note: for this to work, you HAVE TO have APOC availaible on your Neo4J installation
-    """
-    return tx.run(f"""
-        CALL apoc.import.csv([{{fileName: 'file:/{filename}', labels: ['{label}']}}], [], {{}})
-        """)
-
-def import_XML(tx, filename, label):
-    """
-    Imports a given XML into Neo4J. This XML **MUST** be present in Neo4J's Import Path
-    NOTE: for this to work, you HAVE TO have APOC availaible on your Neo4J installation
-    """
-    return tx.run(f"""
-        CALL apoc.import.xml('file:///{filename}')
-        """)
-
 def add_metabolites(tx, filename):
     """
     Creates "Metabolite" nodes based on XML files obtained from the HMDB website,
@@ -84,7 +60,7 @@ def add_metabolites(tx, filename):
             m.Update_Date = update_date, m.Status = status,
             m.Name = name, m.Chemical_Formula = chemical_formula, m.Average_Molecular_Weight = average_molecular_weight,
             m.Monisotopic_Molecular_Weight = monisotopic_molecular_weight, m.IUPAC_Name = iupac_name,
-            m.Traditional_IUPAC = traditional_iupac, m.CAS_Registry_Number = m.cas_registry_number, m.Smiles = smiles,
+            m.Traditional_IUPAC = traditional_iupac, m.CAS_Registry_Number = cas_registry_number, m.Smiles = smiles,
             m.InChi = inchi, m.InChiKey = inchikey, m.State = state, m.ChemSpider_ID = chemspider_id, m.DrugBank_ID = drugbank_id,
             m.FooDB_ID = foodb_id, m.PubChem_Compound_ID = pubchem_compound_id, m.PDB_ID = pdb_id, m.CHEBI_ID = chebi_id,
             m.Phenol_Explorer_Compound_ID = phenol_explorer_compound_id, m.Knapsack_ID = knapsack_id, m.Kegg_ID = kegg_id,
@@ -239,7 +215,7 @@ def add_concentrations_normal(tx, filename):
         SET p.Pages = split(split(reference_text, ":")[-1], ".")[0]
         SET p.Pubmed_ID = pubmed_id
 
-        MERGE (c)-[r2:CITED_IN]->(d)
+        MERGE (c)-[r2:CITED_IN]->(p)
         """)
 
 def add_concentrations_abnormal(tx, filename):
@@ -307,7 +283,7 @@ def add_concentrations_abnormal(tx, filename):
         SET p.Pages = split(split(reference_text, ":")[-1], ".")[0]
         SET p.Pubmed_ID = pubmed_id
 
-        MERGE (c)-[r2:CITED_IN]->(d)
+        MERGE (c)-[r2:CITED_IN]->(p)
         """)
 
 def add_taxonomy(tx, filename):
@@ -592,7 +568,7 @@ def add_go_classifications(tx, filename):
             [X in metabolite._children WHERE X._type = "accession"][0]._text AS accession,
             [X in metabolite._children WHERE X._type = "go_classifications"] AS go_classifications
 
-        MERGE (p:Protein {{ Acession:accession }})
+        MERGE (p:Protein {{ Accession:accession }})
 
         WITH go_classifications, p
         UNWIND go_classifications AS go_class
@@ -627,7 +603,7 @@ def add_gene_properties(tx, filename):
             [X in metabolite._children WHERE X._type = "accession"][0]._text AS accession,
             [X in metabolite._children WHERE X._type = "gene_properties"] AS gene_properties
 
-        MERGE (p:Protein {{ Acession:accession }})
+        MERGE (p:Protein {{ Accession:accession }})
 
         WITH gene_properties, p
         UNWIND gene_properties AS gene_property
@@ -659,7 +635,7 @@ def add_protein_properties(tx, filename):
             [X in metabolite._children WHERE X._type = "accession"][0]._text AS accession,
             [X in metabolite._children WHERE X._type = "protein_properties"] AS protein_properties
 
-        MERGE (p:Protein {{ Acession:accession }})
+        MERGE (p:Protein {{ Accession:accession }})
 
         WITH protein_properties, p
         UNWIND protein_properties AS protein_property
@@ -733,61 +709,6 @@ def add_general_references(tx, filename, type_of):
         SET p.Pubmed_ID = pubmed_id
 
         MERGE (m)-[r:CITED_IN]->(p)
-        """)
-
-def remove_duplicate_accessions(tx):
-    """
-    Removes any duplicated Metabolites or Proteins (or both) that share the same "Accession" code
-    NOTE: Since we only have the "Name" field as mandatory for "Disease" nodes, since no omin-id is
-    mandatory and since nodes where created using "MERGE", no need to do more for "Disease" nodes.
-    Source: https://community.neo4j.com/t/merge-all-nodes-with-the-same-property-name/4509
-    """
-    return tx.run("""
-            MATCH (n)
-            WHERE (n:Metabolite OR n:Protein AND n.Accession IS NOT null)
-            WITH n.Accession as ac, COLLECT(n) AS ns
-            WHERE size(ns) > 1
-                    CALL apoc.refactor.mergeNodes(ns) YIELD node
-            RETURN node
-        """)
-
-def remove_duplicate_pubmed_ids(tx):
-    """
-    Removes any two Publications with the same "Pubmed_ID", in case some error appeared
-    """
-    return tx.run("""
-            MATCH (p:Publication)
-            WHERE (p.Pubmed_ID IS NOT null)
-            WITH p.Pubmed_ID as pb, COLLECT(p) AS ns
-            WHERE size(ns) > 1
-                    CALL apoc.refactor.mergeNodes(ns) YIELD node
-            RETURN node
-        """)
-
-def remove_duplicate_abstracts(tx):
-    """
-    Removes any two Publications with the same "Abstract", in case some error appeared
-    NOTE: In the case of concentrations, nothing could be done since they present so many
-          different, often non-present, characteristics (thus used CREATE).
-    """
-    return tx.run("""
-            MATCH (pu:Publication)
-            WHERE (pu.Pubmed_ID IS NOT null)
-            WITH pu.Abstract as abs, COLLECT(pu) AS ns
-            WHERE size(ns) > 1
-                    CALL apoc.refactor.mergeNodes(ns) YIELD node
-            RETURN node;
-        """)
-
-def remove_duplicate_relationships(tx):
-    """
-    Removes duplicated relationships between ANY existing pair of nodes. Taken From:
-    https://stackoverflow.com/questions/18202197/how-do-i-delete-duplicate-relationships-between-two-nodes-with-cypher
-    """
-    return tx.run("""
-            MATCH (s)-[r]->(e)
-            WITH s,e,type(r) as typ, tail(collect(r)) as coll
-            FOREACH(x in coll | delete x)
         """)
 
 def purge_database(tx):

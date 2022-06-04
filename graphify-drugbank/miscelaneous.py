@@ -114,14 +114,24 @@ def remove_duplicate_nodes(tx, node_type, condition, optional_where=""):
     This condition can be expressed as: n.{node_property} as a, n.{other_property} as b
     NOTE: Optionally, one can specify mandatory conditions with a ```optional_where``` clause
     """
-    return tx.run(f"""
-            MATCH (n:{node_type})
-            {optional_where}
-            WITH {condition}, COLLECT(n) AS ns
-            WHERE size(ns) > 1
-                    CALL apoc.refactor.mergeNodes(ns) YIELD node
-            RETURN node;
-        """)
+    if len(str(node_type))>0:
+        return tx.run(f"""
+                MATCH (n:{node_type})
+                {optional_where}
+                WITH {condition}, COLLECT(n) AS ns
+                WHERE size(ns) > 1
+                        CALL apoc.refactor.mergeNodes(ns) YIELD node
+                RETURN node;
+            """)
+    else:
+        return tx.run(f"""
+                MATCH (n)
+                {optional_where}
+                WITH {condition}, COLLECT(n) AS ns
+                WHERE size(ns) > 1
+                        CALL apoc.refactor.mergeNodes(ns) YIELD node
+                RETURN node;
+            """)
 
 # ********* Work with Files ********* #
 

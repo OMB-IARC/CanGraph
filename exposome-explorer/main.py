@@ -21,12 +21,13 @@ with alive_bar(25) as bar:
     driver = GraphDatabase.driver(instance, auth=(user, passwd))
 
     Neo4JImportPath = misc.get_import_path(driver)
-
+    print("Connected to Neo4J")
     bar()
 
     with driver.session() as session:
-        session.write_transaction(create_nodes.clean_database)
-        bar()
+        session.run( misc.clean_database() )
+    print("Cleaned DataBase")
+    bar()
 
     all_csvs = os.listdir(sys.argv[4])
     relation_tables = ["cancer_associations.csv", "metabolomic_associations.csv", "correlations.csv"]
@@ -72,7 +73,7 @@ with alive_bar(25) as bar:
         session.write_transaction(create_relations.microbial_metabolite_identifications)
         bar()
     with driver.session() as session:
-        session.write_transaction(misc.export_function, "graph.graphml")
+        session.write_transaction(misc.export_graphml, "graph.graphml")
         bar()
 
 print(f"You can find the exported graph at {Neo4JImportPath}/graph.graphml")

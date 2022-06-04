@@ -470,7 +470,7 @@ def add_atc_codes(tx, filename):
         MERGE (d:Drug {{ DrugBank_ID:Primary_Drugbank_ID }})
         MERGE (pri:ATC {{ Code:primary_atc }})
         MERGE (sec:ATC {{ Code:atc_subcode }})
-        SET sec.Name = atc_text
+        SET sec.Name = atc_text, pri.Type = "Primary", sec.Type = "Secondary"
 
         MERGE (d)-[r:RELATED_WITH]->(pri)
         MERGE (pri)-[r2:RELATED_WITH]->(sec)
@@ -500,8 +500,8 @@ def add_drug_interactions(tx, filename):
             [X in my_interaction._children WHERE X._type = "description"][0]._text AS description,
             Primary_Drugbank_ID
 
-        MERGE (d:Drug {{ Drugbank_ID:Primary_Drugbank_ID }})
-        MERGE (dd:Drug {{ Drugbank_ID:drugbank_id }})
+        MERGE (d:Drug {{ DrugBank_ID:Primary_Drugbank_ID }})
+        MERGE (dd:Drug {{ DrugBank_ID:drugbank_id }})
         ON CREATE SET dd.Name = name
         MERGE (d)-[r:RELATED_WITH_DRUG]-(dd)
         SET r.Description = description
@@ -529,7 +529,7 @@ def add_sequences(tx, filename):
 
         WITH my_sequence.format AS format, my_sequence._text as text, Primary_Drugbank_ID
 
-        MERGE (d:Drug {{ Drugbank_ID:Primary_Drugbank_ID }})
+        MERGE (d:Drug {{ DrugBank_ID:Primary_Drugbank_ID }})
         MERGE (s:Sequence {{ Sequence_Text:text }})
         SET s.format = format
         MERGE (d)-[r:SEQUENCED_AS]->(s)
@@ -549,7 +549,7 @@ def add_experimental_properties(tx, filename):
             [X in metabolite._children WHERE X._type = "experimental-properties"] AS experimental_properties
 
 
-        MERGE (d:Drug {{ Drugbank_ID:Primary_Drugbank_ID }})
+        MERGE (d:Drug {{ DrugBank_ID:Primary_Drugbank_ID }})
 
         WITH experimental_properties, d
         UNWIND experimental_properties as experimental_property
@@ -593,7 +593,7 @@ def add_external_identifiers(tx, filename):
             [X in my_identifier._children WHERE X._type = "identifier"][0]._text AS identifier,
             Primary_Drugbank_ID
 
-        MERGE (d:Drug {{ Drugbank_ID:Primary_Drugbank_ID }})
+        MERGE (d:Drug {{ DrugBank_ID:Primary_Drugbank_ID }})
         WITH apoc.map.fromLists(collect(resource), collect(identifier)) AS dict, d
 
         SET d.Therapeutic_Targets_Database = dict["Therapeutic Targets Database"], d.KEGG_Drug = dict["KEGG Drug"],
@@ -634,8 +634,8 @@ def add_external_equivalents(tx, filename):
             [X in my_identifier._children WHERE X._type = "url"][0]._text AS url,
             Primary_Drugbank_ID
 
-        MERGE (d:Drug {{ Drugbank_ID:Primary_Drugbank_ID }})
-        MERGE (ee:External_Equivalent {{ url:url }})
+        MERGE (d:Drug {{ DrugBank_ID:Primary_Drugbank_ID }})
+        MERGE (ee:External_Equivalent {{ URL:url }})
         SET ee.Resource_Name = resource
 
         MERGE (d)-[r:EQUALS]-(ee)
@@ -683,10 +683,10 @@ def add_pathways_and_relations(tx, filename):
             [X IN my_drug._children WHERE X._type = "name"][0]._text AS drug_name,
             smpdb_id, pathway_name, category, Primary_Drugbank_ID
 
-        MERGE (d:Drug {{ Drugbank_ID:Primary_Drugbank_ID }})
+        MERGE (d:Drug {{ DrugBank_ID:Primary_Drugbank_ID }})
         MERGE (s:Pathway {{ SMPDB_ID:smpdb_id }})
         ON CREATE SET s.Name = pathway_name, s.Category = category
-        MERGE (dd:Drug {{ Drugbank_ID:DrugBank_ID }})
+        MERGE (dd:Drug {{ DrugBank_ID:DrugBank_ID }})
         ON CREATE SET dd.Name = drug_name
         MERGE (p:Protein {{ UniProt_ID:UniProt_ID }})
 
@@ -749,7 +749,7 @@ def add_targets_enzymes_carriers_and_transporters(tx, filename, tag_name):
             Primary_Drugbank_ID, actions, polypeptides, target_id, name, target_organism,
             known_action, position
 
-        MERGE (d:Drug {{ Drugbank_ID:Primary_Drugbank_ID }})
+        MERGE (d:Drug {{ DrugBank_ID:Primary_Drugbank_ID }})
 
         MERGE (pu:Publication {{ Ref_ID:ref_id }})
         SET pu.Authors = split(citation, ":")[0]
@@ -792,7 +792,7 @@ def add_targets_enzymes_carriers_and_transporters(tx, filename, tag_name):
             [X in polypeptide._children WHERE X._type = "external-identifiers"] AS external_identifiers,
             target_id, name, target_organism, known_action, actions, position, d
 
-        MERGE (p:Protein {{ Accession:UniProt_ID }})
+        MERGE (p:Protein {{ UniProt_ID:UniProt_ID }})
         SET p.Name = polypeptide_name, p.General_Function = general_function, p.Specific_Function = specific_function,
             p.Gene_Name = gene_name, p.Locus = locus, p.Transmembrane_Regions = transmembrane_regions,
             p.Signal_Regions = signal_regions, p.Theoretical_PI = theoretical_pi, p.Molecular_Weight = molecular_weight,
@@ -850,8 +850,8 @@ def add_targets_enzymes_carriers_and_transporters(tx, filename, tag_name):
         MERGE (pf:pfam {{ PFAM_ID:identifier }})
         SET pf.Name = name
 
-        MERGE (d)-[r:EXPRESSED_IN]->(pf)
-        MERGE (d)-[r2:PART_OF_GENE_ONTOLOGY]-(g)
+        MERGE (p)-[r:EXPRESSED_IN]->(pf)
+        MERGE (p)-[r2:PART_OF_GENE_ONTOLOGY]-(g)
 
         SET p.Synonyms = ""
         FOREACH(element in synonyms|
