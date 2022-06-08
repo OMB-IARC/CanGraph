@@ -19,9 +19,6 @@ def add_metabolites(tx, filename):
         WITH [x in value._children WHERE x._type = "metabolite"] AS metabolites
         UNWIND metabolites AS metabolite
         WITH
-            [X in metabolite._children WHERE X._type = "version"][0]._text AS version,
-            [X in metabolite._children WHERE X._type = "creation_date"][0]._text AS creation_date,
-            [X in metabolite._children WHERE X._type = "update_date"][0]._text AS update_date,
             [X in metabolite._children WHERE X._type = "status"][0]._text AS status,
             [X in metabolite._children WHERE X._type = "accession"][0]._text AS accession,
             [X in metabolite._children WHERE X._type = "name"][0]._text AS name,
@@ -29,7 +26,6 @@ def add_metabolites(tx, filename):
             [X in metabolite._children WHERE X._type = "average_molecular_weight"][0]._text AS average_molecular_weight,
             [X in metabolite._children WHERE X._type = "monisotopic_molecular_weight"][0]._text AS monisotopic_molecular_weight,
             [X in metabolite._children WHERE X._type = "iupac_name"][0]._text AS iupac_name,
-            [X in metabolite._children WHERE X._type = "traditional_iupac"][0]._text AS traditional_iupac,
             [X in metabolite._children WHERE X._type = "cas_registry_number"][0]._text AS cas_registry_number,
             [X in metabolite._children WHERE X._type = "smiles"][0]._text AS smiles,
             [X in metabolite._children WHERE X._type = "inchi"][0]._text AS inchi,
@@ -49,31 +45,39 @@ def add_metabolites(tx, filename):
             [X in metabolite._children WHERE X._type = "wikipedia_id"][0]._text AS wikipedia_id,
             [X in metabolite._children WHERE X._type = "metlin_id"][0]._text AS metlin_id,
             [X in metabolite._children WHERE X._type = "vmh_id"][0]._text AS vmh_id,
-            [X in metabolite._children WHERE X._type = "fbonto_id"][0]._text AS fbonto_id,
             [X in metabolite._children WHERE X._type = "synthesis_reference"][0]._text AS synthesis_reference,
 
             [X in metabolite._children WHERE X._type = "secondary_accessions"] AS secondary_accessions,
             [X in metabolite._children WHERE X._type = "synonyms"] AS synonyms
 
-        MERGE (m:Metabolite {{ Accession:accession }} )
-        SET m.Version = version, m.Creation_Date = creation_date,
-            m.Update_Date = update_date, m.Status = status,
-            m.Name = name, m.Chemical_Formula = chemical_formula, m.Average_Molecular_Weight = average_molecular_weight,
-            m.Monisotopic_Molecular_Weight = monisotopic_molecular_weight, m.IUPAC_Name = iupac_name,
-            m.Traditional_IUPAC = traditional_iupac, m.CAS_Registry_Number = cas_registry_number, m.Smiles = smiles,
-            m.InChi = inchi, m.InChiKey = inchikey, m.State = state, m.ChemSpider_ID = chemspider_id, m.DrugBank_ID = drugbank_id,
-            m.FooDB_ID = foodb_id, m.PubChem_Compound_ID = pubchem_compound_id, m.PDB_ID = pdb_id, m.CHEBI_ID = chebi_id,
-            m.Phenol_Explorer_Compound_ID = phenol_explorer_compound_id, m.Knapsack_ID = knapsack_id, m.Kegg_ID = kegg_id,
-            m.Bigg_ID = bigg_id, m.Wikipedia_ID = wikipedia_id, m.Metlin_ID = metlin_id, m.VMH_ID = vmh_id, m.FBonto_ID = fbonto_id,
-            m.Synthesis_Reference = synthesis_reference
+        MERGE (m:Metabolite {{ HMDB_ID:accession }} )
+        SET m.Status = status, m.Name = name, m.Formula = chemical_formula,
+            m.Average_Molecular_Weight = average_molecular_weight, m.Monisotopic_Molecular_Weight = monisotopic_molecular_weight,
+            m.IUPAC = iupac_name, m.CAS_Number = cas_registry_number, m.SMILES = smiles,
+            m.InChI = inchi, m.InChIKey = inchikey, m.State = state, m.ChemSpider_ID = chemspider_id, m.DrugBank_ID = drugbank_id,
+            m.FooDB_Compound_ID = foodb_id, m.PubChem_ID = pubchem_compound_id, m.PDB_ID = pdb_id, m.ChEBI_ID = chebi_id,
+            m.Phenol_Explorer_Compound_ID = phenol_explorer_compound_id, m.KNApSAcK_ID = knapsack_id, m.KEGG_ID = kegg_id,
+            m.Bigg_ID = bigg_id, m.WikiPedia_Article = wikipedia_id, m.METLIN_ID = metlin_id, m.VMH_ID = vmh_id
 
+        FOREACH(ignoreMe IN CASE WHEN synthesis_reference IS NOT null THEN [1] ELSE [] END |
+            MERGE (p:Publication {{ Authors:replace(split(synthesis_reference, ". ")[0], ";",",") }})
+            SET p.Title = split(split(synthesis_reference, ",")[-3], ".")[-2]
+            SET p.Publication = split(split(synthesis_reference, ",")[-3], ".")[-1]
+            SET p.Date = replace(split(split(synthesis_reference, ",")[-3], "(")[1], ")", "")
+            SET p.Volume = split(split(synthesis_reference, ",")[-2], "(")[0]
+            SET p.Issue = replace(split(split(synthesis_reference, ",")[-2], "(")[1], ")", "")
+            SET p.Pages = split(synthesis_reference, ",")[-1]
+
+            MERGE (m)-[r:CITED_IN]->(p)
+            SET r.Type = "Synthesis"
+        )
 
         WITH secondary_accessions, synonyms, m
 
-        SET m.Synonyms = "", m.Secondary_Accessions = ""
+        SET m.Synonyms = "", m.Secondary_HMDB_IDs = ""
         FOREACH(element in secondary_accessions|
             FOREACH(accession in element._children|
-                SET m.Secondary_Accessions = accession._text + "," + m.Secondary_Accessions
+                SET m.Secondary_HMDB_IDs = accession._text + "," + m.Secondary_HMDB_IDs
             )
         )
 
@@ -94,10 +98,10 @@ def add_diseases(tx, filename):
     If one wants to find the Publication nodes related to a given Metabolite/Disease relation,
     one can use:
     MATCH p=()-[r:RELATED_WITH]->()
-        WITH split(r.Pubmed_ID, ",") as pubmed
+        WITH split(r.PubMed_ID, ",") as pubmed
         UNWIND pubmed as find_this
             MATCH (p:Publication)
-                WHERE p.Pubmed_ID = find_this
+                WHERE p.PubMed_ID = find_this
     RETURN p
     """
     return tx.run(f"""
@@ -110,7 +114,7 @@ def add_diseases(tx, filename):
 
             [X in metabolite._children WHERE X._type = "diseases"] AS diseases
 
-        MERGE (m:Metabolite {{Accession:accession}})
+        MERGE (m:Metabolite {{HMDB_ID:accession}})
 
         WITH diseases, m
         UNWIND diseases AS disease
@@ -130,21 +134,21 @@ def add_diseases(tx, filename):
             diseasename, omim_id, m
 
         MERGE (d:Disease {{Name:diseasename }})
-        SET d.Omim_ID = omim_id
+        SET d.OMIM_ID = omim_id
 
         MERGE (p:Publication {{Authors:split(reference_text, ":")[0]}})
-        SET p.Abstract = split(replace(reference_text, split(reference_text, ":")[0]+": ", ""), ".")[0]
+        SET p.Title = split(replace(reference_text, split(reference_text, ":")[0]+": ", ""), ".")[0]
         SET p.Publication = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[0]
         SET p.Notes = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[2]
         SET p.Date = split(split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[1],";")[0]
         SET p.Volume = split(split(reference_text, ";")[1], "(")[0]
-        SET p.Number = split(split(reference_text, "(")[1], ")")[0]
+        SET p.Issue = split(split(reference_text, "(")[1], ")")[0]
         SET p.Pages = split(split(reference_text, ":")[-1], ".")[0]
-        SET p.Pubmed_ID = pubmed_id
+        SET p.PubMed_ID = pubmed_id
 
-        MERGE (m)-[r:RELATED_WITH]->(d)
-        SET r.Pubmed_ID = ""
-        SET r.Pubmed_ID = pubmed_id + "," + r.Pubmed_ID
+        MERGE (m)-[r:ASSOCIATED_CANCER_METABOLITE]-(d)
+        SET r.PubMed_ID = ""
+        SET r.PubMed_ID = pubmed_id + "," + r.PubMed_ID
 
         MERGE (m)-[r2:CITED_IN]->(p)
         """)
@@ -168,7 +172,7 @@ def add_concentrations_normal(tx, filename):
             [X in metabolite._children WHERE X._type = "accession"][0]._text AS accession,
             [X in metabolite._children WHERE X._type = "normal_concentrations"] AS normal_concentrations
 
-        MERGE (m:Metabolite {{Accession:accession}})
+        MERGE (m:Metabolite {{HMDB_ID:accession}})
 
         WITH normal_concentrations, m
         UNWIND normal_concentrations AS normal_concentration
@@ -197,23 +201,31 @@ def add_concentrations_normal(tx, filename):
             biospecimen, value, units, subject_age, subject_sex, subject_condition, comment,
             m
 
-        CREATE (c:Concentration {{Type:"Normal" }})
-        SET c.Biospecimen = biospecimen, c.Value = value, c.Units = units, c.Subject_Age = subject_age,
-            c.Subject_Sex = subject_sex, c.Subject_Information = subject_condition, c.Comments = comment
+        CREATE (c:Measurement {{Normal:"True"}})
+        SET c.Value = value, c.Comments = comment
 
-        MERGE (m)-[r:MEASURED_AT]->(c)
-        SET r.Pubmed_ID = ""
-        SET r.Pubmed_ID = pubmed_id + "," + r.Pubmed_ID
+        MERGE  (un:Unit {{Name:units}})
+        MERGE  (bs:BioSpecimen {{Name:biospecimen}})
+        CREATE (sb:Subject)
+        SET c.Age_Mean = subject_age, c.Gender = subject_sex, c.Information = subject_condition
+
+        MERGE (m)-[r5:MEASURED_AS]->(me)
+        MERGE (c)-[r6:MEASURED_IN]->(un)
+        MERGE (c)-[r7:TAKEN_FROM_SUBJECT]->(sb)
+        MERGE (c)-[r8:FOUND_IN]->(bs)
+
+        SET r5.PubMed_ID = ""
+        SET r5.PubMed_ID = pubmed_id + "," + r.PubMed_ID
 
         MERGE (p:Publication {{Authors:split(reference_text, ":")[0]}})
-        SET p.Abstract = split(replace(reference_text, split(reference_text, ":")[0]+": ", ""), ".")[0]
+        SET p.Title = split(replace(reference_text, split(reference_text, ":")[0]+": ", ""), ".")[0]
         SET p.Publication = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[0]
         SET p.Notes = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[2]
         SET p.Date = split(split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[1],";")[0]
         SET p.Volume = split(split(reference_text, ";")[1], "(")[0]
-        SET p.Number = split(split(reference_text, "(")[1], ")")[0]
+        SET p.Issue = split(split(reference_text, "(")[1], ")")[0]
         SET p.Pages = split(split(reference_text, ":")[-1], ".")[0]
-        SET p.Pubmed_ID = pubmed_id
+        SET p.PubMed_ID = pubmed_id
 
         MERGE (c)-[r2:CITED_IN]->(p)
         """)
@@ -237,7 +249,7 @@ def add_concentrations_abnormal(tx, filename):
             [X in metabolite._children WHERE X._type = "accession"][0]._text AS accession,
             [X in metabolite._children WHERE X._type = "abnormal_concentrations"] AS abnormal_concentrations
 
-        MERGE (m:Metabolite {{Accession:accession}})
+        MERGE (m:Metabolite {{HMDB_ID:accession}})
 
         WITH abnormal_concentrations, m
         UNWIND abnormal_concentrations AS abnormal_concentration
@@ -265,23 +277,31 @@ def add_concentrations_abnormal(tx, filename):
             [X in my_reference._children WHERE X._type = "pubmed_id"][0]._text AS pubmed_id,
             biospecimen, value, units, patient_age, patient_sex, patient_information, comment, m
 
-        CREATE (c:Concentration {{Type:"Abnormal" }})
-        SET c.Biospecimen = biospecimen, c.Value = value, c.Units = units, c.Subject_Age = patient_age,
-            c.Subject_Sex = patient_sex, c.Subject_Information = patient_information, c.Comments = comment
+        CREATE (c:Measurement {{Normal:"True"}})
+        SET c.Value = value, c.Comments = comment
 
-        MERGE (m)-[r:MEASURED_AT]->(c)
-        SET r.Pubmed_ID = ""
-        SET r.Pubmed_ID = pubmed_id + "," + r.Pubmed_ID
+        MERGE  (un:Unit {{Name:units}})
+        MERGE  (bs:BioSpecimen {{Name:biospecimen}})
+        CREATE (sb:Subject)
+        SET c.Age_Mean = subject_age, c.Gender = subject_sex, c.Information = subject_condition
+
+        MERGE (m)-[r5:MEASURED_AS]->(me)
+        MERGE (c)-[r6:MEASURED_IN]->(un)
+        MERGE (c)-[r7:TAKEN_FROM_SUBJECT]->(sb)
+        MERGE (c)-[r8:FOUND_IN]->(bs)
+
+        SET r5.PubMed_ID = ""
+        SET r5.PubMed_ID = pubmed_id + "," + r.PubMed_ID
 
         MERGE (p:Publication {{Authors:split(reference_text, ":")[0]}})
-        SET p.Abstract = split(replace(reference_text, split(reference_text, ":")[0]+": ", ""), ".")[0]
+        SET p.Title = split(replace(reference_text, split(reference_text, ":")[0]+": ", ""), ".")[0]
         SET p.Publication = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[0]
         SET p.Notes = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[2]
         SET p.Date = split(split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[1],";")[0]
         SET p.Volume = split(split(reference_text, ";")[1], "(")[0]
-        SET p.Number = split(split(reference_text, "(")[1], ")")[0]
+        SET p.Issue = split(split(reference_text, "(")[1], ")")[0]
         SET p.Pages = split(split(reference_text, ":")[-1], ".")[0]
-        SET p.Pubmed_ID = pubmed_id
+        SET p.PubMed_ID = pubmed_id
 
         MERGE (c)-[r2:CITED_IN]->(p)
         """)
@@ -304,7 +324,7 @@ def add_taxonomy(tx, filename):
             [X in metabolite._children WHERE X._type = "accession"][0]._text AS accession,
             [X in metabolite._children WHERE X._type = "taxonomy"] AS taxonomy
 
-        MERGE (m:Metabolite {{Accession:accession}})
+        MERGE (m:Metabolite {{HMDB_ID:accession}})
 
         WITH taxonomy, m
         UNWIND taxonomy as my_nodes
@@ -338,17 +358,17 @@ def add_taxonomy(tx, filename):
         )
         FOREACH(ignoreMe IN CASE WHEN direct_parent IS NOT null THEN [1] ELSE [] END |
             MERGE (dp:Taxonomy {{Name:direct_parent}})
-            MERGE (m)-[:Part_OF_CLADE]->(dp)
+            MERGE (m)-[:PART_OF_CLADE]->(dp)
         )
 
-        MERGE (sp)-[:Part_OF_CLADE]->(k)
-        MERGE (c)-[:Part_OF_CLADE]->(sp)
-        MERGE (sb)-[:Part_OF_CLADE]->(c)
+        MERGE (sp)-[:PART_OF_CLADE]->(k)
+        MERGE (c)-[:PART_OF_CLADE]->(sp)
+        MERGE (sb)-[:PART_OF_CLADE]->(c)
 
         FOREACH(element in alternative_parents|
             FOREACH(taxonomy in element._children|
                 MERGE (t:Taxonomy {{Name:taxonomy._text}})
-                MERGE (m)-[:Part_OF_CLADE]->(t)
+                MERGE (m)-[:PART_OF_CLADE]->(t)
             )
         )
         """)
@@ -371,7 +391,7 @@ def add_experimental_properties(tx, filename):
             [X in metabolite._children WHERE X._type = "accession"][0]._text AS accession,
             [X in metabolite._children WHERE X._type = "experimental_properties"] AS experimental_properties
 
-        MERGE (m:Metabolite {{Accession:accession}})
+        MERGE (m:Metabolite {{HMDB_ID:accession}})
 
         UNWIND experimental_properties as experimental_property
         WITH experimental_property, m
@@ -405,7 +425,7 @@ def add_predicted_properties(tx, filename):
             [X in metabolite._children WHERE X._type = "accession"][0]._text AS accession,
             [X in metabolite._children WHERE X._type = "predicted_properties"] AS predicted_properties
 
-        MERGE (m:Metabolite {{Accession:accession}})
+        MERGE (m:Metabolite {{HMDB_ID:accession}})
 
         UNWIND predicted_properties as predicted_property
         WITH predicted_property, m
@@ -446,7 +466,7 @@ def add_biological_properties(tx, filename):
             [X in metabolite._children WHERE X._type = "accession"][0]._text AS accession,
             [X in metabolite._children WHERE X._type = "biological_properties"] AS biological_properties
 
-        MERGE (m:Metabolite {{Accession:accession}})
+        MERGE (m:Metabolite {{HMDB_ID:accession}})
 
         WITH biological_properties, m
         UNWIND biological_properties AS biological_property
@@ -465,7 +485,7 @@ def add_biological_properties(tx, filename):
             MERGE (m)-[r:LOCATED_INSIDE_CELL]->(c)
         )
         FOREACH(location IN biospecimens|
-            MERGE (b:Biospecimen {{Name:location._text}})
+            MERGE (b:BioSpecimen {{Name:location._text}})
             MERGE (m)-[r:LOCATED_IN_BIOSPECIMEN]->(b)
         )
         FOREACH(location IN tissues|
@@ -482,8 +502,8 @@ def add_biological_properties(tx, filename):
             m
 
         MERGE (p:Pathway {{Name:name}})
-        SET p.SMPDB_ID = smpdb_id, p.KEGG_Map_ID = kegg_map_id
-        MERGE (m)-[r:PART_OF]->(p)
+        SET p.SMPDB_ID = smpdb_id, p.KEGG_ID = kegg_map_id
+        MERGE (m)-[r:PART_OF_PATHWAY]->(p)
         """)
 
 def add_proteins(tx, filename):
@@ -498,9 +518,6 @@ def add_proteins(tx, filename):
         WITH [x in value._children WHERE x._type = "protein"] AS metabolites
         UNWIND metabolites AS metabolite
         WITH
-            [X in metabolite._children WHERE X._type = "version"][0]._text AS version,
-            [X in metabolite._children WHERE X._type = "creation_date"][0]._text AS creation_date,
-            [X in metabolite._children WHERE X._type = "update_date"][0]._text AS update_date,
             [X in metabolite._children WHERE X._type = "accession"][0]._text AS accession,
             [X in metabolite._children WHERE X._type = "name"][0]._text AS name,
             [X in metabolite._children WHERE X._type = "protein_type"][0]._text AS protein_type,
@@ -520,12 +537,12 @@ def add_proteins(tx, filename):
             [X in metabolite._children WHERE X._type = "pdb_ids"] AS pdb_ids,
             [X in metabolite._children WHERE X._type = "synonyms"] AS synonyms
 
-        MERGE (p:Protein {{ Accession:accession }} )
-        SET p.Version = version, p.Creation_Date = creation_date, p.Update_Date = update_date, p.Name = name,
-            p.Protein_Type = protein_type, p.Gene_Name = gene_name, p.General_Function = general_function,
-            p.Specific_Function = specific_function, p.Genbank_Protein_ID = genbank_protein_id, p.Uniprot_ID = uniprot_id,
-            p.Uniprot_Name = uniprot_name, p.GenBank_Gene_ID = genbank_gene_id, p.GeneCard_ID = genecard_id,
-            p.GeneAtlas_ID = geneatlas_id, p.HGNC_ID = hgnc_id
+        MERGE (p:Protein {{ HMDB_ID:accession }} )
+        SET p.Name = name, p.UniProt_ID = uniprot_id,
+            p.Function = protein_type, p.Gene_Name = gene_name, p.Function = general_function,
+            p.Specific_Function = specific_function, p.Genbank_Protein_ID = genbank_protein_id,
+            p.GenBank_Gene_ID = genbank_gene_id, p.GeneCards_ID = genecard_id,
+            p.GenAtlas_ID = geneatlas_id, p.HGNC_ID = hgnc_id
 
         WITH secondary_accessions, synonyms, pdb_ids, subcellular_locations, p
 
@@ -536,10 +553,10 @@ def add_proteins(tx, filename):
             )
         )
 
-        SET p.Synonyms = "", p.Secondary_Accessions = "", p.PDB_IDs = ""
+        SET p.Synonyms = "", p.Secondary_HMDB_IDs = "", p.PDB_ID = ""
         FOREACH(element in secondary_accessions|
             FOREACH(accession in element._children|
-                SET p.Secondary_Accessions = accession._text + "," + p.Secondary_Accessions
+                SET p.Secondary_HMDB_IDs = accession._text + "," + p.Secondary_HMDB_IDs
             )
         )
         FOREACH(element in synonyms|
@@ -549,7 +566,7 @@ def add_proteins(tx, filename):
         )
         FOREACH(element in pdb_ids|
             FOREACH(pdb in element._children|
-                SET p.PDB_IDs = pdb._text + "," + p.PDB_IDs
+                SET p.PDB_ID = pdb._text + "," + p.PDB_ID
             )
         )
         """)
@@ -568,7 +585,7 @@ def add_go_classifications(tx, filename):
             [X in metabolite._children WHERE X._type = "accession"][0]._text AS accession,
             [X in metabolite._children WHERE X._type = "go_classifications"] AS go_classifications
 
-        MERGE (p:Protein {{ Accession:accession }})
+        MERGE (p:Protein {{ HMDB_ID:accession }})
 
         WITH go_classifications, p
         UNWIND go_classifications AS go_class
@@ -581,7 +598,7 @@ def add_go_classifications(tx, filename):
             [X in my_class._children WHERE X._type = "go_id"][0]._text AS go_id,
             p
 
-        MERGE (g:Gene_Ontology {{ Description:description }})
+        MERGE (g:GeneOntology {{ Description:description }})
         SET g.GO_ID = go_id, g.Category = category
 
         MERGE (p)-[r:PART_OF_GENE_ONTOLOGY]-(g)
@@ -603,7 +620,7 @@ def add_gene_properties(tx, filename):
             [X in metabolite._children WHERE X._type = "accession"][0]._text AS accession,
             [X in metabolite._children WHERE X._type = "gene_properties"] AS gene_properties
 
-        MERGE (p:Protein {{ Accession:accession }})
+        MERGE (p:Protein {{ HMDB_ID:accession }})
 
         WITH gene_properties, p
         UNWIND gene_properties AS gene_property
@@ -614,9 +631,9 @@ def add_gene_properties(tx, filename):
             [X in gene_property._children WHERE X._type = "gene_sequence"][0]._text AS gene_sequence,
             p
 
-        SET p.Chromosome_Location = chromosome_location, p.Locus = locus,
-            p.Sequence_Length = replace(split(gene_sequence, "bp")[0], ">", "")+" bp",
-            p.Gene_Sequence = replace(replace(gene_sequence, split(gene_sequence, "bp")[0]+"bp", ""), " ", "")
+        MERGE (se:Sequence {{ Sequence:replace(replace(gene_sequence, split(gene_sequence, "bp")[0]+"bp", ""), " ", "") }} )
+        SET se.Type= "DNA", se.Chromosome_Location = chromosome_location, se.Locus = locus
+        MERGE (p)-[r:SEQUENCED_AS]->(se)
         """)
 
 def add_protein_properties(tx, filename):
@@ -633,9 +650,10 @@ def add_protein_properties(tx, filename):
         UNWIND metabolites AS metabolite
         WITH
             [X in metabolite._children WHERE X._type = "accession"][0]._text AS accession,
-            [X in metabolite._children WHERE X._type = "protein_properties"] AS protein_properties
+            [X in metabolite._children WHERE X._type = "protein_properties"] AS protein_properties,
+            [X in metabolite._children WHERE X._type = "uniprot_id"][0]._text AS uniprot_id
 
-        MERGE (p:Protein {{ Accession:accession }})
+        MERGE (p:Protein {{ HMDB_ID:accession }})
 
         WITH protein_properties, p
         UNWIND protein_properties AS protein_property
@@ -649,9 +667,11 @@ def add_protein_properties(tx, filename):
             p
 
         SET p.Residue_Number = residue_number, p.Molecular_Weight = molecular_weight,
-            p.Theoretical_PI = theoretical_pi,
-            p.Polypeptide_Sequence = split(polypeptide_sequence, "\n")[0],
-            p.Polypeptide_Sequence = replace(polypeptide_sequence, split(polypeptide_sequence, "\n")[0], "")
+            p.Theoretical_PI = theoretical_pi
+
+        MERGE (se:Sequence {{ Sequence: polypeptide_sequence }} )
+        SET se.Type= "PROT", se.UniProt_ID = uniprot_id
+        MERGE (p)-[r:SEQUENCED_AS]->(se)
 
         WITH p, pfams
         UNWIND pfams AS pfam
@@ -663,16 +683,16 @@ def add_protein_properties(tx, filename):
             [X in my_pfam._children WHERE X._type = "pfam_id"][0]._text AS pfam_id,
             p
 
-        MERGE (pf:pfam {{ PFAM_ID:pfam_id }})
+        MERGE (pf:PFam {{ PFAM_ID:pfam_id }})
         SET pf.Name = name
-        MERGE (p)-[r:EXPRESSED_IN]->(pf)
+        MERGE (p)-[r:PART_OF_PFAM]->(pf)
 
         """)
 
 def add_general_references(tx, filename, type_of):
     """
     Creates "Publication" nodes based on XML files obtained from the HMDB website.
-    NOTE: Since not all nodes present a "Pubmed_ID" field (which would be ideal to uniquely-identify
+    NOTE: Since not all nodes present a "PubMed_ID" field (which would be ideal to uniquely-identify
     Publications, as the "Text" field is way more prone to typos/errors), nodes will be created using
     the "Authors" field. This means some duplicates might exist, which should be accounted for.
     NOTE: Unlike the rest, here we are not matching metabolites, but ALSO proteins. This is intentional.
@@ -686,7 +706,7 @@ def add_general_references(tx, filename, type_of):
             [X in metabolite._children WHERE X._type = "accession"][0]._text AS accession,
             [X in metabolite._children WHERE X._type = "general_references"] AS general_references
 
-        MATCH (m) WHERE (m:Metabolite OR m:Protein) AND m.Accession = accession
+        MATCH (m) WHERE (m:Metabolite OR m:Protein) AND m.HMDB_ID = accession
 
         WITH general_references, m
         UNWIND general_references AS general_reference
@@ -699,14 +719,14 @@ def add_general_references(tx, filename, type_of):
             m
 
         MERGE (p:Publication {{Authors:split(reference_text, ":")[0]}})
-        SET p.Abstract = split(replace(reference_text, split(reference_text, ":")[0]+": ", ""), ".")[0]
+        SET p.Title = split(replace(reference_text, split(reference_text, ":")[0]+": ", ""), ".")[0]
         SET p.Publication = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[0]
         SET p.Notes = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[2]
         SET p.Date = split(split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[1],";")[0]
         SET p.Volume = split(split(reference_text, ";")[1], "(")[0]
-        SET p.Number = split(split(reference_text, "(")[1], ")")[0]
+        SET p.Issue = split(split(reference_text, "(")[1], ")")[0]
         SET p.Pages = split(split(reference_text, ":")[-1], ".")[0]
-        SET p.Pubmed_ID = pubmed_id
+        SET p.PubMed_ID = pubmed_id
 
         MERGE (m)-[r:CITED_IN]->(p)
         """)
@@ -714,19 +734,19 @@ def add_general_references(tx, filename, type_of):
 def purge_database(tx):
     """
     This function purges and prepares the database for export:
-        * Removes "Publication" nodes without the Pubmed_ID property
-        * For relations with a "Pubmed_ID" property, it deletes the last character. This is an unnecesary ",".
+        * Removes "Publication" nodes without the PubMed_ID property
+        * For relations with a "PubMed_ID" property, it deletes the last character. This is an unnecesary ",".
         * In case any "Concentration" node was created without measurements, it is removed.
-    WARNING: This should be run ONLY ONCE PER SCRIPT EXECUTION, or else the r.Pubmed_ID property will be affected
+    WARNING: This should be run ONLY ONCE PER SCRIPT EXECUTION, or else the r.PubMed_ID property will be affected
     """
     return tx.run(f"""
         MATCH (p:Publication)
-            WHERE p.Pubmed_ID IS null
+            WHERE p.PubMed_ID IS null
         DETACH DELETE p
         WITH p
-        MATCH ()-[r]-() SET r.Pubmed_ID = substring(r.Pubmed_ID, 0, size(r.Pubmed_ID) -1 )
+        MATCH ()-[r]-() SET r.PubMed_ID = substring(r.PubMed_ID, 0, size(r.PubMed_ID) -1 )
         WITH p
-        MATCH (c:Concentration)
+        MATCH (c:Measurement)
         WHERE size(keys(properties(c))) < 2
         DETACH DELETE c
         """)

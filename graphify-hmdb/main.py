@@ -133,6 +133,8 @@ with driver.session() as session:
         session.write_transaction(misc.remove_duplicate_nodes, "Publication", "n.Abstract as abs")
     #And we delete duplicate relationships
     session.write_transaction(misc.remove_duplicate_relationships)
+    #We also remove all non-unique Subjects. We do this by giving all three parameters this nodes can have to apoc.mergeNodes
+    session.write_transaction(misc.remove_duplicate_nodes, "Subject", "n.Age_Mean as age, n.Gender as gender, n.Information as inf")
     # Finally, we remove some database-specific thingys
     session.write_transaction(create_nodes.purge_database)
     bar()

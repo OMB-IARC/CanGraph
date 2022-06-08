@@ -21,7 +21,7 @@ def add_cancers(tx):
     """
     return tx.run("""
         LOAD CSV WITH HEADERS FROM ('file:///cancers.csv') AS line
-            MERGE (c:Cancer { Exposome_Explorer_ID:"Cancer_"+line["id"] })
+            MERGE (c:Disease { Exposome_Explorer_ID:"Cancer_"+line["id"] })
             SET c.Name = line.name, c.Alternative_Names = replace(line.alternative_names, ";", ","), c.Displayed_Publication_Count = line.displayed_publication_count,
                 c.Displayed_Cancer_Association_Count = line.displayed_cancer_association_count,
                 c.Displayed_Biomarker_Count = line.displayed_biomarker_count
@@ -49,12 +49,12 @@ def add_components(tx):
     """
     return tx.run("""
         LOAD CSV WITH HEADERS FROM ('file:///components.csv') AS line
-            MERGE (c:Component { Exposome_Explorer_ID:"Component_"+line["id"] })
+            MERGE (c:Metabolite { Exposome_Explorer_ID:"Component_"+line["id"] })
             SET c.Name = line.name, c.Description = line.description, c.Alternative_Names = replace(line.alternative_names, ";", ","), c.Level = line.level,
-                c.CAS_Number = line.cas_number, c.PubChem_Compound_ID = line.pubchem_compound_id, c.Chebi_ID = line.chebi_id,
-                c.FooDB_Compound_ID = line.foodb_compound_id, c.FooDB_Food_ID = line.foodb_food_id, c.Structure_SMILES = line.structure_smiles,
-                c.MolDM_SMILES = line.moldb_smiles, c.MolDB_Formula = line.moldb_formula, c.MolDB_InChi = line.moldb_inchi,
-                c.MolDB_InChiKey = line.moldb_inchikey, c.MolDB_Average_Mass = line.moldb_average_mass, c.MolDB_Mono_Mass = line.moldb_mono_mass,
+                c.CAS_Number = line.cas_number, c.PubChem_ID = line.pubchem_compound_id, c.ChEBI_ID = line.chebi_id,
+                c.FooDB_Compound_ID = line.foodb_compound_id, c.FooDB_Food_ID = line.foodb_food_id,
+                c.SMILES = line.moldb_smiles, c.Formula = line.moldb_formula, c.InChI = line.moldb_inchi,
+                c.InChIKey = line.moldb_inchikey, c.Average_Molecular_Weight = line.moldb_average_mass, c.Monisotopic_Molecular_Weight = line.moldb_mono_mass,
                 c.HMDB_ID = line.hmdb_id, c.Displayed_Excretion_Concentration_Count = line.displayed_excretion_concentration_count,
                 c.Displayed_Correlated_Biomarker_Count = line.displayed_correlated_biomarker_count,
                 c.Displayed_Metabolomic_Associated_Biomarker_Count = line.displayed_metabolomic_associated_biomarker_count,
@@ -119,10 +119,11 @@ def add_microbial_metabolite_identifications(tx):
     """
     return tx.run("""
         LOAD CSV WITH HEADERS FROM ('file:///microbial_metabolite_identifications.csv') AS line
-            MERGE (mm:MicrobialMetabolite { Exposome_Explorer_ID:"MicrobialMetabolite_"+line["id"] })
+            MERGE (mm:Metabolite { Exposome_Explorer_ID:"MicrobialMetabolite_"+line["id"] })
             SET mm.Publication_ID = line.publication_id, mm.Component_ID = line.component_id, mm.Antibiotic = line.antibiotic,
-                mm.Identified_by = line.identified_by, mm.Specimen_ID = line.specimen_id,
-                mm.Bacterial_Source = line.bacterial_source, mm.Substrate = line.substrate, mm.Organism = line.organism
+                mm.Identification_Method = line.identified_by, mm.Specimen_ID = line.specimen_id,
+                mm.Bacterial_Source = line.bacterial_source, mm.Substrate = line.substrate, mm.Organism = line.organism,
+                mm.Microbial_Metabolite = "True"
         """)
 
 def add_publications(tx):
@@ -131,7 +132,7 @@ def add_publications(tx):
     return tx.run("""
         LOAD CSV WITH HEADERS FROM ('file:///publications.csv') AS line
             MERGE (p:Publication { Exposome_Explorer_ID:"Publication_"+line["id"] })
-            SET p.Title = line.title, p.First_Author = line.author_first, p.Year = line.year,  p.Journal = line.journal, p.Volume = line.volume, p.Issue = line.issue,
+            SET p.Title = line.title, p.First_Author = line.author_first, p.Date = line.year,  p.Publication = line.journal, p.Volume = line.volume, p.Issue = line.issue,
                 p.Pages = line.Pages, p.PubMed_ID = line.pmid, p.Authors = line.authors, p.DOI = line.doi, p.Public = line.public, p.Metabolomics = line.metabolomics,
                 p.Intake_Count = line.intake_count, p.Intake_Value_Count = line.intake_value_count, p.Excretion_Count = line.excretion_count, p.Excretion_Value_Count = line.excretion_value_count,
                 p.Correlation_Value_Count = line.correlation_value_count, p.Reproducibility_Value_Count = line.reproducibility_value_count,
@@ -167,8 +168,8 @@ def add_specimens(tx):
     """
     return tx.run("""
         LOAD CSV WITH HEADERS FROM ('file:///specimens.csv') AS line
-            MERGE (s:Specimen { Exposome_Explorer_ID:"Specimen_"+line["id"] })
-            SET s.Name = line.name, s.Specimen_type = line.specimen_type, s.Displayed_Excretion_Concentration_Count = line.displayed_excretion_concentration_count,
+            MERGE (s:BioSpecimen { Exposome_Explorer_ID:"Specimen_"+line["id"] })
+            SET s.Name = line.name, s.Specimen_Type = line.specimen_type, s.Displayed_Excretion_Concentration_Count = line.displayed_excretion_concentration_count,
                 s.Displayed_Biomarker_Count = line.displayed_biomarker_count, s.Displayed_Publication_Count = line.displayed_publication_count,
                 s.Displayed_Reproducibility_Count = line.displayed_reproducibility_count,
                 s.Displayed_Excretions_Correlated_with_Intake_Count = line.displayed_excretions_correlated_with_intake_count,

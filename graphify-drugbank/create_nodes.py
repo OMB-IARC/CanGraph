@@ -20,7 +20,7 @@ def add_drugs(tx, filename):
         UNWIND drugs AS drug
 
         WITH
-            drug.type AS type, drug.created AS created, drug.updated AS updated,
+            drug.type AS type,
             [X in drug._children WHERE X._type = "drugbank-id" AND X.primary = "true"][0]._text AS Primary_Drugbank_ID,
             [X in drug._children WHERE X._type = "name"][0]._text AS name,
             [X in drug._children WHERE X._type = "description"][0]._text AS description,
@@ -51,14 +51,11 @@ def add_drugs(tx, filename):
         MERGE (d:Drug {{ DrugBank_ID:Primary_Drugbank_ID }} )
 
         FOREACH(ignoreMe IN CASE WHEN synthesis_reference IS NOT null THEN [1] ELSE [] END |
-            MERGE (p:Publication {{ Authors:split(synthesis_reference, ":")[0] }})
-            SET p.Abstract = split(replace(synthesis_reference, split(synthesis_reference, ":")[0]+": ", ""), ".")[0]
-            SET p.Publication = split(replace(synthesis_reference, split(synthesis_reference, ".")[0]+". ",""), ".")[0]
-            SET p.Notes = split(replace(synthesis_reference, split(synthesis_reference, ".")[0]+". ",""), ".")[2]
-            SET p.Date = split(split(replace(synthesis_reference, split(synthesis_reference, ".")[0]+". ",""), ".")[1],";")[0]
-            SET p.Volume = split(split(synthesis_reference, ";")[1], "(")[0]
-            SET p.Number = split(split(synthesis_reference, "(")[1], ")")[0]
-            SET p.Pages = split(split(synthesis_reference, ":")[-1], ".")[0]
+            MERGE (p:Publication {{ Authors:split(synthesis_reference, "\"")[0] }})
+            SET p.Title = split(synthesis_reference, "\"")[1]
+            SET p.Publication = "US Patent Office"
+            SET p.Notes = split(split(synthesis_reference, "\"")[2], ",")[0]
+            SET p.Date = replace(split(split(synthesis_reference, "\"")[2], ",")[1], "issued ", "")
 
             MERGE (d)-[r:CITED_IN]->(p)
             SET r.Type = "Synthesis"
@@ -70,7 +67,7 @@ def add_drugs(tx, filename):
             d.Metabolism = metabolism, d.Absorption = absorption, d.Half_Life = half_life,
             d.Route_of_Elimination = route_of_elimination, d.Protein_Binding_Info = protein_binding_info,
             d.Volume_of_Distribution = volume_of_distribution, d.Clearance = clearance,
-            d.FDA_Label = fda_label, d.MSDS = msds
+            d.FDA_Label = fda_label, d.Safety_Data_Sheet = msds
 
 
         WITH food_interactions, synonyms, groups, affected_organisms, secondary_ids,  d
@@ -113,7 +110,7 @@ def add_drugs(tx, filename):
 def add_general_references(tx, filename):
     """
     Creates "Publication" nodes based on XML files obtained from the DrugBank website.
-    NOTE: Since not all nodes present a "Pubmed_ID" field (which would be ideal to uniquely-identify
+    NOTE: Since not all nodes present a "PubMed_ID" field (which would be ideal to uniquely-identify
     Publications, as the "Text" field is way more prone to typos/errors), nodes will be created using
     the "Authors" field. This means some duplicates might exist, which should be accounted for.
     """
@@ -143,14 +140,14 @@ def add_general_references(tx, filename):
 
         MERGE (p:Publication {{Ref_ID:ref_id}})
         SET p.Authors = split(citation, ":")[0]
-        SET p.Abstract = split(replace(citation, split(citation, ":")[0]+": ", ""), ".")[0]
+        SET p.Title = split(replace(citation, split(citation, ":")[0]+": ", ""), ".")[0]
         SET p.Publication = split(replace(citation, split(citation, ".")[0]+". ",""), ".")[0]
         SET p.Notes = split(replace(citation, split(citation, ".")[0]+". ",""), ".")[2]
         SET p.Date = split(split(replace(citation, split(citation, ".")[0]+". ",""), ".")[1],";")[0]
         SET p.Volume = split(split(citation, ";")[1], "(")[0]
-        SET p.Number = split(split(citation, "(")[1], ")")[0]
+        SET p.Issue = split(split(citation, "(")[1], ")")[0]
         SET p.Pages = split(split(citation, ":")[-1], ".")[0]
-        SET p.Pubmed_ID = pubmed_id
+        SET p.PubMed_ID = pubmed_id
 
         MERGE (d)-[r:CITED_IN]->(p)
         """)
@@ -205,16 +202,16 @@ def add_taxonomy(tx, filename):
         )
         FOREACH(ignoreMe IN CASE WHEN direct_parent IS NOT null THEN [1] ELSE [] END |
             MERGE (dp:Taxonomy {{ Name:direct_parent }})
-            MERGE (d)-[:Part_OF_CLADE]->(dp)
+            MERGE (d)-[:PART_OF_CLADE]->(dp)
         )
 
-        MERGE (sp)-[:Part_OF_CLADE]->(k)
-        MERGE (c)-[:Part_OF_CLADE]->(sp)
-        MERGE (sb)-[:Part_OF_CLADE]->(c)
+        MERGE (sp)-[:PART_OF_CLADE]->(k)
+        MERGE (c)-[:PART_OF_CLADE]->(sp)
+        MERGE (sb)-[:PART_OF_CLADE]->(c)
 
         FOREACH(element in alternative_parents|
             MERGE (t:Taxonomy {{Name:element._text}})
-            MERGE (d)-[:Part_OF_CLADE]->(t)
+            MERGE (d)-[:PART_OF_CLADE]->(t)
         )
         """)
 
@@ -271,7 +268,7 @@ def add_products(tx, filename):
             p.Over_the_Counter = over_the_counter, p.Approved = approved, p.Country = country,
             p.Source = source, p.Name = name
 
-        MERGE (d)-[r:PART_OF]->(p)
+        MERGE (d)-[r:PART_OF_PRODUCT]->(p)
         """)
 
 def add_mixtures(tx, filename):
@@ -301,8 +298,8 @@ def add_mixtures(tx, filename):
             [X in my_mixture._children WHERE X._type = "ingredients"][0]._text AS ingredient,
             d
 
-        MERGE (m:Mixture {{ Name:name, Ingredient:ingredient }})
-        MERGE (d)-[r:PART_OF_MIXTURE]->(m)
+        MERGE (m:Product {{ Name:name, Ingredient:ingredient }})
+        MERGE (d)-[r:PART_OF_PRODUCT]->(m)
         """)
 
 def add_categories(tx, filename):
@@ -332,9 +329,9 @@ def add_categories(tx, filename):
             [X in my_category._children WHERE X._type = "mesh-id"][0]._text AS MESH_ID,
             d
 
-        MERGE (c:Category {{ Category:category }})
-        SET c.MESH_ID = MESH_ID
-        MERGE (d)-[r:PART_OF_CATEGORY]->(c)
+        MERGE (c:MeSH {{ Category:category }})
+        SET c.MeSH_ID = MESH_ID
+        MERGE (d)-[r:RELATED_MESH]->(c)
         """)
 
 def add_manufacturers(tx, filename):
@@ -472,8 +469,8 @@ def add_atc_codes(tx, filename):
         MERGE (sec:ATC {{ Code:atc_subcode }})
         SET sec.Name = atc_text, pri.Type = "Primary", sec.Type = "Secondary"
 
-        MERGE (d)-[r:RELATED_WITH]->(pri)
-        MERGE (pri)-[r2:RELATED_WITH]->(sec)
+        MERGE (d)-[r:RELATED_ATC]->(pri)
+        MERGE (pri)-[r2:RELATED_ATC]->(sec)
         """)
 
 def add_drug_interactions(tx, filename):
@@ -503,7 +500,7 @@ def add_drug_interactions(tx, filename):
         MERGE (d:Drug {{ DrugBank_ID:Primary_Drugbank_ID }})
         MERGE (dd:Drug {{ DrugBank_ID:drugbank_id }})
         ON CREATE SET dd.Name = name
-        MERGE (d)-[r:RELATED_WITH_DRUG]-(dd)
+        MERGE (d)-[r:INTERACTS_WITH]-(dd)
         SET r.Description = description
         """)
 
@@ -530,9 +527,15 @@ def add_sequences(tx, filename):
         WITH my_sequence.format AS format, my_sequence._text as text, Primary_Drugbank_ID
 
         MERGE (d:Drug {{ DrugBank_ID:Primary_Drugbank_ID }})
-        MERGE (s:Sequence {{ Sequence_Text:text }})
-        SET s.format = format
+        MERGE (s:Sequence {{ Sequence:text }})
+        SET s.Format = format
+        SET s.Type = "PROT"
         MERGE (d)-[r:SEQUENCED_AS]->(s)
+
+        FOREACH(ignoreMe IN CASE WHEN text IS NOT null THEN [1] ELSE [] END |
+            SET d:Protein
+        )
+
         """)
 
 def add_experimental_properties(tx, filename):
@@ -562,9 +565,9 @@ def add_experimental_properties(tx, filename):
             d
 
         WITH apoc.map.fromLists(collect(kind), collect(value)) AS dict, d
-        SET d.Molecular_Weight = dict["Molecular Weight"], d.Isoelectric_Point = dict["Isoelectric Point"],
+        SET d.Average_Molecular_Weight = dict["Molecular Weight"], d.Isoelectric_Point = dict["Isoelectric Point"],
             d.Water_Solubility = dict["Water Solubility"], d.pKa = dict["pKa"],
-            d.Hydrophobicity = dict.Hydrophobicity, d.Molecular_Formula = dict["Molecular Formula"],
+            d.Hydrophobicity = dict.Hydrophobicity, d.Formula = dict["Molecular Formula"],
             d.Melting_Point = dict["Melting Point"], d.logP = dict["logP"]
         """)
 
@@ -596,12 +599,11 @@ def add_external_identifiers(tx, filename):
         MERGE (d:Drug {{ DrugBank_ID:Primary_Drugbank_ID }})
         WITH apoc.map.fromLists(collect(resource), collect(identifier)) AS dict, d
 
-        SET d.Therapeutic_Targets_Database = dict["Therapeutic Targets Database"], d.KEGG_Drug = dict["KEGG Drug"],
-            d.UniProt_ID = dict["UniProtKB"], d.PubChem_Substance = dict["PubChem Substance"],
-            d.PubChem_Compound = dict["PubChem Compound"], d.Wikipedia = dict.Wikipedia, d.ChEMBL_ID = dict.ChEMBL,
-            d.GenBank = dict.GenBank, d.DPD_ID = dict["Drugs Product Database (DPD)"], d.RxCUI = dict["RxCUI"],
-            d.PharmGKB = dict["PharmGKB"], d.KEGG_Compound = dict["KEGG Compound"], d.ChemSpider = dict.ChemSpider,
-            d.BindingDB = dict.BindingDB
+        SET d.Therapeutic_Targets_Database = dict["Therapeutic Targets Database"], d.BindingDB = dict.BindingDB,
+            d.UniProt_ID = dict["UniProtKB"], d.PubChem_ID= dict["PubChem Compound"], d.WikiPedia_Article = dict.Wikipedia,
+            d.ChEMBL_ID = dict.ChEMBL, d.Genbank_Protein_ID = dict.GenBank, d.DPD_ID = dict["Drugs Product Database (DPD)"],
+            d.RxCUI = dict["RxCUI"], d.PharmGKB = dict["PharmGKB"], d.ChemSpider_ID = dict.ChemSpider,
+            d.KEGG_ID = dict["KEGG Drug"]+","+dict["KEGG Compound"]
 
         FOREACH(ignoreMe IN CASE WHEN d.UniProt_ID IS NOT null THEN [1] ELSE [] END |
             SET d:Protein
@@ -635,7 +637,7 @@ def add_external_equivalents(tx, filename):
             Primary_Drugbank_ID
 
         MERGE (d:Drug {{ DrugBank_ID:Primary_Drugbank_ID }})
-        MERGE (ee:External_Equivalent {{ URL:url }})
+        MERGE (ee:ExternalEquivalent {{ URL:url }})
         SET ee.Resource_Name = resource
 
         MERGE (d)-[r:EQUALS]-(ee)
@@ -693,8 +695,8 @@ def add_pathways_and_relations(tx, filename):
         MERGE (d)-[r:PART_OF_PATHWAY]->(s)
         MERGE (dd)-[r2:PART_OF_PATHWAY]->(s)
         MERGE (p)-[r3:PART_OF_PATHWAY]->(s)
-        MERGE (d)-[r4:RELATED_WITH]-(dd)
-        MERGE (d)-[r5:RELATED_WITH]-(p)
+        MERGE (d)-[r4:INTERACTS_WITH]-(dd)
+        MERGE (d)-[r5:INTERACTS_WITH]-(p)
         """)
 
 def add_targets_enzymes_carriers_and_transporters(tx, filename, tag_name):
@@ -753,14 +755,14 @@ def add_targets_enzymes_carriers_and_transporters(tx, filename, tag_name):
 
         MERGE (pu:Publication {{ Ref_ID:ref_id }})
         SET pu.Authors = split(citation, ":")[0]
-        SET pu.Abstract = split(replace(citation, split(citation, ":")[0]+": ", ""), ".")[0]
+        SET pu.Title = split(replace(citation, split(citation, ":")[0]+": ", ""), ".")[0]
         SET pu.Publication = split(replace(citation, split(citation, ".")[0]+". ",""), ".")[0]
         SET pu.Notes = split(replace(citation, split(citation, ".")[0]+". ",""), ".")[2]
         SET pu.Date = split(split(replace(citation, split(citation, ".")[0]+". ",""), ".")[1],";")[0]
         SET pu.Volume = split(split(citation, ";")[1], "(")[0]
-        SET pu.Number = split(split(citation, "(")[1], ")")[0]
+        SET pu.Issue = split(split(citation, "(")[1], ")")[0]
         SET pu.Pages = split(split(citation, ":")[-1], ".")[0]
-        SET pu.Pubmed_ID = pubmed_id, pu.Type = ref_type
+        SET pu.PubMed_ID = pubmed_id, pu.Type = ref_type
 
         MERGE (d)-[r2:CITED_IN]->(pu)
 
@@ -793,16 +795,29 @@ def add_targets_enzymes_carriers_and_transporters(tx, filename, tag_name):
             target_id, name, target_organism, known_action, actions, position, d
 
         MERGE (p:Protein {{ UniProt_ID:UniProt_ID }})
-        SET p.Name = polypeptide_name, p.General_Function = general_function, p.Specific_Function = specific_function,
+        SET p.Name = polypeptide_name, p.Function = general_function, p.Specific_Function = specific_function,
             p.Gene_Name = gene_name, p.Locus = locus, p.Transmembrane_Regions = transmembrane_regions,
-            p.Signal_Regions = signal_regions, p.Theoretical_PI = theoretical_pi, p.Molecular_Weight = molecular_weight,
-            p.Chromosome_Location = chromosome_location, p.Polypeptide_Organism = polypeptide_organism,
-            p.Organism_NCBI_Taxonomy_ID = ncbi_taxonomy_id, p.Target_Position = position, p.Source = polypeptide_source,
-            p.Target_ID = target_id, p.Taget_Name = name, p.Known_Action = known_action, p.Target_Organism = target_organism,
-            p.Amino_Acid_Sequence = amino_acid_sequence, p.Amino_Acid_Sequence_Format = amino_acid_sequence_format,
-            p.Gene_Sequence = gene_sequence, p.Gene_Sequence_Format = gene_sequence_format
-        SET p.Role_as_Target = "{tag_name}"
+            p.Signal_Regions = signal_regions, p.Theoretical_PI = theoretical_pi, p.Average_Molecular_Weight = molecular_weight,
+            p.Organism = polypeptide_organism,
+            p.Target_Position = position, p.Source = polypeptide_source, p.Target_ID = target_id,
+            p.Taget_Name = name, p.Known_Action = known_action, p.Target_Organism = target_organism
+
+        SET p.Function = "{tag_name}"
         MERGE (d)-[r:TARGETS]->(p)
+
+        FOREACH(ignoreMe IN CASE WHEN amino_acid_sequence IS NOT null THEN [1] ELSE [] END |
+            MERGE (se:Sequence {{ Sequence:amino_acid_sequence }} )
+            SET se.Format = amino_acid_sequence_format, se.Type="DNA",
+                se.UniProt_ID = UniProt_ID, se.Chromosome_Location = chromosome_location
+            MERGE (p)-[r:SEQUENCED_AS]->(se)
+        )
+
+        FOREACH(ignoreMe IN CASE WHEN gene_sequence IS NOT null THEN [1] ELSE [] END |
+            MERGE (se:Sequence {{ Sequence:gene_sequence }} )
+            SET se.Format = gene_sequence_format, se.Type="DNA",
+                se.UniProt_ID = UniProt_ID, se.Chromosome_Location = chromosome_location
+            MERGE (p)-[r:SEQUENCED_AS]->(se)
+        )
 
         SET d.Actions = ""
         FOREACH(element in actions|
@@ -827,9 +842,9 @@ def add_targets_enzymes_carriers_and_transporters(tx, filename, tag_name):
 
         WITH apoc.map.fromLists(collect(resource), collect(identifier)) AS dict, d, p, go_classifiers, pfams, synonyms
         SET d.IUPHAR_ID = dict["IUPHAR"], d.Guide_to_Pharmacology_ID = dict["Guide to Pharmacology"],
-            d.GenAtlas_ID = dict["GenAtlas"], d.GenBank_Protein_Database_ID = dict["GenBank Protein Database"],
-            d.UniProtKB_ID = dict["UniProtKB"], d.UniProt_Accession_ID = dict["UniProt Accession"],
-            d.HGNC_Id = dict["HUGO Gene Nomenclature Committee (HGNC)"], d.GenBank_Gene_ID = dict["GenBank Gene Database"]
+            d.GenAtlas_ID = dict["GenAtlas"], d.Genbank_Protein_ID = dict["GenBank Protein Database"],
+            d.UniProt_ID = dict["UniProtKB"],
+            d.HGNC_ID = dict["HUGO Gene Nomenclature Committee (HGNC)"], d.GenBank_Gene_ID = dict["GenBank Gene Database"]
 
         WITH go_classifiers, pfams, d, p, synonyms
         UNWIND go_classifiers AS go_classifier
@@ -845,12 +860,12 @@ def add_targets_enzymes_carriers_and_transporters(tx, filename, tag_name):
             [X in my_pfam._children WHERE X._type = "name"][0]._text AS name,
             synonyms, d, p
 
-        MERGE (g:Gene_Ontology {{ Description:description }})
+        MERGE (g:GeneOntology {{ Description:description }})
         SET g.Category = category
-        MERGE (pf:pfam {{ PFAM_ID:identifier }})
+        MERGE (pf:PFam {{ PFAM_ID:identifier }})
         SET pf.Name = name
 
-        MERGE (p)-[r:EXPRESSED_IN]->(pf)
+        MERGE (p)-[r:PART_OF_PFAM]->(pf)
         MERGE (p)-[r2:PART_OF_GENE_ONTOLOGY]-(g)
 
         SET p.Synonyms = ""

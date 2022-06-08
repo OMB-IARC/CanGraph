@@ -99,13 +99,16 @@ def remove_n10s_graphconfig(tx):
 
 def remove_duplicate_relationships(tx):
     """
-    Removes duplicated relationships between ANY existing pair of nodes. Taken From:
-    https://stackoverflow.com/questions/18202197/how-do-i-delete-duplicate-relationships-between-two-nodes-with-cypher
+    Removes duplicated relationships between ANY existing pair of nodes.
+    NOTE: Only deletes DIRECTED relationships between THE SAME nodes, combining their properties
+    Taken from: https://stackoverflow.com/questions/18724939/neo4j-cypher-merge-duplicate-relationships
     """
     return tx.run("""
             MATCH (s)-[r]->(e)
-            WITH s,e,type(r) as typ, tail(collect(r)) as coll
-            FOREACH(x in coll | delete x)
+            WITH s, e, type(r) as typ, collect(r) as rels
+            CALL apoc.refactor.mergeRelationships(rels, {properties:"combine"})
+            YIELD rel
+            RETURN rel
         """)
 
 def remove_duplicate_nodes(tx, node_type, condition, optional_where=""):
@@ -120,7 +123,7 @@ def remove_duplicate_nodes(tx, node_type, condition, optional_where=""):
                 {optional_where}
                 WITH {condition}, COLLECT(n) AS ns
                 WHERE size(ns) > 1
-                        CALL apoc.refactor.mergeNodes(ns) YIELD node
+                        CALL apoc.refactor.mergeNodes(ns, {{properties:"combine"}}) YIELD node
                 RETURN node;
             """)
     else:
@@ -129,7 +132,7 @@ def remove_duplicate_nodes(tx, node_type, condition, optional_where=""):
                 {optional_where}
                 WITH {condition}, COLLECT(n) AS ns
                 WHERE size(ns) > 1
-                        CALL apoc.refactor.mergeNodes(ns) YIELD node
+                        CALL apoc.refactor.mergeNodes(ns, {{properties:"combine"}}) YIELD node
                 RETURN node;
             """)
 

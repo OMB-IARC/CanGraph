@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+<key id="Disease_Ontology_ID" for="node" attr.name="Disease_Ontology_ID" attr.type="string"/>
+<key id="Concentration_Median" for="node" attr.name="Concentration_Median" attr.type="string"/>
+<key id="Size" for="node" attr.name="Size" attr.type="string"/>
+<key id="Physiological_Charge" for="node" attr.name="Physiological_Charge" attr.type="string"/>
+<key id="Time_Definition" for="node" attr.name="Time_Definition" attr.type="string"/>
+<key id="Gender" for="node" attr.name="Gender" attr.type="string"/>
+<key id="Concentration_Mean" for="node" attr.name="Concentration_Mean" attr.type="string"/>
+<key id="Gene_Name" for="node" attr.name="Gene_Name" attr.type="string"/>
+<key id="EMA_Product_Code" for="node" attr.name="EMA_Product_Code" attr.type="string"/>
+<key id="Age_Median" for="node" attr.name="Age_Median" attr.type="string"/>
+<key id="BMI_Max" for="node" attr.name="BMI_Max" attr.type="string"/>
+<key id="Height_Mean" for="node" attr.name="Height_Mean" attr.type="string"/>
+<key id="Expressed_as_ID" for="node" attr.name="Expressed_as_ID" attr.type="string"/>
+<key id="HGNC_ID" for="node" attr.name="HGNC_ID" attr.type="string"/>
+<key id="Repetitions" for="node" attr.name="Repetitions" attr.type="string"/>
+<key id="Age_Max" for="node" attr.name="Age_Max" attr.type="string"/>
+<key id="Weight_Mean" for="node" attr.name="Weight_Mean" attr.type="string"/>
+<key id="Specimen_ID" for="node" attr.name="Specimen_ID" attr.type="string"/>
+<key id="Genomic_Start" for="node" attr.name="Genomic_Start" attr.type="string"/>
+<key id="Displayed_Cancer_Association_Count" for="node" attr.name="Displayed_Cancer_Association_Count" attr.type="string"/>
+<key id="Ghose_Filter" for="node" attr.name="Ghose_Filter" attr.type="string"/>
+<key id="Status" for="node" attr.name="Status" attr.type="string"/>
+<key id="Correlation_Value_Count" for="node" attr.name="Correlation_Value_Count" attr.type="string"/>
+<key id="Bioavailability" for="node" attr.name="Bioavailability" attr.type="string"/>
+<key id="BMI_SD" for="node" attr.name="BMI_SD" attr.type="string"/>
+<key id="Code" for="node" attr.name="Code" attr.type="string"/>
+<key id="labels" for="node" attr.name="labels" attr.type="string"/>
+<key id="Supplement_Exclusion" for="node" attr.name="Supplement_Exclusion" attr.type="string"/>
+<key id="Route_of_Elimination" for="node" attr.name="Route_of_Elimination" attr.type="string"/>
+<key id="Displayed_Publication_Count" for="node" attr.name="Displayed_Publication_Count" attr.type="string"/>
+<key id="Food_Items" for="node" attr.name="Food_Items" attr.type="string"/>
+<key id="Volume" for="node" attr.name="Volume" attr.type="string"/>
+<key id="Displayed_Excretions_Correlated_with_Intake_Count" for="node" attr.name="Displayed_Excretions_Correlated_with_Intake_Count" attr.type="string"/>
+<key id="Isoelectric_Point" for="node" attr.name="Isoelectric_Point" attr.type="string"/>
+<key id="Boiling_Point" for="node" attr.name="Boiling_Point" attr.type="string"/>
+<key id="Secondary_HMDB_IDs" for="node" attr.name="Secondary_HMDB_IDs" attr.type="string"/>
+<key id="Metabolomics" for="node" attr.name="Metabolomics" attr.type="string"/>
+<key id="Intake_Time_Coverage" for="node" attr.name="Intake_Time_Coverage" attr.type="string"/>
+<key id="Group" for="node" attr.name="Group" attr.type="string"/>
+<key id="Average_Molecular_Weight" for="node" attr.name="Average_Molecular_Weight" attr.type="string"/>
+<key id="Confidence_Interval_95_Lower" for="node" attr.name="Confidence_Interval_95_Lower" attr.type="string"/>
+<key id="Toxicity" for="node" attr.name="Toxicity" attr.type="string"/>
+<key id="Indication" for="node" attr.name="Indication" attr.type="string"/>
+<key id="Taget_Name" for="node" attr.name="Taget_Name" attr.type="string"/>
+<key id="Refractivity" for="node" attr.name="Refractivity" attr.type="string"/>
+<key id="Detected_Size" for="node" attr.name="Detected_Size" attr.type="string"/>
+<key id="Concentration_GeoMean" for="node" attr.name="Concentration_GeoMean" attr.type="string"/>
+<key id="LabelName" for="node" attr.name="LabelName" attr.type="string"/>
+<key id="Ended_Marketing_On" for="node" attr.name="Ended_Marketing_On" attr.type="string"/>
+<key id="Publication_ID" for="node" attr.name="Publication_ID" attr.type="string"/>
+<key id="Hydrophobicity" for="node" attr.name="Hydrophobicity" attr.type="string"/>
+<key id="Displayed_Proof_2_Publications_Count" for="node" attr.name="Displayed_Proof_2_Publications_Count" attr.type="string"/>
+<key id="PDB_ID" for="node" attr.name="PDB_ID" attr.type="string"/>
+<key id="Displayed_Intakes_Associated_with_Excretion_Count" for="node" attr.name="Displayed_Intakes_Associated_with_Excretion_Count" attr.type="string"/>
+<key id="Excretion_Value_Count" for="node" attr.name="Excretion_Value_Count" attr.type="string"/>
+<key id="ICD_1O" for="node" attr.name="ICD_1O" attr.type="string"/>
+<key id="Theoretical_PI" for="node" attr.name="Theoretical_PI" attr.type="string"/>
+<key id="Groups" for="node" attr.name="Groups" attr.type="string"/>
+<key id="Concentration_Detected_Min" for="node" attr.name="Concentration_Detected_Min" attr.type="string"/>
+<key id="FDA_Application_Number" for="node" attr.name="FDA_Application_Number" attr.type="string"/>
+<key id="Displayed_Intakes_Correlated_with_Excretion_Count" for="node" attr.name="Displayed_Intakes_Correlated_with_Excretion_Count" attr.type="string"/>
+<key id="Volume_of_Distribution" for="node" attr.name="Volume_of_Distribution" attr.type="string"/>
+<key id="Weight_SD" for="node" attr.name="Weight_SD" attr.type="string"/>
+<key id="OMIM_ID" for="node" attr.name="OMIM_ID" attr.type="string"/>
+<key id="Converted_to_ID" for="node" attr.name="Converted_to_ID" attr.type="string"/>
+<key id="BMI_Median" for="node" attr.name="BMI_Median" attr.type="string"/>
+<key id="ICC" for="node" attr.name="ICC" attr.type="string"/>
+<key id="SMILES" for="node" attr.name="SMILES" attr.type="string"/>
+<key id="Normal" for="node" attr.name="Normal" attr.type="string"/>
+<key id="Concentration_Max" for="node" attr.name="Concentration_Max" attr.type="string"/>
+<key id="Verber_Rule" for="node" attr.name="Verber_Rule" attr.type="string"/>
+<key id="ICD_11" for="node" attr.name="ICD_11" attr.type="string"/>
+<key id="FooDB_Compound_ID" for="node" attr.name="FooDB_Compound_ID" attr.type="string"/>
+<key id="Sample_ID" for="node" attr.name="Sample_ID" attr.type="string"/>
+<key id="Genbank_Protein_ID" for="node" attr.name="Genbank_Protein_ID" attr.type="string"/>
+<key id="Cohort_ID" for="node" attr.name="Cohort_ID" attr.type="string"/>
+<key id="Issue" for="node" attr.name="Issue" attr.type="string"/>
+<key id="Displayed_Associated_Biomarker_Count" for="node" attr.name="Displayed_Associated_Biomarker_Count" attr.type="string"/>
+<key id="Concentration_Percentile_75" for="node" attr.name="Concentration_Percentile_75" attr.type="string"/>
+<key id="Authors" for="node" attr.name="Authors" attr.type="string"/>
+<key id="Concentration_GeoSD" for="node" attr.name="Concentration_GeoSD" attr.type="string"/>
+<key id="Acceptor_Count" for="node" attr.name="Acceptor_Count" attr.type="string"/>
+<key id="Name" for="node" attr.name="Name" attr.type="string"/>
+<key id="Displayed_Proof_3_Publications_Count" for="node" attr.name="Displayed_Proof_3_Publications_Count" attr.type="string"/>
+<key id="Height_Median" for="node" attr.name="Height_Median" attr.type="string"/>
+<key id="Detected_Only" for="node" attr.name="Detected_Only" attr.type="string"/>
+<key id="Height_Min" for="node" attr.name="Height_Min" attr.type="string"/>
+<key id="HomoloGene_ID" for="node" attr.name="HomoloGene_ID" attr.type="string"/>
+<key id="HMDB_ID" for="node" attr.name="HMDB_ID" attr.type="string"/>
+<key id="Formal_Charge" for="node" attr.name="Formal_Charge" attr.type="string"/>
+<key id="Cancer_Association_Count" for="node" attr.name="Cancer_Association_Count" attr.type="string"/>
+<key id="MDDR_Like_Rule" for="node" attr.name="MDDR_Like_Rule" attr.type="string"/>
+<key id="Donor_Count" for="node" attr.name="Donor_Count" attr.type="string"/>
+<key id="Route" for="node" attr.name="Route" attr.type="string"/>
+<key id="Organism" for="node" attr.name="Organism" attr.type="string"/>
+<key id="Pharmacodynamics" for="node" attr.name="Pharmacodynamics" attr.type="string"/>
+<key id="SMPDB_ID" for="node" attr.name="SMPDB_ID" attr.type="string"/>
+<key id="Variance_Within" for="node" attr.name="Variance_Within" attr.type="string"/>
+<key id="CV_Within" for="node" attr.name="CV_Within" attr.type="string"/>
+<key id="Approved" for="node" attr.name="Approved" attr.type="string"/>
+<key id="Guide_to_Pharmacology_ID" for="node" attr.name="Guide_to_Pharmacology_ID" attr.type="string"/>
+<key id="Initial_ID" for="node" attr.name="Initial_ID" attr.type="string"/>
+<key id="Bigg_ID" for="node" attr.name="Bigg_ID" attr.type="string"/>
+<key id="Dosage_Form" for="node" attr.name="Dosage_Form" attr.type="string"/>
+<key id="InChIKey" for="node" attr.name="InChIKey" attr.type="string"/>
+<key id="Protein_Binding_Info" for="node" attr.name="Protein_Binding_Info" attr.type="string"/>
+<key id="VMH_ID" for="node" attr.name="VMH_ID" attr.type="string"/>
+<key id="State" for="node" attr.name="State" attr.type="string"/>
+<key id="GenAtlas_ID" for="node" attr.name="GenAtlas_ID" attr.type="string"/>
+<key id="Target_ID" for="node" attr.name="Target_ID" attr.type="string"/>
+<key id="Chromosome_Location" for="node" attr.name="Chromosome_Location" attr.type="string"/>
+<key id="MeSH_ID" for="node" attr.name="MeSH_ID" attr.type="string"/>
+<key id="PW_ID" for="node" attr.name="PW_ID" attr.type="string"/>
+<key id="Concentration_Percentile_95" for="node" attr.name="Concentration_Percentile_95" attr.type="string"/>
+<key id="Form" for="node" attr.name="Form" attr.type="string"/>
+<key id="PFAM_ID" for="node" attr.name="PFAM_ID" attr.type="string"/>
+<key id="Displayed_Microbial_Metabolite_Identification_count" for="node" attr.name="Displayed_Microbial_Metabolite_Identification_count" attr.type="string"/>
+<key id="ChemSpider_ID" for="node" attr.name="ChemSpider_ID" attr.type="string"/>
+<key id="InChI" for="node" attr.name="InChI" attr.type="string"/>
+<key id="Time" for="node" attr.name="Time" attr.type="string"/>
+<key id="Concentration_Percentile_90" for="node" attr.name="Concentration_Percentile_90" attr.type="string"/>
+<key id="Target_Organism" for="node" attr.name="Target_Organism" attr.type="string"/>
+<key id="Polar_Surface_Area" for="node" attr.name="Polar_Surface_Area" attr.type="string"/>
+<key id="Intervention_Dose" for="node" attr.name="Intervention_Dose" attr.type="string"/>
+<key id="PubChem_ID" for="node" attr.name="PubChem_ID" attr.type="string"/>
+<key id="Nb_of_Controls" for="node" attr.name="Nb_of_Controls" attr.type="string"/>
+<key id="Citation" for="node" attr.name="Citation" attr.type="string"/>
+<key id="Intake_Tool" for="node" attr.name="Intake_Tool" attr.type="string"/>
+<key id="Notes" for="node" attr.name="Notes" attr.type="string"/>
+<key id="Water_Solubility" for="node" attr.name="Water_Solubility" attr.type="string"/>
+<key id="Weight_Max" for="node" attr.name="Weight_Max" attr.type="string"/>
+<key id="First_Author" for="node" attr.name="First_Author" attr.type="string"/>
+<key id="Title" for="node" attr.name="Title" attr.type="string"/>
+<key id="WikiData_ID" for="node" attr.name="WikiData_ID" attr.type="string"/>
+<key id="Microbial_Metabolite_Identification_Count" for="node" attr.name="Microbial_Metabolite_Identification_Count" attr.type="string"/>
+<key id="Residue_Number" for="node" attr.name="Residue_Number" attr.type="string"/>
+<key id="LiverTox" for="node" attr.name="LiverTox" attr.type="string"/>
+<key id="GenBank_Gene_ID" for="node" attr.name="GenBank_Gene_ID" attr.type="string"/>
+<key id="Study_Design_Type" for="node" attr.name="Study_Design_Type" attr.type="string"/>
+<key id="KEGG_ID" for="node" attr.name="KEGG_ID" attr.type="string"/>
+<key id="CAS_Number" for="node" attr.name="CAS_Number" attr.type="string"/>
+<key id="Mechanism_of_Action" for="node" attr.name="Mechanism_of_Action" attr.type="string"/>
+<key id="Strength" for="node" attr.name="Strength" attr.type="string"/>
+<key id="Over_the_Counter" for="node" attr.name="Over_the_Counter" attr.type="string"/>
+<key id="Concentration_SD" for="node" attr.name="Concentration_SD" attr.type="string"/>
+<key id="CV_Between" for="node" attr.name="CV_Between" attr.type="string"/>
+<key id="Displayed_Correlation_Count" for="node" attr.name="Displayed_Correlation_Count" attr.type="string"/>
+<key id="Female_Proportion" for="node" attr.name="Female_Proportion" attr.type="string"/>
+<key id="Transmembrane_Regions" for="node" attr.name="Transmembrane_Regions" attr.type="string"/>
+<key id="DPD_ID" for="node" attr.name="DPD_ID" attr.type="string"/>
+<key id="Displayed_Reproducibility_Count" for="node" attr.name="Displayed_Reproducibility_Count" attr.type="string"/>
+<key id="Smoker_Proportion" for="node" attr.name="Smoker_Proportion" attr.type="string"/>
+<key id="BMI_Mean" for="node" attr.name="BMI_Mean" attr.type="string"/>
+<key id="Displayed_Correlated_Biomarker_Count" for="node" attr.name="Displayed_Correlated_Biomarker_Count" attr.type="string"/>
+<key id="DOI" for="node" attr.name="DOI" attr.type="string"/>
+<key id="Synonyms" for="node" attr.name="Synonyms" attr.type="string"/>
+<key id="BMI_Min" for="node" attr.name="BMI_Min" attr.type="string"/>
+<key id="Displayed_Metabolomic_Associated_Biomarker_Count" for="node" attr.name="Displayed_Metabolomic_Associated_Biomarker_Count" attr.type="string"/>
+<key id="Age_Min" for="node" attr.name="Age_Min" attr.type="string"/>
+<key id="Detected_Proportion" for="node" attr.name="Detected_Proportion" attr.type="string"/>
+<key id="Actions" for="node" attr.name="Actions" attr.type="string"/>
+<key id="Displayed_Intake_Value_Count" for="node" attr.name="Displayed_Intake_Value_Count" attr.type="string"/>
+<key id="Publication" for="node" attr.name="Publication" attr.type="string"/>
+<key id="Intake_Count" for="node" attr.name="Intake_Count" attr.type="string"/>
+<key id="Metabolism" for="node" attr.name="Metabolism" attr.type="string"/>
+<key id="Anatomical_Location" for="node" attr.name="Anatomical_Location" attr.type="string"/>
+<key id="BindingDB" for="node" attr.name="BindingDB" attr.type="string"/>
+<key id="Metabolomic_Association_Count" for="node" attr.name="Metabolomic_Association_Count" attr.type="string"/>
+<key id="Pages" for="node" attr.name="Pages" attr.type="string"/>
+<key id="Antibiotic" for="node" attr.name="Antibiotic" attr.type="string"/>
+<key id="Country" for="node" attr.name="Country" attr.type="string"/>
+<key id="PubMed_ID" for="node" attr.name="PubMed_ID" attr.type="string"/>
+<key id="Target_Position" for="node" attr.name="Target_Position" attr.type="string"/>
+<key id="Level" for="node" attr.name="Level" attr.type="string"/>
+<key id="Supplement_Inclusion" for="node" attr.name="Supplement_Inclusion" attr.type="string"/>
+<key id="Bacterial_Source" for="node" attr.name="Bacterial_Source" attr.type="string"/>
+<key id="Description" for="node" attr.name="Description" attr.type="string"/>
+<key id="Polarizability" for="node" attr.name="Polarizability" attr.type="string"/>
+<key id="Microbial_Metabolite" for="node" attr.name="Microbial_Metabolite" attr.type="string"/>
+<key id="ChEBI_ID" for="node" attr.name="ChEBI_ID" attr.type="string"/>
+<key id="RxCUI" for="node" attr.name="RxCUI" attr.type="string"/>
+<key id="Full_Annotation" for="node" attr.name="Full_Annotation" attr.type="string"/>
+<key id="Clearance" for="node" attr.name="Clearance" attr.type="string"/>
+<key id="Adjusted_On" for="node" attr.name="Adjusted_On" attr.type="string"/>
+<key id="URL" for="node" attr.name="URL" attr.type="string"/>
+<key id="Displayed_Proof_4_Publications_Count" for="node" attr.name="Displayed_Proof_4_Publications_Count" attr.type="string"/>
+<key id="Nb_of_Cases" for="node" attr.name="Nb_of_Cases" attr.type="string"/>
+<key id="EMA_MA_Number" for="node" attr.name="EMA_MA_Number" attr.type="string"/>
+<key id="Known_Action" for="node" attr.name="Known_Action" attr.type="string"/>
+<key id="Intake_Food_Coverage" for="node" attr.name="Intake_Food_Coverage" attr.type="string"/>
+<key id="Health_Condition" for="node" attr.name="Health_Condition" attr.type="string"/>
+<key id="Absorption" for="node" attr.name="Absorption" attr.type="string"/>
+<key id="Number_of_Rings" for="node" attr.name="Number_of_Rings" attr.type="string"/>
+<key id="Ensembl_Gene_ID" for="node" attr.name="Ensembl_Gene_ID" attr.type="string"/>
+<key id="UNII" for="node" attr.name="UNII" attr.type="string"/>
+<key id="Confidence_Interval_95_Upper" for="node" attr.name="Confidence_Interval_95_Upper" attr.type="string"/>
+<key id="Excretion_Count" for="node" attr.name="Excretion_Count" attr.type="string"/>
+<key id="Identification_Method" for="node" attr.name="Identification_Method" attr.type="string"/>
+<key id="Intake_Value_Count" for="node" attr.name="Intake_Value_Count" attr.type="string"/>
+<key id="Concentration_Min" for="node" attr.name="Concentration_Min" attr.type="string"/>
+<key id="Displayed_Excretions_Associated_with_Intake_Count" for="node" attr.name="Displayed_Excretions_Associated_with_Intake_Count" attr.type="string"/>
+<key id="DrugBank_ID" for="node" attr.name="DrugBank_ID" attr.type="string"/>
+<key id="url" for="node" attr.name="url" attr.type="string"/>
+<key id="Metabolite_ID" for="node" attr.name="Metabolite_ID" attr.type="string"/>
+<key id="Type" for="node" attr.name="Type" attr.type="string"/>
+<key id="Age_SD" for="node" attr.name="Age_SD" attr.type="string"/>
+<key id="Ingredient" for="node" attr.name="Ingredient" attr.type="string"/>
+<key id="Strand_Orientation" for="node" attr.name="Strand_Orientation" attr.type="string"/>
+<key id="Ro5" for="node" attr.name="Ro5" attr.type="string"/>
+<key id="HPO_ID" for="node" attr.name="HPO_ID" attr.type="string"/>
+<key id="Height_SD" for="node" attr.name="Height_SD" attr.type="string"/>
+<key id="Abbreviation" for="node" attr.name="Abbreviation" attr.type="string"/>
+<key id="FooDB_Food_ID" for="node" attr.name="FooDB_Food_ID" attr.type="string"/>
+<key id="Confidence_Interval_95_Geo_Lower" for="node" attr.name="Confidence_Interval_95_Geo_Lower" attr.type="string"/>
+<key id="Started_Marketing_On" for="node" attr.name="Started_Marketing_On" attr.type="string"/>
+<key id="Exposome_Explorer_ID" for="node" attr.name="Exposome_Explorer_ID" attr.type="string"/>
+<key id="Alternative_Names" for="node" attr.name="Alternative_Names" attr.type="string"/>
+<key id="Subject_ID" for="node" attr.name="Subject_ID" attr.type="string"/>
+<key id="Formula" for="node" attr.name="Formula" attr.type="string"/>
+<key id="IUPHAR_ID" for="node" attr.name="IUPHAR_ID" attr.type="string"/>
+<key id="Alternative_DrugBank_IDs" for="node" attr.name="Alternative_DrugBank_IDs" attr.type="string"/>
+<key id="Half_Life" for="node" attr.name="Half_Life" attr.type="string"/>
+<key id="Packager" for="node" attr.name="Packager" attr.type="string"/>
+<key id="Manufacturer" for="node" attr.name="Manufacturer" attr.type="string"/>
+<key id="Ancestry" for="node" attr.name="Ancestry" attr.type="string"/>
+<key id="Transporter_DB_ID" for="node" attr.name="Transporter_DB_ID" attr.type="string"/>
+<key id="Concentration_InterQuartile_Range" for="node" attr.name="Concentration_InterQuartile_Range" attr.type="string"/>
+<key id="Displayed_Nb_of_proofs" for="node" attr.name="Displayed_Nb_of_proofs" attr.type="string"/>
+<key id="Specimen_Type" for="node" attr.name="Specimen_Type" attr.type="string"/>
+<key id="Cytogenetic_Location" for="node" attr.name="Cytogenetic_Location" attr.type="string"/>
+<key id="pKa_Strongest_Acidic" for="node" attr.name="pKa_Strongest_Acidic" attr.type="string"/>
+<key id="Public" for="node" attr.name="Public" attr.type="string"/>
+<key id="Sequence" for="node" attr.name="Sequence" attr.type="string"/>
+<key id="FDA_Label" for="node" attr.name="FDA_Label" attr.type="string"/>
+<key id="Displayed_Excretion_Concentration_Count" for="node" attr.name="Displayed_Excretion_Concentration_Count" attr.type="string"/>
+<key id="Average_Mass" for="node" attr.name="Average_Mass" attr.type="string"/>
+<key id="Unit_ID" for="node" attr.name="Unit_ID" attr.type="string"/>
+<key id="GeneCards_ID" for="node" attr.name="GeneCards_ID" attr.type="string"/>
+<key id="NDC_ID" for="node" attr.name="NDC_ID" attr.type="string"/>
+<key id="Component_ID" for="node" attr.name="Component_ID" attr.type="string"/>
+<key id="Therapeutic_Targets_Database" for="node" attr.name="Therapeutic_Targets_Database" attr.type="string"/>
+<key id="Value" for="node" attr.name="Value" attr.type="string"/>
+<key id="Phenol_Explorer_Compound_ID" for="node" attr.name="Phenol_Explorer_Compound_ID" attr.type="string"/>
+<key id="NDC_Product_Code" for="node" attr.name="NDC_Product_Code" attr.type="string"/>
+<key id="logS" for="node" attr.name="logS" attr.type="string"/>
+<key id="Concentration_Percentile_05" for="node" attr.name="Concentration_Percentile_05" attr.type="string"/>
+<key id="logP" for="node" attr.name="logP" attr.type="string"/>
+<key id="Method_Type" for="node" attr.name="Method_Type" attr.type="string"/>
+<key id="Age_Mean" for="node" attr.name="Age_Mean" attr.type="string"/>
+<key id="Category" for="node" attr.name="Category" attr.type="string"/>
+<key id="Adjustment_Type" for="node" attr.name="Adjustment_Type" attr.type="string"/>
+<key id="WikiPedia_Article" for="node" attr.name="WikiPedia_Article" attr.type="string"/>
+<key id="Generic" for="node" attr.name="Generic" attr.type="string"/>
+<key id="Concentration_Percentile_10" for="node" attr.name="Concentration_Percentile_10" attr.type="string"/>
+<key id="Specific_Function" for="node" attr.name="Specific_Function" attr.type="string"/>
+<key id="METLIN_ID" for="node" attr.name="METLIN_ID" attr.type="string"/>
+<key id="Source" for="node" attr.name="Source" attr.type="string"/>
+<key id="Pregnancy_Category" for="node" attr.name="Pregnancy_Category" attr.type="string"/>
+<key id="Function" for="node" attr.name="Function" attr.type="string"/>
+<key id="Weight_Median" for="node" attr.name="Weight_Median" attr.type="string"/>
+<key id="Affected_Organisms" for="node" attr.name="Affected_Organisms" attr.type="string"/>
+<key id="Format" for="node" attr.name="Format" attr.type="string"/>
+<key id="ICC_Confidence_Interval_95_Lower" for="node" attr.name="ICC_Confidence_Interval_95_Lower" attr.type="string"/>
+<key id="Labeller" for="node" attr.name="Labeller" attr.type="string"/>
+<key id="KNApSAcK_ID" for="node" attr.name="KNApSAcK_ID" attr.type="string"/>
+<key id="Locus" for="node" attr.name="Locus" attr.type="string"/>
+<key id="Monisotopic_Molecular_Weight" for="node" attr.name="Monisotopic_Molecular_Weight" attr.type="string"/>
+<key id="Regressed_On" for="node" attr.name="Regressed_On" attr.type="string"/>
+<key id="Displayed_Metabolomic_Association_Count" for="node" attr.name="Displayed_Metabolomic_Association_Count" attr.type="string"/>
+<key id="GO_ID" for="node" attr.name="GO_ID" attr.type="string"/>
+<key id="Genomic_End" for="node" attr.name="Genomic_End" attr.type="string"/>
+<key id="pKa_Strongest_Basic" for="node" attr.name="pKa_Strongest_Basic" attr.type="string"/>
+<key id="Confidence_Interval_95_Geo_Upper" for="node" attr.name="Confidence_Interval_95_Geo_Upper" attr.type="string"/>
+<key id="Comments" for="node" attr.name="Comments" attr.type="string"/>
+<key id="Height_Max" for="node" attr.name="Height_Max" attr.type="string"/>
+<key id="pKa" for="node" attr.name="pKa" attr.type="string"/>
+<key id="Reproducibility_Value_Count" for="node" attr.name="Reproducibility_Value_Count" attr.type="string"/>
+<key id="Entrez_ID" for="node" attr.name="Entrez_ID" attr.type="string"/>
+<key id="Displayed_Biomarker_Count" for="node" attr.name="Displayed_Biomarker_Count" attr.type="string"/>
+<key id="IUPAC" for="node" attr.name="IUPAC" attr.type="string"/>
+<key id="Resource_Name" for="node" attr.name="Resource_Name" attr.type="string"/>
+<key id="Date" for="node" attr.name="Date" attr.type="string"/>
+<key id="Experimental_Method_ID" for="node" attr.name="Experimental_Method_ID" attr.type="string"/>
+<key id="Substrate" for="node" attr.name="Substrate" attr.type="string"/>
+<key id="UniProt_ID" for="node" attr.name="UniProt_ID" attr.type="string"/>
+<key id="Weight_Min" for="node" attr.name="Weight_Min" attr.type="string"/>
+<key id="Ethnicity" for="node" attr.name="Ethnicity" attr.type="string"/>
+<key id="ICC_Confidence_Interval_95_Upper" for="node" attr.name="ICC_Confidence_Interval_95_Upper" attr.type="string"/>
+<key id="Rotatable_Bond_Count" for="node" attr.name="Rotatable_Bond_Count" attr.type="string"/>
+<key id="Safety_Data_Sheet" for="node" attr.name="Safety_Data_Sheet" attr.type="string"/>
+<key id="Concentration_Percentile_25" for="node" attr.name="Concentration_Percentile_25" attr.type="string"/>
+<key id="Melting_Point" for="node" attr.name="Melting_Point" attr.type="string"/>
+<key id="ChEMBL_ID" for="node" attr.name="ChEMBL_ID" attr.type="string"/>
+<key id="PharmGKB" for="node" attr.name="PharmGKB" attr.type="string"/>
+<key id="label" for="edge" attr.name="label" attr.type="string"/>
+<graph id="G" edgedefault="directed">
+<node id="n0" labels=":Disease"><data key="labels">:Disease</data><data key="LabelName">Disease</data><data key="URL">Optional</data><data key="OMIM_ID">Optional</data><data key="Name">Text</data><data key="HPO_ID">Optional</data><data key="Alternative_Names">List</data><data key="Anatomical_Location">Optional</data><data key="ICD_11">Optional</data><data key="ICD_1O">Optional</data><data key="Displayed_Biomarker_Count">Optional</data><data key="Displayed_Publication_Count">Optional</data><data key="Displayed_Cancer_Association_Count">Optional</data><data key="Exposome_Explorer_ID">Optional</data><data key="KEGG_ID">Optional</data><data key="Disease_Ontology_ID">Optional</data><data key="WikiData_ID">Optional</data></node>
+<node id="n1" labels=":Cohort"><data key="labels">:Cohort</data><data key="URL">Optional</data><data key="LabelName">Cohort</data><data key="Displayed_Metabolomic_Association_Count">Integer</data><data key="Country">Optional</data><data key="Description">Optional</data><data key="Displayed_Correlation_Count">Integer</data><data key="PubMed_ID">Optional</data><data key="Displayed_Intake_Value_Count">Integer</data><data key="Displayed_Excretion_Concentration_Count">Integer</data><data key="Study_Design_Type">Optional</data><data key="Abbreviation">Optional</data><data key="Citation">Optional</data><data key="Displayed_Publication_Count">Integer</data><data key="Displayed_Cancer_Association_Count">Integer</data><data key="Exposome_Explorer_ID">Cohort_2</data><data key="Name">Text</data><data key="Displayed_Biomarker_Count">Text</data></node>
+<node id="n2" labels=":Drug:Metabolite"><data key="labels">:Drug:Metabolite</data><data key="FooDB_Compound_ID">Optional</data><data key="LabelName">Metabolite</data><data key="Displayed_Proof_4_Publications_Count">Integer</data><data key="Displayed_Nb_of_proofs">Integer</data><data key="Displayed_Proof_2_Publications_Count">Integer</data><data key="Displayed_Proof_3_Publications_Count">Integer</data><data key="Displayed_Intakes_Associated_with_Excretion_Count">Integer</data><data key="Displayed_Microbial_Metabolite_Identification_count">Integer</data><data key="Displayed_Excretions_Correlated_with_Intake_Count">Integer</data><data key="Displayed_Excretions_Associated_with_Intake_Count">Integer</data><data key="Displayed_Reproducibility_Count">Integer</data><data key="Displayed_Intakes_Correlated_with_Excretion_Count">Integer</data><data key="Displayed_Metabolomic_Associated_Biomarker_Count">Integer</data><data key="Displayed_Associated_Biomarker_Count">Integer</data><data key="Level">Optional</data><data key="Displayed_Correlated_Biomarker_Count">Integer</data><data key="Displayed_Excretion_Concentration_Count">Integer</data><data key="Displayed_Intake_Value_Count">Integer</data><data key="Displayed_Publication_Count">Integer</data><data key="Displayed_Cancer_Association_Count">Integer</data><data key="Exposome_Explorer_ID">MicrobialMetabolite_1</data><data key="WikiData_ID">Optional</data><data key="Alternative_Names">List</data><data key="SMILES">Optional</data><data key="PDB_ID">Optional</data><data key="Formula">Optional</data><data key="IUPAC">Optional</data><data key="Metabolite_ID">Optional</data><data key="HMDB_ID">Optional</data><data key="Phenol_Explorer_Compound_ID">Optional</data><data key="ChEMBL_ID">Optional</data><data key="Bigg_ID">Optional</data><data key="VMH_ID">Optional</data><data key="Melting_Point">Optional</data><data key="Boiling_Point">Integer</data><data key="Verber_Rule">Optional</data><data key="Water_Solubility">Optional</data><data key="Acceptor_Count">Integer</data><data key="Formal_Charge">Optional</data><data key="Refractivity">Optional</data><data key="Rotatable_Bond_Count">Optional</data><data key="MDDR_Like_Rule">Optional</data><data key="URL">Optional</data><data key="logP">Optional</data><data key="logS">Optional</data><data key="Physiological_Charge">Optional</data><data key="Polarizability">Optional</data><data key="pKa_Strongest_Basic">Optional</data><data key="Number_of_Rings">Optional</data><data key="Polar_Surface_Area">Optional</data><data key="pKa_Strongest_Acidic">Optional</data><data key="Average_Mass">Optional</data><data key="Ro5">Optional</data><data key="Bioavailability">Optional</data><data key="Donor_Count">Integer</data><data key="Function">Optional</data><data key="Description">Optional</data><data key="METLIN_ID">Optional</data><data key="WikiPedia_Article">Optional</data><data key="Identification_Method">Optional</data><data key="KNApSAcK_ID">Optional</data><data key="Ghose_Filter">Optional</data><data key="Microbial_Metabolite">Optional (Boolean True/False)</data><data key="Secondary_HMDB_IDs">List</data><data key="Monisotopic_Molecular_Weight">Optional</data><data key="State">Optional</data><data key="Name">Optional</data><data key="Status">Optional</data><data key="Transporter_DB_ID">Optional</data><data key="Average_Molecular_Weight">Optional</data><data key="InChIKey">Optional</data><data key="UniProt_ID">Optional</data><data key="ChemSpider_ID">Optional</data><data key="InChI">Optional</data><data key="DrugBank_ID">Optional</data><data key="CAS_Number">Text (Should be present in all)</data><data key="Synonyms">List</data><data key="KEGG_ID">List</data><data key="ChEBI_ID">Text (Should be present in all)</data><data key="PubChem_ID">Optional</data><data key="Specimen_ID">Optional</data><data key="Bacterial_Source">Optional</data><data key="Organism">Optional</data><data key="Antibiotic">Optional</data><data key="Component_ID">Optional</data><data key="Substrate">Optional</data><data key="FooDB_Food_ID">Optional</data><data key="Publication_ID">Optional</data></node>
+<node id="n3" labels=":ExperimentalMethod"><data key="labels">:ExperimentalMethod</data><data key="LabelName">ExperimentalMethod</data><data key="Displayed_Reproducibility_Count">Integer</data><data key="Displayed_Excretions_Correlated_with_Intake_Count">Integer</data><data key="Displayed_Excretion_Concentration_Count">Integer</data><data key="Displayed_Publication_Count">Integer</data><data key="Displayed_Biomarker_Count">Integer</data><data key="Method_Type">Optional</data><data key="Name">Optional</data><data key="Displayed_Cancer_Association_Count">Integer</data><data key="Exposome_Explorer_ID">ExperimentalMethod_1</data><data key="Alternative_Names">List</data></node>
+<node id="n4" labels=":Measurement"><data key="labels">:Measurement</data><data key="Detected_Only">Optional</data><data key="LabelName">Measurement</data><data key="Concentration_Detected_Min">Optional</data><data key="Concentration_GeoMean">Optional</data><data key="Food_Items">List</data><data key="Value">Optional</data><data key="Detected_Proportion">Optional</data><data key="Detected_Size">Optional</data><data key="Expressed_as_ID">Optional</data><data key="Supplement_Inclusion">Optional</data><data key="Adjustment_Type">Optional</data><data key="Adjusted_On">Optional</data><data key="Regressed_On">Optional</data><data key="Unit_ID">Optional</data><data key="Sample_ID">Optional</data><data key="Experimental_Method_ID">Optional</data><data key="Concentration_Percentile_95">Optional</data><data key="Concentration_InterQuartile_Range">Optional</data><data key="Concentration_Percentile_75">Optional</data><data key="Concentration_Percentile_90">Optional</data><data key="Concentration_Percentile_10">Optional</data><data key="Concentration_Percentile_25">Optional</data><data key="Concentration_Max">Optional</data><data key="Concentration_Percentile_05">Optional</data><data key="Concentration_Median">Optional</data><data key="Concentration_Min">Optional</data><data key="Exposome_Explorer_ID">Measurement_1</data><data key="Confidence_Interval_95_Upper">Optional</data><data key="Ancestry">Optional</data><data key="Confidence_Interval_95_Lower">Optional</data><data key="Component_ID">Optional</data><data key="Size">Optional</data><data key="Concentration_SD">Optional</data><data key="Concentration_GeoSD">Optional</data><data key="Confidence_Interval_95_Geo_Upper">Optional</data><data key="Normal">Optional (Boolean True/False)</data><data key="Concentration_Mean">Text</data><data key="Comments">Optional</data><data key="Confidence_Interval_95_Geo_Lower">Optional</data></node>
+<node id="n5" labels=":Publication"><data key="labels">:Publication</data><data key="PubMed_ID">Optional</data><data key="LabelName">Publication</data><data key="Displayed_Biomarker_Count">Optional (Integer)</data><data key="Exposome_Explorer_ID">Optional</data><data key="Study_Design_Type">Optional</data><data key="Cancer_Association_Count">Optional (Integer)</data><data key="Metabolomic_Association_Count">Integer</data><data key="Microbial_Metabolite_Identification_Count">Integer</data><data key="Correlation_Value_Count">Optional (Integer)</data><data key="Excretion_Value_Count">Optional (Integer)</data><data key="Excretion_Count">Optional (Integer)</data><data key="Full_Annotation">Optional (Boolean True/False)</data><data key="Intake_Value_Count">Integer</data><data key="Reproducibility_Value_Count">Integer</data><data key="Public">Optional (Boolean True/False)</data><data key="Metabolomics">Optional (Boolean True/False)</data><data key="Intake_Count">Integer</data><data key="Issue">Integer</data><data key="DOI">Optional</data><data key="First_Author">Optional</data><data key="Pages">Optional</data><data key="Volume">Optional</data><data key="Title">Optional</data><data key="Notes">Optional</data><data key="Date">Date (Text)</data><data key="Authors">Optional</data><data key="Publication">Optional</data></node>
+<node id="n6" labels=":Reproducibility"><data key="labels">:Reproducibility</data><data key="LabelName">Reproducibility</data><data key="Variance_Within">Optional</data><data key="ICC">Integer</data><data key="CV_Between">Integer</data><data key="Size">Optional</data><data key="ICC_Confidence_Interval_95_Lower">Integer</data><data key="CV_Within">Integer</data><data key="Exposome_Explorer_ID">Reproducibility_1</data><data key="ICC_Confidence_Interval_95_Upper">Integer</data><data key="Initial_ID">Optional</data></node>
+<node id="n7" labels=":Sample"><data key="labels">:Sample</data><data key="Intervention_Dose">Optional</data><data key="LabelName">Sample</data><data key="Ancestry">Optional</data><data key="Intake_Time_Coverage">Optional</data><data key="Intake_Tool">Optional</data><data key="Intake_Food_Coverage">Optional</data><data key="Time">Optional</data><data key="Time_Definition">Optional</data><data key="Subject_ID">Optional</data><data key="Repetitions">Optional</data><data key="Specimen_ID">Optional</data><data key="Exposome_Explorer_ID">Sample_1</data></node>
+<node id="n8" labels=":BioSpecimen"><data key="labels">:BioSpecimen</data><data key="LabelName">BioSpecimen</data><data key="Displayed_Excretions_Correlated_with_Intake_Count">Integer</data><data key="Displayed_Excretions_Associated_with_Intake_Count">Integer</data><data key="Specimen_Type">Optional</data><data key="Displayed_Reproducibility_Count">Integer</data><data key="Displayed_Biomarker_Count">Integer</data><data key="Displayed_Excretion_Concentration_Count">Integer</data><data key="Displayed_Publication_Count">Integer</data><data key="Displayed_Cancer_Association_Count">Integer</data><data key="Exposome_Explorer_ID">Specimen_1</data><data key="Name">Text</data></node>
+<node id="n9" labels=":Subject"><data key="labels">:Subject</data><data key="LabelName">Subject</data><data key="Exposome_Explorer_ID">Subject_10</data><data key="Name">Optional</data><data key="Nb_of_Cases">Optional</data><data key="Nb_of_Controls">Optional</data><data key="Height_Median">Integer</data><data key="Weight_Median">Integer</data><data key="BMI_Median">Integer</data><data key="Smoker_Proportion">Optional</data><data key="Health_Condition">Optional</data><data key="Age_Median">Integer</data><data key="Height_SD">Integer</data><data key="Weight_SD">Integer</data><data key="BMI_Max">Integer</data><data key="Supplement_Exclusion">Optional</data><data key="Weight_Max">Integer</data><data key="BMI_Min">Integer</data><data key="Weight_Mean">Integer</data><data key="Weight_Min">Integer</data><data key="Height_Min">Integer</data><data key="Height_Max">Integer</data><data key="Age_Max">Integer</data><data key="Height_Mean">Integer</data><data key="Cohort_ID">Optional</data><data key="Age_Min">Integer</data><data key="BMI_Mean">Integer</data><data key="BMI_SD">Integer</data><data key="Age_Mean">Integer</data><data key="Age_SD">Integer</data><data key="Gender">Optional</data><data key="Female_Proportion">Optional</data><data key="Ancestry">Optional</data><data key="Ethnicity">Optional</data><data key="Publication_ID">Optional</data><data key="Size">Optional</data><data key="Description">Optional</data><data key="Country">Optional</data></node>
+<node id="n10" labels=":Unit"><data key="labels">:Unit</data><data key="Type">Optional</data><data key="LabelName">Unit</data><data key="Exposome_Explorer_ID">Unit_7</data><data key="Name">Text</data><data key="Group">Optional</data><data key="Converted_to_ID">Optional</data></node>
+<node id="n11" labels=":Disease"><data key="labels">:Disease</data><data key="LabelName">Disease</data><data key="URL">Optional</data><data key="OMIM_ID">Optional</data><data key="KEGG_ID">Optional</data><data key="HPO_ID">Optional</data><data key="Anatomical_Location">Optional</data><data key="Displayed_Biomarker_Count">Optional</data><data key="ICD_1O">Optional</data><data key="ICD_11">Optional</data><data key="Displayed_Publication_Count">Optional</data><data key="Displayed_Cancer_Association_Count">Optional</data><data key="Exposome_Explorer_ID">Optional</data><data key="Name">Text</data><data key="Alternative_Names">List</data><data key="Disease_Ontology_ID">Optional</data><data key="WikiData_ID">Optional</data></node>
+<node id="n12" labels=":Disease"><data key="labels">:Disease</data><data key="LabelName">Disease</data><data key="URL">Optional</data><data key="OMIM_ID">Optional</data><data key="KEGG_ID">Optional</data><data key="HPO_ID">Optional</data><data key="Anatomical_Location">Optional</data><data key="Displayed_Biomarker_Count">Optional</data><data key="ICD_1O">Optional</data><data key="ICD_11">Optional</data><data key="Displayed_Publication_Count">Optional</data><data key="Displayed_Cancer_Association_Count">Optional</data><data key="Exposome_Explorer_ID">Optional</data><data key="Name">Text</data><data key="Alternative_Names">List</data><data key="Disease_Ontology_ID">Optional</data><data key="WikiData_ID">Optional</data></node>
+<node id="n13" labels=":Disease"><data key="labels">:Disease</data><data key="LabelName">Disease</data><data key="URL">Optional</data><data key="OMIM_ID">Optional</data><data key="KEGG_ID">Optional</data><data key="HPO_ID">Optional</data><data key="Anatomical_Location">Optional</data><data key="Displayed_Biomarker_Count">Optional</data><data key="ICD_1O">Optional</data><data key="ICD_11">Optional</data><data key="Displayed_Publication_Count">Optional</data><data key="Displayed_Cancer_Association_Count">Optional</data><data key="Exposome_Explorer_ID">Optional</data><data key="Name">Text</data><data key="Alternative_Names">List</data><data key="Disease_Ontology_ID">Optional</data><data key="WikiData_ID">Optional</data></node>
+<node id="n14" labels=":Disease"><data key="labels">:Disease</data><data key="LabelName">Disease</data><data key="URL">Optional</data><data key="OMIM_ID">Optional</data><data key="KEGG_ID">Optional</data><data key="HPO_ID">Optional</data><data key="Anatomical_Location">Optional</data><data key="Displayed_Biomarker_Count">Optional</data><data key="ICD_1O">Optional</data><data key="ICD_11">Optional</data><data key="Displayed_Publication_Count">Optional</data><data key="Displayed_Cancer_Association_Count">Optional</data><data key="Exposome_Explorer_ID">Optional</data><data key="Name">Text</data><data key="Alternative_Names">List</data><data key="Disease_Ontology_ID">Optional</data><data key="WikiData_ID">Optional</data></node>
+<node id="n15" labels=":Drug"><data key="labels">:Drug</data><data key="LiverTox">Optional</data><data key="LabelName">Drug</data><data key="InChIKey">Optional</data><data key="Pregnancy_Category">Optional</data><data key="DrugBank_ID">Text</data><data key="InChI">Optional</data><data key="CAS_Number">Optional</data><data key="ChemSpider_ID">Optional</data><data key="PubChem_ID">Optional</data><data key="ChEMBL_ID">Optional</data><data key="KEGG_ID">Optional</data><data key="ChEBI_ID">Optional</data><data key="WikiData_ID">Optional</data><data key="Name">Optional</data><data key="SMILES">Optional</data><data key="URL">Optional</data><data key="Average_Mass">Optional</data><data key="Formula">Optional</data></node>
+<node id="n16" labels=":ExternalEquivalent"><data key="labels">:ExternalEquivalent</data><data key="LabelName">ExternalEquivalent</data><data key="Resource_Name">Optional</data><data key="WikiData_ID">Optional</data><data key="url">Text</data></node>
+<node id="n17" labels=":Cause"><data key="labels">:Cause</data><data key="URL">Optional</data><data key="LabelName">Cause</data><data key="WikiData_ID">Text</data><data key="Name">Optional</data></node>
+<node id="n18" labels=":Gene"><data key="labels">:Gene</data><data key="Cytogenetic_Location">Optional</data><data key="OMIM_ID">Optional</data><data key="HomoloGene_ID">Optional</data><data key="URL">Integer</data><data key="HGNC_ID">Optional</data><data key="Ensembl_Gene_ID">Optional</data><data key="Entrez_ID">Optional</data><data key="Genomic_End">Integer</data><data key="Strand_Orientation">Optional</data><data key="Name">Optional</data><data key="Genomic_Start">Integer</data><data key="Chromosome_Location">Optional</data><data key="WikiData_ID">Text</data><data key="LabelName">Gene</data></node>
+<node id="n19" labels=":AdministrationRoute"><data key="labels">:AdministrationRoute</data><data key="LabelName">AdministrationRoute</data><data key="URL">Optional</data><data key="WikiData_ID">Text</data><data key="Name">Optional</data></node>
+<node id="n20" labels=":Product"><data key="labels">:Product</data><data key="WikiData_ID">Optional</data><data key="LabelName">Product</data><data key="URL">Optional</data><data key="NDC_ID">Optional</data><data key="EMA_MA_Number">Optional</data><data key="Ingredient">Optional</data><data key="DPD_ID">Optional</data><data key="EMA_Product_Code">Optional</data><data key="Country">Optional</data><data key="Source">Optional</data><data key="Generic">Optional (Boolean True/False)</data><data key="Over_the_Counter">Optional (Boolean True/False)</data><data key="Approved">Optional (Boolean True/False)</data><data key="Name">Text</data><data key="Route">Optional</data><data key="FDA_Application_Number">Optional</data><data key="Dosage_Form">Optional</data><data key="Strength">Optional</data><data key="Started_Marketing_On">Optional</data><data key="Ended_Marketing_On">Optional</data><data key="Labeller">Optional</data><data key="NDC_Product_Code">Optional</data></node>
+<node id="n21" labels=":Tissue"><data key="labels">:Tissue</data><data key="URL">Optional</data><data key="LabelName">Tissue</data><data key="WikiData_ID">Optional</data><data key="Name">Text</data></node>
+<node id="n23" labels=":Taxonomy"><data key="labels">:Taxonomy</data><data key="LabelName">Taxonomy</data><data key="Name">Text</data><data key="Type">Kingdom</data></node>
+<node id="n24" labels=":Taxonomy"><data key="labels">:Taxonomy</data><data key="LabelName">Taxonomy</data><data key="Name">Text</data><data key="Type">Super Class</data></node>
+<node id="n25" labels=":Taxonomy"><data key="labels">:Taxonomy</data><data key="LabelName">Taxonomy</data><data key="Name">Text</data><data key="Type">Class</data></node>
+<node id="n26" labels=":Taxonomy"><data key="labels">:Taxonomy</data><data key="LabelName">Taxonomy</data><data key="Name">Text</data><data key="Type">Sub Class</data></node>
+<node id="n27" labels=":Taxonomy"><data key="labels">:Taxonomy</data><data key="Name">Text</data><data key="LabelName">Taxonomy</data></node>
+<node id="n28" labels=":CelularLocation"><data key="labels">:CelularLocation</data><data key="Name">Text</data><data key="LabelName">CelularLocation</data></node>
+<node id="n29" labels=":Pathway"><data key="labels">:Pathway</data><data key="LabelName">Pathway</data><data key="SMPDB_ID">Text</data><data key="Description">Optional</data><data key="PW_ID">Optional</data><data key="Category">Optional</data><data key="Name">Optional</data><data key="KEGG_ID">Optional</data></node>
+<node id="n30" labels=":Drug:Protein"><data key="labels">:Drug:Protein</data><data key="LabelName">Protein</data><data key="SMILES">Optional</data><data key="PDB_ID">List</data><data key="HMDB_ID">Optional</data><data key="Formula">Optional</data><data key="Guide_to_Pharmacology_ID">Optional</data><data key="GenAtlas_ID">Optional</data><data key="Actions">List</data><data key="IUPHAR_ID">Optional</data><data key="Alternative_DrugBank_IDs">List</data><data key="Transmembrane_Regions">Optional</data><data key="Target_Position">Optional</data><data key="Known_Action">Optional</data><data key="Target_Organism">Optional</data><data key="Target_ID">Optional</data><data key="Taget_Name">Optional</data><data key="PharmGKB">Optional</data><data key="BindingDB">Optional</data><data key="ChEMBL_ID">Optional</data><data key="RxCUI">Optional</data><data key="pKa">Optional</data><data key="Therapeutic_Targets_Database">Optional</data><data key="Hydrophobicity">Optional</data><data key="Isoelectric_Point">Optional</data><data key="Water_Solubility">Optional</data><data key="Melting_Point">Optional</data><data key="logP">Optional</data><data key="URL">Optional</data><data key="Source">Optional</data><data key="Average_Mass">Optional</data><data key="Description">Optional</data><data key="Safety_Data_Sheet">Optional</data><data key="GeneCards_ID">Optional</data><data key="Function">Optional</data><data key="Secondary_HMDB_IDs">List</data><data key="WikiPedia_Article">Optional</data><data key="Affected_Organisms">List</data><data key="Protein_Binding_Info">Optional</data><data key="FDA_Label">Optional</data><data key="Clearance">Optional</data><data key="Gene_Name">Optional</data><data key="Route_of_Elimination">Optional</data><data key="Volume_of_Distribution">Optional</data><data key="Absorption">Optional</data><data key="Half_Life">Optional</data><data key="Toxicity">Optional</data><data key="Metabolism">Optional</data><data key="Pharmacodynamics">Optional</data><data key="Mechanism_of_Action">Optional</data><data key="Indication">Optional</data><data key="Synonyms">List</data><data key="Groups">List</data><data key="Theoretical_PI">Optional</data><data key="UNII">Optional</data><data key="Locus">Optional</data><data key="Residue_Number">Integer</data><data key="GenBank_Gene_ID">Optional</data><data key="State">Optional</data><data key="Specific_Function">Optional</data><data key="Genbank_Protein_ID">Optional</data><data key="Average_Molecular_Weight">Optional</data><data key="Name">Optional</data><data key="HGNC_ID">Optional</data><data key="UniProt_ID">Optional</data><data key="CAS_Number">Optional</data><data key="ChemSpider_ID">Optional</data><data key="PubChem_ID">Optional</data><data key="DrugBank_ID">Optional</data><data key="Organism">Optional</data><data key="KEGG_ID">Optional</data></node>
+<node id="n31" labels=":GeneOntology"><data key="labels">:GeneOntology</data><data key="Description">Text</data><data key="LabelName">GeneOntology</data><data key="GO_ID">Optional</data><data key="Category">Optional</data></node>
+<node id="n32" labels=":PFam"><data key="labels">:PFam</data><data key="Name">Optional</data><data key="PFAM_ID">Text</data><data key="LabelName">PFam</data></node>
+<node id="n33" labels=":Sequence"><data key="labels">:Sequence</data><data key="Locus">Optional</data><data key="LabelName">Sequence</data><data key="Type">Boolean (DNA/PROT)</data><data key="Sequence">Text (FASTA header Optional)</data><data key="UniProt_ID">Optional</data><data key="Format">Optional</data><data key="Chromosome_Location">Optional</data><data key="Name">Optional</data></node>
+<node id="n34" labels=":MeSH"><data key="labels">:MeSH</data><data key="LabelName">MeSH</data><data key="Category">Optional</data><data key="MeSH_ID">Optional</data></node>
+<node id="n35" labels=":Company"><data key="labels">:Company</data><data key="Packager">Optional (Boolean True/False)</data><data key="LabelName">Company</data><data key="Manufacturer">Optional (Boolean True/False)</data><data key="Name">Text</data><data key="URL">Text</data><data key="Generic">Optional (Boolean True/False)</data></node>
+<node id="n36" labels=":Dosage"><data key="labels">:Dosage</data><data key="Form">Optional</data><data key="LabelName">Dosage</data><data key="Strength">Optional</data><data key="Route">Text</data></node>
+<node id="n37" labels=":ATC"><data key="labels">:ATC</data><data key="Name">Optional</data><data key="Code">Text</data><data key="LabelName">ATC</data></node>
+<node id="n38" labels=":ATC"><data key="labels">:ATC</data><data key="Name">Optional</data><data key="Code">Text</data><data key="LabelName">ATC</data></node>
+<edge id="e0" source="n0" target="n13" label="SUBCLASS_OF"><data key="label">SUBCLASS_OF</data></edge>
+<edge id="e1" source="n4" target="n5" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e2" source="n4" target="n9" label="TAKEN_FROM_SUBJECT"><data key="label">TAKEN_FROM_SUBJECT</data></edge>
+<edge id="e3" source="n4" target="n8" label="FOUND_IN"><data key="label">FOUND_IN</data></edge>
+<edge id="e4" source="n2" target="n28" label="LOCATED_INSIDE_CELL"><data key="label">LOCATED_INSIDE_CELL</data></edge>
+<edge id="e5" source="n2" target="n5" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e6" source="n2" target="n16" label="EQUALS"><data key="label">EQUALS</data></edge>
+<edge id="e7" source="n18" target="n2" label="ENCODES"><data key="label">ENCODES</data></edge>
+<edge id="e8" source="n2" target="n8" label="FOUND_IN"><data key="label">FOUND_IN</data></edge>
+<edge id="e9" source="n2" target="n2" label="IDENTIFIED_AS"><data key="label">IDENTIFIED_AS</data></edge>
+<edge id="e10" source="n30" target="n33" label="SEQUENCED_AS"><data key="label">SEQUENCED_AS</data></edge>
+<edge id="e11" source="n30" target="n29" label="PART_OF_PATHWAY"><data key="label">PART_OF_PATHWAY</data></edge>
+<edge id="e12" source="n30" target="n5" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e13" source="n30" target="n31" label="PART_OF_GENE_ONTOLOGY"><data key="label">PART_OF_GENE_ONTOLOGY</data></edge>
+<edge id="e14" source="n30" target="n16" label="EQUALS"><data key="label">EQUALS</data></edge>
+<edge id="e15" source="n30" target="n36" label="DOSED_AS"><data key="label">DOSED_AS</data></edge>
+<edge id="e16" source="n30" target="n35" label="MANUFACTURED_BY"><data key="label">MANUFACTURED_BY</data></edge>
+<edge id="e17" source="n30" target="n30" label="TARGETS"><data key="label">TARGETS</data></edge>
+<edge id="e18" source="n30" target="n28" label="LOCATED_INSIDE_CELL"><data key="label">LOCATED_INSIDE_CELL</data></edge>
+<edge id="e19" source="n2" target="n21" label="LOCATED_IN_TISSUE"><data key="label">LOCATED_IN_TISSUE</data></edge>
+<edge id="e20" source="n10" target="n10" label="CONVERTED_INTO"><data key="label">CONVERTED_INTO</data></edge>
+<edge id="e21" source="n2" target="n4" label="MEASURED_AS"><data key="label">MEASURED_AS</data></edge>
+<edge id="e22" source="n4" target="n7" label="TAKEN_FROM_SAMPLE"><data key="label">TAKEN_FROM_SAMPLE</data></edge>
+<edge id="e23" source="n4" target="n3" label="USING_METHOD"><data key="label">USING_METHOD</data></edge>
+<edge id="e24" source="n4" target="n6" label="REPODUCIBILE_WITH_CONDITIONS"><data key="label">REPODUCIBILE_WITH_CONDITIONS</data></edge>
+<edge id="e25" source="n7" target="n8" label="FOUND_IN"><data key="label">FOUND_IN</data></edge>
+<edge id="e26" source="n7" target="n9" label="TAKEN_FROM_SUBJECT"><data key="label">TAKEN_FROM_SUBJECT</data></edge>
+<edge id="e27" source="n12" target="n11" label="SUBCLASS_OF"><data key="label">SUBCLASS_OF</data></edge>
+<edge id="e28" source="n13" target="n12" label="SUBCLASS_OF"><data key="label">SUBCLASS_OF</data></edge>
+<edge id="e29" source="n14" target="n13" label="INSTANCE_OF"><data key="label">INSTANCE_OF</data></edge>
+<edge id="e30" source="n12" target="n15" label="TARGETED_BY"><data key="label">TARGETED_BY</data></edge>
+<edge id="e31" source="n12" target="n16" label="EQUALS"><data key="label">EQUALS</data></edge>
+<edge id="e32" source="n12" target="n17" label="CAUSED_BY"><data key="label">CAUSED_BY</data></edge>
+<edge id="e33" source="n15" target="n19" label="ADMINISTERED_VIA"><data key="label">ADMINISTERED_VIA</data></edge>
+<edge id="e34" source="n18" target="n21" label="EXPRESSED_IN"><data key="label">EXPRESSED_IN</data></edge>
+<edge id="e35" source="n18" target="n16" label="EQUALS"><data key="label">EQUALS</data></edge>
+<edge id="e36" source="n4" target="n4" label="ASSOCIATED_WITH_MEASUREMENT"><data key="label">ASSOCIATED_WITH_MEASUREMENT</data></edge>
+<edge id="e37" source="n9" target="n5" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e38" source="n15" target="n20" label="PART_OF_PRODUCT"><data key="label">PART_OF_PRODUCT</data></edge>
+<edge id="e39" source="n30" target="n32" label="PART_OF_PFAM"><data key="label">PART_OF_PFAM</data></edge>
+<edge id="e40" source="n15" target="n2" label="INTERACTS_WITH"><data key="label">INTERACTS_WITH</data></edge>
+<edge id="e41" source="n30" target="n30" label="INTERACTS_WITH"><data key="label">INTERACTS_WITH</data></edge>
+<edge id="e42" source="n2" target="n30" label="INTERACTS_WITH"><data key="label">INTERACTS_WITH</data></edge>
+<edge id="e43" source="n4" target="n10" label="MEASURED_IN"><data key="label">MEASURED_IN</data></edge>
+<edge id="e44" source="n2" target="n34" label="RELATED_MESH"><data key="label">RELATED_MESH</data></edge>
+<edge id="e45" source="n30" target="n34" label="RELATED_MESH"><data key="label">RELATED_MESH</data></edge>
+<edge id="e46" source="n30" target="n20" label="PART_OF_PRODUCT"><data key="label">PART_OF_PRODUCT</data></edge>
+<edge id="e47" source="n2" target="n29" label="PART_OF_PATHWAY"><data key="label">PART_OF_PATHWAY</data></edge>
+<edge id="e48" source="n2" target="n27" label="PART_OF_CLADE"><data key="label">PART_OF_CLADE</data></edge>
+<edge id="e49" source="n2" target="n26" label="PART_OF_CLADE"><data key="label">PART_OF_CLADE</data></edge>
+<edge id="e50" source="n30" target="n25" label="PART_OF_CLADE"><data key="label">PART_OF_CLADE</data></edge>
+<edge id="e51" source="n26" target="n25" label="PART_OF_CLADE"><data key="label">PART_OF_CLADE</data></edge>
+<edge id="e52" source="n25" target="n24" label="PART_OF_CLADE"><data key="label">PART_OF_CLADE</data></edge>
+<edge id="e53" source="n24" target="n23" label="PART_OF_CLADE"><data key="label">PART_OF_CLADE</data></edge>
+<edge id="e54" source="n9" target="n1" label="PART_OF_COHORT"><data key="label">PART_OF_COHORT</data></edge>
+<edge id="e55" source="n30" target="n37" label="RELATED_ATC"><data key="label">RELATED_ATC</data></edge>
+<edge id="e56" source="n37" target="n38" label="RELATED_ATC"><data key="label">RELATED_ATC</data></edge>
+<edge id="e58" source="n4" target="n0" label="ASSOCIATED_CANCER_MEASUREMENT"><data key="label">ASSOCIATED_CANCER_MEASUREMENT</data></edge>
+<edge id="e59" source="n18" target="n12" label="ASSOCIATED_CANCER_GENE"><data key="label">ASSOCIATED_CANCER_GENE</data></edge>
+<edge id="e60" source="n2" target="n13" label="ASSOCIATED_CANCER_METABOLITE"><data key="label">ASSOCIATED_CANCER_METABOLITE</data></edge>
+</graph>
+</graphml>

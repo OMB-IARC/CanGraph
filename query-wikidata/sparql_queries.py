@@ -40,13 +40,13 @@ def initial_cancer_discovery(tx, number=None):
             row['cause_of_death']['value'] as url,
             split(row['cause_of_death']['value'],'/')[-1] as id
 
-        CREATE (c:Cancer)
-        SET c.name = label,
-            c.url = url,
+        CREATE (c:Disease)
+        SET c.Name = label,
+            c.URL = url,
             c.WikiData_ID = id
 
         WITH c
-        MATCH (n:Cancer)
+        MATCH (n:Disease)
             WHERE n.WikiData_ID = "Q12078"
         DETACH DELETE n
         """)
@@ -58,7 +58,7 @@ def find_subclass_of_cancer(tx, number=None):
     should also, only affect humans
     """
     return tx.run("""
-        MATCH (c:Cancer)
+        MATCH (c:Disease)
         WITH 'SELECT DISTINCT ?cancer ?cancer_name
         WHERE {
                 ?cancer wdt:P279 wd:' + c.WikiData_ID + ' .
@@ -73,9 +73,9 @@ def find_subclass_of_cancer(tx, number=None):
 
         UNWIND value['results']['bindings'] as row
 
-        CREATE (s:Cancer)
-        SET s.name = row['cancer_name']['value'],
-            s.url = row['cancer']['value'],
+        CREATE (s:Disease)
+        SET s.Name = row['cancer_name']['value'],
+            s.URL = row['cancer']['value'],
             s.WikiData_ID = split(row['cancer']['value'],'/')[-1]
 
         CREATE (s)-[:SUBCLASS_OF]->(c)
@@ -88,7 +88,7 @@ def find_instance_of_cancer(tx, number=None):
     should also, only affect humans
     """
     return tx.run("""
-        MATCH (c:Cancer)
+        MATCH (c:Disease)
         WITH 'SELECT DISTINCT ?cancer ?cancer_name
         WHERE {
                 ?cancer wdt:P31 wd:' + c.WikiData_ID + ' .
@@ -103,9 +103,9 @@ def find_instance_of_cancer(tx, number=None):
 
         UNWIND value['results']['bindings'] as row
 
-        CREATE (i:Cancer)
-        SET i.name = row['cancer_name']['value'],
-            i.url = row['cancer']['value'],
+        CREATE (i:Disease)
+        SET i.Name = row['cancer_name']['value'],
+            i.URL = row['cancer']['value'],
             i.WikiData_ID = split(row['cancer']['value'],'/')[-1]
 
         CREATE (i)-[:INSTANCE_OF]->(c)
@@ -117,7 +117,7 @@ def add_cancer_info(tx, number):
     are targeted, and the Java Machine does not run out of memory
     """
     return tx.run(f"""
-        MATCH (c:Cancer)
+        MATCH (c:Disease)
             WHERE toFloat(split(c.WikiData_ID,"")[-1]) = toFloat({number})
         WITH 'SELECT *
             WHERE{{
@@ -137,6 +137,8 @@ def add_cancer_info(tx, number):
                 ?item wdt:P494 ?ICD_1O }}
             OPTIONAL{{
                 ?item wdt:P7807 ?ICD_11 }}
+            OPTIONAL{{
+                ?item wdt:P492 ?OMIM_ID }}
             }}' AS sparql, c
 
             CALL apoc.load.jsonParams(
@@ -151,6 +153,7 @@ def add_cancer_info(tx, number):
             c.Anatomical_Location = row['Anatomical_Location_name']['value'],
             c.HPO_ID = row['HPO_ID']['value'],
             c.ICD_1O = row['ICD_1O']['value'],
+            c.OMIM_ID = row['OMIM_ID']['value'],
             c.ICD_11 = row['ICD_11']['value']
         """)
 
@@ -159,7 +162,7 @@ def add_drugs(tx, number):
     Creates drug nodes related with each of the "Cancer" nodes already on the database
     """
     return tx.run(f"""
-        MATCH (c:Cancer)
+        MATCH (c:Disease)
             WHERE toFloat(split(c.WikiData_ID,"")[-1]) = toFloat({number})
         WITH 'SELECT *
             WHERE{{
@@ -181,13 +184,13 @@ def add_drugs(tx, number):
         UNWIND value['results']['bindings'] as row
 
         FOREACH(ignoreme in case when row['Drugs'] is not null then [1] else [] end |
-                MERGE (d:Drug{{url:row['Drugs']['value'],
+                MERGE (d:Drug{{URL:row['Drugs']['value'],
                                WikiData_ID:split(row['Drugs']['value'],'/')[-1],
-                               name:row['DrugName']['value'] }} )
+                               Name:row['DrugName']['value'] }} )
                 MERGE (c)-[:TARGETED_BY]->(d))
 
         FOREACH(ignoreme in case when row['Exact_Matches'] is not null then [1] else [] end |
-                MERGE (e:ExternalEquivalent{{url:row['Exact_Matches']['value'],
+                MERGE (e:ExternalEquivalent{{URL:row['Exact_Matches']['value'],
                                             WikiData_ID:split(row['Exact_Matches']['value'],'/')[-1]}})
                 MERGE (c)-[:EQUALS]-(e))
         """)
@@ -197,7 +200,7 @@ def add_causes(tx, number):
     Creates drug nodes related with each of the "Cancer" nodes already on the database
     """
     return tx.run(f"""
-        MATCH (c:Cancer)
+        MATCH (c:Disease)
             WHERE toFloat(split(c.WikiData_ID,"")[-1]) = toFloat({number})
         WITH 'SELECT ?Causes ?CauseName
             WHERE{{
@@ -217,9 +220,9 @@ def add_causes(tx, number):
         UNWIND value['results']['bindings'] as row
 
         FOREACH(ignoreme in case when row['Causes'] is not null then [1] else [] end |
-                MERGE (ca:Cause{{url:row['Causes']['value'],
+                MERGE (ca:Cause{{URL:row['Causes']['value'],
                                 WikiData_ID:split(row['Causes']['value'],'/')[-1],
-                                name:row['CauseName']['value'] }} )
+                                Name:row['CauseName']['value'] }} )
                 MERGE (c)-[:CAUSED_BY]->(ca))
         """)
 
@@ -228,7 +231,7 @@ def add_genes(tx, number):
     Creates gene nodes related with each of the "Cancer" nodes already on the database
     """
     return tx.run(f"""
-        MATCH (c:Cancer)
+        MATCH (c:Disease)
             WHERE toFloat(split(c.WikiData_ID,"")[-1]) = toFloat({number})
         WITH 'SELECT *
             WHERE{{
@@ -249,10 +252,10 @@ def add_genes(tx, number):
         UNWIND value['results']['bindings'] as row
 
         FOREACH(ignoreme in case when row['Genetic_Associations'] is not null and row['GeneName'] is not null then [1] else [] end |
-                MERGE (g:Gene{{url:row['Genetic_Associations']['value'],
+                MERGE (g:Gene{{URL:row['Genetic_Associations']['value'],
                               WikiData_ID:split(row['Genetic_Associations']['value'],'/')[-1],
-                              name:row['GeneName']['value'] }})
-                MERGE (g)-[:ASSOCIATED_WITH]->(c))
+                              Name:row['GeneName']['value'] }})
+                MERGE (g)-[:ASSOCIATED_CANCER_GENE]->(c))
         """)
 
 def add_drug_external_ids(tx, number=None):
@@ -320,15 +323,19 @@ def add_drug_external_ids(tx, number=None):
             d.DrugBank_ID = row['DrugBank']['value'],
             d.CAS_Number = row['CAS_Number']['value'],
             d.ChemSpider_ID = row['ChemSpider_ID']['value'],
-            d.ATC_Code = row['ATC_Code']['value'],
-            d.MeSH = row['MeSH']['value'],
             d.InChI = row['InChI']['value'],
             d.InChIKey = row['InChIKey']['value'],
-            d.Mass = row['Mass']['value'],
-            d.Chemical_Formula = row['Chemical_Formula']['value'],
-            d.Canonical_Smiles = row['Canonical_Smiles']['value'],
+            d.Average_Mass = row['Mass']['value'],
+            d.Formula = row['Chemical_Formula']['value'],
+            d.SMILES = row['Canonical_Smiles']['value'],
             d.Pregnancy_Category = row['Pregnancy_Category_Name']['value'],
             d.LiverTox = row['LiverTox']['value']
+
+        MERGE (pri:ATC { Code:ATC_Code })
+            MERGE (d)-[r:RELATED_ATC]->(pri)
+
+        MERGE (c:MeSH { MeSH_ID:row['MeSH']['value'] })
+        MERGE (d)-[r:RELATED_MESH]->(c)
         """)
 
 def add_more_drug_info(tx, number=None):
@@ -367,22 +374,22 @@ def add_more_drug_info(tx, number=None):
         UNWIND value['results']['bindings'] as row
 
         FOREACH(ignoreme in case when row['Interacts_with'] is not null then [1] else [] end |
-                    MERGE (m:Metabolite{url:row['Interacts_with']['value'],
+                    MERGE (m:Metabolite{URL:row['Interacts_with']['value'],
                                 WikiData_ID:split(row['Interacts_with']['value'],'/')[-1],
-                                name:row['Interacts_with_name']['value'] })
-                    MERGE (d)-[:INTERACTS_WIH]->(m))
+                                Name:row['Interacts_with_name']['value'] })
+                    MERGE (d)-[:INTERACTS_WITH]-(m))
 
         FOREACH(ignoreme in case when row['Route_of_Admin'] is not null then [1] else [] end |
-                    MERGE (r:AdministrationRoutes{url:row['Route_of_Admin']['value'],
+                    MERGE (r:AdministrationRoute{URL:row['Route_of_Admin']['value'],
                                 WikiData_ID:split(row['Route_of_Admin']['value'],'/')[-1],
-                                name:row['Route_of_Admin_name']['value'] })
+                                Name:row['Route_of_Admin_name']['value'] })
                     MERGE (d)-[:ADMINISTERED_VIA]->(r))
 
         FOREACH(ignoreme in case when row['Active_ingredient_in'] is not null then [1] else [] end |
-                    MERGE (me:Medicine{url:row['Active_ingredient_in']['value'],
+                    MERGE (me:Product{URL:row['Active_ingredient_in']['value'],
                                 WikiData_ID:split(row['Active_ingredient_in']['value'],'/')[-1],
-                                name:row['Active_ingredient_in_name']['value'] })
-                    MERGE (d)-[:COMPONENT_IN]->(me))
+                                Name:row['Active_ingredient_in_name']['value'] })
+                    MERGE (d)-[:PART_OF_PRODUCT]->(me))
         """)
 
 def add_gene_info(tx, number=None):
@@ -457,19 +464,19 @@ def add_gene_info(tx, number=None):
             g.Genomic_End = row['Genomic_End']['value']
 
         FOREACH(ignoreme in case when row['Encodes'] is not null then [1] else [] end |
-                    MERGE (m:Metabolite{url:row['Encodes']['value'],
+                    MERGE (m:Metabolite{URL:row['Encodes']['value'],
                                 WikiData_ID:split(row['Encodes']['value'],'/')[-1],
-                                name:row['Encodes_name']['value'] })
+                                Name:row['Encodes_name']['value'] })
                     MERGE (g)-[:ENCODES]->(m))
 
         FOREACH(ignoreme in case when row['Expressed_in'] is not null then [1] else [] end |
-                    MERGE (t:Tissue{url:row['Expressed_in']['value'],
+                    MERGE (t:Tissue{URL:row['Expressed_in']['value'],
                                 WikiData_ID:split(row['Expressed_in']['value'],'/')[-1],
-                                name:row['Expressed_in_name']['value'] })
+                                Name:row['Expressed_in_name']['value'] })
                     MERGE (g)-[:EXPRESSED_IN]->(t))
 
         FOREACH(ignoreme in case when row['Exact_Matches'] is not null then [1] else [] end |
-                MERGE (e:ExternalEquivalent{url:row['Exact_Matches']['value'],
+                MERGE (e:ExternalEquivalent{URL:row['Exact_Matches']['value'],
                                             WikiData_ID:split(row['Exact_Matches']['value'],'/')[-1]})
                 MERGE (g)-[:EQUALS]-(e))
         """)
@@ -499,9 +506,27 @@ def add_metabolite_info(tx, number=None):
             OPTIONAL{
                 ?item wdt:P486 ?MeSH }
             OPTIONAL{
-                ?item wdt:P672 ?MeSH_Tree_Code }
-            OPTIONAL{
                 ?item wdt:P7260 ?Transporter_DB_ID }
+            OPTIONAL{
+                ?item wdt:P683 ?ChEBI_ID }
+            OPTIONAL{
+                ?item wdt:P231 ?CAS_Number }
+            OPTIONAL{
+                ?item wdt:P274 ?Chemical_Formula }
+            OPTIONAL{
+                ?item wdt:P234 ?InChI }
+            OPTIONAL{
+                ?item wdt:P235 ?InChIKey }
+            OPTIONAL{
+                ?item wdt:P592 ?CHEMBL_ID }
+            OPTIONAL{
+                ?item wdt:P683 ?ChEBI_ID }
+            OPTIONAL{
+                ?item wdt:P662 ?PubChem_ID }
+            OPTIONAL{
+                ?item wdt:P233 ?Canonical_Smiles }
+            OPTIONAL{
+                ?item wdt:P8117 ?FooDB_Compound_ID }
 
             OPTIONAL{
                     ?item wdt:P129 ?Interacts_with
@@ -519,20 +544,31 @@ def add_metabolite_info(tx, number=None):
 
         UNWIND value['results']['bindings'] as row
 
-        SET m.Instance_of = row['Instance_of_name']['value'],
+        SET m.Function = row['Instance_of_name']['value'],
             m.UniProt_ID = row['UniProt_ID']['value'],
-            m.MeSH = row['MeSH']['value'],
-            m.MeSH_Tree_Code = row['MeSH_Tree_Code']['value'],
+            m.ChEBI_ID = row['ChEBI_ID']['value'],
+            m.CAS_Number = row['CAS_Number']['value'],
+            m.Formula = row['Chemical_Formula']['value'],
+            m.InChI = row['InChI']['value'],
+            m.InChIKey = row['InChIKey']['value'],
+            m.CHEMBL_ID = row['CHEMBL_ID']['value'],
+            m.ChEBI_ID = row['ChEBI_ID']['value'],
+            m.PubChem_ID = row['PubChem_ID']['value'],
+            m.SMILES = row['Canonical_Smiles']['value'],
+            m.FooDB_Compound_ID = row['FooDB_Compound_ID']['value'],
             m.Transporter_DB_ID = row['Transporter_DB_ID']['value']
 
+        MERGE (c:MeSH { MeSH_ID:row['MeSH']['value'] })
+        MERGE (m)-[r:RELATED_MESH]->(c)
+
         FOREACH(ignoreme in case when row['Interacts_with'] is not null then [1] else [] end |
-                    MERGE (me:Metabolite{url:row['Interacts_with']['value'],
+                    MERGE (me:Metabolite{URL:row['Interacts_with']['value'],
                                 WikiData_ID:split(row['Interacts_with']['value'],'/')[-1],
-                                name:row['Interacts_with_name']['value'] })
-                    MERGE (m)-[:INTERACTS_WIH]->(me))
+                                Name:row['Interacts_with_name']['value'] })
+                    MERGE (m)-[:INTERACTS_WITH]-(me))
 
         FOREACH(ignoreme in case when row['Exact_Matches'] is not null then [1] else [] end |
-                MERGE (e:ExternalEquivalent{url:row['Exact_Matches']['value'],
+                MERGE (e:ExternalEquivalent{URL:row['Exact_Matches']['value'],
                                             WikiData_ID:split(row['Exact_Matches']['value'],'/')[-1]})
                 MERGE (m)-[:EQUALS]-(e))
         """)

@@ -17,11 +17,11 @@ def add_metabolites(tx, filename):
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
         MERGE (m:Metabolite {{ Metabolite_ID:line["Metabolite ID"] }})
         SET m.Name = line["Metabolite Name"], m.HMDB_ID = line["HMDB ID"], m.KEGG_ID = line["KEGG ID"], m.ChEBI_ID = line["ChEBI ID"],
-            m.DrugBank_ID = line["DrugBank ID"], m.CAS = line.CAS, m.Formula = line.Formula, m.IUPAC = line.IUPAC, m.SMILES = line.SMILES,
-            m.InChI = line.InChI, m.InChI_Key = line["InChI Key"]
+            m.DrugBank_ID = line["DrugBank ID"], m.CAS_Number = line.CAS, m.Formula = line.Formula, m.IUPAC = line.IUPAC, m.SMILES = line.SMILES,
+            m.InChI = line.InChI, m.InChIKey = line["InChI Key"]
         MERGE (pa:Pathway {{ SMPDB_ID:line["SMPDB ID"] }} )
         SET pa.Name = line["Pathway Name"], pa.Subject = line["Pathway Subject"]
-        MERGE (m)-[r:PART_OF_PÀTHWAY]->(pa)
+        MERGE (m)-[r:PART_OF_PATHWAY]->(pa)
         """)
 
 def add_proteins(tx, filename):
@@ -36,12 +36,12 @@ def add_proteins(tx, filename):
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
         CREATE (p:Protein )
-        SET p.Name = line["Protein Name"], p.HMDBP_ID = line["HMDBP ID"], p.DrugBank_ID = line["DrugBank ID"],
-            p.GenBank_ID = line["GenBank ID"], p.Gene_Name = line["Gene Name"], p.Locus = line["Locus"],
+        SET p.Name = line["Protein Name"], p.HMDB_ID = line["HMDBP ID"], p.DrugBank_ID = line["DrugBank ID"],
+            p.Genbank_Protein_ID = line["GenBank ID"], p.Gene_Name = line["Gene Name"], p.Locus = line["Locus"],
             p.UniProt_ID = line["Uniprot ID"]
         MERGE (pa:Pathway {{ SMPDB_ID:line["SMPDB ID"] }} )
         SET pa.Name = line["Pathway Name"], pa.Subject = line["Pathway Subject"]
-        MERGE (p)-[r:PART_OF_PÀTHWAY]->(pa)
+        MERGE (p)-[r:PART_OF_PATHWAY]->(pa)
         """)
 
 def add_pathways(tx, filename):
@@ -53,7 +53,7 @@ def add_pathways(tx, filename):
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
         MERGE (pa:Pathway {{ SMPDB_ID:line["SMPDB ID"] }} )
-        SET pa.Name = line["Name"], pa.Subject = line["Subject"], pa.PW_ID = line["PW ID"], pa.Description = line["Description"]
+        SET pa.Name = line["Name"], pa.Category = line["Subject"], pa.PW_ID = line["PW ID"], pa.Description = line["Description"]
         """)
 
 def add_sequence(tx, seq_id, seq_name, seq_type, seq, seq_format="FASTA"):
