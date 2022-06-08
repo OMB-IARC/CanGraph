@@ -6,7 +6,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
 
 # transition-databases
 
-<div align="center"> <img src="header.png" width="50%"> </div>
+<div align="center"> <img src="header.png" width="75%"> </div>
 <br>
 
 This Git Project, created as part of my Master's Intenship at IARC, contains a series of scripts that help transition a series of **five** databases from their native format (XML, CSV, etc) into a common, GraphML format, using a shared schema that has been defined to minimize the number of repeated nodes and properties. This databases are:
