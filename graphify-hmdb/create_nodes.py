@@ -4,6 +4,7 @@
 # SPDX-FileCopyrightText: 2022 Pablo Marcos <software@loreak.org>
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-License-Identifier: MIT
 
 # This is just a collection of functions used by the "main" script
 

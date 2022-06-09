@@ -4,6 +4,7 @@
 # SPDX-FileCopyrightText: 2022 Pablo Marcos <software@loreak.org>
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-License-Identifier: MIT
 
 # Import external modules necessary for the script
 from neo4j import GraphDatabase      # The Neo4J python driver
