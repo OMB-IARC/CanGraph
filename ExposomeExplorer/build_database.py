@@ -14,6 +14,10 @@ import os, sys, shutil               # Vital modules to interact with the filesy
 # Import subscripts for the program
 import create_nodes
 import create_relations
+# A hack that allows us to de-duplicate the miscleaneous script in this less-used script
+sys.path.append("../")
+# NOTE: Please beware that, if using this module by itself, you might need to copy "miscelaneous.py" into your path
+# This is not the most elegant, but simplifies code maintenance, and this script shouldnt be used much so...
 import miscelaneous as misc
 
 with alive_bar(25) as bar:

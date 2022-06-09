@@ -16,7 +16,7 @@ To run, it uses `alive_progress` to generate an interactive progress bar (that s
 
 To run the script itself, use:
 
-`python3 main.py neo4jadress username databasepassword filename
+`python3 build_database.py neo4jadress username databasepassword filename`
 
 where:
 

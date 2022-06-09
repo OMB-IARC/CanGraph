@@ -10,6 +10,9 @@ SPDX-License-Identifier: MIT
 <div align="center"> <img src="header.png" width="75%"> </div>
 <br>
 
+PRIMERO RUN SETUP Y LUEGO EL RESTO
+CREAR REQUREMENTS.PY
+
 This Git Project, created as part of my Master's Intenship at IARC, contains a series of scripts that help transition a series of **five** databases from their native format (XML, CSV, etc) into a common, GraphML format, using a shared schema that has been defined to minimize the number of repeated nodes and properties. This databases are:
 
 * Exposome-Explorer: A hand-curated, high-quality database of associations between metabolites, food intakes and outakes and different diseases, specially cancers.

@@ -18,8 +18,7 @@ def import_csv(tx, filename, label):
         """)
 
 def add_cancers(tx):
-    """
-    """
+    """ Adds "Cancer" nodes from Exposome-Explorer's cancers.csv"""
     return tx.run("""
         LOAD CSV WITH HEADERS FROM ('file:///cancers.csv') AS line
             MERGE (c:Disease { Exposome_Explorer_ID:"Cancer_"+line["id"] })
@@ -30,8 +29,7 @@ def add_cancers(tx):
         """)
 
 def add_cohorts(tx):
-    """
-    """
+    """ Adds "Cohort" nodes from Exposome-Explorer's cohorts.csv"""
     return tx.run("""
         LOAD CSV WITH HEADERS FROM ('file:///cohorts.csv') AS line
             MERGE (c:Cohort { Exposome_Explorer_ID:"Cohort_"+line["id"] })
@@ -47,6 +45,8 @@ def add_cohorts(tx):
 
 def add_components(tx):
     """
+    Adds "Metabolite" nodes from Exposome-Explorer's components.csv
+    This is because this components are, in fact, metabolites, either from food or from human metabolism
     """
     return tx.run("""
         LOAD CSV WITH HEADERS FROM ('file:///components.csv') AS line
@@ -76,8 +76,7 @@ def add_components(tx):
         """)
 
 def add_experimental_methods(tx):
-    """
-    """
+    """ Adds "ExperimentalMethod" nodes from Exposome-Explorer's experimental_methods.csv"""
     return tx.run("""
         LOAD CSV WITH HEADERS FROM ('file:///experimental_methods.csv') AS line
             MERGE (em:ExperimentalMethod { Exposome_Explorer_ID:"ExperimentalMethod_"+line["id"] })
@@ -91,8 +90,7 @@ def add_experimental_methods(tx):
         """)
 
 def add_measurements(tx):
-    """
-    """
+    """ Adds "Measurement" nodes from Exposome-Explorer's measurements.csv"""
     return tx.run("""
         LOAD CSV WITH HEADERS FROM ('file:///measurements.csv') AS line
             MERGE (m:Measurement { Exposome_Explorer_ID:"Measurement_"+line["id"] })
@@ -116,7 +114,10 @@ def add_measurements(tx):
         """)
 
 def add_microbial_metabolite_identifications(tx):
-    """
+   """
+    Adds "Metabolite" nodes from Exposome-Explorer's microbial_metabolite_identifications.csv
+    These represent all metabolites that have been re-identified as present, for instance, in the microbiome.
+    To distinguish this metabolites from the only-human "Components", a Microbial_Metabolite = "True" label has been added
     """
     return tx.run("""
         LOAD CSV WITH HEADERS FROM ('file:///microbial_metabolite_identifications.csv') AS line
@@ -128,8 +129,7 @@ def add_microbial_metabolite_identifications(tx):
         """)
 
 def add_publications(tx):
-    """
-    """
+    """Adds "Publication" nodes from Exposome-Explorer's publications.csv"""
     return tx.run("""
         LOAD CSV WITH HEADERS FROM ('file:///publications.csv') AS line
             MERGE (p:Publication { Exposome_Explorer_ID:"Publication_"+line["id"] })
@@ -144,6 +144,8 @@ def add_publications(tx):
 
 def add_reproducibilities(tx):
     """
+    Adds "Reproducibility" nodes from Exposome-Explorer's reproducibilities.csv
+    These represent the conditions under which a given study/measurement was carried
     """
     return tx.run("""
         LOAD CSV WITH HEADERS FROM ('file:///reproducibilities.csv') AS line
@@ -155,6 +157,8 @@ def add_reproducibilities(tx):
 
 def add_samples(tx):
     """
+    Adds "Sample" nodes from Exposome-Explorer's samples.csv
+    From a Sample, one can take a series of measurements
     """
     return tx.run("""
         LOAD CSV WITH HEADERS FROM ('file:///samples.csv') AS line
@@ -166,6 +170,8 @@ def add_samples(tx):
 
 def add_specimens(tx):
     """
+    Adds "BioSpecimen" nodes from Exposome-Explorer's specimens.csv
+    A biospecimen is a type of tissue where a measurement can originate, such as orine, csf fluid, etc
     """
     return tx.run("""
         LOAD CSV WITH HEADERS FROM ('file:///specimens.csv') AS line
@@ -179,8 +185,7 @@ def add_specimens(tx):
         """)
 
 def add_subjects(tx):
-    """
-    """
+    """Adds "Subject" nodes from Exposome-Explorer's subjects.csv"""
     return tx.run("""
         LOAD CSV WITH HEADERS FROM ('file:///subjects.csv') AS line
             MERGE (su:Subject { Exposome_Explorer_ID:"Subject_"+line["id"] })
@@ -196,6 +201,8 @@ def add_subjects(tx):
 
 def add_units(tx):
     """
+    Adds "Unit" nodes from Exposome-Explorer's units.csv
+    A unit can be converted into other (for example, for normalization)
     """
     return tx.run("""
         LOAD CSV WITH HEADERS FROM ('file:///units.csv') AS line

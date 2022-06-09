@@ -14,6 +14,10 @@ from time import sleep               # A hack to avoid starving the system resou
 
 # Import subscripts for the program
 import create_nodes
+# A hack that allows us to de-duplicate the miscleaneous script in this less-used script
+sys.path.append("../")
+# NOTE: Please beware that, if using this module by itself, you might need to copy "miscelaneous.py" into your path
+# This is not the most elegant, but simplifies code maintenance, and this script shouldnt be used much so...
 import miscelaneous as misc
 
 instance = f"{sys.argv[1]}"; user = f"{sys.argv[2]}"; passwd = f"{sys.argv[3]}"

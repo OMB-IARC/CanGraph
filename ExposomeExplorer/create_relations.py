@@ -113,7 +113,7 @@ def measurements_stuff(tx):
 def reproducibilities(tx):
     """
     Creates relations between the "reproducibilities" and the "measurements" table,
-    using "initial_id", an old identifier, for
+    using "initial_id", an old identifier, for the linkage
     """
     return tx.run("""
         LOAD CSV WITH HEADERS FROM 'file:///reproducibilities.csv' AS line
@@ -142,7 +142,7 @@ def subjects(tx):
 def samples(tx):
     """
     Imports the relations pertaining to the "samples" table. A sample will be taken from a given
-    subject and a given tissue (that is, a specimen, which will be mostly blood, urine, etc)
+    subject and a given tissue (that is, a specimen, which will be blood, urine, etc)
     """
     return tx.run("""
         LOAD CSV WITH HEADERS FROM 'file:///samples.csv' AS line
@@ -158,9 +158,8 @@ def samples(tx):
 def microbial_metabolite_identifications(tx):
     """
     Imports the relations pertaining to the "microbial_metabolite_identifications" table. A component
-
-    sample will be taken from a given
-    subject and a given tissue (that is, a specimen, which will be mostly blood, urine, etc)
+    (i.e. a metabolite) can be identified as a Microbial Metabolite, which means it has an equivalent in
+    the microbiome. This can have a given refference and a tissue (BioSpecimen) in which it occurs.
     """
     return tx.run("""
         LOAD CSV WITH HEADERS FROM 'file:///microbial_metabolite_identifications.csv' AS line
