@@ -89,7 +89,7 @@ for url in hmdb_urls:
     else:
 
         print("File downloaded, now splitting its contents...")
-        total_subfiles = misc.split_xml(f"{Neo4JImportPath}/{filename}", "metabolite")
+        total_subfiles = misc.split_xml(f"{Neo4JImportPath}/{filename}", "metabolite", "hmdb")
 
         print("File splitted, now on to import its contents to Neo4J...")
         sleep(5)

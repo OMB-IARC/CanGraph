@@ -4,13 +4,24 @@
 
 # Ignore the __pycache__ folder (unnecessary) in any subfolder
 **/__pycache__/
+__pycache__/
+
 # Ignore the confidential folder with the Full Database Tables
 **/xmlfolder/
 **/csvfolder/
+
 # Ignore the confidential and outdated schema image
 exposome-explorer/database_schema.png
+
 # Ignore the resulting GraphML databases (confidential)
 exposome-explorer/graph.graphml
 graphify-hmdb/graph.graphml
 graphify-drugbank/graph.graphml
 graphify-smpdb/graph.graphml
+
+# Ignore the folder with the databases and everything inside:
+DataBases/
+
+# Ignore confidential sample input
+sample_input.csv
+

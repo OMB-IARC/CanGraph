@@ -27,3 +27,9 @@ With regards to the schema, it can be consulted in detail in the ```new-schema.g
 
 This repo only intends to collect information on how to generate ("graphify") each of the five different databases: a further project will automate sub-network generation for metabolite annotation and discovery (stay tuned [to my blog](https://www.pablomarcos.me/es/posts/) :p). More information on how to generate the different graphs can be found on the README for each of the different subfolders for this project.
 
+## Setting up the FileSystem
+
+To be able to work with the different databases, you will need to prepare the different databases the program will be using as input. To do this:
+
+* Copy the Exposome-Explorer
+
