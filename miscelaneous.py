@@ -177,46 +177,25 @@ def download_and_unzip(url, folder):
 def split_xml(filename, filetype, bigtag):
     """
     Splits a given .xml file in n smaller XML files, one for each first-level record (the name of which has to be specified)
-    on the original file. If the file is larger than 500.000 lines, it will be splitted into n strings of around 500.000 lines,
-    so that python does not crash when processing it.
-    # WARNING: This function is hardcoded to never expect a top-level tag with more than 10.000 entries
+    on the original file, so that it does not crash when processing it.
     """
-    # Calculate total number of lines
-    num_lines = sum(1 for line in open(f'{filename}'))
-    # Since its a module and not a division, we use the if to never get a 0
-    num_bigplits = 1 if num_lines < 500000 else num_lines//500000
-    total_number_of_splits = 0 # The total number of files generated starts at 0 (we will use this as a counter)
+    # Set counters and text variables to null
+    current_text = ""; current_line = 0; num_files = 0
     with open(f'{filename}', "r") as f:
-        all_lines = f.readlines() # All the lines in the masive file
-        # We define the initial starting and ending lines, which will change
-        start_line = 0; end_line = ((num_lines//num_bigplits)-1)
-        for i in range(num_bigplits):
-            # Check each line in the next 10000 lines after an XML ends for the original tag END
-            for index, element in enumerate(all_lines[end_line:end_line+10000]):
-                if re.match(f"</{filetype}>", element):
-                    end_line += index + 1
-                    break
-
-            small_subfile = "".join(all_lines[start_line:end_line])
-            # The old code, which splits the subfiles
-            splitted = re.split(f"<{filetype}>", small_subfile)
-            matches = re.findall(f"<{filetype}>", small_subfile)
-            for index, subunit in enumerate(splitted):
-                # We have the index (local for our subfile) and the total_number_of_splits (global counter)
-                newfile = filename.split(".")[0] + "_" + str(index+total_number_of_splits) + ".xml"
+        for line in f:
+            current_text += line; current_line += 1
+            # Whenever we find a closing tag, we know the info is over
+            if line.startswith(f"</{filetype}>"):
+                newfile = filename.split(".")[0] + "_" + str(num_files) + ".xml"
                 with open(newfile, "w+") as f:
-                    if index > 0:
+                    # Skip already-present headers for the first file
+                    if num_files > 1:
                         f.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
                         f.write(f'<{bigtag}>\n')
-                        f.write(f'{matches[index-1]}')
-                        f.write(splitted[index])
-                        if index < len(splitted) -1: f.write(f'</{bigtag}>')
+                    f.write(current_text)
+                    # This is the same since it will just stop processing at the last tag
+                    f.write(f'</{bigtag}>\n')
                 f.close()
-            # Update total_number_of_splits (global counter)
-            total_number_of_splits += len(splitted)
-
-            # Reset lines for next bigsplit file
-            start_line = end_line
-            end_line += ((num_lines//num_bigplits)-1)
-
-    return total_number_of_splits - 1
+                num_files += 1
+                current_text = ""
+    return num_files - 1

@@ -132,9 +132,9 @@ zf = ZipFile("./DataBases/DrugBank/full_database.zip")
 zf.extractall(path = "./DataBases/DrugBank/")
 zf.close()
 print("File downloaded, now splitting its contents...")
-misc.split_xml(os.path.abspath(f"./DataBases/DrugBank/full database.xml"), "drug type=.*", "drugbank")
+misc.split_xml(os.path.abspath(f"./DataBases/DrugBank/full database.xml"), "drug", "drugbank")
 os.remove(os.path.abspath("./DataBases/DrugBank/full_database.zip"))
-os.remove(os.path.abspath("./DataBases/DrugBank/full_database.xml"))
+os.remove(os.path.abspath("./DataBases/DrugBank/full database.xml"))
 
 print("Everything OK")
 
