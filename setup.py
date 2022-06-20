@@ -11,6 +11,7 @@ from neo4j import GraphDatabase      # The Neo4J python driver
 import os, sys, shutil               # Vital modules to interact with the filesystem
 from time import sleep               # Cute go slowly
 from zipfile import ZipFile          # Work with ZIP files
+import pandas as pd                  # Analysis of tabular data
 
 import miscelaneous as misc          # A collection of useful functions
 
@@ -36,23 +37,38 @@ else:
     os.mkdir("DataBases")
     print("DataBases folder created")
 
-print("First, please put the CSVs pertaining the exposome-explorer database on the ./DataBases/Exposome-Explorer path")
+print("First, please put the CSVs pertaining the exposome-explorer database on the ./DataBases/ExposomeExplorer path")
 sleep(1)
 print("This database is confidential, and CANNOT be found online. Please ask IARC for the files in case you need them.")
 sleep(1)
-if not os.path.exists("./DataBases/Exposome-Explorer"): print("Let me create said folder for you..."); os.mkdir("./DataBases/Exposome-Explorer")
+if not os.path.exists("./DataBases/ExposomeExplorer"): print("Let me create said folder for you..."); os.mkdir("./DataBases/ExposomeExplorer")
 print("Once you are ready, press [ENTER]", end=""); response = input()
 
-check_file("./DataBases/Exposome-Explorer/units.csv");                check_file("./DataBases/Exposome-Explorer/subjects.csv")
-check_file("./DataBases/Exposome-Explorer/specimens.csv");            check_file("./DataBases/Exposome-Explorer/samples.csv")
-check_file("./DataBases/Exposome-Explorer/reproducibilities.csv");    check_file("./DataBases/Exposome-Explorer/publications.csv")
-check_file("./DataBases/Exposome-Explorer/microbial_metabolite_identifications.csv")
-check_file("./DataBases/Exposome-Explorer/metabolomic_associations.csv"); check_file("./DataBases/Exposome-Explorer/cancer_associations.csv")
-check_file("./DataBases/Exposome-Explorer/measurements.csv");         check_file("./DataBases/Exposome-Explorer/experimental_methods.csv")
-check_file("./DataBases/Exposome-Explorer/correlations.csv");         check_file("./DataBases/Exposome-Explorer/components.csv")
-check_file("./DataBases/Exposome-Explorer/cohorts.csv");              check_file("./DataBases/Exposome-Explorer/cancers.csv")
+check_file("./DataBases/ExposomeExplorer/units.csv");                check_file("./DataBases/ExposomeExplorer/subjects.csv")
+check_file("./DataBases/ExposomeExplorer/specimens.csv");            check_file("./DataBases/ExposomeExplorer/samples.csv")
+check_file("./DataBases/ExposomeExplorer/reproducibilities.csv");    check_file("./DataBases/ExposomeExplorer/publications.csv")
+check_file("./DataBases/ExposomeExplorer/microbial_metabolite_identifications.csv")
+check_file("./DataBases/ExposomeExplorer/metabolomic_associations.csv"); check_file("./DataBases/ExposomeExplorer/cancer_associations.csv")
+check_file("./DataBases/ExposomeExplorer/measurements.csv");         check_file("./DataBases/ExposomeExplorer/experimental_methods.csv")
+check_file("./DataBases/ExposomeExplorer/correlations.csv");         check_file("./DataBases/ExposomeExplorer/components.csv")
+check_file("./DataBases/ExposomeExplorer/cohorts.csv");              check_file("./DataBases/ExposomeExplorer/cancers.csv")
 
 print("All checks OK")
+
+print("Now, I will split the some files into a number of one-liner CSVs, simplifying import")
+print("Please, bear in mind that I will remove some of the the original files to avoid problems; is that ok? [y/N]:", end="")
+response = input()
+if response != "y" and response != "Y" and response != "Yes" and response != "yes" and response != "YES":
+    print("Exiting..."); sleep(1); exit(1)
+
+for filename in os.listdir("./DataBases/ExposomeExplorer/"):
+    #if filename not in ["cancer_associations.csv", "metabolomic_associations.csv", "correlations.csv"]:
+    if "components" in filename:
+        bigfile = pd.read_csv(f"./DataBases/ExposomeExplorer/{filename}")
+        for index in range(len(bigfile)):
+            bigfile.iloc[[index]].to_csv(f"./DataBases/ExposomeExplorer/{os.path.splitext(filename)[0]}_{index}.csv", index = False)
+
+        os.remove(f"./DataBases/ExposomeExplorer/{filename}")
 
 print("Now, lets go on with the Human Metabolome DataBase. I will download all the needed folders and store them in ./DataBases/HMDB")
 if not os.path.exists("./DataBases/HMDB"): os.mkdir("./DataBases/HMDB")

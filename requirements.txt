@@ -8,3 +8,5 @@
 neo4j          # The Neo4J python driver
 alive_progress # A cute progress bar that shows the script is still running
 Bio            # To parse FASTA files
+rdkit          # Cheminformatics and ML package
+pandas         # Analysis of tabular data
