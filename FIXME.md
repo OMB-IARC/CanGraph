@@ -4,6 +4,7 @@ SOURCE: https://towardsdatascience.com/lord-of-the-wiki-ring-importing-wikidata-
 
 PRINT("LEETE LAS CONVENCIONES DE NOMBRADO DE NEO4J PARA EL SCRIPT FINAL")
 
+
 // Prepare a SPARQL query
 WITH 'SELECT ?item ?itemLabel
 WHERE{ ?item wdt:P31 wd:Q12078 . SERVICE wikibase:label {bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en" }}' AS sparql
