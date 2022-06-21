@@ -73,8 +73,8 @@ with alive_bar(len(all_files)*len(raw_database)) as bar:
 
 
                             DICE_MACCS = rdkit.DataStructs.DiceSimilarity(MACCSQuery, MACCSSubject)
-                            if DICE_MACCS < 0.05:
-                                import_files = True; import_based_on.append(f"DICE-MACCS {100-round(DICE_MACCS, 2)} % similarity")
+                            if DICE_MACCS > 0.95:
+                                import_files = True; import_based_on.append(f"DICE-MACCS {100*round(DICE_MACCS, 4)} % similarity")
 
                 if row["ChEBI"] in text:
                     import_files = True; import_based_on.append("ChEBI")
