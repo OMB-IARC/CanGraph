@@ -255,7 +255,7 @@ def add_genes(tx, number):
                 MERGE (g:Gene{{URL:row['Genetic_Associations']['value'],
                               WikiData_ID:split(row['Genetic_Associations']['value'],'/')[-1],
                               Name:row['GeneName']['value'] }})
-                MERGE (g)-[:ASSOCIATED_CANCER_GENE]->(c))
+                MERGE (g)-[:ASSOCIATED_DISEASE_GENE]->(c))
         """)
 
 def add_drug_external_ids(tx, number=None):

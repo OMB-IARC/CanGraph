@@ -159,7 +159,7 @@ def add_diseases(tx, filename):
         SET p.Pages = split(split(reference_text, ":")[-1], ".")[0]
         SET p.PubMed_ID = pubmed_id
 
-        MERGE (m)-[r:ASSOCIATED_CANCER_METABOLITE]-(d)
+        MERGE (m)-[r:ASSOCIATED_DISEASE_METABOLITE]-(d)
         SET r.PubMed_ID = ""
         SET r.PubMed_ID = pubmed_id + "," + r.PubMed_ID
 

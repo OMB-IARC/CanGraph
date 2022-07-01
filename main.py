@@ -177,10 +177,8 @@ with alive_bar(len(all_files)*len(raw_database)) as bar:
 
         #Once we finish the search for each metabolite on the original table, we purge the database by removing EQUALLY EXACT metabolites
         # TODO: FIX PUBLICATIONS BEING MERGED!!
-        # TODO: CHANGE NAME TO: ASSOCIATED_CANCER_METABOLITE TO ASSOCIATED DISEASE
         # TODO: DE DONDE SALEN LOS DISEASES SIN ID???
-        # TODO: Fix publication Primary Key
-        # TODO: Fix subject Primary Key
+        # TODO: Fix publication and subject Primary Keys
         with driver.session() as session:
             session.write_transaction(misc.remove_duplicate_nodes, "", "n.InChI as sth", "WHERE n.InChI IS NOT null AND n:Metabolite or n:Protein")
             session.write_transaction(misc.remove_duplicate_nodes, "", "n.InChIKey as sth", "WHERE n.InChIKey IS NOT null AND n:Metabolite or n:Protein")

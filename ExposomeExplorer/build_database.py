@@ -153,7 +153,7 @@ def add_cancer_associations(tx, filename):
 
             MERGE (c:Disease {{ Exposome_Explorer_ID: "Cancer_"+line.`cancer_id` }})
 
-            MERGE (m)-[r:ASSOCIATED_CANCER_MEASUREMENT]-(c)
+            MERGE (m)-[r:ASSOCIATED_DISEASE_MEASUREMENT]-(c)
             SET r.Exposome_Explorer_ID = "CancerAssociation_"+line.id
         """)
 
