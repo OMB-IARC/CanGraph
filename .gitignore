@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2022 Pablo Marcos <software@loreak.org>
 #
-# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-License-Identifier: MIT
 
 # Ignore the __pycache__ folder (unnecessary) in any subfolder
 **/__pycache__/

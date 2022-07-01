@@ -3,7 +3,6 @@
 
 # SPDX-FileCopyrightText: 2022 Pablo Marcos <software@loreak.org>
 #
-# SPDX-License-Identifier: GPL-3.0-or-later
 # SPDX-License-Identifier: MIT
 
 # Import external modules necessary for the script
@@ -183,7 +182,6 @@ with alive_bar(len(all_files)*len(raw_database)) as bar:
         # TODO: REMOVE EXPOSOME EXPLORER CROSS REFERENCERS
         # TODO: Fix publication Primary Key
         # TODO: Fix subject Primary Key
-        # TODO: MIT LICENSE
         with driver.session() as session:
             session.write_transaction(misc.remove_duplicate_nodes, "", "n.InChI as sth", "WHERE n.InChI IS NOT null AND n:Metabolite or n:Protein")
             session.write_transaction(misc.remove_duplicate_nodes, "", "n.InChIKey as sth", "WHERE n.InChIKey IS NOT null AND n:Metabolite or n:Protein")

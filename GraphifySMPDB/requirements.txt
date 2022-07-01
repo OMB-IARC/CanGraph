@@ -1,6 +1,5 @@
 # SPDX-FileCopyrightText: 2022 Pablo Marcos <software@loreak.org>
 #
-# SPDX-License-Identifier: GPL-3.0-or-later
 # SPDX-License-Identifier: MIT
 
 # This file includes all the required packages for this project to run. You can simply install them by running: `pip install -r requirements.txt`

@@ -1,7 +1,6 @@
 <!--
 SPDX-FileCopyrightText: 2022 Pablo Marcos <software@loreak.org>
 
-SPDX-License-Identifier: GPL-3.0-or-later
 SPDX-License-Identifier: MIT
 -->
 
@@ -54,3 +53,5 @@ where:
 * **databasepassword**: the passowrd for the **databasename** DataBase. Since the arguments are passed by BaSH onto python3, you might need to escape special characters
 * **databasefolder**: The folder indicated to ```setup.py``` as the one where your databases will be stored
 * **inputfile**: The location of the CSV file in which the program will search for metabolites. This file should be a Comma-Separated file, with the following format: ```MonoisotopicMass, SMILES, InChIKey, Name, InChI, Identifier, ChEBI```
+
+All images in this repository are [CC-BY-SA-4.0 International](https://creativecommons.org/licenses/by-sa/4.0/) Licensed.
