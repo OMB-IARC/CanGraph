@@ -150,13 +150,13 @@ def export_graphml(tx, exportname):
         """)
 
 
-def import_graphml(tx, exportname):
+def import_graphml(tx, importname):
     """
     Imports a GML file into a Neo4J graph. The file has to be located in Neo4JImportPath
     NOTE: for this to work, you HAVE TO have APOC availaible on your Neo4J installation
     """
     return tx.run(f"""
-        CALL apoc.import.graphml("{exportname}", {{useTypes:true, storeNodeIds:false, readLabels:True}})
+        CALL apoc.import.graphml("{importname}", {{useTypes:true, storeNodeIds:false, readLabels:True}})
         """)
 
 def download_and_unzip(url, folder):

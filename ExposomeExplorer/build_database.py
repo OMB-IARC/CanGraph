@@ -143,7 +143,7 @@ def add_microbial_metabolite_identifications(tx, filename):
 
             MERGE (m)-[r1:CITED_IN]->(p)
             MERGE (c)-[r2:IDENTIFIED_AS]->(m)
-            MERGE (m)-[r3:FOUND_IN]->(s)
+            MERGE (m)-[r3:LOCATED_IN_BIOSPECIMEN]->(s)
         """)
 
 def add_cancer_associations(tx, filename):

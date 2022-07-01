@@ -76,6 +76,7 @@ with alive_bar(len(all_files)*len(raw_database)) as bar:
                             if DICE_MACCS > 0.95:
                                 import_files = True; import_based_on.append(f"DICE-MACCS {100*round(DICE_MACCS, 4)} % similarity")
 
+                # TODO: FIX CHEBI IMPORTS! NOW, THEY DONT WORK
                 if row["ChEBI"] in text:
                     import_files = True; import_based_on.append("ChEBI")
                 if row["Identifier"] in text:
@@ -141,6 +142,8 @@ with alive_bar(len(all_files)*len(raw_database)) as bar:
 
                     #Each time we import some nodes, link them to our original data
                     #NOTE: This WILL duplicate nodes and relations, but we will repeat this later
+
+                    # TODO: Match partial InChIs based on DICE-MACCS
                     with driver.session() as session:
                         session.run( f"""
                                     MATCH (a) WHERE a.InChI = "{row["InChI"]}"
@@ -174,6 +177,13 @@ with alive_bar(len(all_files)*len(raw_database)) as bar:
                 bar()
 
         #Once we finish the search for each metabolite on the original table, we purge the database by removing EQUALLY EXACT metabolites
+        # TODO: FIX PUBLICATIONS BEING MERGED!!
+        # TODO: CHANGE NAME TO: ASSOCIATED_CANCER_METABOLITE TO ASSOCIATED DISEASE
+        # TODO: DE DONDE SALEN LOS DISEASES SIN ID???
+        # TODO: REMOVE EXPOSOME EXPLORER CROSS REFERENCERS
+        # TODO: Fix publication Primary Key
+        # TODO: Fix subject Primary Key
+        # TODO: MIT LICENSE
         with driver.session() as session:
             session.write_transaction(misc.remove_duplicate_nodes, "", "n.InChI as sth", "WHERE n.InChI IS NOT null AND n:Metabolite or n:Protein")
             session.write_transaction(misc.remove_duplicate_nodes, "", "n.InChIKey as sth", "WHERE n.InChIKey IS NOT null AND n:Metabolite or n:Protein")
