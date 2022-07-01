@@ -179,7 +179,6 @@ with alive_bar(len(all_files)*len(raw_database)) as bar:
         # TODO: FIX PUBLICATIONS BEING MERGED!!
         # TODO: CHANGE NAME TO: ASSOCIATED_CANCER_METABOLITE TO ASSOCIATED DISEASE
         # TODO: DE DONDE SALEN LOS DISEASES SIN ID???
-        # TODO: REMOVE EXPOSOME EXPLORER CROSS REFERENCERS
         # TODO: Fix publication Primary Key
         # TODO: Fix subject Primary Key
         with driver.session() as session:

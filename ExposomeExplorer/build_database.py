@@ -201,7 +201,7 @@ def add_correlations(tx, filename):
             r.Confidence_Interval_95_Lower = line.confidence_interval_95_lower,
             r.Confidence_Interval_95_Upper = line.confidence_interval_95_upper,
             r.Is_Significant = line.is_significant, r.covariates = line.covariates,
-            r.Intake_ID = line.intake_id, r.excretion_id = line.excretion_id,
+            r.Intake_ID = line.intake_id, r.Excretion_ID = line.excretion_id,
             r.Measurement_Adjustment = line.measurement_adjustment,
             r.Deattenuation = line.deattenuation, r.size = line.size
         """)
@@ -396,7 +396,15 @@ def remove_counts_and_displayeds(inputfile, outputfile):
     with open(outputfile, 'w') as f:
         f.write(data)
 
-def build_from_file(databasepath, Neo4JImportPath, driver, keep_counts_and_displayeds = True):
+def remove_cross_properties(tx, filename):
+    """Removes properties used in Neo4J to create relationships between nodes"""
+    return tx.run(f"""
+        MATCH (n)
+        REMOVE n.Component_ID, n.Sample_ID, n.Experimental_Method_ID, n.Unit_ID, n.Subject_ID,
+               n.Converted_to_ID, n.Publication_ID, n.Component_ID, n.Specimen_ID, n.Initial_ID, n.Cohort_ID
+        """)
+
+def build_from_file(databasepath, Neo4JImportPath, driver, keep_counts_and_displayeds = True, remove_cross_properties = True):
     if keep_counts_and_displayeds == False:
         remove_counts_and_displayeds(f"{os.path.abspath(databasepath)}/measurements.csv", f"{Neo4JImportPath}/measurements.csv")
         remove_counts_and_displayeds(f"{os.path.abspath(databasepath)}/samples.csv", f"{Neo4JImportPath}/samples.csv")
@@ -455,6 +463,11 @@ def build_from_file(databasepath, Neo4JImportPath, driver, keep_counts_and_displ
         session.write_transaction(add_reproducibilities, "reproducibilities.csv")
         session.write_transaction(add_specimens, "specimens.csv")
         session.write_transaction(add_subjects, "subjects.csv")
+
+    # Finally, we remove the cross-properties that are of no use anymore (this is optional, of course)
+    if remove_cross_properties == True:
+        with driver.session() as session:
+            session.write_transaction(remove_cross_properties)
 
     os.remove(f"{Neo4JImportPath}/measurements.csv");               os.remove(f"{Neo4JImportPath}/samples.csv")
     os.remove(f"{Neo4JImportPath}/experimental_methods.csv");       os.remove(f"{Neo4JImportPath}/units.csv")
