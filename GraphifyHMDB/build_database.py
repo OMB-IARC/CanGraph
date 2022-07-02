@@ -787,7 +787,7 @@ def add_protein_associations(tx, filename):
 
         MERGE (p:Protein {{ HMDB_ID:protein_accession }})
         ON CREATE SET p.Gene_Name = gene_name, p.Function = protein_type,
-                      p.Uniprot_ID = uniprot_id, p.Name = name
+                      p.UniProt_ID = uniprot_id, p.Name = name
 
         MERGE (m)-[r:INTERACTS_WITH]-(p)
         """)
@@ -915,27 +915,3 @@ def build_from_metabolite_file(newfile, driver):
         session.write_transaction(add_predicted_properties, newfile)
     with driver.session() as session:
         session.write_transaction(add_general_references, newfile, "metabolite")
-
-
-def purge_database(driver):
-    """
-    A series of commands to be run only once, at the end of the DB creation process.
-    It tries to purge the database of duplicate nodes, unnecesary artifacts and such.
-    """
-    with driver.session() as session:
-        # We first purge duplicates by merging duplicate accessions
-        # NOTE: If a Metabolite is, at the same time, a Protein, this will make sure both labels are included!
-        session.write_transaction(misc.remove_duplicate_nodes, "", "n.Accession as ac", "WHERE n:Protein OR n:Metabolite")
-        #Also remove duplicates by PubMed ID
-        session.write_transaction(misc.remove_duplicate_nodes, "Publication", "n.Pubmed_ID as id", "WHERE n.Pubmed_ID IS NOT null")
-        #Also remove duplicates by PubMed ID
-        session.write_transaction(misc.remove_duplicate_nodes, "Publication", "n.Abstract as abs")
-        #And we delete duplicate relationships
-        session.write_transaction(misc.remove_duplicate_relationships)
-        #We also remove all non-unique Subjects. We do this by giving all three parameters this nodes can have to apoc.mergeNodes
-        session.write_transaction(misc.remove_duplicate_nodes, "Subject", "n.Age_Mean as age, n.Gender as gender, n.Information as inf")
-        # Finally, we remove some database-specific thingys
-        session.run("MATCH (c:Measurement) WHERE size(keys(properties(c))) < 2 DETACH DELETE c")
-        session.run("MATCH (p:Publication) WHERE size(keys(properties(p))) < 1 DETACH DELETE p")
-        session.run("MATCH (sb:Subject) WHERE size(keys(properties(sb))) < 1 DETACH DELETE sb")
-

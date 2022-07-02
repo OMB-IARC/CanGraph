@@ -50,7 +50,7 @@ def repeat_transaction(tx, num_retries, session, bar, number=None):
                 print(f"{num_retries} consecutive attempts were made at processing Nodes ending in #{number}. Aborting...")
                 raise error
 
-# ********* Edit the Neo4J Database ********* #
+# ********* Interact with the Neo4J Database ********* #
 
 def call_db_schema_visualization(tx):
     """
@@ -65,7 +65,7 @@ def clean_database():
     Gets all the nodes in a Neo4J database and removes them
     NOTE: If running directly from neo4j browser, you will need to add ```:auto ```
     at the beginning of the query in order to force it to autocommit
-    NOTE: To run from a driver, you must force the autocommit using: ```session.run( misc.clean_database() )```
+    NOTE: To run from a driver, you must force the autocommit using: ```session.run( clean_database() )```
     """
     return f"""
         MATCH (n)
@@ -136,6 +136,54 @@ def remove_duplicate_nodes(tx, node_type, condition, optional_where=""):
                         CALL apoc.refactor.mergeNodes(ns, {{properties:"combine"}}) YIELD node
                 RETURN node;
             """)
+
+def purge_database(driver):
+    """
+    A series of commands that purge a database, removing unnecessary, duplicated or empty nodes and merging those without necessary properties
+    This has been converted into a common function to standarize the ways the nodes are merged.
+    # WARNING: When modifying, take good care on how the keys names are written: if a key is not present, all nodes will be merged!
+    """
+    with driver.session() as session:
+        # Fist, we purge Publications by PubMed_ID, using the abstract to merge those that have no PubMed_ID
+        session.write_transaction(remove_duplicate_nodes, "Publication", "n.Pubmed_ID as id", "WHERE n.Pubmed_ID IS NOT null")
+        session.write_transaction(remove_duplicate_nodes, "Publication", "n.Abstract as abs", "WHERE n.Abstract IS NOT null AND n.Pubmed_ID IS null")
+
+        # Now, we work on Proteins/Metabolites/Drygs:
+        # We merge those that have the same InChI or InChIKey:
+        session.write_transaction(remove_duplicate_nodes, "", "n.InChI as inchi", "WHERE n:Protein OR n:Metabolite OR n:Drug AND n.InChI IS NOT null")
+        session.write_transaction(remove_duplicate_nodes, "", "n.InChIKey as key", "WHERE n:Protein OR n:Metabolite OR n:Drug AND n.InChIKey IS NOT null")
+        # We merge Proteins by UniProt_ID, and, when there is none, by Name:
+        session.write_transaction(remove_duplicate_nodes, "Protein", "n.UniProt_ID as id", "WHERE n.UniProt_ID IS NOT null")
+        session.write_transaction(remove_duplicate_nodes, "Protein", "n.Name as id", "WHERE n.UniProt_ID IS null AND n.Name IS NOT null")
+        # We merge Metabolites by HMDB_ID (normally, it should be unique):
+        session.write_transaction(remove_duplicate_nodes, "", "n.HMDB_ID as hmdb_id", "WHERE n:Protein OR n:Metabolite AND n.HMDB_ID IS NOT null")
+        # We can also remove all OriginalMetabolites (or other) that are non-unique
+        session.write_transaction(remove_duplicate_nodes, "", """n.InChI as inchi, n.InChIKey as inchikey, n.Name as name, n.SMILES as smiles,
+                                                                      n.Identifier as hmdb_id, n.ChEBI as chebi, n.Monisotopic_Molecular_Weight as mass""",
+                                                                   "WHERE n:Metabolite OR n:Protein OR n:OriginalMetabolite OR n:Drug")
+
+        # We also remove all non-unique Subjects. We do this by passing on all three parameters this nodes may have to apoc.mergeNodes
+        session.write_transaction(remove_duplicate_nodes, "Subject", "n.Age_Mean as age, n.Gender as gender, n.Information as inf")
+
+        # We can do the same for the different Dosages:
+        session.write_transaction(remove_duplicate_nodes, "Dosage", "n.Form as frm, n.Stength as str, n.Route as rt")
+
+        # For products, we merge all those with the same EMA_MA_Number or FDA_Application_Number to try to minimize duplicates, although this is not the best approach
+        session.write_transaction(remove_duplicate_nodes, "Product", "n.EMA_MA_Number as ema_nb", "WHERE n.EMA_MA_Number IS NOT null")
+        session.write_transaction(remove_duplicate_nodes, "Product", "n.FDA_Application_Number as fda_nb", "WHERE n.FDA_Application_Number IS NOT null")
+
+        # For CelularLocations and BioSpecimens, we merge those with the same Name:
+        session.write_transaction(remove_duplicate_nodes, "CelularLocation", "n.Name as name")
+        session.write_transaction(remove_duplicate_nodes, "BioSpecimen", "n.Name as name")
+
+        # Finally, we delete all empty nodes. This shouldn't be created on the first place, but, in case anyone escapes, this makes the DB cleaner.
+        session.run("MATCH (n) WHERE size(keys(properties(n))) < 1 DETACH DELETE n")
+        # For Measurements and Sequences, 2 properties are the minimum, since they always have some boolean values
+        session.run("MATCH (m:Measurement) WHERE size(keys(properties(m))) < 2 DETACH DELETE m")
+        session.run("MATCH (s:Sequence) WHERE size(keys(properties(s))) < 2 DETACH DELETE s")
+
+        #At last, we may remove any duplicate relationships, which, since we have merged nodes, will surely be there:
+        session.write_transaction(remove_duplicate_relationships)
 
 # ********* Work with Files ********* #
 

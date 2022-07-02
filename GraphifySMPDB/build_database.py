@@ -78,12 +78,6 @@ def add_sequence(tx, seq_id, seq_name, seq_type, seq, seq_format="FASTA"):
         MERGE (p)-[r:SEQUENCED_AS]->(s)
         """)
 
-def purge_database(driver):
-    with driver.session() as session:
-        # We purge the protein since there were some null UniProt_IDs
-        session.write_transaction(misc.remove_duplicate_nodes, "Protein", "n.UniProt_ID as id", "WHERE n.UniProt_ID IS NOT null")
-        session.write_transaction(misc.remove_duplicate_nodes, "Protein", "n.Name as id", "WHERE n.UniProt_ID IS null")
-
 def build_from_file(databasepath, filepath, Neo4JImportPath, driver, filetype):
     # For any given match in a protein file, we import all the nodes in the pathway
     # NOTE: Since this adds a ton of low-resolution nodes, maybe have this db run first?

@@ -51,7 +51,9 @@ with alive_bar((total_subfiles-1)*13 + 3) as bar:
         sleep(1) # Cool-off time
 
     # At the end, purge the database
-    build_database.purge_database(driver)
+    misc.purge_database(driver)
+
+    # And export it:
     with driver.session() as session:
         session.write_transaction(misc.export_graphml, "graph.graphml")
         bar()

@@ -108,7 +108,10 @@ with alive_bar(total_files) as bar:
             session.write_transaction(build_database.add_sequence, UniProt_ID, Name, Type, Sequence, Format)
             bar();
 
-    build_database.purge_database()
+    # At the end, we purge the database
+    misc.purge_database(driver)
+
+    # And export it:
     with driver.session() as session:
         session.write_transaction(misc.export_graphml, "graph.graphml")
         bar()

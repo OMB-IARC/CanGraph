@@ -82,6 +82,10 @@ with alive_bar(65) as bar:
         session.write_transaction(misc.remove_duplicate_relationships)
         bar()
 
+    # # At the end, purge the database
+    misc.purge_database(driver)
+
+    # And export it:
     with driver.session() as session:
         # We might want to remove ExternalEquivalent nodes
         #session.write_transaction(build_database.remove_ExternalEquivalent)

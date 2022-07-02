@@ -937,32 +937,3 @@ def build_from_file(newfile, driver):
     with driver.session() as session:
         for element in ["enzymes", "carriers", "transporters"]:
             session.write_transaction(add_targets_enzymes_carriers_and_transporters, newfile, element)
-
-def purge_database(driver):
-    """
-    A series of commands to be run only once, at the end of the DB creation process.
-    It tries to purge the database of duplicate nodes, unnecesary artifacts and such.
-    """
-    with driver.session() as session:
-        #NOTE: We are not doing: MATCH (n) WHERE size(keys(properties(n))) < 2 DETACH DELETE n
-        #Because we assume the CREATE clase is only invoked if there are non-empty rows
-        #NOTE: We purge by merging all products with the same EMA_MA_Number or FDA_Application_Number
-        session.write_transaction(misc.remove_duplicate_nodes, "Product", "n.EMA_MA_Number as ema_nb")
-        session.write_transaction(misc.remove_duplicate_nodes, "Product", "n.FDA_Application_Number as fda_nb")
-        #Also remove duplicates by PubMed ID
-        session.write_transaction(misc.remove_duplicate_nodes, "Publication", "n.Pubmed_ID as id", "WHERE n.Pubmed_ID IS NOT null")
-        #NOTE: We also merge all dosage nodes that are *exactly equal* in all three values
-        session.write_transaction(misc.remove_duplicate_nodes, "Product", "n.Form as frm, n.Stength as str, n.Route as rt")
-        #And in two (route *should* be duplicated)
-        session.write_transaction(misc.remove_duplicate_nodes, "Product", "n.Stength as str, n.Route as rt", "WHERE n.Form IS null")
-        session.write_transaction(misc.remove_duplicate_nodes, "Product", "n.Form as frm, n.Route as rt", "WHERE n.Stength IS null")
-        # Also remove duplicated cellular locations
-        session.write_transaction(misc.remove_duplicate_nodes, "CelularLocation", "n.Name as name", "")
-        #And we delete duplicate relationships
-        session.write_transaction(misc.remove_duplicate_relationships)
-        #(This shouldn't be necessary but just in case)
-        session.run("MATCH (d:Dosage) WHERE size(keys(properties(d))) < 1 DETACH DELETE d")
-        session.run("MATCH (p:Product) WHERE size(keys(properties(p))) < 1 DETACH DELETE p")
-        session.run("MATCH (t:Taxonomy) WHERE size(keys(properties(t))) < 1 DETACH DELETE t")
-        session.run("MATCH (t:CelularLocation) WHERE size(keys(properties(t))) < 1 DETACH DELETE t")
-

@@ -41,6 +41,10 @@ with alive_bar(25) as bar:
     with driver.session() as session:
         build_database.build_from_file( sys.argv[4], Neo4JImportPath, driver, False)
 
+    # At the end, purge the database
+    misc.purge_database(driver)
+
+    # And export it:
     with driver.session() as session:
         session.write_transaction(misc.export_graphml, "graph.graphml")
         bar()

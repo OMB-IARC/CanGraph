@@ -81,9 +81,10 @@ for url in hmdb_urls:
                 # And remove it
                 os.remove(f"{Neo4JImportPath}/{filename.split('.')[0]}_{i}.xml")
 
-# At the end, purge the database
-build_database.purge_database(driver)
+# At the end, we purge the database
+misc.purge_database(driver)
 
+# And export it:
 with driver.session() as session:
     session.write_transaction(misc.export_graphml, "graph.graphml")
     bar()

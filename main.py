@@ -175,17 +175,12 @@ with alive_bar(len(all_files)*len(raw_database)) as bar:
                 # And advance, of course
                 bar()
 
-        #Once we finish the search for each metabolite on the original table, we purge the database by removing EQUALLY EXACT metabolites
-        # TODO: FIX PUBLICATIONS BEING MERGED!!
-        # TODO: DE DONDE SALEN LOS DISEASES SIN ID???
+        # DE DONDE SALEN LOS DISEASES SIN ID??? -> HMDB. Además el Name es el PK así que da igual
         # TODO: Fix publication and subject Primary Keys
-        with driver.session() as session:
-            session.write_transaction(misc.remove_duplicate_nodes, "", "n.InChI as sth", "WHERE n.InChI IS NOT null AND n:Metabolite or n:Protein")
-            session.write_transaction(misc.remove_duplicate_nodes, "", "n.InChIKey as sth", "WHERE n.InChIKey IS NOT null AND n:Metabolite or n:Protein")
-            session.write_transaction(misc.remove_duplicate_nodes, "", """n.InChI as inchi, n.InChIKey as inchikey, n.Name as name, n.SMILES as smiles,
-                                                                          n.Identifier as hmdb_id, n.ChEBI as chebi, n.Monisotopic_Molecular_Weight as mass""",
-                                                                       "WHERE n:Metabolite or n:Protein")
-            session.write_transaction(misc.remove_duplicate_relationships)
+        # TODO: SIGUE HABIENDO TAXONOMIES VACIAS
+
+        #Once we finish the search, we purge the database by removing nodes considered as duplicated
+        misc.purge_database(driver)
 
         # And save it in GraphML format
         with driver.session() as session:
