@@ -32,7 +32,7 @@ def initial_cancer_discovery(tx, number=None):
 
         CALL apoc.load.jsonParams(
                 replace("https://query.wikidata.org/sparql?query=" + sparql, "\n", ""),
-                { Accept: "application/sparql-results+json"}, null)
+                { Accept: "application/sparql-results+json" }, null )
         YIELD value
 
         UNWIND value['results']['bindings'] as row
@@ -68,7 +68,7 @@ def find_subclass_of_cancer(tx, number=None):
 
         CALL apoc.load.jsonParams(
                 replace("https://query.wikidata.org/sparql?query=" + sparql, "\n", ""),
-                { Accept: "application/sparql-results+json"}, null)
+                { Accept: "application/sparql-results+json" }, null )
         YIELD value
 
         UNWIND value['results']['bindings'] as row
@@ -98,7 +98,7 @@ def find_instance_of_cancer(tx, number=None):
 
         CALL apoc.load.jsonParams(
                 replace("https://query.wikidata.org/sparql?query=" + sparql, "\n", ""),
-                { Accept: "application/sparql-results+json"}, null)
+                { Accept: "application/sparql-results+json" }, null )
         YIELD value
 
         UNWIND value['results']['bindings'] as row
@@ -258,65 +258,75 @@ def add_genes(tx, number):
                 MERGE (g)-[:ASSOCIATED_DISEASE_GENE]->(c))
         """)
 
-def add_drug_external_ids(tx, number=None):
+def add_drug_external_ids(tx, number = None, query = "Wikidata"):
     """
     Adds some external IDs to any "Drug" nodes already present on the database.
     Since the PDB information had too much values which caused triple duplicates that overcharged the system,
     they were intentionally left out.
     """
+    if query == "DrugBank_ID":
+      query_text = """?item (wdt:P715) replace(d.DrugBank_ID, "DB", "")"""
+    else:
+      query_text = """filter (?item = wd:' + d.WikiData_ID + ')"""
+
+
     return tx.run("""
         MATCH (d:Drug)
-        WITH 'SELECT *
-            WHERE{
-                filter (?item = wd:' + d.WikiData_ID + ')
+        WITH 'SELECT DISTINCT *
+        WHERE {
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE]". }
+              {
 
-            OPTIONAL{
-                ?item wdt:P592 ?CHEMBL_ID }
-            OPTIONAL{
-                ?item wdt:P683 ?ChEBI_ID }
-            OPTIONAL{
-                ?item wdt:P662 ?PubChem_ID }
-            OPTIONAL{
-                ?item wdt:P665 ?KEGG_ID }
-            OPTIONAL{
-                ?item wdt:P715 ?DrugBank }
-            OPTIONAL{
-                ?item wdt:P231 ?CAS_Number }
-            OPTIONAL{
-                ?item wdt:P661 ?ChemSpider_ID }
-            OPTIONAL{
-                ?item wdt:P267 ?ATC_Code }
-            OPTIONAL{
-                ?item wdt:P486 ?MeSH }
-            OPTIONAL{
-                ?item wdt:P234 ?InChI }
-            OPTIONAL{
-                ?item wdt:P235 ?InChIKey }
+        {query_text}
 
-            OPTIONAL{
-                ?item wdt:P2067 ?Mass }
-            OPTIONAL{
-                ?item wdt:P274 ?Chemical_Formula }
-            OPTIONAL{
-                ?item wdt:P233 ?Canonical_Smiles }
+        OPTIONAL{
+            ?item wdt:P715 ?DrugBank }
 
-            OPTIONAL{
-                ?item wdt:P3489 ?Pregnancy_Category
-                SERVICE wikibase:label { bd:serviceParam wikibase:language "en".
-                                         ?Pregnancy_Category rdfs:label ?Pregnancy_Category_Name. } }
-            OPTIONAL{
-                ?item wdt:P7830 ?LiverTox }
+        OPTIONAL{
+            ?item wdt:P234 ?InChI }
+        OPTIONAL{
+            ?item wdt:P235 ?InChIKey }
 
+        OPTIONAL{
+            ?item wdt:P683 ?ChEBI_ID }
+        OPTIONAL{
+            ?item wdt:P592 ?CHEMBL_ID }
+        OPTIONAL{
+            ?item wdt:P661 ?ChemSpider_ID }
+        OPTIONAL{
+            ?item wdt:P662 ?PubChem_ID }
+        OPTIONAL{
+            ?item wdt:P665 ?KEGG_ID }
+        OPTIONAL{
+            ?item wdt:P231 ?CAS_Number }
+        OPTIONAL{
+            ?item wdt:P267 ?ATC_Code }
+        OPTIONAL{
+            ?item wdt:P486 ?MeSH }
+
+        OPTIONAL{
+            ?item wdt:P2067 ?Mass }
+        OPTIONAL{
+            ?item wdt:P274 ?Chemical_Formula }
+        OPTIONAL{
+            ?item wdt:P233 ?Canonical_Smiles }
+        OPTIONAL{
+            ?item wdt:P3489 ?Pregnancy_Category
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "en".
+                                    ?Pregnancy_Category rdfs:label ?Pregnancy_Category_Name. } }
+        OPTIONAL{
+            ?item wdt:P7830 ?LiverTox }
             }' AS sparql, d
 
             CALL apoc.load.jsonParams(
                 replace("https://query.wikidata.org/sparql?query=" + sparql, "\n", ""),
-                { Accept: "application/sparql-results+json"}, null)
+                { Accept: "application/sparql-results+json" }, null )
         YIELD value
 
         UNWIND value['results']['bindings'] as row
 
-        SET d.CHEMBL_ID = row['CHEMBL_ID']['value'],
+        SET d.WikiData_ID = split(row['item']['value'],'/')[-1],
+            d.CHEMBL_ID = row['CHEMBL_ID']['value'],
             d.ChEBI_ID = row['ChEBI_ID']['value'],
             d.PubChem_ID = row['PubChem_ID']['value'],
             d.KEGG_ID = row['KEGG_ID']['value'],
@@ -336,9 +346,9 @@ def add_drug_external_ids(tx, number=None):
 
         MERGE (c:MeSH { MeSH_ID:row['MeSH']['value'] })
         MERGE (d)-[r:RELATED_MESH]->(c)
-        """)
+        """.format(query_text = query_text))
 
-def add_more_drug_info(tx, number=None):
+def add_more_drug_info(tx, number=None, query = "Wikidata"):
     """
     Creates some nodes that are related with each of the "Drug" nodes already existing
     on the database: routes of administration, targeted metabolites and approved drugs
@@ -346,24 +356,31 @@ def add_more_drug_info(tx, number=None):
     TODO: ADD ROLE to metabolite interactions
     NOTE: This transaction has been separated in order to keep response times low
     """
-    return tx.run("""
-        MATCH (d:Drug)
-        WITH 'SELECT *
-            WHERE{
-                filter (?item = wd:' + d.WikiData_ID + ')
+    if query == "DrugBank_ID":
+      query_text = ["""?item (wdt:P715) replace(d.DrugBank_ID, "DB", "") . """]
+    else:
+      query_text = ["""filter (?item = wd:' + d.WikiData_ID + ')"""]
 
-                OPTIONAL{
-                    ?item wdt:P636 ?Route_of_Admin
-                    SERVICE wikibase:label { bd:serviceParam wikibase:language "en".
-                                            ?Route_of_Admin rdfs:label ?Route_of_Admin_name. } }
-                OPTIONAL{
-                    ?item wdt:P3780 ?Active_ingredient_in
-                    SERVICE wikibase:label { bd:serviceParam wikibase:language "en".
-                                            ?Active_ingredient_in rdfs:label ?Active_ingredient_in_name. } }
-                OPTIONAL{
-                    ?item wdt:P129 ?Interacts_with
-                    SERVICE wikibase:label { bd:serviceParam wikibase:language "en".
-                                            ?Interacts_with rdfs:label ?Interacts_with_name. } }
+    return tx.run("""
+        WITH 'SELECT DISTINCT *
+        WHERE {
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE]". }
+              {
+
+        {query_text}
+
+        OPTIONAL{
+            ?item wdt:P636 ?Route_of_Admin
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "en".
+                                    ?Route_of_Admin rdfs:label ?Route_of_Admin_name. } }
+        OPTIONAL{
+            ?item wdt:P3780 ?Active_ingredient_in
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "en".
+                                    ?Active_ingredient_in rdfs:label ?Active_ingredient_in_name. } }
+        OPTIONAL{
+            ?item wdt:P129 ?Interacts_with
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "en".
+                                    ?Interacts_with rdfs:label ?Interacts_with_name. } }
             }' AS sparql, d
 
             CALL apoc.load.jsonParams(
@@ -373,24 +390,26 @@ def add_more_drug_info(tx, number=None):
 
         UNWIND value['results']['bindings'] as row
 
+        SET d.WikiData_ID = split(row['item']['value'],'/')[-1],
+
         FOREACH(ignoreme in case when row['Interacts_with'] is not null then [1] else [] end |
-                    MERGE (m:Metabolite{URL:row['Interacts_with']['value'],
+                    MERGE (m:Metabolite{{URL:row['Interacts_with']['value'],
                                 WikiData_ID:split(row['Interacts_with']['value'],'/')[-1],
-                                Name:row['Interacts_with_name']['value'] })
+                                Name:row['Interacts_with_name']['value'] }})
                     MERGE (d)-[:INTERACTS_WITH]-(m))
 
         FOREACH(ignoreme in case when row['Route_of_Admin'] is not null then [1] else [] end |
-                    MERGE (r:AdministrationRoute{URL:row['Route_of_Admin']['value'],
+                    MERGE (r:AdministrationRoute{{URL:row['Route_of_Admin']['value'],
                                 WikiData_ID:split(row['Route_of_Admin']['value'],'/')[-1],
-                                Name:row['Route_of_Admin_name']['value'] })
+                                Name:row['Route_of_Admin_name']['value'] }})
                     MERGE (d)-[:ADMINISTERED_VIA]->(r))
 
         FOREACH(ignoreme in case when row['Active_ingredient_in'] is not null then [1] else [] end |
-                    MERGE (me:Product{URL:row['Active_ingredient_in']['value'],
+                    MERGE (me:Product{{URL:row['Active_ingredient_in']['value'],
                                 WikiData_ID:split(row['Active_ingredient_in']['value'],'/')[-1],
-                                Name:row['Active_ingredient_in_name']['value'] })
+                                Name:row['Active_ingredient_in_name']['value'] }})
                     MERGE (d)-[:PART_OF_PRODUCT]->(me))
-        """)
+        """.format(query_text = query_text))
 
 def add_gene_info(tx, number=None):
     """
@@ -447,7 +466,7 @@ def add_gene_info(tx, number=None):
 
             CALL apoc.load.jsonParams(
                 replace("https://query.wikidata.org/sparql?query=" + sparql, "\n", ""),
-                { Accept: "application/sparql-results+json"}, null)
+                { Accept: "application/sparql-results+json" }, null )
         YIELD value
 
         UNWIND value['results']['bindings'] as row
@@ -481,7 +500,7 @@ def add_gene_info(tx, number=None):
                 MERGE (g)-[:EQUALS]-(e))
         """)
 
-def add_metabolite_info(tx, number=None):
+def add_metabolite_info(tx, number = None, query = "ChEBI_ID"):
     """
     A Cypher Query that adds some external IDs and properties to "Metabolite" nodes already existing on
     the database. Two kind of metabolites exist: those that are encoded by a given gene, and those that interact
@@ -490,61 +509,69 @@ def add_metabolite_info(tx, number=None):
         * The metabolites are not forced to be proteins, but if they are, this is kept in the "instance_of" record
         * TODO: Might include P527 "has part or parts" for more info (it crashed java)
     """
+    if query == "ChEBI_ID":
+      query_text = ["""?item (wdt:P683) m.ChEBI_ID ."""]
+    else:
+      query_text = ["""filter (?item = wd:' + m.WikiData_ID + ')"""]
+
     return tx.run("""
         MATCH (m:Metabolite)
-        WITH 'SELECT *
-            WHERE{
-                filter (?item = wd:' + m.WikiData_ID + ')
-                ?item wdt:P703 wd:Q15978631
+        WITH 'SELECT DISTINCT *
+        WHERE {
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE]". }
+              {
 
-            OPTIONAL{
-                ?item wdt:P31 ?Instance_of
-                SERVICE wikibase:label { bd:serviceParam wikibase:language "en".
-                                            ?Instance_of rdfs:label ?Instance_of_name. } }
-            OPTIONAL{
-                ?item wdt:P352 ?UniProt_ID }
-            OPTIONAL{
-                ?item wdt:P486 ?MeSH }
-            OPTIONAL{
-                ?item wdt:P7260 ?Transporter_DB_ID }
-            OPTIONAL{
-                ?item wdt:P683 ?ChEBI_ID }
-            OPTIONAL{
-                ?item wdt:P231 ?CAS_Number }
-            OPTIONAL{
-                ?item wdt:P274 ?Chemical_Formula }
-            OPTIONAL{
-                ?item wdt:P234 ?InChI }
-            OPTIONAL{
-                ?item wdt:P235 ?InChIKey }
-            OPTIONAL{
-                ?item wdt:P592 ?CHEMBL_ID }
-            OPTIONAL{
-                ?item wdt:P683 ?ChEBI_ID }
-            OPTIONAL{
-                ?item wdt:P662 ?PubChem_ID }
-            OPTIONAL{
-                ?item wdt:P233 ?Canonical_Smiles }
-            OPTIONAL{
-                ?item wdt:P8117 ?FooDB_Compound_ID }
+        {query_text}
 
-            OPTIONAL{
-                    ?item wdt:P129 ?Interacts_with
-                    SERVICE wikibase:label { bd:serviceParam wikibase:language "en".
-                                            ?Interacts_with rdfs:label ?Interacts_with_name. } }
-            OPTIONAL{
-                ?item wdt:P2888 ?Exact_Matches }
+        OPTIONAL{
+            ?item wdt:P31 ?Instance_of
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "en".
+                                    ?Instance_of rdfs:label ?Instance_of_name. } }
+
+        OPTIONAL{
+            ?item (wdt:P683) ?ChEBI_ID }
+        OPTIONAL{
+            ?item wdt:P231 ?CAS_Number }
+
+        OPTIONAL{
+            ?item wdt:P234 ?InChI }
+        OPTIONAL{
+            ?item wdt:P235 ?InChIKey }
+        OPTIONAL{
+            ?item wdt:P352 ?UniProt_ID }
+        OPTIONAL{
+            ?item wdt:P486 ?MeSH }
+        OPTIONAL{
+            ?item wdt:P7260 ?Transporter_DB_ID }
+        OPTIONAL{
+            ?item wdt:P274 ?Chemical_Formula }
+        OPTIONAL{
+            ?item wdt:P592 ?CHEMBL_ID }
+        OPTIONAL{
+            ?item wdt:P662 ?PubChem_ID }
+        OPTIONAL{
+            ?item wdt:P233 ?Canonical_Smiles }
+        OPTIONAL{
+            ?item wdt:P8117 ?FooDB_Compound_ID }
+
+        OPTIONAL{
+            ?item wdt:P129 ?Interacts_with
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "en".
+                    ?Interacts_with rdfs:label ?Interacts_with_name. } }
+        OPTIONAL{
+            ?item wdt:P2888 ?Exact_Matches }
 
             }' AS sparql, m
 
             CALL apoc.load.jsonParams(
                 replace("https://query.wikidata.org/sparql?query=" + sparql, "\n", ""),
-                { Accept: "application/sparql-results+json"}, null)
+                {{ Accept: "application/sparql-results+json"}}, null)
         YIELD value
 
         UNWIND value['results']['bindings'] as row
 
-        SET m.Function = row['Instance_of_name']['value'],
+        SET m.WikiData_ID = split(row['item']['value'],'/')[-1],
+            m.Function = row['Instance_of_name']['value'],
             m.UniProt_ID = row['UniProt_ID']['value'],
             m.ChEBI_ID = row['ChEBI_ID']['value'],
             m.CAS_Number = row['CAS_Number']['value'],
@@ -558,20 +585,20 @@ def add_metabolite_info(tx, number=None):
             m.FooDB_Compound_ID = row['FooDB_Compound_ID']['value'],
             m.Transporter_DB_ID = row['Transporter_DB_ID']['value']
 
-        MERGE (c:MeSH { MeSH_ID:row['MeSH']['value'] })
+        MERGE (c:MeSH {{ MeSH_ID:row['MeSH']['value'] }})
         MERGE (m)-[r:RELATED_MESH]->(c)
 
         FOREACH(ignoreme in case when row['Interacts_with'] is not null then [1] else [] end |
-                    MERGE (me:Metabolite{URL:row['Interacts_with']['value'],
+                    MERGE (me:Metabolite{{URL:row['Interacts_with']['value'],
                                 WikiData_ID:split(row['Interacts_with']['value'],'/')[-1],
-                                Name:row['Interacts_with_name']['value'] })
+                                Name:row['Interacts_with_name']['value'] }})
                     MERGE (m)-[:INTERACTS_WITH]-(me))
 
         FOREACH(ignoreme in case when row['Exact_Matches'] is not null then [1] else [] end |
-                MERGE (e:ExternalEquivalent{URL:row['Exact_Matches']['value'],
-                                            WikiData_ID:split(row['Exact_Matches']['value'],'/')[-1]})
+                MERGE (e:ExternalEquivalent{{URL:row['Exact_Matches']['value'],
+                                            WikiData_ID:split(row['Exact_Matches']['value'],'/')[-1]}})
                 MERGE (m)-[:EQUALS]-(e))
-        """)
+        """.format(query_text = query_text))
 
 def add_toomuch_metabolite_info(tx, number=None):
     """
@@ -603,7 +630,7 @@ def add_toomuch_metabolite_info(tx, number=None):
 
             CALL apoc.load.jsonParams(
                 replace("https://query.wikidata.org/sparql?query=" + sparql, "\n", ""),
-                { Accept: "application/sparql-results+json"}, null)
+                { Accept: "application/sparql-results+json" }, null )
         YIELD value
 
         UNWIND value['results']['bindings'] as row
@@ -627,6 +654,34 @@ def add_toomuch_metabolite_info(tx, number=None):
         WITH m, row, CASE WHEN EXISTS(m.A) THEN m.A ELSE [] END AS nA
             WHERE NONE (x IN nA WHERE x = row['PDB_Structure_ID']['value'])
         SET m.A = nA + row['PDB_Structure_ID']['value']
+        """)
+
+def annotate_diseases(tx, number=None):
+    """
+    A function that adds some MeSH nodes and WikiData_IDs to existing "Disease" nodes, based on their name.
+    """
+    return tx.run("""
+        MATCH (d:Disease)
+        WITH 'SELECT DISTINCT *
+        WHERE{
+            ?item ?label d.Name@en.
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+
+        OPTIONAL{
+            ?item wdt:P486 ?MeSH_ID }
+        }' AS sparql, m
+
+            CALL apoc.load.jsonParams(
+                replace("https://query.wikidata.org/sparql?query=" + sparql, "\n", ""),
+                { Accept: "application/sparql-results+json" }, null )
+        YIELD value
+
+        UNWIND value['results']['bindings'] as row
+
+        SET d.WikiData_ID = split(row['item']['value'],'/')[-1]
+
+        MERGE (c:MeSH { MeSH_ID:row['MeSH']['value'] })
+        MERGE (d)-[r:RELATED_MESH]->(c)
         """)
 
 def remove_ExternalEquivalent(tx, number=None):

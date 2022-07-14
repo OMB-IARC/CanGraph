@@ -72,17 +72,20 @@ def add_metabolites(tx, filename):
             m.Phenol_Explorer_Compound_ID = phenol_explorer_compound_id, m.KNApSAcK_ID = knapsack_id, m.KEGG_ID = kegg_id,
             m.Bigg_ID = bigg_id, m.WikiPedia_Article = wikipedia_id, m.METLIN_ID = metlin_id, m.VMH_ID = vmh_id
 
+        WITH secondary_accessions, synonyms, m, split(split(synthesis_reference, ",")[-3], ".")[-2] AS ref_title, synthesis_reference
         FOREACH(ignoreMe IN CASE WHEN synthesis_reference IS NOT null THEN [1] ELSE [] END |
-            MERGE (p:Publication {{ Authors:replace(split(synthesis_reference, ". ")[0], ";",",") }})
-            SET p.Title = split(split(synthesis_reference, ",")[-3], ".")[-2]
-            SET p.Publication = split(split(synthesis_reference, ",")[-3], ".")[-1]
-            SET p.Date = replace(split(split(synthesis_reference, ",")[-3], "(")[1], ")", "")
-            SET p.Volume = split(split(synthesis_reference, ",")[-2], "(")[0]
-            SET p.Issue = replace(split(split(synthesis_reference, ",")[-2], "(")[1], ")", "")
-            SET p.Pages = split(synthesis_reference, ",")[-1]
+            FOREACH(ignoreMe IN CASE WHEN ref_title IS NOT null THEN [1] ELSE [] END |
+                MERGE (p:Publication {{ Title: ref_title }})
+                SET p.Authors = replace(split(synthesis_reference, ". ")[0], ";",",")
+                SET p.Publication = split(split(synthesis_reference, ",")[-3], ".")[-1]
+                SET p.Date = replace(split(split(synthesis_reference, ",")[-3], "(")[1], ")", "")
+                SET p.Volume = split(split(synthesis_reference, ",")[-2], "(")[0]
+                SET p.Issue = replace(split(split(synthesis_reference, ",")[-2], "(")[1], ")", "")
+                SET p.Pages = split(synthesis_reference, ",")[-1]
 
-            MERGE (m)-[r:CITED_IN]->(p)
-            SET r.Type = "Synthesis"
+                MERGE (m)-[r:CITED_IN]->(p)
+                SET r.Type = "Synthesis"
+            )
         )
 
         WITH secondary_accessions, synonyms, m
@@ -149,21 +152,27 @@ def add_diseases(tx, filename):
         MERGE (d:Disease {{Name:diseasename }})
         SET d.OMIM_ID = omim_id
 
-        MERGE (p:Publication {{Authors:split(reference_text, ":")[0]}})
-        SET p.Title = split(replace(reference_text, split(reference_text, ":")[0]+": ", ""), ".")[0]
-        SET p.Publication = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[0]
-        SET p.Notes = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[2]
-        SET p.Date = split(split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[1],";")[0]
-        SET p.Volume = split(split(reference_text, ";")[1], "(")[0]
-        SET p.Issue = split(split(reference_text, "(")[1], ")")[0]
-        SET p.Pages = split(split(reference_text, ":")[-1], ".")[0]
-        SET p.PubMed_ID = pubmed_id
-
         MERGE (m)-[r:ASSOCIATED_DISEASE_METABOLITE]-(d)
-        SET r.PubMed_ID = ""
-        SET r.PubMed_ID = pubmed_id + "," + r.PubMed_ID
 
-        MERGE (m)-[r2:CITED_IN]->(p)
+        WITH split(replace(reference_text, split(reference_text, ":")[0]+": ", ""), ".")[0] AS ref_title, pubmed_id, reference_text
+        FOREACH(ignoreMe IN CASE WHEN ref_title IS NOT null THEN [1] ELSE [] END |
+            MERGE (p:Publication {{ Title: ref_title }})
+            SET p.Authors = split(reference_text, ":")[0]
+
+
+            SET p.Publication = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[0]
+            SET p.Notes = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[2]
+            SET p.Date = split(split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[1],";")[0]
+            SET p.Volume = split(split(reference_text, ";")[1], "(")[0]
+            SET p.Issue = split(split(reference_text, "(")[1], ")")[0]
+            SET p.Pages = split(split(reference_text, ":")[-1], ".")[0]
+            SET p.PubMed_ID = pubmed_id
+
+            MERGE (m)-[r2:CITED_IN]->(p)
+            SET r2.PubMed_ID = ""
+            SET r2.PubMed_ID = pubmed_id + "," + r2.PubMed_ID
+        )
+        
         """)
 
 def add_concentrations_normal(tx, filename):
@@ -218,7 +227,7 @@ def add_concentrations_normal(tx, filename):
         SET c.Value = value, c.Comments = comment
 
         CREATE (sb:Subject)
-        SET sb.Age_Mean = subject_age, sb.Gender = subject_sex, sb.Information = subject_condition
+        SET sb.Age = replace(subject_age, "&gt;", ">"), sb.Gender = replace(subject_sex, "Both", "Female + Male"), sb.Information = subject_condition
 
         MERGE (m)-[r5:MEASURED_AS]->(me)
         MERGE (c)-[r7:TAKEN_FROM_SUBJECT]->(sb)
@@ -235,17 +244,24 @@ def add_concentrations_normal(tx, filename):
         SET r5.PubMed_ID = ""
         SET r5.PubMed_ID = pubmed_id + "," + r5.PubMed_ID
 
-        MERGE (p:Publication {{Authors:split(reference_text, ":")[0]}})
-        SET p.Title = split(replace(reference_text, split(reference_text, ":")[0]+": ", ""), ".")[0]
-        SET p.Publication = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[0]
-        SET p.Notes = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[2]
-        SET p.Date = split(split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[1],";")[0]
-        SET p.Volume = split(split(reference_text, ";")[1], "(")[0]
-        SET p.Issue = split(split(reference_text, "(")[1], ")")[0]
-        SET p.Pages = split(split(reference_text, ":")[-1], ".")[0]
-        SET p.PubMed_ID = pubmed_id
+        WITH split(replace(reference_text, split(reference_text, ":")[0]+": ", ""), ".")[0] AS ref_title, pubmed_id, reference_text
+        FOREACH(ignoreMe IN CASE WHEN ref_title IS NOT null THEN [1] ELSE [] END |
+            MERGE (p:Publication {{ Title: ref_title }})
+            SET p.Authors = split(reference_text, ":")[0]
 
-        MERGE (c)-[r2:CITED_IN]->(p)
+
+            SET p.Publication = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[0]
+            SET p.Notes = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[2]
+            SET p.Date = split(split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[1],";")[0]
+            SET p.Volume = split(split(reference_text, ";")[1], "(")[0]
+            SET p.Issue = split(split(reference_text, "(")[1], ")")[0]
+            SET p.Pages = split(split(reference_text, ":")[-1], ".")[0]
+            SET p.PubMed_ID = pubmed_id
+
+            MERGE (c)-[r2:CITED_IN]->(p)
+        )
+
+
         """)
 
 def add_concentrations_abnormal(tx, filename):
@@ -299,7 +315,7 @@ def add_concentrations_abnormal(tx, filename):
         SET c.Value = value, c.Comments = comment
 
         CREATE (sb:Subject)
-        SET sb.Age_Mean = patient_age, sb.Gender = patient_sex, sb.Information = patient_information
+        SET sb.Age = replace(patient_age, "&gt;", ">"), sb.Gender = replace(patient_sex, "Both", "Female + Male"), sb.Information = patient_information
 
         MERGE (m)-[r5:MEASURED_AS]->(me)
         MERGE (c)-[r7:TAKEN_FROM_SUBJECT]->(sb)
@@ -316,17 +332,23 @@ def add_concentrations_abnormal(tx, filename):
         SET r5.PubMed_ID = ""
         SET r5.PubMed_ID = pubmed_id + "," + r5.PubMed_ID
 
-        MERGE (p:Publication {{Authors:split(reference_text, ":")[0]}})
-        SET p.Title = split(replace(reference_text, split(reference_text, ":")[0]+": ", ""), ".")[0]
-        SET p.Publication = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[0]
-        SET p.Notes = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[2]
-        SET p.Date = split(split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[1],";")[0]
-        SET p.Volume = split(split(reference_text, ";")[1], "(")[0]
-        SET p.Issue = split(split(reference_text, "(")[1], ")")[0]
-        SET p.Pages = split(split(reference_text, ":")[-1], ".")[0]
-        SET p.PubMed_ID = pubmed_id
+        WITH split(replace(reference_text, split(reference_text, ":")[0]+": ", ""), ".")[0] AS ref_title, pubmed_id, reference_text
+        FOREACH(ignoreMe IN CASE WHEN ref_title IS NOT null THEN [1] ELSE [] END |
+            MERGE (p:Publication {{ Title: ref_title }})
+            SET p.Authors = split(reference_text, ":")[0]
 
-        MERGE (c)-[r2:CITED_IN]->(p)
+
+            SET p.Publication = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[0]
+            SET p.Notes = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[2]
+            SET p.Date = split(split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[1],";")[0]
+            SET p.Volume = split(split(reference_text, ";")[1], "(")[0]
+            SET p.Issue = split(split(reference_text, "(")[1], ")")[0]
+            SET p.Pages = split(split(reference_text, ":")[-1], ".")[0]
+            SET p.PubMed_ID = pubmed_id
+
+            MERGE (c)-[r2:CITED_IN]->(p)
+        )
+
         """)
 
 def add_taxonomy(tx, filename):
@@ -678,7 +700,7 @@ def add_protein_properties(tx, filename):
 
         MERGE (p:Protein {{ HMDB_ID:accession }})
 
-        WITH protein_properties, p
+        WITH protein_properties, p, uniprot_id
         UNWIND protein_properties AS protein_property
 
         WITH
@@ -687,7 +709,7 @@ def add_protein_properties(tx, filename):
             [X in protein_property._children WHERE X._type = "theoretical_pi"][0]._text AS theoretical_pi,
             [X in protein_property._children WHERE X._type = "pfams"] AS pfams,
             [X in protein_property._children WHERE X._type = "polypeptide_sequence"][0]._text AS polypeptide_sequence,
-            p
+            p, uniprot_id
 
         SET p.Residue_Number = residue_number, p.Molecular_Weight = molecular_weight,
             p.Theoretical_PI = theoretical_pi
@@ -741,17 +763,23 @@ def add_general_references(tx, filename, type_of):
             [X in my_reference._children WHERE X._type = "pubmed_id"][0]._text AS pubmed_id,
             m
 
-        MERGE (p:Publication {{Authors:split(reference_text, ":")[0]}})
-        SET p.Title = split(replace(reference_text, split(reference_text, ":")[0]+": ", ""), ".")[0]
-        SET p.Publication = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[0]
-        SET p.Notes = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[2]
-        SET p.Date = split(split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[1],";")[0]
-        SET p.Volume = split(split(reference_text, ";")[1], "(")[0]
-        SET p.Issue = split(split(reference_text, "(")[1], ")")[0]
-        SET p.Pages = split(split(reference_text, ":")[-1], ".")[0]
-        SET p.PubMed_ID = pubmed_id
+        WITH split(replace(reference_text, split(reference_text, ":")[0]+": ", ""), ".")[0] AS ref_title, pubmed_id, reference_text
+        FOREACH(ignoreMe IN CASE WHEN ref_title IS NOT null THEN [1] ELSE [] END |
+            MERGE (p:Publication {{ Title: ref_title }})
+            SET p.Authors = split(reference_text, ":")[0]
 
-        MERGE (m)-[r:CITED_IN]->(p)
+
+            SET p.Publication = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[0]
+            SET p.Notes = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[2]
+            SET p.Date = split(split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[1],";")[0]
+            SET p.Volume = split(split(reference_text, ";")[1], "(")[0]
+            SET p.Issue = split(split(reference_text, "(")[1], ")")[0]
+            SET p.Pages = split(split(reference_text, ":")[-1], ".")[0]
+            SET p.PubMed_ID = pubmed_id
+
+            MERGE (c)-[r2:CITED_IN]->(p)
+        )
+
         """)
 
 def add_protein_associations(tx, filename):
@@ -864,18 +892,22 @@ def add_metabolite_references(tx, filename):
             MERGE (m)-[r:INTERACTS_WITH]-(p)
             )
 
-        FOREACH(ignoreMe IN CASE WHEN reference_text IS NOT null THEN [1] ELSE [] END |
-            MERGE (pu:Publication {{Authors:split(reference_text, ":")[0]}})
-            SET pu.Title = split(replace(reference_text, split(reference_text, ":")[0]+": ", ""), ".")[0]
-            SET pu.Publication = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[0]
-            SET pu.Notes = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[2]
-            SET pu.Date = split(split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[1],";")[0]
-            SET pu.Volume = split(split(reference_text, ";")[1], "(")[0]
-            SET pu.Issue = split(split(reference_text, "(")[1], ")")[0]
-            SET pu.Pages = split(split(reference_text, ":")[-1], ".")[0]
-            SET pu.PubMed_ID = pubmed_id
-            MERGE (p)-[r1:CITED_IN]->(pu)
-            )
+        WITH split(replace(reference_text, split(reference_text, ":")[0]+": ", ""), ".")[0] AS ref_title, pubmed_id, reference_text
+        FOREACH(ignoreMe IN CASE WHEN ref_title IS NOT null THEN [1] ELSE [] END |
+            MERGE (p:Publication {{ Title: ref_title }})
+            SET p.Authors = split(reference_text, ":")[0]
+
+            SET p.Publication = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[0]
+            SET p.Notes = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[2]
+            SET p.Date = split(split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[1],";")[0]
+            SET p.Volume = split(split(reference_text, ";")[1], "(")[0]
+            SET p.Issue = split(split(reference_text, "(")[1], ")")[0]
+            SET p.Pages = split(split(reference_text, ":")[-1], ".")[0]
+            SET p.PubMed_ID = pubmed_id
+
+            MERGE (c)-[r2:CITED_IN]->(p)
+        )
+
         """)
 
 def build_from_protein_file(newfile, driver):

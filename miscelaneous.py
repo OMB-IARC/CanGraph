@@ -29,7 +29,7 @@ def get_import_path(current_driver):
         Neo4JImportPath = session.read_transaction(get_neo4j_path)[0]
     return Neo4JImportPath
 
-def repeat_transaction(tx, num_retries, session, bar, number=None):
+def repeat_transaction(tx, num_retries, session, bar, number=None, query = "WikiData"):
     """
     A function that repeats transactions whenever an error is found.
     This may make an incorrect script unnecessarily repear; however, since the error is printed,
@@ -37,7 +37,7 @@ def repeat_transaction(tx, num_retries, session, bar, number=None):
     """
     for attempt in range(num_retries):
         try:
-            session.write_transaction(tx, number)
+            session.write_transaction(tx, number, query = "WikiData")
             bar()
             if attempt > 0: print(f"Error solved on attempt #{attempt}")
             break
@@ -163,7 +163,8 @@ def purge_database(driver):
                                                                    "WHERE n:Metabolite OR n:Protein OR n:OriginalMetabolite OR n:Drug")
 
         # We also remove all non-unique Subjects. We do this by passing on all three parameters this nodes may have to apoc.mergeNodes
-        session.write_transaction(remove_duplicate_nodes, "Subject", "n.Age_Mean as age, n.Gender as gender, n.Information as inf")
+        # NOTE: This concerns only those nodes that DO NOT COME from Exposome_Explorer
+        session.write_transaction(remove_duplicate_nodes, "Subject", "n.Age_Mean as age, n.Gender as gender, n.Information as inf", "WHERE n.Exposome_Explorer_ID IS null")
 
         # We can do the same for the different Dosages:
         session.write_transaction(remove_duplicate_nodes, "Dosage", "n.Form as frm, n.Stength as str, n.Route as rt")
@@ -177,7 +178,8 @@ def purge_database(driver):
         session.write_transaction(remove_duplicate_nodes, "BioSpecimen", "n.Name as name")
 
         # Finally, we delete all empty nodes. This shouldn't be created on the first place, but, in case anyone escapes, this makes the DB cleaner.
-        session.run("MATCH (n) WHERE size(keys(properties(n))) < 1 DETACH DELETE n")
+        # NOTE: In the case of Taxonomys, these "empty nodes" are actually created on purpose. This, they are here removed.
+        session.run("MATCH (n) WHERE size(keys(properties(n))) < 1 CALL { WITH n DETACH DELETE n } IN TRANSACTIONS OF 1000 ROWS")
         # For Measurements and Sequences, 2 properties are the minimum, since they always have some boolean values
         session.run("MATCH (m:Measurement) WHERE size(keys(properties(m))) < 2 DETACH DELETE m")
         session.run("MATCH (s:Sequence) WHERE size(keys(properties(s))) < 2 DETACH DELETE s")

@@ -23,6 +23,7 @@ def add_drugs(tx, filename):
     Creates "Drug" nodes based on XML files obtained from the DrugBank website,
     adding some essential identifiers and external properties.
     Source: https://lyonwj.com/blog/grandstack-podcast-app-parsing-xml-neo4j-rss-episodes-playlists
+    # NOTE: Since Publications dont have any standard identificator, they are created using the "Title"
     """
     return tx.run(f"""
         CALL apoc.load.xml("{filename}")
@@ -62,14 +63,35 @@ def add_drugs(tx, filename):
         MERGE (d:Drug {{ DrugBank_ID:Primary_Drugbank_ID }} )
 
         FOREACH(ignoreMe IN CASE WHEN synthesis_reference IS NOT null THEN [1] ELSE [] END |
-            MERGE (p:Publication {{ Authors:split(synthesis_reference, "\\"")[0] }})
-            SET p.Title = split(synthesis_reference, "\\"")[1]
-            SET p.Publication = "US Patent Office"
-            SET p.Notes = split(split(synthesis_reference, "\\"")[2], ",")[0]
-            SET p.Date = replace(split(split(synthesis_reference, "\\"")[2], ",")[1], "issued ", "")
+            FOREACH(ignoreMe IN CASE WHEN split(synthesis_reference, "\\"")[1] IS NOT null THEN [1] ELSE [] END |
 
-            MERGE (d)-[r:CITED_IN]->(p)
-            SET r.Type = "Synthesis"
+                MERGE (p:Publication {{ Title:split(synthesis_reference, "\\"")[1] }})
+
+                SET p.Authors = split(synthesis_reference, "\\"")[0]
+                SET p.Publication = "US Patent Office"
+                SET p.Notes = split(split(synthesis_reference, "\\"")[2], ",")[0]
+                SET p.Date = replace(split(split(synthesis_reference, "\\"")[2], ",")[1], "issued ", "")
+
+                MERGE (d)-[r:CITED_IN]->(p)
+                SET r.Type = "Synthesis"
+            )
+            FOREACH(ignoreMe IN CASE WHEN split(synthesis_reference, "\\"")[1] IS NOT null THEN [1] ELSE [] END |
+
+                MERGE (p:Publication {{ Title:split(split(synthesis_reference, ":")[1], ".")[0] }})
+
+                SET p.Authors = split(synthesis_reference, ":")[0]
+                SET p.Title = split(replace(synthesis_reference, split(synthesis_reference, ":")[0]+": ", ""), ".")[0]
+                SET p.Publication = split(replace(synthesis_reference, split(synthesis_reference, ".")[0]+". ",""), ".")[0]
+                SET p.Notes = split(replace(synthesis_reference, split(synthesis_reference, ".")[0]+". ",""), ".")[2]
+                SET p.Date = split(split(replace(synthesis_reference, split(synthesis_reference, ".")[0]+". ",""), ".")[1],";")[0]
+                SET p.Volume = split(split(synthesis_reference, ";")[1], "(")[0]
+                SET p.Issue = split(split(synthesis_reference, "(")[1], ")")[0]
+                SET p.Pages = split(split(synthesis_reference, ":")[-1], ".")[0]
+                SET p.DOI = split(synthesis_reference, "doi:")[1]
+
+                MERGE (d)-[r:CITED_IN]->(p)
+                SET r.Type = "Synthesis"
+            )
         )
 
         SET d.Name = name, d.Description = description, d.CAS_Number = cas_number,
@@ -149,18 +171,25 @@ def add_general_references(tx, filename):
             [X in my_reference._children WHERE X._type = "pubmed-id"][0]._text AS pubmed_id,
             d
 
-        MERGE (p:Publication {{Ref_ID:ref_id}})
-        SET p.Authors = split(citation, ":")[0]
-        SET p.Title = split(replace(citation, split(citation, ":")[0]+": ", ""), ".")[0]
-        SET p.Publication = split(replace(citation, split(citation, ".")[0]+". ",""), ".")[0]
-        SET p.Notes = split(replace(citation, split(citation, ".")[0]+". ",""), ".")[2]
-        SET p.Date = split(split(replace(citation, split(citation, ".")[0]+". ",""), ".")[1],";")[0]
-        SET p.Volume = split(split(citation, ";")[1], "(")[0]
-        SET p.Issue = split(split(citation, "(")[1], ")")[0]
-        SET p.Pages = split(split(citation, ":")[-1], ".")[0]
-        SET p.PubMed_ID = pubmed_id
+        FOREACH(ignoreMe IN CASE WHEN citation IS NOT null THEN [1] ELSE [] END |
+            FOREACH(ignoreMe IN CASE WHEN split(replace(citation, split(citation, ":")[0]+": ", ""), ".")[0] IS NOT null THEN [1] ELSE [] END |
 
-        MERGE (d)-[r:CITED_IN]->(p)
+                MERGE (p:Publication {{Ref_ID:ref_id}})
+
+                SET p.Authors = split(citation, ":")[0]
+                SET p.Title = split(replace(citation, split(citation, ":")[0]+": ", ""), ".")[0]
+                SET p.Publication = split(replace(citation, split(citation, ".")[0]+". ",""), ".")[0]
+                SET p.Notes = split(replace(citation, split(citation, ".")[0]+". ",""), ".")[2]
+                SET p.Date = split(split(replace(citation, split(citation, ".")[0]+". ",""), ".")[1],";")[0]
+                SET p.Volume = split(split(citation, ";")[1], "(")[0]
+                SET p.Issue = split(split(citation, "(")[1], ")")[0]
+                SET p.Pages = split(split(citation, ":")[-1], ".")[0]
+                SET p.PubMed_ID = pubmed_id
+
+                MERGE (d)-[r:CITED_IN]->(p)
+            )
+        )
+
         """)
 
 def add_taxonomy(tx, filename):
@@ -778,18 +807,24 @@ def add_targets_enzymes_carriers_and_transporters(tx, filename, tag_name):
 
         MERGE (d:Drug {{ DrugBank_ID:Primary_Drugbank_ID }})
 
-        MERGE (pu:Publication {{ Ref_ID:ref_id }})
-        SET pu.Authors = split(citation, ":")[0]
-        SET pu.Title = split(replace(citation, split(citation, ":")[0]+": ", ""), ".")[0]
-        SET pu.Publication = split(replace(citation, split(citation, ".")[0]+". ",""), ".")[0]
-        SET pu.Notes = split(replace(citation, split(citation, ".")[0]+". ",""), ".")[2]
-        SET pu.Date = split(split(replace(citation, split(citation, ".")[0]+". ",""), ".")[1],";")[0]
-        SET pu.Volume = split(split(citation, ";")[1], "(")[0]
-        SET pu.Issue = split(split(citation, "(")[1], ")")[0]
-        SET pu.Pages = split(split(citation, ":")[-1], ".")[0]
-        SET pu.PubMed_ID = pubmed_id, pu.Type = ref_type
+        FOREACH(ignoreMe IN CASE WHEN citation IS NOT null THEN [1] ELSE [] END |
+            FOREACH(ignoreMe IN CASE WHEN split(replace(citation, split(citation, ":")[0]+": ", ""), ".")[0] IS NOT null THEN [1] ELSE [] END |
 
-        MERGE (d)-[r2:CITED_IN]->(pu)
+                MERGE (pu:Publication {{ Ref_ID:ref_id }})
+
+                SET pu.Authors = split(citation, ":")[0]
+                SET pu.Title = split(replace(citation, split(citation, ":")[0]+": ", ""), ".")[0]
+                SET pu.Publication = split(replace(citation, split(citation, ".")[0]+". ",""), ".")[0]
+                SET pu.Notes = split(replace(citation, split(citation, ".")[0]+". ",""), ".")[2]
+                SET pu.Date = split(split(replace(citation, split(citation, ".")[0]+". ",""), ".")[1],";")[0]
+                SET pu.Volume = split(split(citation, ";")[1], "(")[0]
+                SET pu.Issue = split(split(citation, "(")[1], ")")[0]
+                SET pu.Pages = split(split(citation, ":")[-1], ".")[0]
+                SET pu.PubMed_ID = pubmed_id, pu.Type = ref_type
+
+                MERGE (d)-[r2:CITED_IN]->(pu)
+            )
+        )
 
         WITH polypeptides, target_id, name, target_organism, known_action, actions, position, d
         UNWIND polypeptides AS polypeptide

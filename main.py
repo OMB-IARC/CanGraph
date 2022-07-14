@@ -75,8 +75,12 @@ with alive_bar(len(all_files)*len(raw_database)) as bar:
                             if DICE_MACCS > 0.95:
                                 import_files = True; import_based_on.append(f"DICE-MACCS {100*round(DICE_MACCS, 4)} % similarity")
 
-                # TODO: FIX CHEBI IMPORTS! NOW, THEY DONT WORK
-                if row["ChEBI"] in text:
+                if "ExposomeExplorer/components" in relpath:
+                    component = pd.read_csv(os.path.abspath(filepath))
+                    chebi_id = component["chebi_id"]
+                    if row["ChEBI"].replace("CHEBI:", "") in chebi_id:
+                        import_files = True; import_based_on.append("ChEBI")
+                elif row["ChEBI"].replace("CHEBI:", "<chebi_id>") in text:
                     import_files = True; import_based_on.append("ChEBI")
                 if row["Identifier"] in text:
                     import_files = True; import_based_on.append("HMDB ID")
@@ -89,29 +93,24 @@ with alive_bar(len(all_files)*len(raw_database)) as bar:
                         shutil.copyfile(filepath, f"{Neo4JImportPath}/{os.path.basename(filepath)}")
                         DrugBankDataBase.build_from_file(f"{os.path.basename(filepath)}", driver)
                         os.remove(f"{Neo4JImportPath}/{os.path.basename(filepath)}")
-                        DrugBankDataBase.purge_database(driver)
 
                     if "HMDB" in relpath:
                         if "protein" in relpath:
                             shutil.copyfile(filepath, f"{Neo4JImportPath}/{os.path.basename(filepath)}")
                             HumanMetabolomeDataBase.build_from_protein_file(f"{os.path.basename(filepath)}", driver)
                             os.remove(f"{Neo4JImportPath}/{os.path.basename(filepath)}")
-                            HumanMetabolomeDataBase.purge_database(driver)
                         elif "metabolite" in relpath:
                             shutil.copyfile(filepath, f"{Neo4JImportPath}/{os.path.basename(filepath)}")
                             HumanMetabolomeDataBase.build_from_metabolite_file(f"{os.path.basename(filepath)}", driver)
                             os.remove(f"{Neo4JImportPath}/{os.path.basename(filepath)}")
-                            HumanMetabolomeDataBase.purge_database(driver)
 
                     if "SMPDB" in relpath:
                         # NOTE: Since this adds a ton of low-resolution nodes, maybe have this db run first?
                         # We will ignore the smpdb_pathways file because it doesnt have "real" identifiers
                         if "proteins" in relpath:
                             SmallMoleculePathWayDataBase.build_from_file(sys.argv[4], filepath, Neo4JImportPath, driver, "Protein")
-                            SmallMoleculePathWayDataBase.purge_database(driver)
                         if "metabolites" in relpath:
                             SmallMoleculePathWayDataBase.build_from_file(sys.argv[4], filepath, Neo4JImportPath, driver, "Metabolite")
-                            SmallMoleculePathWayDataBase.purge_database(driver)
 
                     if "ExposomeExplorer/components" in relpath:
                             # NOTE: Since only "components" can result in a match based on our current criteria, we will build the DB based on the components only.
@@ -125,61 +124,71 @@ with alive_bar(len(all_files)*len(raw_database)) as bar:
 
                             ExposomeExplorerDataBase.build_from_file( os.path.dirname(filepath), Neo4JImportPath, driver, False)
 
-                    #Finally, we annotate the existing nodes using WikiData
-                    #TODO: Fix the WikiData Script so that this actually does something!
-                    #with driver.session() as session:
-                        #misc.repeat_transaction(WikiDataBase.add_metabolite_info, 10, session, bar)
-                        #misc.repeat_transaction(WikiDataBase.add_genes, 10, session, bar)
-                        #misc.repeat_transaction(WikiDataBase.add_gene_info, 10, session, bar)
-                        #misc.repeat_transaction(WikiDataBase.add_drugs, 10, session, bar)
-                        #misc.repeat_transaction(WikiDataBase.add_drug_external_ids, 10, session, bar)
-                        #misc.repeat_transaction(WikiDataBase.add_more_drug_info, 10, session, bar)
-                        #misc.repeat_transaction(WikiDataBase.add_causes, 10, session, bar)
-                        #misc.repeat_transaction(WikiDataBase.find_subclass_of_cancer, 10, session, bar)
-                        #misc.repeat_transaction(WikiDataBase.find_instance_of_cancer, 10, session, bar)
-                        #misc.repeat_transaction(WikiDataBase.add_cancer_info, 10, session, bar)
+                #Each time we import some nodes, link them to our original data
+                #NOTE: This WILL duplicate nodes and relations, but we will fix this later when we purge the DB
 
-                    #Each time we import some nodes, link them to our original data
-                    #NOTE: This WILL duplicate nodes and relations, but we will repeat this later
-
-                    # TODO: Match partial InChIs based on DICE-MACCS
-                    with driver.session() as session:
-                        session.run( f"""
-                                    MATCH (a) WHERE a.InChI = "{row["InChI"]}"
-                                    MATCH (b) WHERE b.InChIKey = "{row["InChIKey"]}"
-                                    MATCH (c) WHERE c.Name = "{row["Name"]}"
-                                    MATCH (d) WHERE d.SMILES = "{row["SMILES"]}"
-                                    MATCH (e) WHERE e.InChI = "{row["InChI"]}"
-                                    MATCH (f) WHERE f.HMDB_ID = "{row["Identifier"]}"
-                                    MATCH (g) WHERE g.Monisotopic_Molecular_Weight = "{row["MonoisotopicMass"]}"
-                                    CREATE (n:OriginalMetabolite)
-                                    SET n.InChI = "{row["InChI"]}", n.InChIKey = "{row["InChIKey"]}", n.Name = "{row["Name"]}",
-                                        n.SMILES = "{row["SMILES"]}", n.HMDB_ID = "{row["Identifier"]}", n.ChEBI = "{row["ChEBI"]}",
-                                        n.Monisotopic_Molecular_Weight = "{row["MonoisotopicMass"]}"
-                                    MERGE (n)-[r1:ORIGINALLY_IDENTIFIED_AS]->(a)
-                                    MERGE (n)-[r2:ORIGINALLY_IDENTIFIED_AS]->(b)
-                                    MERGE (n)-[r3:ORIGINALLY_IDENTIFIED_AS]->(c)
-                                    MERGE (n)-[r4:ORIGINALLY_IDENTIFIED_AS]->(d)
-                                    MERGE (n)-[r5:ORIGINALLY_IDENTIFIED_AS]->(e)
-                                    MERGE (n)-[r6:ORIGINALLY_IDENTIFIED_AS]->(f)
-                                    MERGE (n)-[r7:ORIGINALLY_IDENTIFIED_AS]->(g)
-                                    SET r1.Identified_By = {import_based_on}
-                                    SET r2.Identified_By = {import_based_on}
-                                    SET r3.Identified_By = {import_based_on}
-                                    SET r4.Identified_By = {import_based_on}
-                                    SET r5.Identified_By = {import_based_on}
-                                    SET r6.Identified_By = {import_based_on}
-                                    SET r7.Identified_By = {import_based_on}
-                                    """ )
+                # TODO: Match partial InChIs based on DICE-MACCS
+                # TODO: QUE FUNCIONE
+                with driver.session() as session:
+                    session.run( f"""
+                                MATCH (a) WHERE a.InChI = "{row["InChI"]}"
+                                MATCH (b) WHERE b.InChIKey = "{row["InChIKey"]}"
+                                MATCH (c) WHERE c.Name = "{row["Name"]}"
+                                MATCH (d) WHERE d.SMILES = "{row["SMILES"]}"
+                                MATCH (e) WHERE e.InChI = "{row["InChI"]}"
+                                MATCH (f) WHERE f.HMDB_ID = "{row["Identifier"]}"
+                                MATCH (g) WHERE g.Monisotopic_Molecular_Weight = "{row["MonoisotopicMass"]}"
+                                CREATE (n:OriginalMetabolite)
+                                SET n.InChI = "{row["InChI"]}", n.InChIKey = "{row["InChIKey"]}", n.Name = "{row["Name"]}",
+                                    n.SMILES = "{row["SMILES"]}", n.HMDB_ID = "{row["Identifier"]}", n.ChEBI = "{row["ChEBI"]}",
+                                    n.Monisotopic_Molecular_Weight = "{row["MonoisotopicMass"]}"
+                                MERGE (n)-[r1:ORIGINALLY_IDENTIFIED_AS]->(a)
+                                MERGE (n)-[r2:ORIGINALLY_IDENTIFIED_AS]->(b)
+                                MERGE (n)-[r3:ORIGINALLY_IDENTIFIED_AS]->(c)
+                                MERGE (n)-[r4:ORIGINALLY_IDENTIFIED_AS]->(d)
+                                MERGE (n)-[r5:ORIGINALLY_IDENTIFIED_AS]->(e)
+                                MERGE (n)-[r6:ORIGINALLY_IDENTIFIED_AS]->(f)
+                                MERGE (n)-[r7:ORIGINALLY_IDENTIFIED_AS]->(g)
+                                SET r1.Identified_By = {import_based_on}
+                                SET r2.Identified_By = {import_based_on}
+                                SET r3.Identified_By = {import_based_on}
+                                SET r4.Identified_By = {import_based_on}
+                                SET r5.Identified_By = {import_based_on}
+                                SET r6.Identified_By = {import_based_on}
+                                SET r7.Identified_By = {import_based_on}
+                                """ )
 
                 # And advance, of course
                 bar()
 
-        # DE DONDE SALEN LOS DISEASES SIN ID??? -> HMDB. Además el Name es el PK así que da igual
-        # TODO: Fix publication and subject Primary Keys
-        # TODO: SIGUE HABIENDO TAXONOMIES VACIAS
+        # Section Schema Changes
+        # NOTE: For Subject, we have a composite PK: Exposome_Explorer_ID, Age, Gender e Information
+        # NOTE: Now, more diseases will have a WikiData_ID and a related MeSH. This will help with networking. And, this diseases dont even need to be a part of a cancer!
+        # NOTE: The Gene nodes no longer exist in the full db
 
-        #Once we finish the search, we purge the database by removing nodes considered as duplicated
+        #Once we finish the search, we annotate the existing nodes using WikiData
+        #TODO: WHEN FIXING QUERIES, FIX THE MAIN SUBSCRIPT ALSO
+        with driver.session() as session:
+            misc.repeat_transaction(WikiDataBase.annotate_diseases, 10, session, bar)
+            misc.repeat_transaction(WikiDataBase.add_metabolite_info, 10, session, bar, number = None, query = "ChEBI_ID")
+            misc.repeat_transaction(WikiDataBase.add_drug_external_ids, 10, session, bar, number = None, query = "DrugBank_ID")
+            misc.repeat_transaction(WikiDataBase.add_more_drug_info, 10, session, bar, query = "DrugBank_ID")
+
+            misc.repeat_transaction(WikiDataBase.find_subclass_of_cancer, 10, session, bar)
+            misc.repeat_transaction(WikiDataBase.find_subclass_of_cancer, 10, session, bar)
+            misc.repeat_transaction(WikiDataBase.find_subclass_of_cancer, 10, session, bar)
+            misc.repeat_transaction(WikiDataBase.find_instance_of_cancer, 10, session, bar)
+            misc.repeat_transaction(WikiDataBase.add_cancer_info, 10, session, bar)
+            misc.repeat_transaction(WikiDataBase.add_drugs, 10, session, bar)
+            misc.repeat_transaction(WikiDataBase.add_causes, 10, session, bar)
+            misc.repeat_transaction(WikiDataBase.add_genes, 10, session, bar)
+            misc.repeat_transaction(WikiDataBase.add_drug_external_ids, 10, session, bar)
+            misc.repeat_transaction(WikiDataBase.add_more_drug_info, 10, session, bar)
+            misc.repeat_transaction(WikiDataBase.add_gene_info, 10, session, bar)
+            misc.repeat_transaction(WikiDataBase.add_metabolite_info, 10, session, bar)
+
+        # Finally, we purge the database by removing nodes considered as duplicated
+        # We only purge once at the end, to limit processing time
         misc.purge_database(driver)
 
         # And save it in GraphML format

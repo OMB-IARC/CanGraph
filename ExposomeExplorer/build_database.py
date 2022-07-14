@@ -138,11 +138,15 @@ def add_microbial_metabolite_identifications(tx, filename):
 
             MERGE (m:Metabolite {{ Exposome_Explorer_ID: "MicrobialMetabolite_"+line.id, Microbial_Metabolite:"True" }})
             MERGE (p:Publication {{ Exposome_Explorer_ID: "Publication_"+line.publication_id }})
-            MERGE (s:BioSpecimen {{ Exposome_Explorer_ID: "Specimen_"+line.specimen_id }})
 
             MERGE (m)-[r1:CITED_IN]->(p)
             MERGE (c)-[r2:IDENTIFIED_AS]->(m)
-            MERGE (m)-[r3:LOCATED_IN_BIOSPECIMEN]->(s)
+
+            FOREACH(ignoreMe IN CASE WHEN line.specimen_id IS NOT null THEN [1] ELSE [] END |
+                MERGE (s:BioSpecimen {{ Exposome_Explorer_ID: "Specimen_"+line.specimen_id }})
+                MERGE (m)-[r3:LOCATED_IN_BIOSPECIMEN]->(s)
+            )
+
         """)
 
 def add_cancer_associations(tx, filename):
@@ -396,7 +400,7 @@ def remove_counts_and_displayeds(inputfile, outputfile):
     with open(outputfile, 'w') as f:
         f.write(data)
 
-def remove_cross_properties(tx, filename):
+def remove_cross_properties(tx):
     """Removes properties used in Neo4J to create relationships between nodes"""
     return tx.run(f"""
         MATCH (n)
@@ -404,7 +408,7 @@ def remove_cross_properties(tx, filename):
                n.Converted_to_ID, n.Publication_ID, n.Component_ID, n.Specimen_ID, n.Initial_ID, n.Cohort_ID
         """)
 
-def build_from_file(databasepath, Neo4JImportPath, driver, keep_counts_and_displayeds = True, remove_cross_properties = True):
+def build_from_file(databasepath, Neo4JImportPath, driver, keep_counts_and_displayeds = True, keep_cross_properties = False):
     if keep_counts_and_displayeds == False:
         remove_counts_and_displayeds(f"{os.path.abspath(databasepath)}/measurements.csv", f"{Neo4JImportPath}/measurements.csv")
         remove_counts_and_displayeds(f"{os.path.abspath(databasepath)}/samples.csv", f"{Neo4JImportPath}/samples.csv")
@@ -465,7 +469,7 @@ def build_from_file(databasepath, Neo4JImportPath, driver, keep_counts_and_displ
         session.write_transaction(add_subjects, "subjects.csv")
 
     # Finally, we remove the cross-properties that are of no use anymore (this is optional, of course)
-    if remove_cross_properties == True:
+    if keep_cross_properties == False:
         with driver.session() as session:
             session.write_transaction(remove_cross_properties)
 
