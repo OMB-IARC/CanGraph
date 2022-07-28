@@ -23,7 +23,11 @@ from GraphifyHMDB import build_database as HumanMetabolomeDataBase
 from GraphifySMPDB import build_database as SmallMoleculePathWayDataBase
 from ExposomeExplorer import build_database as ExposomeExplorerDataBase
 from QueryWikidata import build_database as WikiDataBase
+from MeSHandMetaNetX import build_database as MeSHandMetaNetXDataBases
 
+
+# First, we prepare a scan of all the files available on our "DataBases" folder
+# We will cycle through them later on to try and find matches
 all_files = []
 for root,dirs,files in os.walk(sys.argv[4]):
     for filename in files:
@@ -31,27 +35,49 @@ for root,dirs,files in os.walk(sys.argv[4]):
 
 raw_database = pd.read_csv(sys.argv[5], delimiter=',', header=0)
 
+# Set up the progress bar
 with alive_bar(len(all_files)*len(raw_database)) as bar:
 
+    # And connect to the Neo4J database
     instance = f"{sys.argv[1]}"; user = f"{sys.argv[2]}"; passwd = f"{sys.argv[3]}"
     driver = GraphDatabase.driver(instance, auth=(user, passwd))
 
     Neo4JImportPath = misc.get_import_path(driver)
     print("Connected to Neo4J")
 
+    # For each item in our "query" file, we will try to find matches:
     for index, row in raw_database.iterrows():
-        print(f"Importing metabolites: {index+1}/{len(raw_database)}")
+
+        # We start by cleaning the database (important if this is not the first run)
         with driver.session() as session:
             session.run( misc.clean_database() )
-        print("Cleaned DataBase")
+            if index == 0: print("Cleaned DataBase") # Only the first time so as not to repeat
+            session.write_transaction(misc.create_n10s_graphconfig)
+
+        print(f"Importing metabolites: {index+1}/{len(raw_database)}")
+
+        # Then, we declare some lists to store the synonyms
+        chebi_ids = []; names = []; hmdb_ids = []; inchis = []
+        # And we store the original IDs there
+        chebi_ids.append(row["ChEBI"].replace("CHEBI:", "")); names.append(row["Name"])
+        hmdb_ids.append(row["Identifier"]); inchis.append(row["InChI"])
+
+        # Now, we can calculate synonyms for each metabolite we will search
+        misc.find_synonyms(driver, hmdb_ids, chebi_ids, inchis, names, "Name", row.Name)
+        misc.find_synonyms(driver, hmdb_ids, chebi_ids, inchis, names, "InChI", row.InChI)
+        misc.find_synonyms(driver, hmdb_ids, chebi_ids, inchis, names, "HMDB", row.Identifier)
+        misc.find_synonyms(driver, hmdb_ids, chebi_ids, inchis, names, "ChEBI", row.ChEBI.replace("CHEBI:", ""))
+
+        # And search for them in the all_files list we created earlier on based on a series of criteria:
         for filepath in all_files:
             with open(f'{filepath}', "r") as f:
                 text = f.read(); relpath = os.path.relpath(filepath, ".")
                 import_files = False; import_based_on = []
 
-                # Similarity evaluator
-                if row["InChI"] in text:
+                # We try to find exact InChI matches:
+                if any(inchi in text for inchi in inchis):
                     import_files = True; import_based_on.append("Exact InChI")
+                # If none if found, we use the "Similarity Evaluator" metric
                 elif "InChI=" in text:
                     # SOURCE: https://chemistry.stackexchange.com/questions/82144/what-is-the-correct-regular-expression-for-inchi
                     results = re.search("InChI\=1S?\/[A-Za-z0-9\.]+(\+[0-9]+)?(\/[cnpqbtmsih][A-Za-z0-9\-\+\(\)\,\/\?\;\.]+)*(\"|\<)", text)
@@ -75,19 +101,25 @@ with alive_bar(len(all_files)*len(raw_database)) as bar:
                             if DICE_MACCS > 0.95:
                                 import_files = True; import_based_on.append(f"DICE-MACCS {100*round(DICE_MACCS, 4)} % similarity")
 
+                # For CHEBI, if we are using E-E, and since they dont have a prefix (i.e. they are only a number) we have to process the files.
                 if "ExposomeExplorer/components" in relpath:
                     component = pd.read_csv(os.path.abspath(filepath))
-                    chebi_id = component["chebi_id"]
-                    if row["ChEBI"].replace("CHEBI:", "") in chebi_id:
+                    chebi_query = component["chebi_id"]
+                    # NOTE: Here, we remove the optional CHEBI: prefix
+                    if chebi_query in [chebi_id.replace("CHEBI:", "").replace("chebi:", "") for chebi_id in chebi_ids]:
                         import_files = True; import_based_on.append("ChEBI")
+                # And, even if its not E-E, we still need to convert it to tag format
                 elif row["ChEBI"].replace("CHEBI:", "<chebi_id>") in text:
                     import_files = True; import_based_on.append("ChEBI")
-                if row["Identifier"] in text:
+
+                # For the rest of the databases, we simply search for exact matches in our list and the texts:
+                if any(hmdb in text for hmdb in hmdb_ids):
                     import_files = True; import_based_on.append("HMDB ID")
-                if row["Name"] in text:
+                if any(name in text for name in names):
                     import_files = True; import_based_on.append("Name")
 
-                # This is so that it only cycles one time through the code
+                # Once we know the reasons to import (this is done so that it only cycles one
+                # time through the code), we import the files themselves
                 if import_files == True:
                     if "DrugBank" in relpath:
                         shutil.copyfile(filepath, f"{Neo4JImportPath}/{os.path.basename(filepath)}")
@@ -127,20 +159,23 @@ with alive_bar(len(all_files)*len(raw_database)) as bar:
                 #Each time we import some nodes, link them to our original data
                 #NOTE: This WILL duplicate nodes and relations, but we will fix this later when we purge the DB
 
+                # TODO: CAMBIAR NOMBRE A LOS MESH PARA INDICAR EL TIPO. AÑADIR NAME A LOS WIKIDATA
+                # TODO: FIX THE REPEAT TRANSACTION FUNCTION
+                # TODO: ADD COMMENTS TO MISC AND MESHANDMETANETX
+                # TODO: ADD README TO MESHANDMETANETX
                 # TODO: Match partial InChIs based on DICE-MACCS
                 # TODO: QUE FUNCIONE
                 with driver.session() as session:
                     session.run( f"""
                                 MATCH (a) WHERE a.InChI = "{row["InChI"]}"
-                                MATCH (b) WHERE b.InChIKey = "{row["InChIKey"]}"
                                 MATCH (c) WHERE c.Name = "{row["Name"]}"
                                 MATCH (d) WHERE d.SMILES = "{row["SMILES"]}"
                                 MATCH (e) WHERE e.InChI = "{row["InChI"]}"
                                 MATCH (f) WHERE f.HMDB_ID = "{row["Identifier"]}"
                                 MATCH (g) WHERE g.Monisotopic_Molecular_Weight = "{row["MonoisotopicMass"]}"
                                 CREATE (n:OriginalMetabolite)
-                                SET n.InChI = "{row["InChI"]}", n.InChIKey = "{row["InChIKey"]}", n.Name = "{row["Name"]}",
-                                    n.SMILES = "{row["SMILES"]}", n.HMDB_ID = "{row["Identifier"]}", n.ChEBI = "{row["ChEBI"]}",
+                                SET n.InChI = "{row["InChI"]}", n.Name = "{row["Name"]}", n.ChEBI = "{row["ChEBI"]}",
+                                    n.SMILES = "{row["SMILES"]}", n.HMDB_ID = "{row["Identifier"]}",
                                     n.Monisotopic_Molecular_Weight = "{row["MonoisotopicMass"]}"
                                 MERGE (n)-[r1:ORIGINALLY_IDENTIFIED_AS]->(a)
                                 MERGE (n)-[r2:ORIGINALLY_IDENTIFIED_AS]->(b)
@@ -158,18 +193,18 @@ with alive_bar(len(all_files)*len(raw_database)) as bar:
                                 SET r7.Identified_By = {import_based_on}
                                 """ )
 
+                # Section Schema Changes
+                # NOTE: For Subject, we have a composite PK: Exposome_Explorer_ID, Age, Gender e Information
+                # NOTE: Now, more diseases will have a WikiData_ID and a related MeSH. This will help with networking. And, this diseases dont even need to be a part of a cancer!
+                # NOTE: The Gene nodes no longer exist in the full db
+
                 # And advance, of course
                 bar()
-
-        # Section Schema Changes
-        # NOTE: For Subject, we have a composite PK: Exposome_Explorer_ID, Age, Gender e Information
-        # NOTE: Now, more diseases will have a WikiData_ID and a related MeSH. This will help with networking. And, this diseases dont even need to be a part of a cancer!
-        # NOTE: The Gene nodes no longer exist in the full db
 
         #Once we finish the search, we annotate the existing nodes using WikiData
         #TODO: WHEN FIXING QUERIES, FIX THE MAIN SUBSCRIPT ALSO
         with driver.session() as session:
-            misc.repeat_transaction(WikiDataBase.annotate_diseases, 10, session, bar)
+            misc.repeat_transaction(WikiDataBase.add_wikidata_to_mesh, 10, session, bar)
             misc.repeat_transaction(WikiDataBase.add_metabolite_info, 10, session, bar, number = None, query = "ChEBI_ID")
             misc.repeat_transaction(WikiDataBase.add_drug_external_ids, 10, session, bar, number = None, query = "DrugBank_ID")
             misc.repeat_transaction(WikiDataBase.add_more_drug_info, 10, session, bar, query = "DrugBank_ID")
@@ -178,14 +213,32 @@ with alive_bar(len(all_files)*len(raw_database)) as bar:
             misc.repeat_transaction(WikiDataBase.find_subclass_of_cancer, 10, session, bar)
             misc.repeat_transaction(WikiDataBase.find_subclass_of_cancer, 10, session, bar)
             misc.repeat_transaction(WikiDataBase.find_instance_of_cancer, 10, session, bar)
-            misc.repeat_transaction(WikiDataBase.add_cancer_info, 10, session, bar)
-            misc.repeat_transaction(WikiDataBase.add_drugs, 10, session, bar)
-            misc.repeat_transaction(WikiDataBase.add_causes, 10, session, bar)
-            misc.repeat_transaction(WikiDataBase.add_genes, 10, session, bar)
+            for number in range(3):
+                misc.repeat_transaction(WikiDataBase.add_cancer_info, 10, session, bar, number)
+                misc.repeat_transaction(WikiDataBase.add_drugs, 10, session, bar, number)
+                misc.repeat_transaction(WikiDataBase.add_causes, 10, session, bar, number)
+                misc.repeat_transaction(WikiDataBase.add_genes, 10, session, bar, number)
             misc.repeat_transaction(WikiDataBase.add_drug_external_ids, 10, session, bar)
             misc.repeat_transaction(WikiDataBase.add_more_drug_info, 10, session, bar)
             misc.repeat_transaction(WikiDataBase.add_gene_info, 10, session, bar)
             misc.repeat_transaction(WikiDataBase.add_metabolite_info, 10, session, bar)
+
+        # We will also add MeSH terms to all nodes:
+        with driver.session() as session:
+            misc.repeat_transaction(MeSHandMetaNetXDataBases.add_mesh_by_name, 10, session, bar)
+        # We also add synonyms:
+        with driver.session() as session:
+            session.write_transaction(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx, "Name")
+            session.write_transaction(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx, "KEGG_ID")
+            session.write_transaction(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx, "ChEBI")
+            session.write_transaction(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx, "HMDB")
+            session.write_transaction(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx, "InChI")
+            session.write_transaction(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx, "InChIKey")
+
+        # And some protein interactions, together with their pathways, too:
+        with driver.session() as session:
+            session.write_transaction(MeSHandMetaNetXDataBases.find_protein_interactions_in_metanetx)
+            session.write_transaction(MeSHandMetaNetXDataBases.get_kegg_pathways_for_metabolites)
 
         # Finally, we purge the database by removing nodes considered as duplicated
         # We only purge once at the end, to limit processing time
@@ -193,6 +246,7 @@ with alive_bar(len(all_files)*len(raw_database)) as bar:
 
         # And save it in GraphML format
         with driver.session() as session:
+            session.write_transaction(misc.remove_n10s_graphconfig)
             session.write_transaction(misc.export_graphml, f"metabolite_{index+1}.graphml")
 
         print(f"Metabolite {index+1}/{len(raw_database)} processed. You can find a copy of the associated knowledge graph at {os.path.abspath(sys.argv[4])}/metabolite_{index+1}.graphml")

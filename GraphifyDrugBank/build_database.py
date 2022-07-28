@@ -63,7 +63,7 @@ def add_drugs(tx, filename):
         MERGE (d:Drug {{ DrugBank_ID:Primary_Drugbank_ID }} )
 
         FOREACH(ignoreMe IN CASE WHEN synthesis_reference IS NOT null THEN [1] ELSE [] END |
-            FOREACH(ignoreMe IN CASE WHEN split(synthesis_reference, "\\"")[1] IS NOT null THEN [1] ELSE [] END |
+            FOREACH(ignoreMe IN CASE WHEN split(synthesis_reference, "\\"")[1] != "" THEN [1] ELSE [] END |
 
                 MERGE (p:Publication {{ Title:split(synthesis_reference, "\\"")[1] }})
 
@@ -75,7 +75,7 @@ def add_drugs(tx, filename):
                 MERGE (d)-[r:CITED_IN]->(p)
                 SET r.Type = "Synthesis"
             )
-            FOREACH(ignoreMe IN CASE WHEN split(synthesis_reference, "\\"")[1] IS NOT null THEN [1] ELSE [] END |
+            FOREACH(ignoreMe IN CASE WHEN split(synthesis_reference, "\\"")[1] != "" THEN [1] ELSE [] END |
 
                 MERGE (p:Publication {{ Title:split(split(synthesis_reference, ":")[1], ".")[0] }})
 
@@ -172,7 +172,7 @@ def add_general_references(tx, filename):
             d
 
         FOREACH(ignoreMe IN CASE WHEN citation IS NOT null THEN [1] ELSE [] END |
-            FOREACH(ignoreMe IN CASE WHEN split(replace(citation, split(citation, ":")[0]+": ", ""), ".")[0] IS NOT null THEN [1] ELSE [] END |
+            FOREACH(ignoreMe IN CASE WHEN split(replace(citation, split(citation, ":")[0]+": ", ""), ".")[0] != "" THEN [1] ELSE [] END |
 
                 MERGE (p:Publication {{Ref_ID:ref_id}})
 
@@ -383,7 +383,13 @@ def add_categories(tx, filename):
             [X in my_category._children WHERE X._type = "mesh-id"][0]._text AS MESH_ID,
             d
 
-        MERGE (c:MeSH {{ Category:category }})
+        MERGE (c:MeSH {{ Name:category }})
+        FOREACH(ignoreMe IN CASE WHEN substring(d.Name, 0, 1) = "M" THEN [1] ELSE [] END |
+            SET c.Type = "Concept", c.MeSH_ID = MESH_ID
+        )
+        FOREACH(ignoreMe IN CASE WHEN substring(d.Name, 0, 1) = "D" THEN [1] ELSE [] END |
+            SET c.Type = "Descriptor", c.MeSH_ID = MESH_ID
+        )
         SET c.MeSH_ID = MESH_ID
         MERGE (d)-[r:RELATED_MESH]->(c)
         """)
@@ -808,7 +814,7 @@ def add_targets_enzymes_carriers_and_transporters(tx, filename, tag_name):
         MERGE (d:Drug {{ DrugBank_ID:Primary_Drugbank_ID }})
 
         FOREACH(ignoreMe IN CASE WHEN citation IS NOT null THEN [1] ELSE [] END |
-            FOREACH(ignoreMe IN CASE WHEN split(replace(citation, split(citation, ":")[0]+": ", ""), ".")[0] IS NOT null THEN [1] ELSE [] END |
+            FOREACH(ignoreMe IN CASE WHEN split(replace(citation, split(citation, ":")[0]+": ", ""), ".")[0] != "" THEN [1] ELSE [] END |
 
                 MERGE (pu:Publication {{ Ref_ID:ref_id }})
 

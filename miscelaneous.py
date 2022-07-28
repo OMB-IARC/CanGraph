@@ -16,6 +16,8 @@ import xml.etree.ElementTree as ET   # To parse and split XML files
 import re                            # To split XML files with a regex pattern
 from time import sleep               # Cute go slowly
 
+from MeSHandMetaNetX import build_database as MeSHandMetaNetXDataBases
+
 # ********* Manage the Neo4J Database Connection and Transactions ********* #
 
 def get_neo4j_path(tx):
@@ -38,7 +40,6 @@ def repeat_transaction(tx, num_retries, session, bar, number=None, query = "Wiki
     for attempt in range(num_retries):
         try:
             session.write_transaction(tx, number, query = "WikiData")
-            bar()
             if attempt > 0: print(f"Error solved on attempt #{attempt}")
             break
         except Exception as error:
@@ -148,7 +149,7 @@ def purge_database(driver):
         session.write_transaction(remove_duplicate_nodes, "Publication", "n.Pubmed_ID as id", "WHERE n.Pubmed_ID IS NOT null")
         session.write_transaction(remove_duplicate_nodes, "Publication", "n.Abstract as abs", "WHERE n.Abstract IS NOT null AND n.Pubmed_ID IS null")
 
-        # Now, we work on Proteins/Metabolites/Drygs:
+        # Now, we work on Proteins/Metabolites/Drugs:
         # We merge those that have the same InChI or InChIKey:
         session.write_transaction(remove_duplicate_nodes, "", "n.InChI as inchi", "WHERE n:Protein OR n:Metabolite OR n:Drug AND n.InChI IS NOT null")
         session.write_transaction(remove_duplicate_nodes, "", "n.InChIKey as key", "WHERE n:Protein OR n:Metabolite OR n:Drug AND n.InChIKey IS NOT null")
@@ -161,6 +162,8 @@ def purge_database(driver):
         session.write_transaction(remove_duplicate_nodes, "", """n.InChI as inchi, n.InChIKey as inchikey, n.Name as name, n.SMILES as smiles,
                                                                       n.Identifier as hmdb_id, n.ChEBI as chebi, n.Monisotopic_Molecular_Weight as mass""",
                                                                    "WHERE n:Metabolite OR n:Protein OR n:OriginalMetabolite OR n:Drug")
+        # And all Metabolites that do not match our Schema
+        session.run("MATCH (m:Metabolite) WHERE n.ChEBI_ID IS NULL OR n.ChEBI_ID = "" OR n.CAS_Number IS NULL OR n.CAS_Number = "" DETACH DELETE m")
 
         # We also remove all non-unique Subjects. We do this by passing on all three parameters this nodes may have to apoc.mergeNodes
         # NOTE: This concerns only those nodes that DO NOT COME from Exposome_Explorer
@@ -186,6 +189,17 @@ def purge_database(driver):
 
         #At last, we may remove any duplicate relationships, which, since we have merged nodes, will surely be there:
         session.write_transaction(remove_duplicate_relationships)
+
+def find_synonyms(driver, hmdb_ids, chebi_ids, inchis, names, query_type, query):
+    with driver.session() as session:
+        graph_response = session.read_transaction(MeSHandMetaNetXDataBases.read_synonyms_in_metanetx, query_type, query)
+        for element in graph_response:
+            if element["databasename"].lower() == "hmdb":
+                if element["databaseid"] not in hmdb_ids: hmdb_ids.append(element["databaseid"])
+            if element["databasename"].lower() == "chebi":
+                if element["databaseid"] not in chebi_ids: chebi_ids.append(element["databaseid"])
+            if element["InChI"] not in inchis: inchis.append(graph_response[0]["InChI"])
+            if element["Name"] not in names: names.append(graph_response[0]["Name"])
 
 # ********* Work with Files ********* #
 
