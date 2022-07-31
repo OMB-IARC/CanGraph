@@ -63,7 +63,7 @@ def add_drugs(tx, filename):
         MERGE (d:Drug {{ DrugBank_ID:Primary_Drugbank_ID }} )
 
         FOREACH(ignoreMe IN CASE WHEN synthesis_reference IS NOT null THEN [1] ELSE [] END |
-            FOREACH(ignoreMe IN CASE WHEN split(synthesis_reference, "\\"")[1] != "" THEN [1] ELSE [] END |
+            FOREACH(ignoreMe IN CASE WHEN split(synthesis_reference, "\\"")[1] <> "" THEN [1] ELSE [] END |
 
                 MERGE (p:Publication {{ Title:split(synthesis_reference, "\\"")[1] }})
 
@@ -75,7 +75,7 @@ def add_drugs(tx, filename):
                 MERGE (d)-[r:CITED_IN]->(p)
                 SET r.Type = "Synthesis"
             )
-            FOREACH(ignoreMe IN CASE WHEN split(synthesis_reference, "\\"")[1] != "" THEN [1] ELSE [] END |
+            FOREACH(ignoreMe IN CASE WHEN split(synthesis_reference, "\\"")[1] <> "" THEN [1] ELSE [] END |
 
                 MERGE (p:Publication {{ Title:split(split(synthesis_reference, ":")[1], ".")[0] }})
 
@@ -172,7 +172,7 @@ def add_general_references(tx, filename):
             d
 
         FOREACH(ignoreMe IN CASE WHEN citation IS NOT null THEN [1] ELSE [] END |
-            FOREACH(ignoreMe IN CASE WHEN split(replace(citation, split(citation, ":")[0]+": ", ""), ".")[0] != "" THEN [1] ELSE [] END |
+            FOREACH(ignoreMe IN CASE WHEN split(replace(citation, split(citation, ":")[0]+": ", ""), ".")[0] <> "" THEN [1] ELSE [] END |
 
                 MERGE (p:Publication {{Ref_ID:ref_id}})
 
@@ -814,7 +814,7 @@ def add_targets_enzymes_carriers_and_transporters(tx, filename, tag_name):
         MERGE (d:Drug {{ DrugBank_ID:Primary_Drugbank_ID }})
 
         FOREACH(ignoreMe IN CASE WHEN citation IS NOT null THEN [1] ELSE [] END |
-            FOREACH(ignoreMe IN CASE WHEN split(replace(citation, split(citation, ":")[0]+": ", ""), ".")[0] != "" THEN [1] ELSE [] END |
+            FOREACH(ignoreMe IN CASE WHEN split(replace(citation, split(citation, ":")[0]+": ", ""), ".")[0] <> "" THEN [1] ELSE [] END |
 
                 MERGE (pu:Publication {{ Ref_ID:ref_id }})
 
