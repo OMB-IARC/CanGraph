@@ -165,33 +165,33 @@ with alive_bar(len(all_files)*len(raw_database)) as bar:
                 # TODO: ADD README TO MESHANDMETANETX
                 # TODO: Match partial InChIs based on DICE-MACCS
                 # TODO: QUE FUNCIONE
-                with driver.session() as session:
-                    session.run( f"""
-                                MATCH (a) WHERE a.InChI = "{row["InChI"]}"
-                                MATCH (c) WHERE c.Name = "{row["Name"]}"
-                                MATCH (d) WHERE d.SMILES = "{row["SMILES"]}"
-                                MATCH (e) WHERE e.InChI = "{row["InChI"]}"
-                                MATCH (f) WHERE f.HMDB_ID = "{row["Identifier"]}"
-                                MATCH (g) WHERE g.Monisotopic_Molecular_Weight = "{row["MonoisotopicMass"]}"
-                                CREATE (n:OriginalMetabolite)
-                                SET n.InChI = "{row["InChI"]}", n.Name = "{row["Name"]}", n.ChEBI = "{row["ChEBI"]}",
-                                    n.SMILES = "{row["SMILES"]}", n.HMDB_ID = "{row["Identifier"]}",
-                                    n.Monisotopic_Molecular_Weight = "{row["MonoisotopicMass"]}"
-                                MERGE (n)-[r1:ORIGINALLY_IDENTIFIED_AS]->(a)
-                                MERGE (n)-[r2:ORIGINALLY_IDENTIFIED_AS]->(b)
-                                MERGE (n)-[r3:ORIGINALLY_IDENTIFIED_AS]->(c)
-                                MERGE (n)-[r4:ORIGINALLY_IDENTIFIED_AS]->(d)
-                                MERGE (n)-[r5:ORIGINALLY_IDENTIFIED_AS]->(e)
-                                MERGE (n)-[r6:ORIGINALLY_IDENTIFIED_AS]->(f)
-                                MERGE (n)-[r7:ORIGINALLY_IDENTIFIED_AS]->(g)
-                                SET r1.Identified_By = {import_based_on}
-                                SET r2.Identified_By = {import_based_on}
-                                SET r3.Identified_By = {import_based_on}
-                                SET r4.Identified_By = {import_based_on}
-                                SET r5.Identified_By = {import_based_on}
-                                SET r6.Identified_By = {import_based_on}
-                                SET r7.Identified_By = {import_based_on}
-                                """ )
+                #with driver.session() as session:
+                    #session.run( f"""
+                                #MATCH (a) WHERE a.InChI = "{row["InChI"]}"
+                                #MATCH (c) WHERE c.Name = "{row["Name"]}"
+                                #MATCH (d) WHERE d.SMILES = "{row["SMILES"]}"
+                                #MATCH (e) WHERE e.InChI = "{row["InChI"]}"
+                                #MATCH (f) WHERE f.HMDB_ID = "{row["Identifier"]}"
+                                #MATCH (g) WHERE g.Monisotopic_Molecular_Weight = "{row["MonoisotopicMass"]}"
+                                #CREATE (n:OriginalMetabolite)
+                                #SET n.InChI = "{row["InChI"]}", n.Name = "{row["Name"]}", n.ChEBI = "{row["ChEBI"]}",
+                                    #n.SMILES = "{row["SMILES"]}", n.HMDB_ID = "{row["Identifier"]}",
+                                    #n.Monisotopic_Molecular_Weight = "{row["MonoisotopicMass"]}"
+                                #MERGE (n)-[r1:ORIGINALLY_IDENTIFIED_AS]->(a)
+                                #MERGE (n)-[r2:ORIGINALLY_IDENTIFIED_AS]->(b)
+                                #MERGE (n)-[r3:ORIGINALLY_IDENTIFIED_AS]->(c)
+                                #MERGE (n)-[r4:ORIGINALLY_IDENTIFIED_AS]->(d)
+                                #MERGE (n)-[r5:ORIGINALLY_IDENTIFIED_AS]->(e)
+                                #MERGE (n)-[r6:ORIGINALLY_IDENTIFIED_AS]->(f)
+                                #MERGE (n)-[r7:ORIGINALLY_IDENTIFIED_AS]->(g)
+                                #SET r1.Identified_By = {import_based_on}
+                                #SET r2.Identified_By = {import_based_on}
+                                #SET r3.Identified_By = {import_based_on}
+                                #SET r4.Identified_By = {import_based_on}
+                                #SET r5.Identified_By = {import_based_on}
+                                #SET r6.Identified_By = {import_based_on}
+                                #SET r7.Identified_By = {import_based_on}
+                                #""" )
 
                 # Section Schema Changes
                 # NOTE: For Subject, we have a composite PK: Exposome_Explorer_ID, Age, Gender e Information
