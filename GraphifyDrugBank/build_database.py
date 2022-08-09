@@ -63,7 +63,7 @@ def add_drugs(tx, filename):
         MERGE (d:Drug {{ DrugBank_ID:Primary_Drugbank_ID }} )
 
         FOREACH(ignoreMe IN CASE WHEN synthesis_reference IS NOT null THEN [1] ELSE [] END |
-            FOREACH(ignoreMe IN CASE WHEN split(synthesis_reference, "\\"")[1] <> "" THEN [1] ELSE [] END |
+            FOREACH(ignoreMe IN CASE WHEN split(synthesis_reference, "\\"")[1] <> "" AND split(synthesis_reference, "\\"")[1] IS NOT null THEN [1] ELSE [] END |
 
                 MERGE (p:Publication {{ Title:split(synthesis_reference, "\\"")[1] }})
 
@@ -75,12 +75,12 @@ def add_drugs(tx, filename):
                 MERGE (d)-[r:CITED_IN]->(p)
                 SET r.Type = "Synthesis"
             )
-            FOREACH(ignoreMe IN CASE WHEN split(synthesis_reference, "\\"")[1] <> "" THEN [1] ELSE [] END |
+
+            FOREACH(ignoreMe IN CASE WHEN split(split(synthesis_reference, ":")[1], ".")[0] <> "" AND split(split(synthesis_reference, ":")[1], ".")[0] IS NOT null THEN [1] ELSE [] END |
 
                 MERGE (p:Publication {{ Title:split(split(synthesis_reference, ":")[1], ".")[0] }})
 
                 SET p.Authors = split(synthesis_reference, ":")[0]
-                SET p.Title = split(replace(synthesis_reference, split(synthesis_reference, ":")[0]+": ", ""), ".")[0]
                 SET p.Publication = split(replace(synthesis_reference, split(synthesis_reference, ".")[0]+". ",""), ".")[0]
                 SET p.Notes = split(replace(synthesis_reference, split(synthesis_reference, ".")[0]+". ",""), ".")[2]
                 SET p.Date = split(split(replace(synthesis_reference, split(synthesis_reference, ".")[0]+". ",""), ".")[1],";")[0]

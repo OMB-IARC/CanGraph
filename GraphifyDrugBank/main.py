@@ -60,4 +60,4 @@ with alive_bar((total_subfiles-1)*13 + 3) as bar:
 
 print(f"You can find the exported graph at {Neo4JImportPath}/graph.graphml")
 shutil.copyfile(f"{Neo4JImportPath}/graph.graphml", f"./graph.graphml")
-print(f"A copy of the file has been saved in this project's directory")
+print(f"A copy of the file has been saved in this project's work directory")

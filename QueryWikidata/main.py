@@ -29,7 +29,6 @@ with alive_bar(65) as bar:
 
     with driver.session() as session:
         session.run( misc.clean_database() )
-        session.write_transaction(misc.create_n10s_graphconfig)
         bar()
     print("Cleaned DataBase")
 
@@ -89,10 +88,9 @@ with alive_bar(65) as bar:
     with driver.session() as session:
         # We might want to remove ExternalEquivalent nodes
         #session.write_transaction(build_database.remove_ExternalEquivalent)
-        session.write_transaction(misc.remove_n10s_graphconfig)
         session.write_transaction(misc.export_graphml, "graph.graphml")
         bar()
 
 print(f"You can find the exported graph at {Neo4JImportPath}/graph.graphml")
 shutil.copyfile(f"{Neo4JImportPath}/graph.graphml", f"./graph.graphml")
-print(f"A copy of the file has been saved in this project's directory")
+print(f"A copy of the file has been saved in this project's work directory")

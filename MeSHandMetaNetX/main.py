@@ -18,47 +18,78 @@ sys.path.append("../")
 # This is not the most elegant, but simplifies code maintenance, and this script shouldnt be used much so...
 import miscelaneous as misc
 
-with alive_bar(65) as bar:
+mnx_urls = ["https://www.metanetx.org/cgi-bin/mnxget/mnxref/chem_xref.tsv",
+            "https://www.metanetx.org/cgi-bin/mnxget/mnxref/chem_prop.tsv",
+            "https://www.metanetx.org/cgi-bin/mnxget/mnxref/chem_isom.tsv",
+            "https://www.metanetx.org/cgi-bin/mnxget/mnxref/comp_xref.tsv",
+            "https://www.metanetx.org/cgi-bin/mnxget/mnxref/comp_prop.tsv"
+            ]
 
-    instance = f"{sys.argv[1]}"; user = f"{sys.argv[2]}"; passwd = f"{sys.argv[3]}"
-    driver = GraphDatabase.driver(instance, auth=(user, passwd))
+instance = f"{sys.argv[1]}"; user = f"{sys.argv[2]}"; passwd = f"{sys.argv[3]}"
+driver = GraphDatabase.driver(instance, auth=(user, passwd))
 
-    Neo4JImportPath = misc.get_import_path(driver)
+Neo4JImportPath = misc.get_import_path(driver)
 
-    print("Connected to Neo4J")
+print("Connected to Neo4J")
 
-    with driver.session() as session:
-        session.run( misc.clean_database() )
-        session.write_transaction(misc.create_n10s_graphconfig)
+#with driver.session() as session:
+    #session.run( misc.clean_database() )
+
+print("Cleaned DataBase")
+
+datafolder = os.path.abspath(sys.argv[4])
+
+# We download all the necessary DB files
+#for index, url in enumerate(mnx_urls):
+    #print(f"Downloading files: {index + 1}/{len(mnx_urls)}")
+    #misc.download(url, f"{datafolder}")
+    #print(f"Splitting files: {index + 1}/{len(mnx_urls)}")
+    #misc.split_csv(f"{url.split('/')[-1]}", f"{datafolder}", sep='\t', sep_out='\t', startFrom=351, withStepsOf=1000)
+
+all_files = []
+for root,dirs,files in os.walk(sys.argv[4]):
+    for filename in files:
+        all_files.append( os.path.abspath(os.path.join(root, filename)) )
+
+print("Database ready for import. Commencing process...")
+with alive_bar(len(all_files) + 26) as bar:
+    # First, we import all the files
+    for filename in os.listdir(datafolder):
+        #shutil.copyfile(f"{os.path.abspath(sys.argv[4])}/{filename}", f"{Neo4JImportPath}/{filename}")
+        #build_database.build_from_file(filename, driver)
+        #os.remove(f"{Neo4JImportPath}/{filename}")
         bar()
-    print("Cleaned DataBase")
 
+    # Then, we add proteins and their properties:
     with driver.session() as session:
-        session.write_transaction(build_database.initial_cancer_discovery)
-        session.write_transaction(build_database.remove_duplicate_nodes)
-        bar()
+        #session.run(build_database.add_pept())
+        bar(); bar(); bar(); bar(); bar() # Add some bulk bars because this will take forever
+        #session.run(build_database.find_protein_data_in_metanetx())
+        bar(); bar(); bar(); bar(); bar()
 
-
-
+    # And their interactions with other MetaNetX metabolites
     with driver.session() as session:
-        #NOTE: We purge by merging all products with the same EMA_MA_Number or FDA_Application_Number
-        session.write_transaction(misc.remove_duplicate_nodes, "", "n.WikiData_ID as wdt")
-        # And, then, we delete duplicate relationships
-        #NOTE: We will just do this once to decrease processing time
-        session.write_transaction(misc.remove_duplicate_relationships)
-        bar()
+        session.run(build_database.find_protein_interactions_in_metanetx())
+        bar(); bar(); bar(); bar(); bar()
 
-    # # At the end, purge the database
-    misc.purge_database(driver)
+    # Finally, we try to find KEGG Patways for all metabolites in the DB
+    with driver.session() as session:
+        #session.run(build_database.get_kegg_pathways_for_metabolites())
+        bar(); bar(); bar(); bar(); bar()
+
+    # And MeSH IDs, too (by name):
+    with driver.session() as session:
+        #session.run(build_database.add_mesh_by_name())
+        bar(); bar(); bar(); bar(); bar()
+
+    # At the end, purge the database
+    #misc.purge_database(driver)
 
     # And export it:
     with driver.session() as session:
-        # We might want to remove ExternalEquivalent nodes
-        #session.write_transaction(build_database.remove_ExternalEquivalent)
-        session.write_transaction(misc.remove_n10s_graphconfig)
         session.write_transaction(misc.export_graphml, "graph.graphml")
         bar()
 
 print(f"You can find the exported graph at {Neo4JImportPath}/graph.graphml")
 shutil.copyfile(f"{Neo4JImportPath}/graph.graphml", f"./graph.graphml")
-print(f"A copy of the file has been saved in this project's directory")
+print(f"A copy of the file has been saved in this project's work directory")
