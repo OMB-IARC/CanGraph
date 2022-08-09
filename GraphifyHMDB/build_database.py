@@ -676,9 +676,16 @@ def add_gene_properties(tx, filename):
             [X in gene_property._children WHERE X._type = "gene_sequence"][0]._text AS gene_sequence,
             p
 
-        MERGE (se:Sequence {{ Sequence:replace(replace(gene_sequence, split(gene_sequence, "bp")[0]+"bp", ""), " ", "") }} )
-        SET se.Type= "DNA", se.Chromosome_Location = chromosome_location, se.Locus = locus
-        MERGE (p)-[r:SEQUENCED_AS]->(se)
+        WITH
+            replace(replace(gene_sequence, split(gene_sequence, "bp")[0]+"bp", ""), " ", "") as SEQUENCE,
+            chromosome_location, locus, gene_sequence, p
+
+        FOREACH(ignoreMe IN CASE WHEN SEQUENCE IS NOT null AND SEQUENCE <> "" THEN [1] ELSE [] END |
+            MERGE (se:Sequence {{ Sequence:SEQUENCE }} )
+            SET se.Type= "DNA", se.Chromosome_Location = chromosome_location, se.Locus = locus
+            MERGE (p)-[r:SEQUENCED_AS]->(se)
+        )
+
         """)
 
 def add_protein_properties(tx, filename):
@@ -714,9 +721,12 @@ def add_protein_properties(tx, filename):
         SET p.Residue_Number = residue_number, p.Molecular_Weight = molecular_weight,
             p.Theoretical_PI = theoretical_pi
 
-        MERGE (se:Sequence {{ Sequence: polypeptide_sequence }} )
-        SET se.Type= "PROT", se.UniProt_ID = uniprot_id
-        MERGE (p)-[r:SEQUENCED_AS]->(se)
+        FOREACH(ignoreMe IN CASE WHEN polypeptide_sequence IS NOT null AND polypeptide_sequence <> "" THEN [1] ELSE [] END |
+            MERGE (se:Sequence {{ Sequence: polypeptide_sequence }} )
+            SET se.Type= "PROT", se.UniProt_ID = uniprot_id
+            MERGE (p)-[r:SEQUENCED_AS]->(se)
+        )
+
 
         WITH p, pfams
         UNWIND pfams AS pfam

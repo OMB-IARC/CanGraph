@@ -10,7 +10,6 @@ from neo4j import GraphDatabase      # The Neo4J python driver
 import os, sys, shutil               # Vital modules to interact with the filesystem
 from time import sleep               # Cute go slowly
 from zipfile import ZipFile          # Work with ZIP files
-import pandas as pd                  # Analysis of tabular data
 
 import miscelaneous as misc          # A collection of useful functions
 
@@ -63,11 +62,7 @@ if response != "y" and response != "Y" and response != "Yes" and response != "ye
 for filename in os.listdir("./DataBases/ExposomeExplorer/"):
     #if filename not in ["cancer_associations.csv", "metabolomic_associations.csv", "correlations.csv"]:
     if "components" in filename:
-        bigfile = pd.read_csv(f"./DataBases/ExposomeExplorer/{filename}")
-        for index in range(len(bigfile)):
-            bigfile.iloc[[index]].to_csv(f"./DataBases/ExposomeExplorer/{os.path.splitext(filename)[0]}_{index}.csv", index = False)
-
-        os.remove(f"./DataBases/ExposomeExplorer/{filename}")
+        misc.split_csv(filename.split("/")[-1], "./DataBases/ExposomeExplorer/")
 
 print("Now, lets go on with the Human Metabolome DataBase. I will download all the needed folders and store them in ./DataBases/HMDB")
 if not os.path.exists("./DataBases/HMDB"): os.mkdir("./DataBases/HMDB")

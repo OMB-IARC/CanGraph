@@ -9,12 +9,13 @@
 
 # Import external modules necessary for the script
 from neo4j import GraphDatabase      # The Neo4J python driver
-from urllib.request import urlopen   # Extensible library for opening URLs
+import urllib.request as request     # Extensible library for opening URLs
 from zipfile import ZipFile          # Work with ZIP files
 import os                            # Integration with the system
 import xml.etree.ElementTree as ET   # To parse and split XML files
 import re                            # To split XML files with a regex pattern
 from time import sleep               # Cute go slowly
+import pandas as pd                  # Analysis of tabular data
 
 from MeSHandMetaNetX import build_database as MeSHandMetaNetXDataBases
 
@@ -64,21 +65,22 @@ def call_db_schema_visualization(tx):
 def clean_database():
     """
     Gets all the nodes in a Neo4J database and removes them
-    NOTE: If running directly from neo4j browser, you will need to add ```:auto ```
-    at the beginning of the query in order to force it to autocommit
-    NOTE: To run from a driver, you must force the autocommit using: ```session.run( clean_database() )```
+    NOTE: This is an **autocommit transaction**. This means that, in order to not keep data in memory
+        (and make running it with a huge amount of data) more efficient, you will need to add ```:auto ```
+        when calling it from the Neo4J browser, or call it as ```session.run( clean_database() )``` from the driver.
     """
-    return f"""
+    return """
         MATCH (n)
-        CALL {{ WITH n
+        CALL { WITH n
         DETACH DELETE n
-        }} IN TRANSACTIONS OF 1000 ROWS;
+        } IN TRANSACTIONS OF 1000 ROWS
         """
 
 def create_n10s_graphconfig(tx):
     """
     Creates a neosemantic constraint to hold all the RDF we will import.
     Taken from: https://neo4j.com/labs/neosemantics/how-to-guide/
+    NOTE: Since we are importing based on apoc.load.jsonParams, this is not needed anymore
     """
     return tx.run("""
         CALL n10s.graphconfig.init({
@@ -94,6 +96,7 @@ def remove_n10s_graphconfig(tx):
     """
     Removes the "_GraphConfig" node, which is necessary for querying SPARQL endpoints
     but not at all useful in our final export
+    NOTE: Since we are importing based on apoc.load.jsonParams, this is not needed anymore
     """
     return tx.run("""
         MATCH (n:`_GraphConfig`) DETACH DELETE n
@@ -209,7 +212,9 @@ def export_graphml(tx, exportname):
     NOTE: for this to work, you HAVE TO have APOC availaible on your Neo4J installation
     """
     return tx.run(f"""
-        CALL apoc.export.graphml.all("{exportname}", {{useTypes:true, storeNodeIds:false}})
+        CALL apoc.export.graphml.all("{exportname}", {{batchSize: 5, useTypes:true, storeNodeIds:false,
+                                                       useOptimizations:
+                                                           {{type: "UNWIND_BATCH", unwindBatchSize: 5}} }})
         """)
 
 
@@ -219,15 +224,17 @@ def import_graphml(tx, importname):
     NOTE: for this to work, you HAVE TO have APOC availaible on your Neo4J installation
     """
     return tx.run(f"""
-        CALL apoc.import.graphml("{importname}", {{useTypes:true, storeNodeIds:false, readLabels:True}})
+        CALL apoc.import.graphml("{importname}", {{batchSize: 5, useTypes:true, storeNodeIds:false,
+                                                   readLabels:True, useOptimizations:
+                                                       {{type: "UNWIND_BATCH", unwindBatchSize: 5}} }})
         """)
 
 def download_and_unzip(url, folder):
     """
-    https://svaderia.github.io/articles/downloading-and-unzipping-a-zipfile/
-    https://stackoverflow.com/questions/32123394/workflow-to-create-a-folder-if-it-doesnt-exist-already
+    Source: https://svaderia.github.io/articles/downloading-and-unzipping-a-zipfile/
+    Source: https://stackoverflow.com/questions/32123394/workflow-to-create-a-folder-if-it-doesnt-exist-already
     """
-    zipresp = urlopen(url)
+    zipresp = request.urlopen(url)
     tempzip = open("/tmp/tempfile.zip", "wb")
     tempzip.write(zipresp.read())
     tempzip.close()
@@ -262,3 +269,27 @@ def split_xml(filename, filetype, bigtag):
                 num_files += 1
                 current_text = ""
     return num_files - 1
+
+def download(url, folder):
+    """
+    Downloads a file from the internet
+    """
+    if not os.path.exists(f"{folder}"):
+        os.makedirs(f"{folder}")
+    request.urlretrieve(url, f"{folder}/{url.split('/')[-1].split('.')[0]}.{url.split('.')[-1]}")
+
+def split_csv(filename, folder, sep=",", sep_out=",", startFrom=0, withStepsOf=1):
+    """
+    Splits a given .csv/tsv file in n smaller csv files, one for each row on the original file,
+    so that it does not crash when processing it. It also allows to start reading from ```startFrom``` lines
+    WARNING: Original file will be removed
+    """
+    bigfile = pd.read_csv(f"{folder}/{filename}", sep=sep, skiprows=startFrom)
+    filenumber = 0
+    for index in range(0, len(bigfile), withStepsOf):
+        new_df = bigfile.iloc[index:(index+withStepsOf)]
+        new_df.to_csv(f"{folder}/{os.path.splitext(filename)[0]}_{filenumber}.csv", index = False, sep=sep_out)
+        filenumber += 1
+
+    os.remove(f"{folder}/{filename}")
+    return filenumber

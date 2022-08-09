@@ -52,7 +52,6 @@ with alive_bar(len(all_files)*len(raw_database)) as bar:
         with driver.session() as session:
             session.run( misc.clean_database() )
             if index == 0: print("Cleaned DataBase") # Only the first time so as not to repeat
-            session.write_transaction(misc.create_n10s_graphconfig)
 
         print(f"Importing metabolites: {index+1}/{len(raw_database)}")
 
@@ -188,10 +187,12 @@ with alive_bar(len(all_files)*len(raw_database)) as bar:
 
                 # TODO: CAMBIAR NOMBRE A LOS MESH PARA INDICAR EL TIPO. AÑADIR NAME A LOS WIKIDATA
                 # TODO: FIX THE REPEAT TRANSACTION FUNCTION
-                # TODO: ADD COMMENTS TO MISC AND MESHANDMETANETX
-                # TODO: ADD README TO MESHANDMETANETX
                 # TODO: Match partial InChIs based on DICE-MACCS
                 # TODO: QUE FUNCIONE -> ACTUALMENTE ESTA SECCION RALENTIZA MAZO
+                # TODO: CHECK APOC IS INSTALLED
+                # TODO: FIX MAIN
+                # TODO: MERGE BY INCHI, METANETX ID
+                # TODO: Fix find_protein_interactions_in_metanetx
 
                 # Section Schema Changes
                 # NOTE: For Subject, we have a composite PK: Exposome_Explorer_ID, Age, Gender e Information
@@ -225,20 +226,21 @@ with alive_bar(len(all_files)*len(raw_database)) as bar:
 
         # We will also add MeSH terms to all nodes:
         with driver.session() as session:
-            misc.repeat_transaction(MeSHandMetaNetXDataBases.add_mesh_by_name, 10, session, bar)
+            misc.repeat_transaction(MeSHandMetaNetXDataBases.add_mesh_by_name(), 10, session, bar)
         # We also add synonyms:
         with driver.session() as session:
-            session.write_transaction(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx, "Name")
-            session.write_transaction(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx, "KEGG_ID")
-            session.write_transaction(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx, "ChEBI")
-            session.write_transaction(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx, "HMDB")
-            session.write_transaction(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx, "InChI")
-            session.write_transaction(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx, "InChIKey")
+            session.run(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx("Name"))
+            session.run(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx("KEGG_ID"))
+            session.run(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx("ChEBI_ID"))
+            session.run(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx("HMDB_ID"))
+            session.run(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx("InChI"))
+            session.run(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx("InChIKey"))
 
         # And some protein interactions, together with their pathways, too:
         with driver.session() as session:
-            session.write_transaction(MeSHandMetaNetXDataBases.find_protein_interactions_in_metanetx)
-            session.write_transaction(MeSHandMetaNetXDataBases.get_kegg_pathways_for_metabolites)
+            session.run(MeSHandMetaNetXDataBases.find_protein_data_in_metanetx())
+            session.run(MeSHandMetaNetXDataBases.find_protein_interactions_in_metanetx())
+            session.run(MeSHandMetaNetXDataBases.get_kegg_pathways_for_metabolites())
 
         # Finally, we purge the database by removing nodes considered as duplicated
         # We only purge once at the end, to limit processing time
@@ -246,8 +248,8 @@ with alive_bar(len(all_files)*len(raw_database)) as bar:
 
         # And save it in GraphML format
         with driver.session() as session:
-            session.write_transaction(misc.remove_n10s_graphconfig)
             session.write_transaction(misc.export_graphml, f"metabolite_{index+1}.graphml")
 
         print(f"Metabolite {index+1}/{len(raw_database)} processed. You can find a copy of the associated knowledge graph at {os.path.abspath(sys.argv[4])}/metabolite_{index+1}.graphml")
         shutil.copyfile(f"{Neo4JImportPath}/metabolite_{index+1}.graphml", f"{os.path.abspath(sys.argv[4])}/metabolite_{index+1}.graphml")
+        exit(0)

@@ -1,0 +1,9 @@
+# SPDX-FileCopyrightText: 2022 Pablo Marcos <software@loreak.org>
+#
+# SPDX-License-Identifier: MIT
+
+# This file includes all the required packages for this project to run. You can simply install them by running: `pip install -r requirements.txt`
+
+neo4j          # The Neo4J python driver
+alive_progress # A cute progress bar that shows the script is still running
+pandas         # Analysis of tabular data

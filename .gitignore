@@ -9,6 +9,7 @@ __pycache__/
 # Ignore the confidential folder with the Full Database Tables
 **/xmlfolder/
 **/csvfolder/
+**/tsvfolder/
 
 # Ignore the confidential and outdated schema image
 exposome-explorer/database_schema.png
