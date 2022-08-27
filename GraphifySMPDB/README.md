@@ -4,9 +4,7 @@ SPDX-FileCopyrightText: 2022 Pablo Marcos <software@loreak.org>
 SPDX-License-Identifier: MIT
 -->
 
-# graphify-smpdb
-
-<div align="center"> <img src="header.png" width="50%"> </div>
+<div align="center"> <img src="_static/smpdb_schema.png" width="50%"> </div>
 <br>
 
 This script, created as part of my Master's Intenship at IARC, transitions the [Small Molecule Pathway Database](http://smpdb.ca/) (a high quality database containing associations betweem metabolites, proteins and metabolomic pathways) to Neo4J format in an automated way, providing an export in GraphML format.
@@ -29,5 +27,8 @@ An archived version of this repository that takes into account the gitignored fi
 
 ## Important Notices
 
+* Please ensure you have internet access, enough espace in your hard drive (around 5 GB) and read-write access in ```./csvfolder```. The files needed to build the database will be stored there.
+
 * Since the "Structure" files at smpdb.ca seemed to be super complicated to import, we decided against doing so. However, regarding the future, they shouldn't be overlooked, as they might include useful info
+
 * The "PW ID" column from the "Pathways" table, and the "Pathway Subject" from the "Metabolite" tables may correlate (both start with PW). However, they seem to use different formats, so we have decided against including them in the Final Database

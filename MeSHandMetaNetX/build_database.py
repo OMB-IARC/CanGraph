@@ -5,14 +5,22 @@
 #
 # SPDX-License-Identifier: MIT
 
-# This is just a collection of functions used by the "main" script
+"""
+A python module that provides the necessary functions to transition the MetaNetX database (and related MeSH terms and KEGG IDs) to graph format,
+either from scratch importing all the nodes (as showcased in :obj:`CanGraph.MeSHandMetaNetX.main`) or in a case-by-case basis,
+to annotate existing metabolites (as showcased in :obj:`CanGraph.main`).
+"""
 
 # ********* SPARQL queries to annotate existing nodes using MeSH ********* #
 
-def add_mesh_by_name(query = None ):
+def add_mesh_by_name():
     """
     A function that adds some MeSH nodes to any existing nodes, based on their Name property.
-    NOTE: Only exact matches work here, which is not ideal.
+
+    Returns:
+        str: A text chain that represents the CYPHER query with the desired output. This can be run using: :obj:`neo4j.Session.run`
+
+    .. NOTE:: Only exact matches work here, which is not ideal.
     """
     return """
         CALL {
@@ -63,6 +71,9 @@ def add_prefixes():
     """
     Add some prefixes necessary for all MetaNetX queries to work.
     This are kept together since adding extra prefixes does not increase computation time
+
+    Returns:
+        str: A text chain that represents the CYPHER query with the desired output. This can be run using: :obj:`neo4j.Session.run`
     """
     return("""
         PREFIX mnx: <https://rdf.metanetx.org/schema/>
@@ -84,10 +95,20 @@ def get_identifiers(from_sparql=False):
     It takes an original metabolite (n) and a row variable, which should have columns named external_identifier,
     cross_refference, InChIKey, InChI, SMILES, Formula and Mass with the adequated format; it is basically a code-reuser,
     not intended to be used separately.
-    NOTE: All HMDB matches might create a Metabolite without CHEBI_ID or CAS_Number, which would violate our schema. This will be later on accounted for.
-    NOTE: Some keys, such as VMH_ID, are not merged into their own node, but rather added to an existing one.
+
+    Args:
+        from_sparql (bool): A True/False param defining whether the identifiers are being parsed from a SPARQL query;
+            default is False (i.e. imported from file)
+
+    Returns:
+        str: A text chain that represents the CYPHER query with the desired output. This can be run using: :obj:`neo4j.Session.run`
+
+    .. NOTE:: All HMDB matches might create a Metabolite without CHEBI_ID or CAS_Number, which would violate our schema. This will be later on accounted for.
+
+    .. NOTE:: Some keys, such as VMH_ID, are not merged into their own node, but rather added to an existing one.
           This is because this do not prevously exist in our Schema, and might be changed in the future.
-    NOTE: We dont care about overwriting InChI and InChIKey because they are necessarily unique; the same is true for Mass and Formula,
+
+    .. NOTE:: We dont care about overwriting InChI and InChIKey because they are necessarily unique; the same is true for Mass and Formula,
           as they are not all that important. However, for HMDB ID and others, we will take care not to overwrite, which could mess up the DB
     """
     if from_sparql == True:
@@ -130,7 +151,7 @@ def get_identifiers(from_sparql=False):
             """]
     else: sparql_parser = ["",""]
 
-    return (f"""
+    return f"""
 
         {sparql_parser[0]}
 
@@ -191,15 +212,22 @@ def get_identifiers(from_sparql=False):
         )
 
         {sparql_parser[1]}
-        """)
+        """
 
 def write_synonyms_in_metanetx(query = None ):
     """
-    A SPARQL function that finds synonyms for metabolites, proteins or drugs based on a given `query`, using MetaNetX.
+    A SPARQL function that finds synonyms for metabolites, proteins or drugs in an existing Neo4J database, using MetaNetX.
     At the same time, it is able to annotate them a bit, adding Name, InChI, InChIKey, SMILES, Formula, Mass, some External IDs,
     and finding whether the metabolite in question has any known isomers, anootating if so.
-    NOTE: This is intended to be run as a write_transaction, modifying the existing database.
-    This query can either be Name, KEGG_ID, CHEBI, HMDB ID, InChI or InChIKey
+
+    Args:
+        query (str): The type of query that is being searched for. One of ["Name","KEGG_ID","ChEBI_ID","HMDB_ID","InChI","InChIKey"];
+            default is None (i.e. the function will not process anything).
+
+    Returns:
+        str: A text chain that represents the CYPHER query with the desired output. This can be run using: :obj:`neo4j.Session.run`
+
+    .. NOTE:: This is intended to be run as a write_transaction, modifying the existing database.
     """
     if query == "Name":
       query_text = """?mnx_url  rdfs:comment  \"' +  n.Name + '\" . """
@@ -266,14 +294,21 @@ def read_synonyms_in_metanetx(tx, querytype = None, query = None ):
     A SPARQL function that finds synonyms for metabolites, proteins or drugs based on a given `query`, using MetaNetX.
     At the same time, it is able to annotate them a bit, adding Name, InChI, InChIKey, SMILES, Formula, Mass, some External IDs,
     and finding whether the metabolite in question has any known isomers, anootating if so.
-    NOTE: This is intended to be run as a read_transaction, only returning synonyms present in the DB. No modifications will be applied.
-    This query can either be Name, KEGG_ID, CHEBI, HMDB ID, InChI or InChIKey
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        querytype   (str): The type of query that is being searched for. One of ["Name","KEGG_ID","ChEBI_ID","HMDB_ID","InChI","InChIKey"];
+            default is :obj:`None` (i.e. the function will not process anything).
+        query       (str): The query we are searching for; must be of type ```querytype```
+
+
+    .. NOTE:: This is intended to be run as a read_transaction, only returning synonyms present in the DB. No modifications will be applied.
     """
     if querytype == "Name":
       query_text = f"""?mnx_url  rdfs:comment  \"{ query }\" . """
-    elif querytype == "ChEBI":
+    elif querytype == "ChEBI_ID":
       query_text = f"""?mnx_url  mnx:chemXref  chebi:{ query } . """
-    elif querytype == "HMDB":
+    elif querytype == "HMDB_ID":
       query_text = f"""?mnx_url  mnx:chemXref  hmdb:{ query } . """
     elif querytype == "InChI":
       query_text = f"""?mnx_url  mnx:inchi  \"{ query }\" . """
@@ -326,7 +361,11 @@ def read_synonyms_in_metanetx(tx, querytype = None, query = None ):
 def find_protein_interactions_in_metanetx():
     """
     A SPARQL function that finds the Metabolites a given Protein (based on its UniProt_ID) interacts with, using MetaNetX.
-    NOTE: We are not using peptXref: since all proteins in MetaNetX come from UniProt, there is no use here
+
+    Returns:
+        str: A text chain that represents the CYPHER query with the desired output. This can be run using: :obj:`neo4j.Session.run`
+
+    .. NOTE:: We are not using peptXref: since all proteins in MetaNetX come from UniProt, there is no use here
     """
     return f"""
         CALL {{
@@ -381,7 +420,11 @@ def find_protein_interactions_in_metanetx():
 def find_protein_data_in_metanetx():
     """
     A SPARQL function that annotates Protein nodes in an exiting Neo4J database by using the information provided by MetaNetX
-    NOTE: This function is partly a duplicate of `self.find_protein_interactions_in_metanetx()`, which was split to prevent timeouts
+
+    Returns:
+        str: A text chain that represents the CYPHER query with the desired output. This can be run using: :obj:`neo4j.Session.run`
+
+    .. NOTE:: This function is partly a duplicate of `self.find_protein_interactions_in_metanetx()`, which was split to prevent timeouts
     """
 
     return f"""
@@ -442,7 +485,15 @@ def find_protein_data_in_metanetx():
 def add_chem_xref(tx, filename):
     """
     A CYPHER query that loads the `chem_xref.tsv` file availaible at the MetaNetX site, using a graph format.
-    NOTE: For performance, it is recommended to split the file in 1 subfile for each row in the DataBase
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the CSV file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: For performance, it is recommended to split the file in 1 subfile for each row in the DataBase
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line FIELDTERMINATOR '\t'
@@ -460,7 +511,15 @@ def add_chem_xref(tx, filename):
 def add_chem_prop(tx, filename):
     """
     A CYPHER query that loads the `chem_prop.tsv` file availaible at the MetaNetX site, using a graph format.
-    NOTE: For performance, it is recommended to split the file in 1 subfile for each row in the DataBase
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the CSV file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: For performance, it is recommended to split the file in 1 subfile for each row in the DataBase
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line FIELDTERMINATOR '\t'
@@ -473,7 +532,15 @@ def add_chem_prop(tx, filename):
 def add_chem_isom(tx, filename):
     """
     A CYPHER query that loads the `chem_isom.tsv` file availaible at the MetaNetX site, using a graph format.
-    NOTE: For performance, it is recommended to split the file in 1 subfile for each row in the DataBase
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the CSV file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: For performance, it is recommended to split the file in 1 subfile for each row in the DataBase
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line FIELDTERMINATOR '\t'
@@ -490,10 +557,20 @@ def add_chem_isom(tx, filename):
 def add_comp_xref(tx, filename):
     """
     A CYPHER query that loads the `comp_xref.tsv` file availaible at the MetaNetX site, using a graph format.
-    NOTE: For performance, it is recommended to split the file in 1 subfile for each row in the DataBase
-    NOTE: Some identifiers present the CL/cl prefix. Since I could not find what this prefix refers to,
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the CSV file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: For performance, it is recommended to split the file in 1 subfile for each row in the DataBase
+
+    .. NOTE:: Some identifiers present the CL/cl prefix. Since I could not find what this prefix refers to,
           and since it only pertains to one single MetaNetX ID, we did not take them into account
-    NOTE: The "description" field in the DataBase is ignored, since it seems to be quite similar, but less useful,
+
+    .. NOTE:: The "description" field in the DataBase is ignored, since it seems to be quite similar, but less useful,
           than the "name" field from comp_prop, which is more coherent with our pre-existing schema
     """
     return tx.run(f"""
@@ -529,7 +606,15 @@ def add_comp_xref(tx, filename):
 def add_comp_prop(tx, filename):
     """
     A CYPHER query that loads the `comp_prop.tsv` file availaible at the MetaNetX site, using a graph format.
-    NOTE: For performance, it is recommended to split the file in 1 subfile for each row in the DataBase
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the CSV file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: For performance, it is recommended to split the file in 1 subfile for each row in the DataBase
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line FIELDTERMINATOR '\t'
@@ -541,13 +626,17 @@ def add_comp_prop(tx, filename):
 def add_pept():
     """
     A CYPHER query that all the protein availaible at the MetaNetX site, using a graph format and SPARQL.
-    NOTE: SPARQL was only used here because, unlike with the other files, there is no download available;
+
+    Returns:
+        str: A text chain that represents the CYPHER query with the desired output. This can be run using: :obj:`neo4j.Session.run`
+
+    .. NOTE:: SPARQL was only used here because, unlike with the other files, there is no download available;
           also, given there are few proteins, Neo4J is able to process it without running out of memory
           (unlike what happened with the other fields)
-    NOTE: This is an **autocommit transaction**. This means that, in order to not keep data in memory
+
+    .. NOTE:: This is an **autocommit transaction**. This means that, in order to not keep data in memory
           (and make running it with a huge amount of data) more efficient, you will need to add ```:auto ```
           when calling it from the Neo4J browser, or call it as ```session.run( clean_database() )``` from the driver.
-
     """
     return f"""
         WITH '
@@ -581,7 +670,11 @@ def get_kegg_pathways_for_metabolites():
     A function that finds the Pathways a given Metabolite (based on its Kegg_ID) is a part of, using KEGG.
     This uses genome.jp's dbget web service, since I honestly could not find a way to use KEGG's SPARQL
     service (https://www.genome.jp/linkdb/linkdb_rdf.html) for that.
-    Another possibility could be using https://rest.kegg.jp/get/R00703/
+
+    .. seealso:: Another possibility could be using `Kegg's Rest API <https://rest.kegg.jp/get/R00703/>`_
+
+    Returns:
+        str: A text chain that represents the CYPHER query with the desired output. This can be run using: :obj:`neo4j.Session.run`
     """
     return """
         CALL {
@@ -606,7 +699,17 @@ def get_kegg_pathways_for_metabolites():
 
 def build_from_file(filename, driver):
     """
-    A function that builds the part of the database, pertaning to a single, splitted csv file
+    A function able to build a portion of the MetaNetX database in graph format, provided that one MetaNetX CSV is supplied to it.
+    This CSVs are downloaded from the website, and can be presented either as the full file, or as a splitted
+    version of it, with just one item per file (which is recommended due to memory limitations). If you want all the database to be
+    imported, you should run this function with all the CSVs that form it, as portrayed in the :obj:`~CanGraph.MeSHandMetaNetX.main` module
+
+    Args:
+        driver (neo4j.Driver): Neo4J's Bolt Driver currently in use
+        filename    (str): The name of the CSV file that is being imported
+
+    Returns:
+        This function modifies the Neo4J Database as desired, but does not produce any particular return.
     """
     if "chem_xref" in filename:
         with driver.session() as session:

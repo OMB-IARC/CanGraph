@@ -5,6 +5,16 @@
 #
 # SPDX-License-Identifier: MIT
 
+"""
+A python module that leverages the functions present in the :obj:`~CanGraph.GraphifyHMDB.build\_database`
+module to recreate `the HMDB database <https://hmdb.ca/>`_ using a graph forma and Neo4J, and then provides an GraphML export file.
+
+Please note that, to work, the functions here pre-suppose you have internet access, which will be used to download
+HMDB's XMLs under ```./xmlfolder/``` (please ensure you have read-write access there).
+
+For more details on how to run this script, please consult the package's README
+"""
+
 # Import external modules necessary for the script
 from neo4j import GraphDatabase      # The Neo4J python driver
 from alive_progress import alive_bar # A cute progress bar that shows the script is still running
@@ -19,76 +29,85 @@ sys.path.append("../")
 # This is not the most elegant, but simplifies code maintenance, and this script shouldnt be used much so...
 import miscelaneous as misc
 
-hmdb_urls = ["https://hmdb.ca/system/downloads/current/hmdb_proteins.zip",
-             "https://hmdb.ca/system/downloads/current/urine_metabolites.zip",
-             "https://hmdb.ca/system/downloads/current/serum_metabolites.zip",
-             "https://hmdb.ca/system/downloads/current/csf_metabolites.zip",
-             "https://hmdb.ca/system/downloads/current/saliva_metabolites.zip",
-             "https://hmdb.ca/system/downloads/current/feces_metabolites.zip",
-             "https://hmdb.ca/system/downloads/current/sweat_metabolites.zip"
-            ]
+def main():
+    """
+    The function that executes the code
+    """
 
-instance = f"{sys.argv[1]}"; user = f"{sys.argv[2]}"; passwd = f"{sys.argv[3]}"
-driver = GraphDatabase.driver(instance, auth=(user, passwd))
+    hmdb_urls = ["https://hmdb.ca/system/downloads/current/hmdb_proteins.zip",
+                "https://hmdb.ca/system/downloads/current/urine_metabolites.zip",
+                "https://hmdb.ca/system/downloads/current/serum_metabolites.zip",
+                "https://hmdb.ca/system/downloads/current/csf_metabolites.zip",
+                "https://hmdb.ca/system/downloads/current/saliva_metabolites.zip",
+                "https://hmdb.ca/system/downloads/current/feces_metabolites.zip",
+                "https://hmdb.ca/system/downloads/current/sweat_metabolites.zip"
+                ]
 
-Neo4JImportPath = misc.get_import_path(driver)
+    instance = f"{sys.argv[1]}"; user = f"{sys.argv[2]}"; passwd = f"{sys.argv[3]}"
+    driver = GraphDatabase.driver(instance, auth=(user, passwd))
 
-print("Connected to Neo4J")
+    Neo4JImportPath = misc.get_import_path(driver)
 
-with driver.session() as session:
-    session.run( misc.clean_database() )
+    print("Connected to Neo4J")
 
-print("Cleaned DataBase")
+    with driver.session() as session:
+        session.run( misc.clean_database() )
 
-for url in hmdb_urls:
+    print("Cleaned DataBase")
 
-    filename = f"{url.split('/')[-1].split('.')[0]}.xml"
-    print(f"Downloading and Unzipping: {filename}...")
-    misc.download_and_unzip(url, "xmlfolder")
+    for url in hmdb_urls:
 
-    filepath = os.path.abspath(f"./xmlfolder/{filename}")
-    shutil.copyfile(filepath, f"{Neo4JImportPath}/{filename}")
+        filename = f"{url.split('/')[-1].split('.')[0]}.xml"
+        print(f"Downloading and Unzipping: {filename}...")
+        misc.download_and_unzip(url, "./xmlfolder")
 
-    if filename == "hmdb_proteins.xml":
+        filepath = os.path.abspath(f"./xmlfolder/{filename}")
+        shutil.copyfile(filepath, f"{Neo4JImportPath}/{filename}")
 
-        print("File downloaded, now splitting its contents...")
-        total_subfiles = misc.split_xml(f"{Neo4JImportPath}/{filename}", "protein", "hmdb")
+        if filename == "hmdb_proteins.xml":
 
-        print("File splitted, now on to import its contents to Neo4J...")
-        sleep(5)
+            print("File downloaded, now splitting its contents...")
+            total_subfiles = misc.split_xml(f"{Neo4JImportPath}/{filename}", "protein", "hmdb")
 
-        with alive_bar(total_subfiles*7) as bar:
-            for i in range(1, total_subfiles):
-                newfile = f"{filename.split('.')[0]}_{i}.xml"
-                # For each file, add its contents to the DB
-                build_database.build_from_protein_file(newfile, driver)
-                # And remove it
-                os.remove(f"{Neo4JImportPath}/{filename.split('.')[0]}_{i}.xml")
+            print("File splitted, now on to import its contents to Neo4J...")
+            sleep(5)
 
-    else:
+            with alive_bar(total_subfiles*7) as bar:
+                for i in range(1, total_subfiles):
+                    newfile = f"{filename.split('.')[0]}_{i}.xml"
+                    # For each file, add its contents to the DB
+                    build_database.build_from_protein_file(newfile, driver)
+                    # And remove it
+                    os.remove(f"{Neo4JImportPath}/{filename.split('.')[0]}_{i}.xml")
 
-        print("File downloaded, now splitting its contents...")
-        total_subfiles = misc.split_xml(f"{Neo4JImportPath}/{filename}", "metabolite", "hmdb")
+        else:
 
-        print("File splitted, now on to import its contents to Neo4J...")
-        sleep(5)
+            print("File downloaded, now splitting its contents...")
+            total_subfiles = misc.split_xml(f"{Neo4JImportPath}/{filename}", "metabolite", "hmdb")
 
-        with alive_bar(total_subfiles*9) as bar:
-            for i in range(1, total_subfiles):
-                newfile = f"{filename.split('.')[0]}_{i}.xml"
-                # For each file, add its contents to the DB
-                build_database.build_from_metabolite_file(newfile, driver)
-                # And remove it
-                os.remove(f"{Neo4JImportPath}/{filename.split('.')[0]}_{i}.xml")
+            print("File splitted, now on to import its contents to Neo4J...")
+            sleep(5)
 
-# At the end, we purge the database
-misc.purge_database(driver)
+            with alive_bar(total_subfiles*9) as bar:
+                for i in range(1, total_subfiles):
+                    newfile = f"{filename.split('.')[0]}_{i}.xml"
+                    # For each file, add its contents to the DB
+                    build_database.build_from_metabolite_file(newfile, driver)
+                    # And remove it
+                    os.remove(f"{Neo4JImportPath}/{filename.split('.')[0]}_{i}.xml")
 
-# And export it:
-with driver.session() as session:
-    session.write_transaction(misc.export_graphml, "graph.graphml")
-    bar()
+    # At the end, we purge the database
+    misc.purge_database(driver)
 
-print(f"You can find the exported graph at {Neo4JImportPath}/graph.graphml")
-shutil.copyfile(f"{Neo4JImportPath}/graph.graphml", f"./graph.graphml")
-print(f"A copy of the file has been saved in this project's work directory")
+    # And export it:
+    with driver.session() as session:
+        session.write_transaction(misc.export_graphml, "graph.graphml")
+        bar()
+
+    print(f"You can find the exported graph at {Neo4JImportPath}/graph.graphml")
+    shutil.copyfile(f"{Neo4JImportPath}/graph.graphml", f"./graph.graphml")
+    print(f"A copy of the file has been saved in this project's work directory")
+
+if __name__ == '__main__':
+
+    main()

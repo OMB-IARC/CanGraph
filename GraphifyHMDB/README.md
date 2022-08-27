@@ -4,9 +4,7 @@ SPDX-FileCopyrightText: 2022 Pablo Marcos <software@loreak.org>
 SPDX-License-Identifier: MIT
 -->
 
-# graphify-hmdb
-
-<div align="center"> <img src="header.png" width="50%"> </div>
+<div align="center"> <img src="_static/hmdb_schema.png" width="50%"> </div>
 <br>
 
 This script, created as part of my Master's Intenship at IARC, imports nodes from the [Human Metabolome Database](https://hmdb.ca/) (a high quality, database containing a list of metabolites and proteins associated to different diseases) to Neo4J format in an automated way, providing an export in GraphML format.
@@ -28,6 +26,8 @@ Please note that there are two kinds of functions in the associated code: those 
 An archived version of this repository that takes into account the gitignored files can be created using: `git archive HEAD -o ${PWD##*/}.zip`
 
 ## Important Notices
+
+* Please ensure you have internet access, enough espace in your hard drive (around 5 GB) and read-write access in ```./xmlfolder```. The files needed to build the database will be stored there.
 
 * There are two kinds of high-level nodes stored in this database: "Metabolites", which are individual compounds present in the Human Metabolome; and "Proteins", which are normally enzimes and are related to one or multiple metabolites. There are different types of metabolites, but they were all imported in the same way; their origin can be differenced by the "<biospecimen>" field on the corresponding "Concentration" nodes. You could run a query such as: ```MATCH (n:Metabolite)-[r:MEASURED_AT]-(c:Concentration) RETURN DISTINCT c.Biospecimen```
 

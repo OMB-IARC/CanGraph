@@ -5,6 +5,18 @@
 #
 # SPDX-License-Identifier: MIT
 
+"""
+A python module that leverages the functions present in the :obj:`~CanGraph.GraphifyDrugBank.build\_database`
+module to recreate `the DrugBank database <https://go.drugbank.com/>`_ using a graph format
+and Neo4J, and then provides an GraphML export file.
+
+Please note that, to work, the functions here pre-suppose you have a DrugBank account with access to the whole Database.
+You have to prevously apply for it at: https://go.drugbank.com/public_users/sign_up, and place the ```full_database.xml```
+file at ```./xmlfolder```.
+
+For more details on how to run this script, please consult the package's README
+"""
+
 # Import external modules necessary for the script
 from neo4j import GraphDatabase      # The Neo4J python driver
 from alive_progress import alive_bar # A cute progress bar that shows the script is still running
@@ -19,45 +31,54 @@ sys.path.append("../")
 # This is not the most elegant, but simplifies code maintenance, and this script shouldnt be used much so...
 import miscelaneous as misc
 
-instance = f"{sys.argv[1]}"; user = f"{sys.argv[2]}"; passwd = f"{sys.argv[3]}"
-driver = GraphDatabase.driver(instance, auth=(user, passwd))
+def main():
+    """
+    The function that executes the code
+    """
 
-Neo4JImportPath = misc.get_import_path(driver)
+    instance = f"{sys.argv[1]}"; user = f"{sys.argv[2]}"; passwd = f"{sys.argv[3]}"
+    driver = GraphDatabase.driver(instance, auth=(user, passwd))
 
-print("Connected to Neo4J")
+    Neo4JImportPath = misc.get_import_path(driver)
 
-with driver.session() as session:
-    session.run( misc.clean_database() )
+    print("Connected to Neo4J")
 
-print("Cleaned DataBase")
-
-filename = sys.argv[4]
-filepath = os.path.abspath(f"./xmlfolder/{filename}")
-shutil.copyfile(filepath, f"{Neo4JImportPath}/{filename}")
-
-print("File downloaded, now splitting its contents...")
-total_subfiles = misc.split_xml(f"{Neo4JImportPath}/{filename}", "drug type=.*", "drugbank")
-
-print("File splitted, now on to import its contents to Neo4J...")
-sleep(5)
-
-with alive_bar((total_subfiles-1)*13 + 3) as bar:
-    for i in range(1, total_subfiles):
-        newfile = f"{filename.split('.')[0]}_{i}.xml"
-        # For each file, add its contents to the DB
-        build_database.build_from_file(newfile, driver)
-        # And remove it
-        os.remove(f"{Neo4JImportPath}/{filename.split('.')[0]}_{i}.xml")
-        sleep(1) # Cool-off time
-
-    # At the end, purge the database
-    misc.purge_database(driver)
-
-    # And export it:
     with driver.session() as session:
-        session.write_transaction(misc.export_graphml, "graph.graphml")
-        bar()
+        session.run( misc.clean_database() )
 
-print(f"You can find the exported graph at {Neo4JImportPath}/graph.graphml")
-shutil.copyfile(f"{Neo4JImportPath}/graph.graphml", f"./graph.graphml")
-print(f"A copy of the file has been saved in this project's work directory")
+    print("Cleaned DataBase")
+
+    filename = sys.argv[4]
+    filepath = os.path.abspath(f"./xmlfolder/{filename}")
+    shutil.copyfile(filepath, f"{Neo4JImportPath}/{filename}")
+
+    print("File downloaded, now splitting its contents...")
+    total_subfiles = misc.split_xml(f"{Neo4JImportPath}/{filename}", "drug type=.*", "drugbank")
+
+    print("File splitted, now on to import its contents to Neo4J...")
+    sleep(5)
+
+    with alive_bar((total_subfiles-1)*13 + 3) as bar:
+        for i in range(1, total_subfiles):
+            newfile = f"{filename.split('.')[0]}_{i}.xml"
+            # For each file, add its contents to the DB
+            build_database.build_from_file(newfile, driver)
+            # And remove it
+            os.remove(f"{Neo4JImportPath}/{filename.split('.')[0]}_{i}.xml")
+            sleep(1) # Cool-off time
+
+        # At the end, purge the database
+        misc.purge_database(driver)
+
+        # And export it:
+        with driver.session() as session:
+            session.write_transaction(misc.export_graphml, "graph.graphml")
+            bar()
+
+    print(f"You can find the exported graph at {Neo4JImportPath}/graph.graphml")
+    shutil.copyfile(f"{Neo4JImportPath}/graph.graphml", f"./graph.graphml")
+    print(f"A copy of the file has been saved in this project's work directory")
+
+if __name__ == '__main__':
+
+    main()

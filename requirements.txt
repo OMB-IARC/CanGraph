@@ -11,3 +11,7 @@ rdkit               # Cheminformatics and ML package
 pandas              # Analysis of tabular data
 sphix               # Documentation server
 sphinx-book-theme   # Documentation server theme
+sphinx-design       # Sphinx extension for cuter docs
+myst-parser         # Enable MarkDown Documentation
+gitpython           # Manage Git directly from Python
+argparse            # Arguments pàrser for Python

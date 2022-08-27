@@ -1,0 +1,964 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>CanGraph.GraphifyDrugBank package &#8212; CanGraph 0.9 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script src="_static/design-tabs.js"></script>
+    <link rel="shortcut icon" href="_static/cangraph-mini.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="CanGraph.GraphifyHMDB package" href="CanGraph.GraphifyHMDB.html" />
+    <link rel="prev" title="CanGraph.ExposomeExplorer package" href="CanGraph.ExposomeExplorer.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="_static/cangraph-logo.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="index.html">
+                    Main Page
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="Tutorials.html">
+   Tutorials
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="simple">
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="CanGraph.html">
+   CanGraph package
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="CanGraph.ExposomeExplorer.html">
+     CanGraph.ExposomeExplorer package
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     CanGraph.GraphifyDrugBank package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="CanGraph.GraphifyHMDB.html">
+     CanGraph.GraphifyHMDB package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="CanGraph.GraphifySMPDB.html">
+     CanGraph.GraphifySMPDB package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="CanGraph.MeSHandMetaNetX.html">
+     CanGraph.MeSHandMetaNetX package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="CanGraph.QueryWikidata.html">
+     CanGraph.QueryWikidata package
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Logo by <a href="https://www.instagram.com/danonino.caducado/"> Daniel Marcos </a> </br>
+                     Website by <a href="https://www.pablomarcos.me/"> Pablo Marcos </a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/OMB-IARC/CanGraph/"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/OMB-IARC/CanGraph//issues/new?title=Issue%20on%20page%20%2FCanGraph.GraphifyDrugBank.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/OMB-IARC/CanGraph/edit/main/docs/CanGraph.GraphifyDrugBank.rst"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/CanGraph.GraphifyDrugBank.rst.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.rst</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> In this page
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#important-notices">
+   Important Notices
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-CanGraph.GraphifyDrugBank.build_database">
+   CanGraph.GraphifyDrugBank.build_database module
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-CanGraph.GraphifyDrugBank.main">
+   CanGraph.GraphifyDrugBank.main module
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>CanGraph.GraphifyDrugBank package</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> In this page </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#important-notices">
+   Important Notices
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-CanGraph.GraphifyDrugBank.build_database">
+   CanGraph.GraphifyDrugBank.build_database module
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-CanGraph.GraphifyDrugBank.main">
+   CanGraph.GraphifyDrugBank.main module
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="cangraph-graphifydrugbank-package">
+<h1>CanGraph.GraphifyDrugBank package<a class="headerlink" href="#cangraph-graphifydrugbank-package" title="Permalink to this headline">#</a></h1>
+<!--
+SPDX-FileCopyrightText: 2022 Pablo Marcos <software@loreak.org>
+
+SPDX-License-Identifier: MIT
+-->
+<div align="center"> <img src="_static/drugbank_schema.png" width="50%"> </div>
+<br>
+<p>This package, created as part of my Master’s Intenship at IARC, imports nodes from the <a class="reference external" href="https://www.drugbank.com/">DrugBank Database</a> (a high quality database containing a drugs and proteins with some characteristics) to Neo4J format in an automated way, providing an export in GraphML format.</p>
+<p>To run, it uses <code class="docutils literal notranslate"><span class="pre">alive_progress</span></code> to generate an interactive progress bar (that shows the script is still running through its most time-consuming parts) and the <code class="docutils literal notranslate"><span class="pre">neo4j</span></code> python driver. This requirements can be installed using: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirements.txt</span></code>.</p>
+<p>To run the script itself, use:</p>
+<p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">main.py</span> <span class="pre">neo4jadress</span> <span class="pre">username</span> <span class="pre">databasepassword</span> <span class="pre">filename</span></code></p>
+<p>where:</p>
+<ul class="simple">
+<li><p><strong>neo4jadress</strong>: is the URL of the database, in neo4j:// or bolt:// format</p></li>
+<li><p><strong>username</strong>: the username for your neo4j instance. Remember, the default is neo4j</p></li>
+<li><p><strong>password</strong>: the passowrd for your database. Since the arguments are passed by BaSH onto python3, you might need to escape special characters</p></li>
+<li><p><strong>filename</strong>: the database’s file name. For practical purpouses, it <strong>must</strong> be present in ./xmlfolder</p></li>
+</ul>
+<p>Please note that there are two kinds of functions in the associated code: those that use python f-strings, which themselves contain text that <em>cannot</em> be directly copied into Neo4J (for instance, double brackets have to be turned into simple brackets) and normal multi-line strings, which can. This is because f-strings allow for variable customization, while normal strings dont.</p>
+<p>An archived version of this repository that takes into account the gitignored files can be created using: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">archive</span> <span class="pre">HEAD</span> <span class="pre">-o</span> <span class="pre">${PWD##*/}.zip</span></code></p>
+<section id="important-notices">
+<h2>Important Notices<a class="headerlink" href="#important-notices" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>To access the Drugbank database, you have to previously request access at: https://go.drugbank.com/public_users/sign_up</p></li>
+<li><p>Some XML tags have been intentionally not processed; for example, the <international-brands> tag didn’t seem to dd anything new, and the <price> and <patents> tags are likely not relevant for our project. The <ahfs-codes> tag has no info (check <code class="docutils literal notranslate"><span class="pre">cat</span> <span class="pre">full\</span> <span class="pre">database.xml</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">&quot;&lt;ahfs-codes&gt;&quot;</span></code>) and the <pdb-entries> tag seemed like too much work (same for <salts>).
+nOT USE <price/>  <patents/>because not of use to us</p></li>
+<li><p>Some :Proteins might also be :Drugs and viceversa: this makes the schema difficult to understand, but provides more meaningful data. This is also why some relations (<code class="docutils literal notranslate"><span class="pre">RELATED_WITH</span></code>, for instance) dont have a relation: this way, we avoid duplicates.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<p>The package consists of the following modules:</p>
+<section id="module-CanGraph.GraphifyDrugBank.build_database">
+<span id="cangraph-graphifydrugbank-build-database-module"></span><h2>CanGraph.GraphifyDrugBank.build_database module<a class="headerlink" href="#module-CanGraph.GraphifyDrugBank.build_database" title="Permalink to this headline">#</a></h2>
+<p>A python module that provides the necessary functions to transition the DrugBank database to graph format,
+either from scratch importing all the nodes (as showcased in <a class="reference internal" href="#module-CanGraph.GraphifyDrugBank.main" title="CanGraph.GraphifyDrugBank.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CanGraph.GraphifyDrugBank.main</span></code></a>) or in a case-by-case basis,
+to annotate existing metabolites (as showcased in <a class="reference internal" href="CanGraph.html#module-CanGraph.main" title="CanGraph.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CanGraph.main</span></code></a>).</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyDrugBank.build_database.add_atc_codes">
+<span class="sig-name descname"><span class="pre">add_atc_codes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CanGraph.GraphifyDrugBank.build_database.add_atc_codes" title="Permalink to this definition">#</a></dt>
+<dd><p>Creates “ATC” nodes based on XML files obtained from the DrugBank website.
+These represent the different ATC codes a Drug can be related with (including an small taxonomy)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – The name of the XML file that is being imported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v4.4)">neo4j.work.result.Result</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyDrugBank.build_database.add_categories">
+<span class="sig-name descname"><span class="pre">add_categories</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CanGraph.GraphifyDrugBank.build_database.add_categories" title="Permalink to this definition">#</a></dt>
+<dd><p>Creates “Category” nodes based on XML files obtained from the DrugBank website.
+These represent the different MeSH IDs a Drug can be related with</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – The name of the XML file that is being imported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v4.4)">neo4j.work.result.Result</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Each category seems to have an associated MeSH ID. Maybe could rename nodes as MeSH?</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyDrugBank.build_database.add_dosages">
+<span class="sig-name descname"><span class="pre">add_dosages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CanGraph.GraphifyDrugBank.build_database.add_dosages" title="Permalink to this definition">#</a></dt>
+<dd><p>Creates “Dosage” nodes based on XML files obtained from the DrugBank website.
+These represent the different Dosages that a Drug should be administered at.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – The name of the XML file that is being imported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v4.4)">neo4j.work.result.Result</a></p>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Using CREATE might generate duplicate nodes, but there was no
+unique characteristic to MERGE nodes into.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyDrugBank.build_database.add_drug_interactions">
+<span class="sig-name descname"><span class="pre">add_drug_interactions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CanGraph.GraphifyDrugBank.build_database.add_drug_interactions" title="Permalink to this definition">#</a></dt>
+<dd><p>Creates <code class="docutils literal notranslate"><span class="pre">`(d)-[r:RELATED_WITH_DRUG]-(dd)`</span></code> interactions between “Drug” nodes, whether they existed
+before or not. These are intentionally non-directional, as they should be related with each other.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – The name of the XML file that is being imported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v4.4)">neo4j.work.result.Result</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyDrugBank.build_database.add_drugs">
+<span class="sig-name descname"><span class="pre">add_drugs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CanGraph.GraphifyDrugBank.build_database.add_drugs" title="Permalink to this definition">#</a></dt>
+<dd><p>Creates “Drug” nodes based on XML files obtained from the DrugBank website,
+adding some essential identifiers and external properties.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>This way of working has been taken from
+<a class="reference external" href="https://lyonwj.com/blog/grandstack-podcast-app-parsing-xml-neo4j-rss-episodes-playlists">William Lyon’s Blog</a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – The name of the XML file that is being imported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v4.4)">neo4j.work.result.Result</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Since Publications dont have any standard identificator, they are created using the “Title”</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyDrugBank.build_database.add_experimental_properties">
+<span class="sig-name descname"><span class="pre">add_experimental_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CanGraph.GraphifyDrugBank.build_database.add_experimental_properties" title="Permalink to this definition">#</a></dt>
+<dd><p>Adds some experimental properties to existing “Drug” nodes based on XML files obtained from the DrugBank website.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – The name of the XML file that is being imported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v4.4)">neo4j.work.result.Result</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyDrugBank.build_database.add_external_equivalents">
+<span class="sig-name descname"><span class="pre">add_external_equivalents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CanGraph.GraphifyDrugBank.build_database.add_external_equivalents" title="Permalink to this definition">#</a></dt>
+<dd><p>Adds some external equivalents to existing “Drug” nodes based on XML files obtained from the DrugBank website.
+This should be “exact matches” of the Drug in other databases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – The name of the XML file that is being imported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v4.4)">neo4j.work.result.Result</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The main reason to add them as “External-Equivalents” is because I felt these IDs where of not much use (and
+are thus easier to eliminate due to their common label)</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyDrugBank.build_database.add_external_identifiers">
+<span class="sig-name descname"><span class="pre">add_external_identifiers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CanGraph.GraphifyDrugBank.build_database.add_external_identifiers" title="Permalink to this definition">#</a></dt>
+<dd><p>Adds some external identifiers to existing “Drug” nodes based on XML files obtained from the DrugBank website.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – The name of the XML file that is being imported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v4.4)">neo4j.work.result.Result</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These also adds a “Protein” label to any “Drug”-labeled nodes which have a “UniProtKB”-ID
+among their properties. NOTE that this can look confusing in the DB Schema!!!</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyDrugBank.build_database.add_general_references">
+<span class="sig-name descname"><span class="pre">add_general_references</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CanGraph.GraphifyDrugBank.build_database.add_general_references" title="Permalink to this definition">#</a></dt>
+<dd><p>Creates “Publication” nodes based on XML files obtained from the DrugBank website.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – The name of the XML file that is being imported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v4.4)">neo4j.work.result.Result</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Since not all nodes present a “PubMed_ID” field (which would be ideal to uniquely-identify
+Publications, as the “Text” field is way more prone to typos/errors), nodes will be created using
+the “Authors” field. This means some duplicates might exist, which should be accounted for.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyDrugBank.build_database.add_manufacturers">
+<span class="sig-name descname"><span class="pre">add_manufacturers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CanGraph.GraphifyDrugBank.build_database.add_manufacturers" title="Permalink to this definition">#</a></dt>
+<dd><p>Creates “Company” nodes based on XML files obtained from the DrugBank website.
+These represent the different Companies that manufacture a Drug’s compound (not just package it)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – The name of the XML file that is being imported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v4.4)">neo4j.work.result.Result</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyDrugBank.build_database.add_mixtures">
+<span class="sig-name descname"><span class="pre">add_mixtures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CanGraph.GraphifyDrugBank.build_database.add_mixtures" title="Permalink to this definition">#</a></dt>
+<dd><p>Creates “Mixture” nodes based on XML files obtained from the DrugBank website.
+These are the mixtures of existing Drugs, which may or may not be on the market.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – The name of the XML file that is being imported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v4.4)">neo4j.work.result.Result</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This doesn’t seem of much use, but has been added nonetheless just in case.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyDrugBank.build_database.add_packagers">
+<span class="sig-name descname"><span class="pre">add_packagers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CanGraph.GraphifyDrugBank.build_database.add_packagers" title="Permalink to this definition">#</a></dt>
+<dd><p>Creates “Company” nodes based on XML files obtained from the DrugBank website.
+These represent the different Companies that package a Drug’s compounds (not the ones that manufacture them)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – The name of the XML file that is being imported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v4.4)">neo4j.work.result.Result</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyDrugBank.build_database.add_pathways_and_relations">
+<span class="sig-name descname"><span class="pre">add_pathways_and_relations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CanGraph.GraphifyDrugBank.build_database.add_pathways_and_relations" title="Permalink to this definition">#</a></dt>
+<dd><p>Adds “Pathway” nodes based on XML files obtained from the DrugBank website.
+It also adds some relations between Drugs and Proteins (which, remember, could even be the same kind of node)
+It is also able to tag both a Protein’s and a Drug¡s relation with a given Pathway
+In general, a Pathway involves a collection of Enzymes, Drugs and Proteins, with a SMPDB_ID (cool for interconnexion!)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – The name of the XML file that is being imported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v4.4)">neo4j.work.result.Result</a></p>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This function uses a “double UNWIND” clause, which means that we are only representing &lt;pathways&gt; tags
+with &lt;enzymes&gt; tags inside. Fortunately, this seems to seldom not happen, so it should represent no problem.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyDrugBank.build_database.add_products">
+<span class="sig-name descname"><span class="pre">add_products</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CanGraph.GraphifyDrugBank.build_database.add_products" title="Permalink to this definition">#</a></dt>
+<dd><p>Creates “Product” nodes based on XML files obtained from the DrugBank website.
+These are the individal medicaments that have been approved (or not) by the FDA</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – The name of the XML file that is being imported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v4.4)">neo4j.work.result.Result</a></p>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Using CREATE means that duplicates will appear; unfortunately, I couldnt any unique_id
+field to use as ID when MERGEing the nodes. This should be accounted for.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyDrugBank.build_database.add_sequences">
+<span class="sig-name descname"><span class="pre">add_sequences</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CanGraph.GraphifyDrugBank.build_database.add_sequences" title="Permalink to this definition">#</a></dt>
+<dd><p>Creates “Sequence” nodes based on XML files obtained from the DrugBank website.
+These represent the AminoAcid sequence of Drugs that are of a peptidic nature.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – The name of the XML file that is being imported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v4.4)">neo4j.work.result.Result</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyDrugBank.build_database.add_targets_enzymes_carriers_and_transporters">
+<span class="sig-name descname"><span class="pre">add_targets_enzymes_carriers_and_transporters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CanGraph.GraphifyDrugBank.build_database.add_targets_enzymes_carriers_and_transporters" title="Permalink to this definition">#</a></dt>
+<dd><p>A <em>REALLY HUGE</em> function. It takes a filename and a tag_name, and gets info and creates “Protein” nodes with tag_name set as their role.
+It also adds a bunch of additional info, such as Publications, Targets, Actions, GO_IDs, PFAMs and/or some External IDs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – The name of the XML file that is being imported</p></li>
+<li><p><strong>tag_name</strong> (<em>str</em>) – The type of Protein node you want to import; it must be one of [“enzymes”, “carriers”, “transporters”]
+It is recommended that you run this function thrice, once for each type of protein</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v4.4)">neo4j.work.result.Result</a></p>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>We are using a bunch of concatenated UNWINDs, which force the existance of all elements in the UNWIND chain. This might remove some
+elements, but this is a HUUUUUGE database, and, to be honest, most things seem to almost always be present. An example is References and Polypeptides;
+Since there seem to be more References that Polypeptides, we try to UNWIND those first. The same can be said on the rest of UNWINDS: as we have
+external-id &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; go-classifier &gt;&gt;&gt;&gt; pfam &gt;&gt; synonyms (in order of <em>occurrence</em>. not <em>number</em> of tags) , we UNWIND in that order to mitigate data loss</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To fix repetitions in properties such as Actions or Synonyms (caused by the HUGE number of UNWINDs), we tried lots of different strategies,
+finally coming up with SET p.Synonyms = replace(p.Synonyms, synonym._text + “,”, “”). This is cool! But means there will always be a trailing
+comma (removing it was not easy in this same transaction, though it could (TODO?) be done at the end.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>&lt;tag_name&gt;</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyDrugBank.build_database.add_taxonomy">
+<span class="sig-name descname"><span class="pre">add_taxonomy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CanGraph.GraphifyDrugBank.build_database.add_taxonomy" title="Permalink to this definition">#</a></dt>
+<dd><p>Creates “Taxonomy” nodes based on XML files obtained from the DrugBank website.
+These represent the “kind” of Drug we are dealing with (Family, etc)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – The name of the XML file that is being imported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v4.4)">neo4j.work.result.Result</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It only creates relationships in the Kingdom -&gt; Super Class -&gt; Class -&gt; Subclass
+direction, and from any node -&gt; Drug. This means that, if any member of the
+Kingdom -&gt; Super Class -&gt; Class -&gt; Subclass is absent, the line will be broken; hopefully
+in that case a new Drug will come in to rescue and settle the relation!</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Some nodes without labels might be created if names are null:
+This has to be accounted for later on in the process</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyDrugBank.build_database.build_from_file">
+<span class="sig-name descname"><span class="pre">build_from_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">driver</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CanGraph.GraphifyDrugBank.build_database.build_from_file" title="Permalink to this definition">#</a></dt>
+<dd><p>A function able to build a portion of the DrugBank database in graph format, provided that one XML is supplied to it.
+This can either be the <code class="docutils literal notranslate"><span class="pre">`full_database.xml`</span></code> file that you can get in DrugBank’s website, or a splitted version of it,
+with just one item per file (which is recommended due to memory limitations)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>newfile</strong> (<em>str</em>) – The path of the XML file to import</p></li>
+<li><p><strong>driver</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Driver" title="(in Neo4j Python Driver v4.4)"><em>neo4j.Driver</em></a>) – Neo4J’s Bolt Driver currently in use</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>This function modifies the Neo4J Database as desired, but does not produce any particular return.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-CanGraph.GraphifyDrugBank.main">
+<span id="cangraph-graphifydrugbank-main-module"></span><h2>CanGraph.GraphifyDrugBank.main module<a class="headerlink" href="#module-CanGraph.GraphifyDrugBank.main" title="Permalink to this headline">#</a></h2>
+<p>A python module that leverages the functions present in the <a class="reference internal" href="#module-CanGraph.GraphifyDrugBank.build_database" title="CanGraph.GraphifyDrugBank.build_database"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_database</span></code></a>
+module to recreate <a class="reference external" href="https://go.drugbank.com/">the DrugBank database</a> using a graph format
+and Neo4J, and then provides an GraphML export file.</p>
+<p>Please note that, to work, the functions here pre-suppose you have a DrugBank account with access to the whole Database.
+You have to prevously apply for it at: <a class="reference external" href="https://go.drugbank.com/public_users/sign_up">https://go.drugbank.com/public_users/sign_up</a>, and place the <code class="docutils literal notranslate"><span class="pre">`full_database.xml`</span></code>
+file at <code class="docutils literal notranslate"><span class="pre">`./xmlfolder`</span></code>.</p>
+<p>For more details on how to run this script, please consult the package’s README</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyDrugBank.main.main">
+<span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CanGraph.GraphifyDrugBank.main.main" title="Permalink to this definition">#</a></dt>
+<dd><p>The function that executes the code</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="CanGraph.ExposomeExplorer.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">CanGraph.ExposomeExplorer package</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="CanGraph.GraphifyHMDB.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">CanGraph.GraphifyHMDB package</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+      &copy; Copyright 2022, Pablo Marcos &lt;software @ loreak . org&gt;.<br/>
+    Last updated on Aug 26, 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

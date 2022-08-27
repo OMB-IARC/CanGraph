@@ -4,9 +4,7 @@ SPDX-FileCopyrightText: 2022 Pablo Marcos <software@loreak.org>
 SPDX-License-Identifier: MIT
 -->
 
-# transition-databases
-
-<div align="center"> <img src="header.png" width="75%"> </div>
+<div align="center"> <img src="_static/main_schema.png" width="75%"> </div>
 <br>
 
 This Git Project, created as part of my Master's Intenship at IARC, contains a series of scripts that pulls information from a series of **five** databases from their native format (XML, CSV, etc) into a common, GraphML format, using a shared schema that has been defined to minimize the number of repeated nodes and properties. This databases are:
@@ -31,14 +29,14 @@ To use this script, you should first clone it into your personal computer. The e
 2. Clone the repo: ```git clone https://codeberg.org/FlyingFlamingo/graphify-databases```
 3. Step into the directory ```cd graphify-databases```
 
-Once the project has been installed, you **must** run ```setup.py```, a preparation script that guides you through the process of installing all five databases on your computer, so that then we can correctly process them and generate the sub-networks. You should also install the required python modules:
+Once the project has been installed, you **must** run ```setup.py```, a preparation script that guides you through the process of installing all five databases on your computer, so that then we can correctly process them and generate the sub-networks. You should also install the required python modules and run the setup script:
 
-4. Run the setup: ```python3 setup.py``` (or ```python setup.py``` in case you have your computer configured that way)
-5. PIP install all dependencies: ```pip install -r requirements.txt```
+4. PIP install all dependencies: ```pip install -r requirements.txt```
+5. Run the setup script: ```python3 setup.py```
 
 Once this has been done, you are ready to start using the main script!
 
-NOTE: If you do not wish to use git, you can manually download the repo by clicking [here](https://codeberg.org/FlyingFlamingo/graphify-databases/archive/main.zip)
+NOTE: If you do not wish to use git, you can manually download the repo by clicking [here](https://codeberg.org/FlyingFlamingo/CanGraph/archive/main.zip)
 
 ## Usage
 

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generator: Adobe Illustrator 23.0.5, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+
+<svg
+   version="1.1"
+   id="Capa_1"
+   x="0px"
+   y="0px"
+   viewBox="0 0 529.99997 530"
+   xml:space="preserve"
+   sodipodi:docname="cangraph-mini.svg"
+   width="530"
+   height="530"
+   inkscape:export-filename="FORMATO LOGO MINIATURA _ CAN GRAPH.png"
+   inkscape:export-xdpi="100"
+   inkscape:export-ydpi="100"
+   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><defs
+   id="defs179"><linearGradient
+     inkscape:collect="always"
+     id="linearGradient1633"><stop
+       style="stop-color:#ffc040;stop-opacity:1;"
+       offset="0"
+       id="stop1629" /><stop
+       style="stop-color:#ff4060;stop-opacity:1;"
+       offset="0.25"
+       id="stop1637" /><stop
+       style="stop-color:#c02020;stop-opacity:1;"
+       offset="0.5"
+       id="stop1639" /><stop
+       style="stop-color:#602080;stop-opacity:1;"
+       offset="0.75"
+       id="stop1641" /><stop
+       style="stop-color:#4020c0;stop-opacity:1;"
+       offset="1"
+       id="stop1631" /></linearGradient><linearGradient
+     inkscape:collect="always"
+     id="linearGradient1579"><stop
+       style="stop-color:#000000;stop-opacity:1;"
+       offset="0"
+       id="stop1575" /><stop
+       style="stop-color:#000000;stop-opacity:0;"
+       offset="1"
+       id="stop1577" /></linearGradient><linearGradient
+     inkscape:collect="always"
+     xlink:href="#linearGradient1579"
+     id="linearGradient1581"
+     x1="275.10001"
+     y1="297.60001"
+     x2="566.79999"
+     y2="297.60001"
+     gradientUnits="userSpaceOnUse" /><linearGradient
+     inkscape:collect="always"
+     xlink:href="#linearGradient1633"
+     id="linearGradient1635"
+     x1="319.70578"
+     y1="124.34743"
+     x2="519.21936"
+     y2="470.38052"
+     gradientUnits="userSpaceOnUse" /><linearGradient
+     inkscape:collect="always"
+     xlink:href="#linearGradient1633"
+     id="linearGradient2957"
+     gradientUnits="userSpaceOnUse"
+     x1="319.70578"
+     y1="124.34743"
+     x2="519.21936"
+     y2="470.38052" /><linearGradient
+     inkscape:collect="always"
+     xlink:href="#linearGradient1633"
+     id="linearGradient2959"
+     gradientUnits="userSpaceOnUse"
+     x1="319.70578"
+     y1="124.34743"
+     x2="519.21936"
+     y2="470.38052" /></defs><sodipodi:namedview
+   id="namedview177"
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1.0"
+   inkscape:showpageshadow="2"
+   inkscape:pageopacity="0.0"
+   inkscape:pagecheckerboard="0"
+   inkscape:deskcolor="#d1d1d1"
+   showgrid="false"
+   inkscape:zoom="1"
+   inkscape:cx="-247.5"
+   inkscape:cy="264"
+   inkscape:window-width="1920"
+   inkscape:window-height="993"
+   inkscape:window-x="0"
+   inkscape:window-y="0"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="Capa_1" />
+<style
+   type="text/css"
+   id="style168">
+	.st0{fill:#FFC040;}
+	.st1{fill:#C02020;}
+</style>
+<g
+   id="g174"
+   style="fill:url(#linearGradient1635);fill-opacity:1;stroke:none"
+   transform="matrix(1.2981507,0,0,1.2981507,-281.45654,-121.32965)">
+	<path
+   class="st0"
+   d="m 370.4,96.4 -95.3,55 v 110.1 l 95.3,55 95.3,-55 v -110 z m 0,181.9 -62.1,-35.9 v -71.8 l 62.1,-35.9 62.1,35.9 v 0.5 l -28.1,15.5 -34,-19.6 -34.2,19.7 v 39.5 l 34.2,19.7 33.3,-19.2 28.8,-15.9 v 31.5 z"
+   id="path170"
+   style="fill:url(#linearGradient2957);fill-opacity:1;stroke:none" />
+	<path
+   class="st1"
+   d="m 471.5,278.7 -95.3,55 v 110.1 l 95.3,55 95.3,-55 V 333.7 Z m 62.1,145.9 -62.1,35.9 -62.1,-35.9 V 352.9 L 471.5,317 v 32.3 L 437.3,369 v 39.5 l 34.2,19.7 34.2,-19.7 v -12.1 h -30.6 v -19 h 58.5 v 1.9 z"
+   id="path172"
+   style="fill:url(#linearGradient2959);fill-opacity:1;stroke:none" />
+</g>
+</svg>

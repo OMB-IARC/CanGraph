@@ -5,7 +5,11 @@
 #
 # SPDX-License-Identifier: MIT
 
-# This is just a collection of functions used by the "main" script
+"""
+A python module that provides the necessary functions to transition the SMPDB database to graph format,
+either from scratch importing all the nodes (as showcased in :obj:`CanGraph.GraphifySMPDB.main`) or in a case-by-case basis,
+to annotate existing metabolites (as showcased in :obj:`CanGraph.main`).
+"""
 
 # Import external modules necessary for the script
 import os, sys, shutil               # Vital modules to interact with the filesystem
@@ -15,15 +19,24 @@ import pandas as pd                  # Process tabular data
 # Import subscripts for the program
 # This hack that allows us to de-duplicate the miscleaneous script in this less-used script
 sys.path.append("../")
-# NOTE: Please beware that, if using this module by itself, you might need to copy "miscelaneous.py" into your path
+# .. NOTE:: Please beware that, if using this module by itself, you might need to copy "miscelaneous.py" into your path
 # This is not the most elegant, but simplifies code maintenance, and this script shouldnt be used much so...
 import miscelaneous as misc
 
 def add_metabolites(tx, filename):
     """
     Adds "Metabolite" nodes to the database, according to individual CSVs present in the SMPDB website
-    NOTE: Some of the node's properties might be set to "null" (important in order to work with it)
-    NOTE: This database clearly differentiates Metabolites and Proteins, so no overlap is accounted for
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the CSV file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: Some of the node's properties might be set to "null" (important in order to work with it)
+
+    .. NOTE:: This database clearly differentiates Metabolites and Proteins, so no overlap is accounted for
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
@@ -39,10 +52,21 @@ def add_metabolites(tx, filename):
 def add_proteins(tx, filename):
     """
     Adds "Protein" nodes to the database, according to individual CSVs present in the SMPDB website
-    NOTE: Some of the node's properties might be set to "null" (important in order to work with it)
-    NOTE: This database clearly differentiates Metabolites and Proteins, so no overlap is accounted for
-    TODO: Why is the SMPDB_ID property called like that and not SMDB_ID?
-    WARNING: Since no unique identifier was found, CREATE had to be used (instead of merge). This might create
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the CSV file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: Some of the node's properties might be set to "null" (important in order to work with it)
+
+    .. NOTE:: This database clearly differentiates Metabolites and Proteins, so no overlap is accounted for
+
+    .. TODO:: Why is the SMPDB_ID property called like that and not SMDB_ID?
+
+    .. WARNING:: Since no unique identifier was found, CREATE had to be used (instead of merge). This might create
              duplicates. which should be accounted for.
     """
     return tx.run(f"""
@@ -60,7 +84,15 @@ def add_pathways(tx, filename):
     """
     Adds "Pathways" nodes to the database, according to individual CSVs present in the SMPDB website
     Since this is done after the creation of said pathways in the last step, this will most likely just annotate them.
-    TODO: This file is really big. It could be divided into smaller ones.
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the CSV file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. TODO:: This file is really big. It could be divided into smaller ones.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
@@ -71,6 +103,17 @@ def add_pathways(tx, filename):
 def add_sequence(tx, seq_id, seq_name, seq_type, seq, seq_format="FASTA"):
     """
     Adds "Pathways" nodes to the database, according to the sequences presented in FASTA files from the SMPDB website
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        seq_id      (str): The UniProt Database Identifier for the sequence that is been imported
+        seq_name    (str): The Name (i.e. FASTA header) of the Sequence that is been imported
+        seq_type    (bool): The type of the sequence; can be either of ["DNA", "PROT"]
+        seq         (str): The seuqnce that is been imported; a text chain of nucleotides or aminoacids, identified by their acronyms
+        seq_format  (str): The format the sequence is provided under; default is "FASTA", but its optional
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         MERGE (s:Sequence {{ UniProt_ID:"{seq_id}", Name:"{seq_name}", Type:"{seq_type}", Sequence:"{seq}", Format:"{seq_format}" }} )
@@ -79,8 +122,25 @@ def add_sequence(tx, seq_id, seq_name, seq_type, seq, seq_format="FASTA"):
         """)
 
 def build_from_file(databasepath, filepath, Neo4JImportPath, driver, filetype):
-    # For any given match in a protein file, we import all the nodes in the pathway
-    # NOTE: Since this adds a ton of low-resolution nodes, maybe have this db run first?
+    """
+    A function able to build a portion of the SMPDB in graph format, provided that one CSV is supplied to it.
+    This CSVs are downloaded from the website, and can be presented either as the full file, or as a splitted
+    version of it, with just one item per file (which is recommended due to memory limitations)
+
+    Since file title represents a different pathway, the function automatically picks up and import the relative pathway node.
+
+    Args:
+        databasepath (str): The path to the database where all SMPDB CSVs are stored
+        filepath (str): The path to the current file being imported
+        Neo4JImportPath (str): The path from which Neo4J is importing data
+        driver (neo4j.Driver): Neo4J's Bolt Driver currently in use
+        filetype (bool): The type of file being imported; one of ether ["Metabolite", "Protein"]- If the file is a FASTA sequence store, this will be auto-detected.
+
+    Returns:
+        This function modifies the Neo4J Database as desired, but does not produce any particular return.
+
+     .. NOTE:: Since this adds a ton of low-resolution nodes, maybe have this db run first?
+    """
     shutil.copyfile(os.path.abspath(filepath), f"{Neo4JImportPath}/{os.path.basename(filepath)}")
     pathway_id = filepath.split("/")[-1].split("_")[0]
     all_the_proteins = pd.read_csv(f"{os.path.abspath(databasepath)}/SMPDB/smpdb_proteins/{pathway_id}_proteins.csv")

@@ -5,7 +5,11 @@
 #
 # SPDX-License-Identifier: MIT
 
-# This is just a collection of functions used by the "main" script
+"""
+A python module that provides the necessary functions to transition the HMDB database to graph format,
+either from scratch importing all the nodes (as showcased in :obj:`CanGraph.GraphifyHMDB.main`) or in a case-by-case basis,
+to annotate existing metabolites (as showcased in :obj:`CanGraph.main`).
+"""
 
 # Import external modules necessary for the script
 from neo4j import GraphDatabase      # The Neo4J python driver
@@ -16,7 +20,7 @@ from time import sleep               # A hack to avoid starving the system resou
 # Import subscripts for the program
 # This hack that allows us to de-duplicate the miscleaneous script in this less-used script
 sys.path.append("../")
-# NOTE: Please beware that, if using this module by itself, you might need to copy "miscelaneous.py" into your path
+# .. NOTE:: Please beware that, if using this module by itself, you might need to copy "miscelaneous.py" into your path
 # This is not the most elegant, but simplifies code maintenance, and this script shouldnt be used much so...
 import miscelaneous as misc
 
@@ -24,7 +28,16 @@ def add_metabolites(tx, filename):
     """
     Creates "Metabolite" nodes based on XML files obtained from the HMDB website,
     adding some essential identifiers and external properties.
-    Source: https://lyonwj.com/blog/grandstack-podcast-app-parsing-xml-neo4j-rss-episodes-playlists
+
+    .. seealso:: This way of working has been taken from
+        `William Lyon's Blog <https://lyonwj.com/blog/grandstack-podcast-app-parsing-xml-neo4j-rss-episodes-playlists>`_
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the XML file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         CALL apoc.load.xml("file:///{filename}")
@@ -107,18 +120,31 @@ def add_metabolites(tx, filename):
 def add_diseases(tx, filename):
     """
     Creates "Publication" nodes based on XML files obtained from the HMDB website.
-    NOTE: Here, an UNWIND clause is used instead of a FOREACH clause. This provides
-    better performance, since, unlike FOREACH, UNWIND does not process rows with empty values
-    (and, logically, there should be no Publication if there is no Disease)
-    NOTE: Publications are created with a (m)-[r:CITED_IN]->(p) relation with Metabolite nodes.
-    If one wants to find the Publication nodes related to a given Metabolite/Disease relation,
-    one can use:
-    MATCH p=()-[r:RELATED_WITH]->()
-        WITH split(r.PubMed_ID, ",") as pubmed
-        UNWIND pubmed as find_this
-            MATCH (p:Publication)
-                WHERE p.PubMed_ID = find_this
-    RETURN p
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the XML file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: Here, an UNWIND clause is used instead of a FOREACH clause. This provides
+        better performance, since, unlike FOREACH, UNWIND does not process rows with empty values
+        (and, logically, there should be no Publication if there is no Disease)
+
+    .. NOTE:: Publications are created with a (m)-[r:CITED_IN]->(p) relation with Metabolite nodes.
+        If one wants to find the Publication nodes related to a given Metabolite/Disease relation,
+        one can use:
+
+        .. code-block:: python3
+
+            MATCH p=()-[r:RELATED_WITH]->()
+              WITH split(r.PubMed_ID, ",") as pubmed
+                UNWIND pubmed as find_this
+                MATCH (p:Publication)
+                  WHERE p.PubMed_ID = find_this
+            RETURN p
+
     """
     return tx.run(f"""
         CALL apoc.load.xml("file:///{filename}")
@@ -179,11 +205,20 @@ def add_concentrations_normal(tx, filename):
     """
     Creates "Concentration" nodes based on XML files obtained from the HMDB website.
     In this function, only metabolites that are labeled as "normal_concentration" are added.
-    NOTE: Here, an UNWIND clause is used instead of a FOREACH clause. This provides
-    better performance, since, unlike FOREACH, UNWIND does not process rows with empty values
-    WARNING: Using the CREATE row forces the creation of a Concentration node, even when
-    some values might be missing. However, this means some bogus nodes could be added,
-    which MUST be accounted for at the end of the DB-Creation process.
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the XML file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: Here, an UNWIND clause is used instead of a FOREACH clause. This provides
+        better performance, since, unlike FOREACH, UNWIND does not process rows with empty values
+
+    .. WARNING:: Using the CREATE row forces the creation of a Concentration node, even when
+        some values might be missing. However, this means some bogus nodes could be added,
+        which MUST be accounted for at the end of the DB-Creation process.
     """
     return tx.run(f"""
         CALL apoc.load.xml("file:///{filename}")
@@ -261,18 +296,26 @@ def add_concentrations_normal(tx, filename):
             MERGE (c)-[r2:CITED_IN]->(p)
         )
 
-
         """)
 
 def add_concentrations_abnormal(tx, filename):
     """
     Creates "Concentration" nodes based on XML files obtained from the HMDB website.
     In this function, only metabolites that are labeled as "abnormal_concentration" are added.
-    NOTE: Here, an UNWIND clause is used instead of a FOREACH clause. This provides
-    better performance, since, unlike FOREACH, UNWIND does not process rows with empty values
-    WARNING: Using the CREATE row forces the creation of a Concentration node, even when
-    some values might be missing. However, this means some bogus nodes could be added,
-    which MUST be accounted for at the end of the DB-Creation process.
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the XML file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: Here, an UNWIND clause is used instead of a FOREACH clause. This provides
+        better performance, since, unlike FOREACH, UNWIND does not process rows with empty values
+
+    .. WARNING:: Using the CREATE row forces the creation of a Concentration node, even when
+        some values might be missing. However, this means some bogus nodes could be added,
+        which MUST be accounted for at the end of the DB-Creation process.
     """
     return tx.run(f"""
         CALL apoc.load.xml("file:///{filename}")
@@ -355,10 +398,18 @@ def add_taxonomy(tx, filename):
     """
     Creates "Taxonomy" nodes based on XML files obtained from the HMDB website.
     These represent the "kind" of metabolite we are dealing with (Family, etc)
-    NOTE: It only creates relationships in the Kingdom -> Super Class -> Class -> Subclass
-    direction, and from any node -> Metabolite. This means that, if any member of the
-    Kingdom -> Super Class -> Class -> Subclass is absent, the line will be broken; hopefully
-    in that case a new metabolite will come in to rescue and settle the relation!
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the XML file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: It only creates relationships in the Kingdom -> Super Class -> Class -> Subclass
+        direction, and from any node -> Metabolite. This means that, if any member of the
+        Kingdom -> Super Class -> Class -> Subclass is absent, the line will be broken; hopefully
+        in that case a new metabolite will come in to rescue and settle the relation!
     """
     return tx.run(f"""
         CALL apoc.load.xml("file:///{filename}")
@@ -422,10 +473,19 @@ def add_experimental_properties(tx, filename):
     """
     Adds properties to existing "Metabolite" nodes based on XML files obtained from the HMDB website.
     In this case, only properties labeled as <experimental_properties> are added.
-    NOTE: Another option would have been to auto-add all the properties, and name them using
-    RETURN "Experimental " + apoc.text.capitalizeAll(replace(kind, "_", " ")), value; however, this
-    way we can select and not duplicate / overwrite values.
-    TODO: It would be nice to be able to distinguish between experimental and predicted properties
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the XML file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: Another option would have been to auto-add all the properties, and name them using
+        RETURN "Experimental " + apoc.text.capitalizeAll(replace(kind, "_", " ")), value; however, this
+        way we can select and not duplicate / overwrite values.
+
+    .. TODO:: It would be nice to be able to distinguish between experimental and predicted properties
     """
     return tx.run(f"""
         CALL apoc.load.xml("file:///{filename}")
@@ -456,10 +516,19 @@ def add_predicted_properties(tx, filename):
     """
     Adds properties to existing "Metabolite" nodes based on XML files obtained from the HMDB website.
     In this case, only properties labeled as <predicted_properties> are added.
-    NOTE: Another option would have been to auto-add all the properties, and name them using
-    RETURN "Predicted " + apoc.text.capitalizeAll(replace(kind, "_", " ")), value; however, this
-    way we can select and not duplicate / overwrite values.
-    TODO: It would be nice to be able to distinguish between experimental and predicted properties
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the XML file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: Another option would have been to auto-add all the properties, and name them using
+        RETURN "Predicted " + apoc.text.capitalizeAll(replace(kind, "_", " ")), value; however, this
+        way we can select and not duplicate / overwrite values.
+
+    .. TODO:: It would be nice to be able to distinguish between experimental and predicted properties
     """
     return tx.run(f"""
         CALL apoc.load.xml("file:///{filename}")
@@ -497,10 +566,19 @@ def add_biological_properties(tx, filename):
     """
     Adds biological properties to existing "Metabolite" nodes based on XML files obtained from the HMDB website.
     In this case, only properties labeled as <predicted_properties> are added.
-    NOTE: Another option would have been to auto-add all the properties, and name them using
-    RETURN "Predicted " + apoc.text.capitalizeAll(replace(kind, "_", " ")), value; however, this
-    way we can select and not duplicate / overwrite values.
-    TODO: It would be nice to be able to distinguish between experimental and predicted properties
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the XML file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: Another option would have been to auto-add all the properties, and name them using
+        RETURN "Predicted " + apoc.text.capitalizeAll(replace(kind, "_", " ")), value; however, this
+        way we can select and not duplicate / overwrite values.
+
+    .. TODO:: It would be nice to be able to distinguish between experimental and predicted properties
     """
     return tx.run(f"""
         CALL apoc.load.xml("file:///{filename}")
@@ -554,8 +632,16 @@ def add_biological_properties(tx, filename):
 def add_proteins(tx, filename):
     """
     Creates "Protein" nodes based on XML files obtained from the HMDB website.
-    NOTE: We are not creating "Gene" nodes (even though each protein comes from a given gene)
-    because we believe not enough information is being given about them.
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the XML file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: We are not creating "Gene" nodes (even though each protein comes from a given gene)
+        because we believe not enough information is being given about them.
     """
     return tx.run(f"""
         CALL apoc.load.xml("file:///{filename}")
@@ -620,6 +706,13 @@ def add_go_classifications(tx, filename):
     """
     Creates "Gene Ontology" nodes based on XML files obtained from the HMDB website.
     This relates each protein to some GO-Terms
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the XML file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         CALL apoc.load.xml("file:///{filename}")
@@ -653,8 +746,16 @@ def add_gene_properties(tx, filename):
     """
     Adds some properties to existing "Protein" nodes based on XML files obtained from the HMDB website.
     In this case, properties will mostly relate to the gene from which the protein originates.
-    NOTE: We are not creating "Gene" nodes (even though each protein comes from a given gene)
-    because we believe not enough information is being given about them.
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the XML file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: We are not creating "Gene" nodes (even though each protein comes from a given gene)
+        because we believe not enough information is being given about them.
     """
     return tx.run(f"""
         CALL apoc.load.xml("file:///{filename}")
@@ -692,8 +793,16 @@ def add_protein_properties(tx, filename):
     """
     Adds some properties to existing "Protein" nodes based on XML files obtained from the HMDB website.
     In this case, properties will mostly relate to the protein itself.
-    NOTE: The "signal_regions" and the "transmembrane_regions" properties were left out
-    because, after a preliminary search, they were mostly empty
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the XML file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: The "signal_regions" and the "transmembrane_regions" properties were left out
+        because, after a preliminary search, they were mostly empty
     """
     return tx.run(f"""
         CALL apoc.load.xml("file:///{filename}")
@@ -747,10 +856,19 @@ def add_protein_properties(tx, filename):
 def add_general_references(tx, filename, type_of):
     """
     Creates "Publication" nodes based on XML files obtained from the HMDB website.
-    NOTE: Since not all nodes present a "PubMed_ID" field (which would be ideal to uniquely-identify
-    Publications, as the "Text" field is way more prone to typos/errors), nodes will be created using
-    the "Authors" field. This means some duplicates might exist, which should be accounted for.
-    NOTE: Unlike the rest, here we are not matching metabolites, but ALSO proteins. This is intentional.
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the XML file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: Since not all nodes present a "PubMed_ID" field (which would be ideal to uniquely-identify
+        Publications, as the "Text" field is way more prone to typos/errors), nodes will be created using
+        the "Authors" field. This means some duplicates might exist, which should be accounted for.
+
+    .. NOTE:: Unlike the rest, here we are not matching metabolites, but ALSO proteins. This is intentional.
     """
     return tx.run(f"""
         CALL apoc.load.xml("file:///{filename}")
@@ -795,9 +913,17 @@ def add_general_references(tx, filename, type_of):
 def add_protein_associations(tx, filename):
     """
     Creates "Protein" nodes based on XML files obtained from the HMDB website.
-    NOTE: Unlike the "add_protein" function, this creates Proteins based on info on the
-    "Metabolite" files, not on the "Protein" files themselves. This could mean node duplication, but,
-    hopefully, the MERGE by Accession will mean that this duplicates will be catched.
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the XML file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: Unlike the "add_protein" function, this creates Proteins based on info on the
+        "Metabolite" files, not on the "Protein" files themselves. This could mean node duplication, but,
+        hopefully, the MERGE by Accession will mean that this duplicates will be catched.
     """
     return tx.run(f"""
         CALL apoc.load.xml("file:///{filename}")
@@ -833,9 +959,18 @@ def add_protein_associations(tx, filename):
 def add_metabolite_associations(tx, filename):
     """
     Adds associations contained in the "protein" file, between proteins and metabolites.
-    NOTE: Like he "add_metabolite_associations" function, this creates non-directional
-    relationships (m)-[r:ASSOCIATED_WITH]-(p) ; this helps duplicates be detected.
-    NOTE: The "ON CREATE SET" clause for the "Name" param ensures no overwriting
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the XML file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: Like he "add_metabolite_associations" function, this creates non-directional
+        relationships (m)-[r:ASSOCIATED_WITH]-(p) ; this helps duplicates be detected.
+
+    .. NOTE:: The "ON CREATE SET" clause for the "Name" param ensures no overwriting
     """
     return tx.run(f"""
         CALL apoc.load.xml("file:///{filename}")
@@ -867,9 +1002,17 @@ def add_metabolite_associations(tx, filename):
 def add_metabolite_references(tx, filename):
     """
     Creates references for relations betweens Protein nodes and Metabolite nodes
-    WARNING: Unfortunately, Neo4J makes it really, really, really difficult to work with XML,
-    and so, this time, a r.PubMed_ID list with the references could not be created. Nonetheless,
-    I considered adding this useful.
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the XML file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. WARNING:: Unfortunately, Neo4J makes it really, really, really difficult to work with XML,
+        and so, this time, a r.PubMed_ID list with the references could not be created. Nonetheless,
+        I considered adding this useful.
     """
     return tx.run(f"""
         CALL apoc.load.xml("file:///{filename}")
@@ -921,6 +1064,18 @@ def add_metabolite_references(tx, filename):
         """)
 
 def build_from_protein_file(newfile, driver):
+    """
+    A function able to build a portion of the HMDB database in graph format, provided that one "Protein" XML is supplied to it.
+    This are downloaded separately from the website, as ```hmdb_proteins.zip```, and can be presented either as the full file,
+    or as a splitted version of it, with just one item per file (which is recommended due to memory limitations)
+
+    Args:
+        newfile         (str): The path of the XML file to import
+        driver (neo4j.Driver): Neo4J's Bolt Driver currently in use
+
+    Returns:
+        This function modifies the Neo4J Database as desired, but does not produce any particular return.
+    """
     with driver.session() as session:
         session.write_transaction(add_proteins, newfile)
     with driver.session() as session:
@@ -938,6 +1093,18 @@ def build_from_protein_file(newfile, driver):
 
 
 def build_from_metabolite_file(newfile, driver):
+    """
+    A function able to build a portion of the HMDB database in graph format, provided that one "Metabolite" XML is supplied to it.
+    This are downloaded separately from the website, as all the files that are not ```hmdb_proteins.zip```, and can be presented either
+    as the full file, or as a splitted version of it, with just one item per file (which is recommended due to memory limitations)
+
+    Args:
+        newfile         (str): The path of the XML file to import
+        driver (neo4j.Driver): Neo4J's Bolt Driver currently in use
+
+    Returns:
+        This function modifies the Neo4J Database as desired, but does not produce any particular return.
+    """
     with driver.session() as session:
         session.write_transaction(add_metabolites, newfile)
     with driver.session() as session:

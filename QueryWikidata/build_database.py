@@ -5,14 +5,24 @@
 #
 # SPDX-License-Identifier: MIT
 
-# This is just a collection of functions used by the "main" script
+"""
+A python module that provides the necessary functions to transition selected parts of the Wikidata database to graph format,
+either from scratch importing all the nodes (as showcased in :obj:`CanGraph.QueryWikidata.main`) or in a case-by-case basis,
+to annotate existing metabolites (as showcased in :obj:`CanGraph.main`).
+"""
 
-def initial_cancer_discovery(tx, number=None, query = None ):
+def initial_cancer_discovery(tx):
     """
     A Neo4J Cypher Statment that queries wikidata for Human Cancers. Since using the "afflicts:human"
     tag didnt have much use here, I used a simple workaround: Query wikidata for all humans, and, among them,
     find all of this for which their cause of death was a subclass of "Cancer" (Q12078). Unfortunaltely,
     some of them were diagnosed "Cancer" (Q12078), which is too general, so I removed it.
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run("""
         WITH 'SELECT DISTINCT ?cause_of_death ?cause_of_death_name
@@ -45,11 +55,17 @@ def initial_cancer_discovery(tx, number=None, query = None ):
         DETACH DELETE n
         """)
 
-def find_subclass_of_cancer(tx, number=None, query = None ):
+def find_subclass_of_cancer(tx):
     """
     A Neo4J Cypher Statment that queries wikidata for subclasses of "Cancer" nodes already
     present on the Database. Since this are expected to only affect humans, this subclasses
     should also, only affect humans
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run("""
         MATCH (c:Disease)
@@ -75,11 +91,17 @@ def find_subclass_of_cancer(tx, number=None, query = None ):
         CREATE (s)-[:SUBCLASS_OF]->(c)
         """)
 
-def find_instance_of_cancer(tx, number=None, query = None ):
+def find_instance_of_cancer(tx):
     """
     A Neo4J Cypher Statment that queries wikidata for instances of "Cancer" nodes already
     present on the Database. Since this are expected to only affect humans, this subclasses
     should also, only affect humans
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run("""
         MATCH (c:Disease)
@@ -105,10 +127,17 @@ def find_instance_of_cancer(tx, number=None, query = None ):
         CREATE (i)-[:INSTANCE_OF]->(c)
         """)
 
-def add_cancer_info(tx, number=None, query = None ):
+def add_cancer_info(tx, number=None):
     """
-    Adds info to "Cancer" nodes for which its WikiData_ID ends in a given numbe. This way, only some of the nodes
+    Adds info to "Cancer" nodes for which its WikiData_ID ends in a given number. This way, only some of the nodes
     are targeted, and the Java Machine does not run out of memory
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        number (int): From 0 to 9, the number under which the WikiData_IDs to process should ends. This allows us tho divide the work, although its not very elegant.
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         MATCH (c:Disease)
@@ -151,9 +180,16 @@ def add_cancer_info(tx, number=None, query = None ):
             c.ICD_11 = row['ICD_11']['value']
         """)
 
-def add_drugs(tx, number=None, query = None ):
+def add_drugs(tx, number=None):
     """
     Creates drug nodes related with each of the "Cancer" nodes already on the database
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        number (int): From 0 to 9, the number under which the WikiData_IDs to process should ends. This allows us tho divide the work, although its not very elegant.
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         MATCH (c:Disease)
@@ -189,9 +225,16 @@ def add_drugs(tx, number=None, query = None ):
                 MERGE (c)-[:EQUALS]-(e))
         """)
 
-def add_causes(tx, number=None, query = None ):
+def add_causes(tx, number=None):
     """
     Creates drug nodes related with each of the "Cancer" nodes already on the database
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        number (int): From 0 to 9, the number under which the WikiData_IDs to process should ends. This allows us tho divide the work, although its not very elegant.
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         MATCH (c:Disease)
@@ -220,9 +263,16 @@ def add_causes(tx, number=None, query = None ):
                 MERGE (c)-[:CAUSED_BY]->(ca))
         """)
 
-def add_genes(tx, number=None, query = None ):
+def add_genes(tx, number=None):
     """
     Creates gene nodes related with each of the "Cancer" nodes already on the database
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        number (int): From 0 to 9, the number under which the WikiData_IDs to process should ends. This allows us tho divide the work, although its not very elegant.
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         MATCH (c:Disease)
@@ -252,11 +302,18 @@ def add_genes(tx, number=None, query = None ):
                 MERGE (g)-[:ASSOCIATED_DISEASE_GENE]->(c))
         """)
 
-def add_drug_external_ids(tx, number = None, query = "Wikidata"):
+def add_drug_external_ids(tx, query = "Wikidata"):
     """
     Adds some external IDs to any "Drug" nodes already present on the database.
     Since the PDB information had too much values which caused triple duplicates that overcharged the system,
     they were intentionally left out.
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        query (str): One of ["DrugBank_ID","WikiData_ID"], a way to identify the nodes for which external IDs will be added.
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     if query == "DrugBank_ID":
       query_text = """?item (wdt:P715) replace(d.DrugBank_ID, "DB", "")"""
@@ -351,13 +408,23 @@ def add_drug_external_ids(tx, number = None, query = "Wikidata"):
         MERGE (d)-[r3:RELATED_MESH]->(cc)
         """)
 
-def add_more_drug_info(tx, number=None, query = "Wikidata"):
+def add_more_drug_info(tx, query = "WikiData_ID"):
     """
     Creates some nodes that are related with each of the "Drug" nodes already existing
     on the database: routes of administration, targeted metabolites and approved drugs
     that tehy are been used in
-    TODO: ADD ROLE to metabolite interactions
-    NOTE: This transaction has been separated in order to keep response times low
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        query (str): One of ["DrugBank_ID","WikiData_ID"], a way to identify the nodes for which external IDs will be added; default is "WikiData_ID"
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+
+    .. TODO:: ADD ROLE to metabolite interactions
+
+    .. NOTE:: This transaction has been separated in order to keep response times low
     """
     if query == "DrugBank_ID":
       query_text = """?item (wdt:P715) replace(d.DrugBank_ID, "DB", "") . """
@@ -414,13 +481,21 @@ def add_more_drug_info(tx, number=None, query = "Wikidata"):
             MERGE (d)-[:PART_OF_PRODUCT]->(me))
         """)
 
-def add_gene_info(tx, number=None, query = None ):
+def add_gene_info(tx):
     """
     A Cypher Query that adds some external IDs and properties to "Gene" nodes already existing on
     the database. This query forces the genes to have a "found_in_taxon:homo_sapiens" label. This means
-    that any non-human genes will not be annotated (TODO: delete those)
-        * Genomic Start and ends keep just the 2nd position, as reported in wikidata
-        * TODO: Might include P684 "Orthologues" for more info (it crashed java)
+    that any non-human genes will not be annotated (.. TODO:: delete those)
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: Genomic Start and ends keep just the 2nd position, as reported in wikidata
+
+    .. TODO:: Might include P684 "Orthologues" for more info (it crashed java)
     """
     return tx.run("""
         MATCH (g:Gene)
@@ -503,14 +578,23 @@ def add_gene_info(tx, number=None, query = None ):
                 MERGE (g)-[:EQUALS]-(e))
         """)
 
-def add_metabolite_info(tx, number = None, query = "ChEBI_ID"):
+def add_metabolite_info(tx, query = "ChEBI_ID"):
     """
     A Cypher Query that adds some external IDs and properties to "Metabolite" nodes already existing on
     the database. Two kind of metabolites exist: those that are encoded by a given gene, and those that interact
     with a given drug. Both are adressed here, since they are similar, and, most likely, instances of proteins.
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        query (str): One of ["DrugBank_ID","WikiData_ID"], a way to identify the nodes for which external IDs will be added; default is "WikiData_ID"
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
         * This function forces all metabolites to have a "found_in_taxon:human" target
         * The metabolites are not forced to be proteins, but if they are, this is kept in the "instance_of" record
-        * TODO: Might include P527 "has part or parts" for more info (it crashed java)
+
+    .. TODO:: Might include P527 "has part or parts" for more info (it crashed java)
     """
     if query == "ChEBI_ID":
       query_text = """?item (wdt:P683) m.ChEBI_ID ."""
@@ -612,11 +696,17 @@ def add_metabolite_info(tx, number = None, query = "ChEBI_ID"):
                 MERGE (m)-[:EQUALS]-(e))
         """)
 
-def add_toomuch_metabolite_info(tx, number=None, query = None ):
+def add_toomuch_metabolite_info(tx):
     """
     A function that adds loads of info to existing "Metabolite" nodes. This was left out, first because
     it might be too much information, (specially when it is already availaible by clicking the "url" field),
     and because, due to it been so much, it crashes the JVM.
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run("""
         MATCH (m:Metabolite)
@@ -668,10 +758,16 @@ def add_toomuch_metabolite_info(tx, number=None, query = None ):
         SET m.A = nA + row['PDB_Structure_ID']['value']
         """)
 
-def add_wikidata_to_mesh(tx, number=None, query = None ):
+def add_wikidata_to_mesh(tx):
     """
     A function that adds some MeSH nodes and WikiData_IDs to existing nodes, based on their name.
     Since WikiData is not really specified on this, this wont add much info
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run("""
         MATCH (d)
@@ -704,14 +800,4 @@ def add_wikidata_to_mesh(tx, number=None, query = None ):
         MERGE (d)-[r:RELATED_MESH]->(c)
         MERGE (cc:MeSH { MeSH_ID:row['MeSH_Concept_ID']['value'] , Type:"Concept", Name: row['MeSH_Concept_Name']['value']})
         MERGE (d)-[r2:RELATED_MESH]->(cc)
-        """)
-
-def remove_ExternalEquivalent(tx, number=None, query = None ):
-    """
-    Removes all nodes of type: ExternalEquivalent from he DataBase; since this do not add
-    new info, one might consider them not useful.
-    """
-    return tx.run("""
-        MATCH (e:ExternalEquivalent)
-        DETACH DELETE e
         """)

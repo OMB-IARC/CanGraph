@@ -4,9 +4,7 @@ SPDX-FileCopyrightText: 2022 Pablo Marcos <software@loreak.org>
 SPDX-License-Identifier: MIT
 -->
 
-# query-wikidata
-
-<div align="center"> <img src="header.png" width="50%"> </div>
+<div align="center"> <img src="_static/wikidata_schema.png" width="50%"> </div>
 <br>
 
 This script, created as part of my Master's Intenship at IARC, imports nodes from the [WikiData SPARQL Service](https://query.wikidata.org), creating a high-quality representation of the data therein. Although wikidata is manually curated using [the Wiki principles](https://en.wikipedia.org/wiki/Wiki), [some publications have found](https://pubmed.ncbi.nlm.nih.gov/32180547/) it might be a good source of information for life sciences, specially due to the breadth of information it contains. It also provides an export in GraphML format.
@@ -30,6 +28,8 @@ An archived version of this repository that takes into account the gitignored fi
 Finally, please node that the general philosophy and approach of the queries have been taken from [Towards Data Science](https://towardsdatascience.com/lord-of-the-wiki-ring-importing-wikidata-into-neo4j-and-analyzing-family-trees-da27f64d675e), a genuinely useful web site.
 
 ## Important Notices
+
+* Please ensure you have internet access, which will be used to connect to Wikidata's SPAQL endpoint and gather the necessary info.
 
 * As Neo4J can run out of "Java Heap Space" if the number of nodes/properties to add is too high, the script has been divided in order to minimize said number: for instance, only nodes with a ```wikidata_id``` ending in a given number from 0 to 9 are processed at a time. This does not decrease performance, since these nodes would have been processed nontheless, but makes the script more reliable.
 

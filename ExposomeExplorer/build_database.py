@@ -5,7 +5,11 @@
 #
 # SPDX-License-Identifier: MIT
 
-# This is just a collection of functions used by the "main" script
+"""
+A python module that provides the necessary functions to transition the Exposome Explorer database to graph format,
+either from scratch importing all the nodes (as showcased in :obj:`CanGraph.ExposomeExplorer.main`) or in a case-by-case basis,
+to annotate existing metabolites (as showcased in :obj:`CanGraph.main`).
+"""
 
 # Import external modules necessary for the script
 from neo4j import GraphDatabase      # The Neo4J python driver
@@ -15,8 +19,17 @@ import os, sys, shutil               # Vital modules to interact with the filesy
 
 def import_csv(tx, filename, label):
     """
-    Imports a given CSV into Neo4J. This CSV **MUST** be present in Neo4J's Import Path
-    Note: for this to work, you HAVE TO have APOC availaible on your Neo4J installation
+    Imports a given CSV into Neo4J. This CSV **must** be present in Neo4J's Import Path
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the CSV file that is being imported
+        label       (str): The label of the Neo4J nodes that will be imported, with the columns of the CSV being its properties.
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: For this to work, you HAVE TO have APOC availaible on your Neo4J installation
     """
     return tx.run(f"""
         CALL apoc.import.csv([{{fileName: 'file:/{filename}', labels: [apoc.text.capitalize('{label}')]}}], [], {{}})
@@ -26,6 +39,13 @@ def add_components(tx, filename):
     """
     Adds "Metabolite" nodes from Exposome-Explorer's components.csv
     This is because this components are, in fact, metabolites, either from food or from human metabolism
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the CSV file that is being imported.
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
@@ -60,10 +80,18 @@ def add_measurements_stuff(tx, filename):
     """
     A massive and slow-running function that creates ALL the relations between the 'measurements' table
     and all other related tables:
-     * units: The units in which a given measurement is expressed
-     * components: The component which is being measured
-     * samples: The sample from which a measurement is taken
-     * experimental_methods: The method used to take a measurement
+
+    - units: The units in which a given measurement is expressed
+    - components: The component which is being measured
+    - samples: The sample from which a measurement is taken
+    - experimental_methods: The method used to take a measurement
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the CSV file that is being imported.
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
@@ -84,6 +112,13 @@ def add_reproducibilities(tx, filename):
     """
     Creates relations between the "reproducibilities" and the "measurements" table,
     using "initial_id", an old identifier, for the linkage
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the CSV file that is being imported.
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
@@ -98,6 +133,13 @@ def add_samples(tx, filename):
     """
     Imports the relations pertaining to the "samples" table. A sample will be taken from a given
     subject and a given tissue (that is, a specimen, which will be blood, urine, etc)
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the CSV file that is being imported.
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
@@ -114,6 +156,13 @@ def add_subjects(tx, filename):
     """
     Imports the relations pertaining to the "subjects" table. Basically, a subject can appear
     in a given publication, and will be part of a cohort (i.e. a grop of subjects)
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the CSV file that is being imported.
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
@@ -130,7 +179,14 @@ def add_microbial_metabolite_identifications(tx, filename):
     """
     Imports the relations pertaining to the "microbial_metabolite_identifications" table. A component
     (i.e. a metabolite) can be identified as a Microbial Metabolite, which means it has an equivalent in
-    the microbiome. This can have a given refference and a tissue (BioSpecimen) in which it occurs.
+    the microbiome. This can have a given reference and a tissue (BioSpecimen) in which it occurs.
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the CSV file that is being imported.
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
@@ -150,7 +206,16 @@ def add_microbial_metabolite_identifications(tx, filename):
         """)
 
 def add_cancer_associations(tx, filename):
-    """ Imports the 'cancer_associations' database as a relation between a given Cancer and a Measurement """
+    """
+    Imports the 'cancer_associations' database as a relation between a given Cancer and a Measurement
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the CSV file that is being imported.
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+    """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
             MATCH (m:Measurement {{ Exposome_Explorer_ID: "Measurement_"+line.`excretion_id` }})
@@ -168,6 +233,13 @@ def add_metabolomic_associations(tx, filename):
     and the excretion_id, a chemical found in human biological samples, such that, when one
     takes one component, one will excrete the other. Data comes from Metabolomics studies
     seeking to identify putative dietary biomarkers.
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the CSV file that is being imported.
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
@@ -192,6 +264,13 @@ def add_correlations(tx, filename):
     and the excretion_id, a chemical found in human biological samples, such that, when one
     takes one component, one will excrete the other. Data comes from epidemiological studies
     where dietary questionnaires are administered, and biomarkers are measured in specimens
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the CSV file that is being imported.
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
@@ -213,7 +292,16 @@ def add_correlations(tx, filename):
 # ********* Finally, we can annotate the nodes created ********* #
 
 def add_measurements(tx, filename):
-    """ Adds "Measurement" nodes from Exposome-Explorer's measurements.csv"""
+    """
+    Adds "Measurement" nodes from Exposome-Explorer's measurements.csv
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the CSV file that is being imported.
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+    """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
             MATCH (m:Measurement {{ Exposome_Explorer_ID:"Measurement_"+line["id"] }})
@@ -240,6 +328,13 @@ def add_samples(tx, filename):
     """
     Adds "Sample" nodes from Exposome-Explorer's samples.csv
     From a Sample, one can take a series of measurements
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the CSV file that is being imported.
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
@@ -250,7 +345,16 @@ def add_samples(tx, filename):
         """)
 
 def add_experimental_methods(tx, filename):
-    """ Adds "ExperimentalMethod" nodes from Exposome-Explorer's experimental_methods.csv"""
+    """
+    Adds "ExperimentalMethod" nodes from Exposome-Explorer's experimental_methods.csv
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the CSV file that is being imported.
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+    """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
             MATCH (em:ExperimentalMethod {{ Exposome_Explorer_ID:"ExperimentalMethod_"+line["id"] }})
@@ -267,6 +371,13 @@ def add_units(tx, filename):
     """
     Adds "Unit" nodes from Exposome-Explorer's units.csv
     A unit can be converted into other (for example, for normalization)
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the CSV file that is being imported.
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
@@ -278,6 +389,13 @@ def add_auto_units(tx, filename):
     """
     Shows the correlations between two units, converted using the rubygem 'https://github.com/masa16/phys-units'
     which standarizes units of measurement for our data
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the CSV file that is being imported.
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
@@ -288,7 +406,16 @@ def add_auto_units(tx, filename):
         """)
 
 def add_cancers(tx, filename):
-    """ Adds "Cancer" nodes from Exposome-Explorer's cancers.csv"""
+    """
+    Adds "Cancer" nodes from Exposome-Explorer's cancers.csv
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the CSV file that is being imported.
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+    """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
             MERGE (c:Disease {{ Exposome_Explorer_ID:"Cancer_"+line["id"] }})
@@ -299,7 +426,16 @@ def add_cancers(tx, filename):
         """)
 
 def add_cohorts(tx, filename):
-    """ Adds "Cohort" nodes from Exposome-Explorer's cohorts.csv"""
+    """
+    Adds "Cohort" nodes from Exposome-Explorer's cohorts.csv
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the CSV file that is being imported.
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+    """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
             MERGE (c:Cohort {{ Exposome_Explorer_ID:"Cohort_"+line["id"] }})
@@ -318,6 +454,13 @@ def add_microbial_metabolite_info(tx, filename):
     Adds "Metabolite" nodes from Exposome-Explorer's microbial_metabolite_identifications.csv
     These represent all metabolites that have been re-identified as present, for instance, in the microbiome.
     To distinguish this metabolites from the only-human "Components", a Microbial_Metabolite = "True" label has been added
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the CSV file that is being imported.
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
@@ -329,7 +472,16 @@ def add_microbial_metabolite_info(tx, filename):
         """)
 
 def add_publications(tx, filename):
-    """Adds "Publication" nodes from Exposome-Explorer's publications.csv"""
+    """
+    Adds "Publication" nodes from Exposome-Explorer's publications.csv
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the CSV file that is being imported.
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+    """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
             MERGE (p:Publication {{ Exposome_Explorer_ID:"Publication_"+line["id"] }})
@@ -346,6 +498,13 @@ def add_reproducibilities(tx, filename):
     """
     Adds "Reproducibility" nodes from Exposome-Explorer's reproducibilities.csv
     These represent the conditions under which a given study/measurement was carried
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the CSV file that is being imported.
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
@@ -361,6 +520,13 @@ def add_specimens(tx, filename):
     """
     Adds "BioSpecimen" nodes from Exposome-Explorer's specimens.csv
     A biospecimen is a type of tissue where a measurement can originate, such as orine, csf fluid, etc
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the CSV file that is being imported.
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
@@ -374,7 +540,16 @@ def add_specimens(tx, filename):
         """)
 
 def add_subjects(tx, filename):
-    """Adds "Subject" nodes from Exposome-Explorer's subjects.csv"""
+    """
+    Adds "Subject" nodes from Exposome-Explorer's subjects.csv
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the CSV file that is being imported.
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+    """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///subjects.csv') AS line
             MERGE (su:Subject {{ Exposome_Explorer_ID:"Subject_"+line["id"] }})
@@ -390,7 +565,16 @@ def add_subjects(tx, filename):
 
 def remove_counts_and_displayeds(inputfile, outputfile):
     """
-    Nukes some text from the header so that the columns are not recognised. Not the most elegant, but works.
+    Removes ```_count``` &  ```displayed_``` text-strings from a given file, so that, when processing it with the other functions
+    present in this document, they ignore the columns containing said text-strings, which represent properties which are considered
+    not useful for our program. This is. of course, not the most elegant, but it works.
+
+    Args:
+        inputfile    (str): The path to the file from which ```_count``` &  ```displayed_`` text-strings are to be removed
+        outputfile   (str): The path of the file where the contents of the replaced file will be written.
+
+    Returns:
+        The function does not have a return; instead, it transforms ```inputfile```` into ```outputfile```
     """
     data = ""
     with open(inputfile, 'r') as f :
@@ -401,7 +585,16 @@ def remove_counts_and_displayeds(inputfile, outputfile):
         f.write(data)
 
 def remove_cross_properties(tx):
-    """Removes properties used in Neo4J to create relationships between nodes"""
+    """
+    Removes some properties that were added by the other functions present in this script, that are used to cross-reference
+    the different tables in the Relational Database EE comes from, and that, in a Graph Database, are no longer necessary.
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+    """
     return tx.run(f"""
         MATCH (n)
         REMOVE n.Component_ID, n.Sample_ID, n.Experimental_Method_ID, n.Unit_ID, n.Subject_ID,
@@ -409,6 +602,26 @@ def remove_cross_properties(tx):
         """)
 
 def build_from_file(databasepath, Neo4JImportPath, driver, keep_counts_and_displayeds = True, keep_cross_properties = False):
+    """
+    A function able to build a portion of the Exposome-Explorer database in graph format, provided that at least one "Component" (Metabolite)
+    node is present in said database. It works by using that node as an starting point from which to search in the rest of the Exposome_Explorer
+    database, finding related nodes there.
+
+    Args:
+        databasepath (str): The path to the database where all Exposome-Explorer CSVs are stored
+        Neo4JImportPath (str): The path from which Neo4J is importing data
+        driver (neo4j.Driver): Neo4J's Bolt Driver currently in use
+        keep_counts_and_displayeds (bool): Whether to keep the properties ending with ```_count``` &  ```displayed_``` that, although present
+                                           in the original DB, might be considered not useful for us.
+        keep_cross_properties (bool): Whether to keep the properties used to cross-reference in the original Neo4J database.
+
+    Returns:
+        This function modifies the Neo4J Database as desired, but does not produce any particular return.
+
+    .. NOTE: This wont work if a "Component" (Metabolite) node is not already present; when building the database,
+             either full or by parts, you should import the respective Components first
+
+    """
     if keep_counts_and_displayeds == False:
         remove_counts_and_displayeds(f"{os.path.abspath(databasepath)}/measurements.csv", f"{Neo4JImportPath}/measurements.csv")
         remove_counts_and_displayeds(f"{os.path.abspath(databasepath)}/samples.csv", f"{Neo4JImportPath}/samples.csv")

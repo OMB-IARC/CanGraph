@@ -5,6 +5,12 @@
 #
 # SPDX-License-Identifier: MIT
 
+"""
+A python module that provides the necessary functions to transition the DrugBank database to graph format,
+either from scratch importing all the nodes (as showcased in :obj:`CanGraph.GraphifyDrugBank.main`) or in a case-by-case basis,
+to annotate existing metabolites (as showcased in :obj:`CanGraph.main`).
+"""
+
 # Import external modules necessary for the script
 from neo4j import GraphDatabase      # The Neo4J python driver
 from alive_progress import alive_bar # A cute progress bar that shows the script is still running
@@ -14,7 +20,7 @@ from time import sleep               # A hack to avoid starving the system resou
 # Import subscripts for the program
 # This hack that allows us to de-duplicate the miscleaneous script in this less-used script
 sys.path.append("../")
-# NOTE: Please beware that, if using this module by itself, you might need to copy "miscelaneous.py" into your path
+# .. NOTE::: Please beware that, if using this module by itself, you might need to copy "miscelaneous.py" into your path
 # This is not the most elegant, but simplifies code maintenance, and this script shouldnt be used much so...
 import miscelaneous as misc
 
@@ -22,8 +28,18 @@ def add_drugs(tx, filename):
     """
     Creates "Drug" nodes based on XML files obtained from the DrugBank website,
     adding some essential identifiers and external properties.
-    Source: https://lyonwj.com/blog/grandstack-podcast-app-parsing-xml-neo4j-rss-episodes-playlists
-    # NOTE: Since Publications dont have any standard identificator, they are created using the "Title"
+
+    .. seealso:: This way of working has been taken from
+        `William Lyon's Blog <https://lyonwj.com/blog/grandstack-podcast-app-parsing-xml-neo4j-rss-episodes-playlists>`_
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the XML file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: Since Publications dont have any standard identificator, they are created using the "Title"
     """
     return tx.run(f"""
         CALL apoc.load.xml("{filename}")
@@ -143,9 +159,18 @@ def add_drugs(tx, filename):
 def add_general_references(tx, filename):
     """
     Creates "Publication" nodes based on XML files obtained from the DrugBank website.
-    NOTE: Since not all nodes present a "PubMed_ID" field (which would be ideal to uniquely-identify
-    Publications, as the "Text" field is way more prone to typos/errors), nodes will be created using
-    the "Authors" field. This means some duplicates might exist, which should be accounted for.
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the XML file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: Since not all nodes present a "PubMed_ID" field (which would be ideal to uniquely-identify
+        Publications, as the "Text" field is way more prone to typos/errors), nodes will be created using
+        the "Authors" field. This means some duplicates might exist, which should be accounted for.
+
     """
     return tx.run(f"""
         CALL apoc.load.xml("{filename}")
@@ -196,12 +221,22 @@ def add_taxonomy(tx, filename):
     """
     Creates "Taxonomy" nodes based on XML files obtained from the DrugBank website.
     These represent the "kind" of Drug we are dealing with (Family, etc)
-    NOTE: It only creates relationships in the Kingdom -> Super Class -> Class -> Subclass
-    direction, and from any node -> Drug. This means that, if any member of the
-    Kingdom -> Super Class -> Class -> Subclass is absent, the line will be broken; hopefully
-    in that case a new Drug will come in to rescue and settle the relation!
-    WARNING: Some nodes without labels might be created if names are null:
-    This has to be accounted for later on in the process
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the XML file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: It only creates relationships in the Kingdom -> Super Class -> Class -> Subclass
+        direction, and from any node -> Drug. This means that, if any member of the
+        Kingdom -> Super Class -> Class -> Subclass is absent, the line will be broken; hopefully
+        in that case a new Drug will come in to rescue and settle the relation!
+
+    .. WARNING:: Some nodes without labels might be created if names are null:
+        This has to be accounted for later on in the process
+
     """
     return tx.run(f"""
         CALL apoc.load.xml("{filename}")
@@ -273,8 +308,16 @@ def add_products(tx, filename):
     """
     Creates "Product" nodes based on XML files obtained from the DrugBank website.
     These are the individal medicaments that have been approved (or not) by the FDA
-    WARNING: Using CREATE means that duplicates will appear; unfortunately, I couldnt any unique_id
-    field to use as ID when MERGEing the nodes. This should be accounted for.
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the XML file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. WARNING:: Using CREATE means that duplicates will appear; unfortunately, I couldnt any unique_id
+        field to use as ID when MERGEing the nodes. This should be accounted for.
     """
     return tx.run(f"""
         CALL apoc.load.xml("{filename}")
@@ -329,7 +372,15 @@ def add_mixtures(tx, filename):
     """
     Creates "Mixture" nodes based on XML files obtained from the DrugBank website.
     These are the mixtures of existing Drugs, which may or may not be on the market.
-    NOTE: This doesn't seem of much use, but has been added nonetheless just in case.
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the XML file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: This doesn't seem of much use, but has been added nonetheless just in case.
     """
     return tx.run(f"""
         CALL apoc.load.xml("{filename}")
@@ -360,7 +411,15 @@ def add_categories(tx, filename):
     """
     Creates "Category" nodes based on XML files obtained from the DrugBank website.
     These represent the different MeSH IDs a Drug can be related with
-    NOTE: Each category seems to have an associated MeSH ID. Maybe could rename nodes as MeSH?
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the XML file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: Each category seems to have an associated MeSH ID. Maybe could rename nodes as MeSH?
     """
     return tx.run(f"""
         CALL apoc.load.xml("{filename}")
@@ -398,6 +457,13 @@ def add_manufacturers(tx, filename):
     """
     Creates "Company" nodes based on XML files obtained from the DrugBank website.
     These represent the different Companies that manufacture a Drug's compound (not just package it)
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the XML file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         CALL apoc.load.xml("{filename}")
@@ -431,6 +497,13 @@ def add_packagers(tx, filename):
     """
     Creates "Company" nodes based on XML files obtained from the DrugBank website.
     These represent the different Companies that package a Drug's compounds (not the ones that manufacture them)
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the XML file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         CALL apoc.load.xml("{filename}")
@@ -465,8 +538,16 @@ def add_dosages(tx, filename):
     """
     Creates "Dosage" nodes based on XML files obtained from the DrugBank website.
     These represent the different Dosages that a Drug should be administered at.
-    WARNING: Using CREATE might generate duplicate nodes, but there was no
-    unique characteristic to MERGE nodes into.
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the XML file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. WARNING:: Using CREATE might generate duplicate nodes, but there was no
+        unique characteristic to MERGE nodes into.
     """
     return tx.run(f"""
         CALL apoc.load.xml("{filename}")
@@ -499,6 +580,13 @@ def add_atc_codes(tx, filename):
     """
     Creates "ATC" nodes based on XML files obtained from the DrugBank website.
     These represent the different ATC codes a Drug can be related with (including an small taxonomy)
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the XML file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         CALL apoc.load.xml("{filename}")
@@ -535,8 +623,15 @@ def add_atc_codes(tx, filename):
 
 def add_drug_interactions(tx, filename):
     """
-    Creates (d)-[r:RELATED_WITH_DRUG]-(dd) interactions between "Drug" nodes, whether they existed
+    Creates ```(d)-[r:RELATED_WITH_DRUG]-(dd)``` interactions between "Drug" nodes, whether they existed
     before or not. These are intentionally non-directional, as they should be related with each other.
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the XML file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         CALL apoc.load.xml("{filename}")
@@ -568,7 +663,15 @@ def add_sequences(tx, filename):
     """
     Creates "Sequence" nodes based on XML files obtained from the DrugBank website.
     These represent the AminoAcid sequence of Drugs that are of a peptidic nature.
-    TODO: In some other parts of the script, sequences are being added as
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the XML file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. TODO:: In some other parts of the script, sequences are being added as
           properties on Protein nodes. A common format should be set.
     """
     return tx.run(f"""
@@ -601,6 +704,13 @@ def add_sequences(tx, filename):
 def add_experimental_properties(tx, filename):
     """
     Adds some experimental properties to existing "Drug" nodes based on XML files obtained from the DrugBank website.
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the XML file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         CALL apoc.load.xml("{filename}")
@@ -634,8 +744,16 @@ def add_experimental_properties(tx, filename):
 def add_external_identifiers(tx, filename):
     """
     Adds some external identifiers to existing "Drug" nodes based on XML files obtained from the DrugBank website.
-    NOTE: These also adds a "Protein" label to any "Drug"-labeled nodes which have a "UniProtKB"-ID
-    among their properties. NOTE that this can look confusing in the DB Schema!!!
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the XML file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: These also adds a "Protein" label to any "Drug"-labeled nodes which have a "UniProtKB"-ID
+        among their properties. NOTE that this can look confusing in the DB Schema!!!
     """
     return tx.run(f"""
         CALL apoc.load.xml("{filename}")
@@ -673,9 +791,17 @@ def add_external_identifiers(tx, filename):
 def add_external_equivalents(tx, filename):
     """
     Adds some external equivalents to existing "Drug" nodes based on XML files obtained from the DrugBank website.
-    This should be "exact matches" of the Drug in other databases
-    NOTE: The main reason to add them as "External-Equivalents" is because I felt these IDs where of not much use (and
-    are thus easier to eliminate due to their common label)
+    This should be "exact matches" of the Drug in other databases.
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the XML file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: The main reason to add them as "External-Equivalents" is because I felt these IDs where of not much use (and
+        are thus easier to eliminate due to their common label)
     """
     return tx.run(f"""
         CALL apoc.load.xml("{filename}")
@@ -709,8 +835,16 @@ def add_pathways_and_relations(tx, filename):
     It also adds some relations between Drugs and Proteins (which, remember, could even be the same kind of node)
     It is also able to tag both a Protein's and a Drug¡s relation with a given Pathway
     In general, a Pathway involves a collection of Enzymes, Drugs and Proteins, with a SMPDB_ID (cool for interconnexion!)
-    WARNING: This function uses a "double UNWIND" clause, which means that we are only representing <pathways> tags
-    with <enzymes> tags inside. Fortunately, this seems to seldom not happen, so it should represent no problem.
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the XML file that is being imported
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. WARNING:: This function uses a "double UNWIND" clause, which means that we are only representing <pathways> tags
+        with <enzymes> tags inside. Fortunately, this seems to seldom not happen, so it should represent no problem.
     """
     return tx.run(f"""
         CALL apoc.load.xml("{filename}")
@@ -763,15 +897,29 @@ def add_targets_enzymes_carriers_and_transporters(tx, filename, tag_name):
     """
     A *REALLY HUGE* function. It takes a filename and a tag_name, and gets info and creates "Protein" nodes with tag_name set as their role.
     It also adds a bunch of additional info, such as Publications, Targets, Actions, GO_IDs, PFAMs and/or some External IDs
-    WARNING: We are using a bunch of concatenated UNWINDs, which force the existance of all elements in the UNWIND chain. This might remove some
-    elements, but this is a HUUUUUGE database, and, to be honest, most things seem to almost always be present. An example is References and Polypeptides;
-    Since there seem to be more References that Polypeptides, we try to UNWIND those first. The same can be said on the rest of UNWINDS: as we have
-    external-id >>>>>>>>>> go-classifier >>>> pfam >> synonyms (in order of *occurrence*. not *number* of tags) , we UNWIND in that order to mitigate data loss
-    NOTE: To fix repetitions in properties such as Actions or Synonyms (caused by the HUGE number of UNWINDs), we tried lots of different strategies,
-    finally coming up with SET p.Synonyms = replace(p.Synonyms, synonym._text + ",", ""). This is cool! But means there will always be a trailing
-    comma (removing it was not easy in this same transaction, though it could (TODO?) be done at the end.
-    NOTE: <tag_name> can be one among: ["enzymes", "carriers", "transporters"]
-    TODO: Investigate https://stackoverflow.com/questions/14026217/using-neo4j-distinct-and-order-by-on-different-properties
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        filename    (str): The name of the XML file that is being imported
+        tag_name    (str): The type of Protein node you want to import; it must be one of ["enzymes", "carriers", "transporters"]
+                    It is recommended that you run this function thrice, once for each type of protein
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. WARNING:: We are using a bunch of concatenated UNWINDs, which force the existance of all elements in the UNWIND chain. This might remove some
+        elements, but this is a HUUUUUGE database, and, to be honest, most things seem to almost always be present. An example is References and Polypeptides;
+        Since there seem to be more References that Polypeptides, we try to UNWIND those first. The same can be said on the rest of UNWINDS: as we have
+        external-id >>>>>>>>>> go-classifier >>>> pfam >> synonyms (in order of *occurrence*. not *number* of tags) , we UNWIND in that order to mitigate data loss
+
+    .. NOTE:: To fix repetitions in properties such as Actions or Synonyms (caused by the HUGE number of UNWINDs), we tried lots of different strategies,
+        finally coming up with SET p.Synonyms = replace(p.Synonyms, synonym._text + ",", ""). This is cool! But means there will always be a trailing
+        comma (removing it was not easy in this same transaction, though it could (TODO?) be done at the end.
+
+    .. NOTE:: <tag_name>
+
+    .. TODO:: Investigate https://stackoverflow.com/questions/14026217/using-neo4j-distinct-and-order-by-on-different-properties
+
     """
     return tx.run(f"""
         CALL apoc.load.xml("{filename}")
@@ -947,7 +1095,16 @@ def add_targets_enzymes_carriers_and_transporters(tx, filename, tag_name):
 
 def build_from_file(newfile, driver):
     """
-    A function that builds the part of the database, pertaning to a single, splitted xml file
+    A function able to build a portion of the DrugBank database in graph format, provided that one XML is supplied to it.
+    This can either be the ```full_database.xml``` file that you can get in DrugBank's website, or a splitted version of it,
+    with just one item per file (which is recommended due to memory limitations)
+
+    Args:
+        newfile         (str): The path of the XML file to import
+        driver (neo4j.Driver): Neo4J's Bolt Driver currently in use
+
+    Returns:
+        This function modifies the Neo4J Database as desired, but does not produce any particular return.
     """
     with driver.session() as session:
         session.write_transaction(add_drugs, newfile)
