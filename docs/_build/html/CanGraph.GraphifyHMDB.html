@@ -96,24 +96,17 @@
             </li>
         </ul>
         <ul class="current nav bd-sidenav">
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="Tutorials.html">
-   Tutorials
+ <li class="toctree-l1">
+  <a class="reference internal" href="ToDoList.html">
+   To-Do List
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
-  <label for="toctree-checkbox-1">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul class="simple">
-  </ul>
  </li>
  <li class="toctree-l1 current active has-children">
   <a class="reference internal" href="CanGraph.html">
    CanGraph package
   </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-  <label for="toctree-checkbox-2">
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -449,7 +442,7 @@ In this case, only properties labeled as &lt;predicted_properties&gt; are added.
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
-<li><p><strong>filename</strong> (<em>str</em>) – The name of the XML file that is being imported</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the XML file that is being imported</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -465,6 +458,10 @@ In this case, only properties labeled as &lt;predicted_properties&gt; are added.
 RETURN “Predicted ” + apoc.text.capitalizeAll(replace(kind, “_”, ” “)), value; however, this
 way we can select and not duplicate / overwrite values.</p>
 </div>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>It would be nice to be able to distinguish between experimental and predicted properties</p>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -476,7 +473,7 @@ In this function, only metabolites that are labeled as “abnormal_concentration
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
-<li><p><strong>filename</strong> (<em>str</em>) – The name of the XML file that is being imported</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the XML file that is being imported</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -508,7 +505,7 @@ In this function, only metabolites that are labeled as “normal_concentration�
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
-<li><p><strong>filename</strong> (<em>str</em>) – The name of the XML file that is being imported</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the XML file that is being imported</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -539,7 +536,7 @@ which MUST be accounted for at the end of the DB-Creation process.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
-<li><p><strong>filename</strong> (<em>str</em>) – The name of the XML file that is being imported</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the XML file that is being imported</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -580,7 +577,7 @@ In this case, only properties labeled as &lt;experimental_properties&gt; are add
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
-<li><p><strong>filename</strong> (<em>str</em>) – The name of the XML file that is being imported</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the XML file that is being imported</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -596,6 +593,10 @@ In this case, only properties labeled as &lt;experimental_properties&gt; are add
 RETURN “Experimental ” + apoc.text.capitalizeAll(replace(kind, “_”, ” “)), value; however, this
 way we can select and not duplicate / overwrite values.</p>
 </div>
+<div class="admonition-todo admonition" id="id2">
+<p class="admonition-title">Todo</p>
+<p>It would be nice to be able to distinguish between experimental and predicted properties</p>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -607,7 +608,7 @@ In this case, properties will mostly relate to the gene from which the protein o
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
-<li><p><strong>filename</strong> (<em>str</em>) – The name of the XML file that is being imported</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the XML file that is being imported</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -632,7 +633,7 @@ because we believe not enough information is being given about them.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
-<li><p><strong>filename</strong> (<em>str</em>) – The name of the XML file that is being imported</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the XML file that is being imported</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -663,7 +664,7 @@ This relates each protein to some GO-Terms</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
-<li><p><strong>filename</strong> (<em>str</em>) – The name of the XML file that is being imported</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the XML file that is being imported</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -683,7 +684,7 @@ This relates each protein to some GO-Terms</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
-<li><p><strong>filename</strong> (<em>str</em>) – The name of the XML file that is being imported</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the XML file that is being imported</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -712,7 +713,7 @@ relationships (m)-[r:ASSOCIATED_WITH]-(p) ; this helps duplicates be detected.</
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
-<li><p><strong>filename</strong> (<em>str</em>) – The name of the XML file that is being imported</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the XML file that is being imported</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -744,7 +745,7 @@ adding some essential identifiers and external properties.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
-<li><p><strong>filename</strong> (<em>str</em>) – The name of the XML file that is being imported</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the XML file that is being imported</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -765,7 +766,7 @@ In this case, only properties labeled as &lt;predicted_properties&gt; are added.
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
-<li><p><strong>filename</strong> (<em>str</em>) – The name of the XML file that is being imported</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the XML file that is being imported</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -781,6 +782,10 @@ In this case, only properties labeled as &lt;predicted_properties&gt; are added.
 RETURN “Predicted ” + apoc.text.capitalizeAll(replace(kind, “_”, ” “)), value; however, this
 way we can select and not duplicate / overwrite values.</p>
 </div>
+<div class="admonition-todo admonition" id="id3">
+<p class="admonition-title">Todo</p>
+<p>It would be nice to be able to distinguish between experimental and predicted properties</p>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -791,7 +796,7 @@ way we can select and not duplicate / overwrite values.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
-<li><p><strong>filename</strong> (<em>str</em>) – The name of the XML file that is being imported</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the XML file that is being imported</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -818,7 +823,7 @@ In this case, properties will mostly relate to the protein itself.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
-<li><p><strong>filename</strong> (<em>str</em>) – The name of the XML file that is being imported</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the XML file that is being imported</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -843,7 +848,7 @@ because, after a preliminary search, they were mostly empty</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
-<li><p><strong>filename</strong> (<em>str</em>) – The name of the XML file that is being imported</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the XML file that is being imported</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -869,7 +874,7 @@ These represent the “kind” of metabolite we are dealing with (Family, etc)</
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
-<li><p><strong>filename</strong> (<em>str</em>) – The name of the XML file that is being imported</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the XML file that is being imported</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -897,7 +902,7 @@ as the full file, or as a splitted version of it, with just one item per file (w
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>newfile</strong> (<em>str</em>) – The path of the XML file to import</p></li>
+<li><p><strong>newfile</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The path of the XML file to import</p></li>
 <li><p><strong>driver</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Driver" title="(in Neo4j Python Driver v4.4)"><em>neo4j.Driver</em></a>) – Neo4J’s Bolt Driver currently in use</p></li>
 </ul>
 </dd>
@@ -916,7 +921,7 @@ or as a splitted version of it, with just one item per file (which is recommende
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>newfile</strong> (<em>str</em>) – The path of the XML file to import</p></li>
+<li><p><strong>newfile</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The path of the XML file to import</p></li>
 <li><p><strong>driver</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Driver" title="(in Neo4j Python Driver v4.4)"><em>neo4j.Driver</em></a>) – Neo4J’s Bolt Driver currently in use</p></li>
 </ul>
 </dd>
@@ -972,8 +977,10 @@ HMDB’s XMLs under <code class="docutils literal notranslate"><span class="pre"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
+    By Pablo Marcos<br/>
+  
       &copy; Copyright 2022, Pablo Marcos &lt;software @ loreak . org&gt;.<br/>
-    Last updated on Aug 26, 2022.<br/>
+    Last updated on Aug 30, 2022.<br/>
 </p>
         </footer>
     </div>

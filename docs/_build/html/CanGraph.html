@@ -37,7 +37,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="CanGraph.ExposomeExplorer package" href="CanGraph.ExposomeExplorer.html" />
-    <link rel="prev" title="Tutorials" href="Tutorials.html" />
+    <link rel="prev" title="To-Do List" href="ToDoList.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -96,24 +96,17 @@
             </li>
         </ul>
         <ul class="current nav bd-sidenav">
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="Tutorials.html">
-   Tutorials
+ <li class="toctree-l1">
+  <a class="reference internal" href="ToDoList.html">
+   To-Do List
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
-  <label for="toctree-checkbox-1">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul class="simple">
-  </ul>
  </li>
  <li class="toctree-l1 current active has-children">
   <a class="current reference internal" href="#">
    CanGraph package
   </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-  <label for="toctree-checkbox-2">
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -364,6 +357,25 @@ title="Print to PDF"
   <a class="reference internal nav-link" href="#module-CanGraph.deploy">
    CanGraph.deploy module
   </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cangraph-deploy-usage">
+     CanGraph.deploy Usage
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#Named Arguments">
+       Named Arguments
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cangraph-deploy-functions">
+     CanGraph.deploy Functions
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#module-CanGraph.main">
@@ -418,6 +430,25 @@ title="Print to PDF"
   <a class="reference internal nav-link" href="#module-CanGraph.deploy">
    CanGraph.deploy module
   </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cangraph-deploy-usage">
+     CanGraph.deploy Usage
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#Named Arguments">
+       Named Arguments
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cangraph-deploy-functions">
+     CanGraph.deploy Functions
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#module-CanGraph.main">
@@ -538,12 +569,192 @@ SPDX-License-Identifier: MIT
 </section>
 <section id="module-CanGraph.deploy">
 <span id="cangraph-deploy-module"></span><h2>CanGraph.deploy module<a class="headerlink" href="#module-CanGraph.deploy" title="Permalink to this headline">#</a></h2>
+<p>A python module that simplifies deploying the different formats the program can present itself as:</p>
+<ul class="simple">
+<li><p>A web documentation that is made using sphinx</p></li>
+<li><p>A PDF manual likewise made, also using LaTeX</p></li>
+<li><p>A git repo where the program can be accessed and version-tagged</p></li>
+<li><p>And, in the future… a singularity container!</p></li>
+</ul>
+<section id="cangraph-deploy-usage">
+<h3>CanGraph.deploy Usage<a class="headerlink" href="#cangraph-deploy-usage" title="Permalink to this headline">#</a></h3>
+<p>To use this module:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">python3</span> <span class="n">deploy</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">m</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">d</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">w</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">p</span><span class="p">]</span>
+</pre></div>
+</div>
+<section id="Named Arguments">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments" title="Permalink to this headline">#</a></h4>
+<dl class="option-list">
+<dt><kbd>-m, --main</kbd></dt>
+<dd><p>deploy code to your dev branch</p>
+</dd>
+<dt><kbd>-d, --dev</kbd></dt>
+<dd><p>deploy code to your main branch</p>
+</dd>
+<dt><kbd>-w, --web</kbd></dt>
+<dd><p>deploys the documentation to the ‘pages’ web site, depending on which is activated</p>
+</dd>
+<dt><kbd>-p, --pdf</kbd></dt>
+<dd><p>generates a PDF version of the sphinx manual, and saves it to the repo</p>
+</dd>
+</dl>
+</section>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For this program to work, the Git environment <strong>has to be set up first</strong>.
+You can ensure this by using: <code class="xref py py-obj docutils literal notranslate"><span class="pre">CanGraph.setup.setup_git</span></code></p>
+</div>
+</section>
+<section id="cangraph-deploy-functions">
+<h3>CanGraph.deploy Functions<a class="headerlink" href="#cangraph-deploy-functions" title="Permalink to this headline">#</a></h3>
+<p>This module is comprised of:</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.deploy.args_parser">
+<span class="sig-name descname"><span class="pre">args_parser</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CanGraph.deploy.args_parser" title="Permalink to this definition">#</a></dt>
+<dd><p>Parses the command line arguments into a more usable form, providing help and more</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A dictionary of the different possible options for the program as keys, specifying their set value.
+If no command-line arguments are provided, the help message is shown and the program exits.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.8/library/argparse.html#argparse.ArgumentParser" title="(in Python v3.8)">argparse.ArgumentParser</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note that, in Google Docstrings, if you want a multi-line <code class="docutils literal notranslate"><span class="pre">Returns</span></code> comment,
+you have to start it in a different line :(</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The return <strong>must</strong> be of type <a class="reference external" href="https://docs.python.org/3.8/library/argparse.html#argparse.ArgumentParser" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">argparse.ArgumentParser</span></code></a> for the <code class="docutils literal notranslate"><span class="pre">argparse</span></code>
+directive to work and auto-gen docs</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.deploy.deploy_code">
+<span class="sig-name descname"><span class="pre">deploy_code</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">branch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dev'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CanGraph.deploy.deploy_code" title="Permalink to this definition">#</a></dt>
+<dd><p>Deploys code from a given branch to the corresponding remote.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>branch</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the branch of the <strong>local</strong> git repo that we want to deploy</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Normally, the <code class="docutils literal notranslate"><span class="pre">pages</span></code> branch should be published using <a class="reference internal" href="#CanGraph.deploy.deploy_webdocs" title="CanGraph.deploy.deploy_webdocs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deploy_webdocs</span></code></a>,
+which in theory would be weird to publish without updating the docs first</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.deploy.deploy_pdf_manual">
+<span class="sig-name descname"><span class="pre">deploy_pdf_manual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">docs_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./docs/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">work_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manual_location</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./CanGraph_Manual.pdf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prechecks_done</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_domain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CanGraph.deploy.deploy_pdf_manual" title="Permalink to this definition">#</a></dt>
+<dd><p>Parses the command line arguments into a more usable form, providing help and more</p>
+<p>Generates the PDF docs guide, and publishes it in <code class="docutils literal notranslate"><span class="pre">manual_location</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>docs_folder</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The path to sphinx’s docs folder, where the tests will be run;
+by default <code class="docutils literal notranslate"><span class="pre">./docs/</span></code></p></li>
+<li><p><strong>work_dir</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The current Working Directory; by default</p></li>
+<li><p><strong>prechecks_done</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – Whether the prechecks present
+in <cite>~CanGraph.deploy.make_sphinx_prechecks</cite> have already been made</p></li>
+<li><p><strong>custom_domain</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – A custom domain to deploy de docs to.</p></li>
+<li><p><strong>manual_location</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The location (<strong>including filename</strong>) of the finalised PDF manual,
+relative to the location of the script</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Whether the prechecks have already been done; always True if the function is run</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.deploy.deploy_webdocs">
+<span class="sig-name descname"><span class="pre">deploy_webdocs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">docs_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./docs/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">work_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prechecks_done</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_domain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CanGraph.deploy.deploy_webdocs" title="Permalink to this definition">#</a></dt>
+<dd><p>Generates the HTML web docs, and publishes it both to Github and Codeberg pages</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>docs_folder</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The path to sphinx’s docs folder, where the tests will be run;
+by default <code class="docutils literal notranslate"><span class="pre">./docs/</span></code></p></li>
+<li><p><strong>work_dir</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The current Working Directory; by default</p></li>
+<li><p><strong>prechecks_done</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – Whether the prechecks present
+in <cite>~CanGraph.deploy.make_sphinx_prechecks</cite> have already been made</p></li>
+<li><p><strong>custom_domain</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – A custom domain to deploy de docs to.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Whether the prechecks have already been done; always True if the function is run</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For <code class="docutils literal notranslate"><span class="pre">custom_domain</span></code> to work, please configure your DNS records apparently</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">modules.rst</span></code> is not removed, but it is correctly ignored in conf.py</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.deploy.git_push">
+<span class="sig-name descname"><span class="pre">git_push</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_to_repo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remote_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">commit_message</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CanGraph.deploy.git_push" title="Permalink to this definition">#</a></dt>
+<dd><p>Pushes the current repo’s state to a remote git repository</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path_to_repo</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The path to the local <code class="docutils literal notranslate"><span class="pre">.git</span></code> folder</p></li>
+<li><p><strong>remote_name</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the remote to which we want to commit, which must be previously
+configured (see <code class="xref py py-obj docutils literal notranslate"><span class="pre">CanGraph.setup.setup_git</span></code>)</p></li>
+<li><p><strong>commit_message</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The Git Commit Message for the current repo’s state</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">gitpython</span></code> is not good at managing complex commit messages (i.e. those with a Subject and a Body).
+If you want to add one of those, please, use <code class="docutils literal notranslate"><span class="pre">\n</span></code> as the separator; the function will take care of the rest</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>The approach taken hare was inspired
+by <a class="reference external" href="https://stackoverflow.com/questions/41836988/git-push-via-gitpython">StackOverflow #41836988</a></p>
+</div>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="CanGraph.deploy.main">
 <span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CanGraph.deploy.main" title="Permalink to this definition">#</a></dt>
 <dd><p>The function that executes the code</p>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.deploy.make_sphinx_prechecks">
+<span class="sig-name descname"><span class="pre">make_sphinx_prechecks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">docs_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./docs/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">work_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CanGraph.deploy.make_sphinx_prechecks" title="Permalink to this definition">#</a></dt>
+<dd><p>Generates sphinx api-docs for automatic documentation and uses <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">linkcheck`</span></code> to check for broken links</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>docs_folder</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The path to sphinx’s docs folder, where the tests will be run; by default <code class="docutils literal notranslate"><span class="pre">./docs/</span></code></p></li>
+<li><p><strong>work_dir</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The current Working Directory; by default <code class="docutils literal notranslate"><span class="pre">.</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 </section>
 <section id="module-CanGraph.main">
 <span id="cangraph-main-module"></span><h2>CanGraph.main module<a class="headerlink" href="#module-CanGraph.main" title="Permalink to this headline">#</a></h2>
@@ -580,7 +791,59 @@ and then provides an GraphML export file.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="CanGraph.main.main">
 <span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CanGraph.main.main" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>The function that executes the code</p>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>CAMBIAR NOMBRE A LOS MESH PARA INDICAR EL TIPO. AÑADIR NAME A LOS WIKIDATA</p>
+</div>
+<div class="admonition-todo admonition" id="id2">
+<p class="admonition-title">Todo</p>
+<p>FIX THE REPEAT TRANSACTION FUNCTION</p>
+</div>
+<div class="admonition-todo admonition" id="id3">
+<p class="admonition-title">Todo</p>
+<p>Match partial InChIs based on DICE-MACCS</p>
+</div>
+<div class="admonition-todo admonition" id="id4">
+<p class="admonition-title">Todo</p>
+<p>QUE FUNCIONE -&gt; ACTUALMENTE ESTA SECCION RALENTIZA MAZO</p>
+</div>
+<div class="admonition-todo admonition" id="id5">
+<p class="admonition-title">Todo</p>
+<p>CHECK APOC IS INSTALLED</p>
+</div>
+<div class="admonition-todo admonition" id="id6">
+<p class="admonition-title">Todo</p>
+<p>FIX MAIN</p>
+</div>
+<div class="admonition-todo admonition" id="id7">
+<p class="admonition-title">Todo</p>
+<p>MERGE BY INCHI, METANETX ID</p>
+</div>
+<div class="admonition-todo admonition" id="id8">
+<p class="admonition-title">Todo</p>
+<p>Fix find_protein_interactions_in_metanetx</p>
+</div>
+<div class="admonition-todo admonition" id="id9">
+<p class="admonition-title">Todo</p>
+<p>Mover esa funcion de setup a misc</p>
+</div>
+<div class="admonition-todo admonition" id="id10">
+<p class="admonition-title">Todo</p>
+<p>EDIT conf.py</p>
+</div>
+<div class="admonition-todo admonition" id="id11">
+<p class="admonition-title">Todo</p>
+<p>Detail Schema Changes</p>
+</div>
+<div class="admonition-todo admonition" id="id12">
+<p class="admonition-title">Todo</p>
+<p>Document the following Schema Changes:
+For Subject, we have a composite PK: Exposome_Explorer_ID, Age, Gender e Information
+Now, more diseases will have a WikiData_ID and a related MeSH. This will help with networking. And, this diseases dont even need to be a part of a cancer!
+The Gene nodes no longer exist in the full db? -&gt; They do</p>
+</div>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="CanGraph.main.scan_folder">
@@ -601,6 +864,10 @@ scripts present in the CanGraph package, with various, useful functionalities</p
 <dd class="field-odd"><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p>
 </dd>
 </dl>
+<div class="admonition-todo admonition" id="id13">
+<p class="admonition-title">Todo</p>
+<p>Make it download the image</p>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -612,7 +879,7 @@ scripts present in the CanGraph package, with various, useful functionalities</p
 <dd class="field-odd"><p>A text chain that represents the CYPHER query with the desired output. This can be run using: <a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session.run" title="(in Neo4j Python Driver v4.4)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">neo4j.Session.run</span></code></a></p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>str</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)">str</a></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -656,8 +923,8 @@ where this approach was taken from</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>url</strong> (<em>str</em>) – The Uniform Resource Locator for the Zipfile to be downloaded and unzipped</p></li>
-<li><p><strong>folder</strong> (<em>str</em>) – The folder under which the file will be stored.</p></li>
+<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The Uniform Resource Locator for the Zipfile to be downloaded and unzipped</p></li>
+<li><p><strong>folder</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The folder under which the file will be stored.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -673,8 +940,8 @@ where this approach was taken from</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>url</strong> (<em>str</em>) – The Uniform Resource Locator for the Zipfile to be downloaded and unzipped</p></li>
-<li><p><strong>folder</strong> (<em>str</em>) – The folder under which the file will be stored.</p></li>
+<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The Uniform Resource Locator for the Zipfile to be downloaded and unzipped</p></li>
+<li><p><strong>folder</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The folder under which the file will be stored.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -696,7 +963,7 @@ and from <a class="reference external" href="https://stackoverflow.com/questions
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
-<li><p><strong>exportname</strong> (<em>str</em>) – The name for the exported file, which will be saved under ./Neo4JImportPath/</p></li>
+<li><p><strong>exportname</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name for the exported file, which will be saved under ./Neo4JImportPath/</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -725,15 +992,15 @@ using <a class="reference internal" href="CanGraph.MeSHandMetaNetX.html#CanGraph
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>driver</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Driver" title="(in Neo4j Python Driver v4.4)"><em>neo4j.Driver</em></a>) – Neo4J’s Bolt Driver currently in use</p></li>
-<li><p><strong>query_type</strong> (<em>str</em>) – one of [“HMDB_ID”,”ChEBI_ID”,”InChI”,”Name”]; the type of query we will be searching synonyms in</p></li>
-<li><p><strong>query</strong> (<em>str</em>) – The value of an identifier based on which we want to find synonyms for a metabolite</p></li>
+<li><p><strong>query_type</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – one of [“HMDB_ID”,”ChEBI_ID”,”InChI”,”Name”]; the type of query we will be searching synonyms in</p></li>
+<li><p><strong>query</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The value of an identifier based on which we want to find synonyms for a metabolite</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>a list of the synonyms that MetaNetx can find for <code class="docutils literal notranslate"><span class="pre">query</span></code>, including the query itself</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#list" title="(in Python v3.8)">list</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -756,7 +1023,7 @@ and repeated in case it fails.</p>
 <dd class="field-even"><p>Neo4J’s Import Path, i.e., where Neo4J will pick up files to be imported using the <code class="docutils literal notranslate"><span class="pre">`file:///`</span></code> schema</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -769,7 +1036,7 @@ and repeated in case it fails.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
-<li><p><strong>importname</strong> (<em>str</em>) – The name for the file to be imported, which must be under ./Neo4JImportPath/</p></li>
+<li><p><strong>importname</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name for the file to be imported, which must be under ./Neo4JImportPath/</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -803,7 +1070,7 @@ it returns a one-item list with the import path itself, but it <strong>needs</st
 <dd class="field-even"><p>A one-item list containing the Neo4J Import Path</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -857,11 +1124,11 @@ new info, one might consider them not useful.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
-<li><p><strong>node_type</strong> (<em>str</em>) – The label of the nodes that will be selected for merging. If more than one, leave null and set
+<li><p><strong>node_type</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The label of the nodes that will be selected for merging. If more than one, leave null and set
 optional_where = <code class="docutils literal notranslate"><span class="pre">WHERE</span> <span class="pre">(n:Label1</span> <span class="pre">ÒR</span> <span class="pre">n:Label2)</span> <span class="pre">AND</span> <span class="pre">...</span></code></p></li>
-<li><p><strong>condition</strong> (<em>str</em>) – The node properties used for collecting, if not using all properties. This can be expressed as:
+<li><p><strong>condition</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The node properties used for collecting, if not using all properties. This can be expressed as:
 <code class="docutils literal notranslate"><span class="pre">n.{property_1}</span> <span class="pre">as</span> <span class="pre">a,</span> <span class="pre">n.{property_n}</span> <span class="pre">as</span> <span class="pre">b</span></code></p></li>
-<li><p><strong>optional_where</strong> (<em>str</em>) – An optional <code class="docutils literal notranslate"><span class="pre">WHERE</span></code> Neo4J Statement to constrain the nodes that are picked up; default is “” (no statement)</p></li>
+<li><p><strong>optional_where</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – An optional <code class="docutils literal notranslate"><span class="pre">WHERE</span></code> Neo4J Statement to constrain the nodes that are picked up; default is “” (no statement)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -940,16 +1207,16 @@ so that it does not crash when processing it. It also allows to start reading fr
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filepath</strong> (<em>str</em>) – The path to the file that needs to be xplitted</p></li>
-<li><p><strong>splittag</strong> (<em>str</em>) – The tag based on which the file will be split</p></li>
-<li><p><strong>bigtag</strong> (<em>str</em>) – The main tag of the file, which needs to be re-added.</p></li>
+<li><p><strong>filepath</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The path to the file that needs to be xplitted</p></li>
+<li><p><strong>splittag</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The tag based on which the file will be split</p></li>
+<li><p><strong>bigtag</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The main tag of the file, which needs to be re-added.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The number of files that have been produced from the original</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>int</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)">int</a></p>
 </dd>
 </dl>
 <div class="admonition warning">
@@ -967,16 +1234,16 @@ the <code class="docutils literal notranslate"><span class="pre">&lt;metabolite&
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filepath</strong> (<em>str</em>) – The path to the file that needs to be xplitted</p></li>
-<li><p><strong>splittag</strong> (<em>str</em>) – The tag based on which the file will be split</p></li>
-<li><p><strong>bigtag</strong> (<em>str</em>) – The main tag of the file, which needs to be re-added.</p></li>
+<li><p><strong>filepath</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The path to the file that needs to be xplitted</p></li>
+<li><p><strong>splittag</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The tag based on which the file will be split</p></li>
+<li><p><strong>bigtag</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The main tag of the file, which needs to be re-added.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The number of files that have been produced from the original</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>int</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -994,16 +1261,16 @@ things, for example, if you are using the singularity package</p>
 <dd><p>Checks for the presence of a file, and exits the program</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>filepath</strong> (<em>str</em>) – The path of the file its existence is being checked</p>
+<dd class="field-odd"><p><strong>filepath</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The path of the file its existence is being checked</p>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If the file does not exist</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.8/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – If the file does not exist</p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>True if successful, False otherwise.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>bool</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1014,7 +1281,7 @@ things, for example, if you are using the singularity package</p>
 <dd><p>Prompts the user with a final message.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>interactive</strong> (<em>bool</em>) – Whether the session is set to be interactive or not</p>
+<dd class="field-odd"><p><strong>interactive</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – Whether the session is set to be interactive or not</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1025,7 +1292,7 @@ things, for example, if you are using the singularity package</p>
 <dd><p>Prompts the user with an initial message if the session is set to be interactive.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>interactive</strong> (<em>bool</em>) – Whether the session is set to be interactive or not</p>
+<dd class="field-odd"><p><strong>interactive</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – Whether the session is set to be interactive or not</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1037,12 +1304,12 @@ things, for example, if you are using the singularity package</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>requirements_file</strong> (<em>str</em>) – The path to a “requirements.txt” file, containing one requirement per line</p></li>
-<li><p><strong>package_name</strong> (<em>str</em>) – A package to be installed</p></li>
+<li><p><strong>requirements_file</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The path to a “requirements.txt” file, containing one requirement per line</p></li>
+<li><p><strong>package_name</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – A package to be installed</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If neither a <code class="docutils literal notranslate"><span class="pre">requirements_file</span></code> nor a <code class="docutils literal notranslate"><span class="pre">package_name</span></code> is provided</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.8/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – If neither a <code class="docutils literal notranslate"><span class="pre">requirements_file</span></code> nor a <code class="docutils literal notranslate"><span class="pre">package_name</span></code> is provided</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1060,9 +1327,13 @@ things, for example, if you are using the singularity package</p>
 splitting them for easier processing later on.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>interactive</strong> (<em>bool</em>) – Whether the session is set to be interactive or not</p>
+<dd class="field-odd"><p><strong>interactive</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – Whether the session is set to be interactive or not</p>
 </dd>
 </dl>
+<div class="admonition-todo admonition" id="id14">
+<p class="admonition-title">Todo</p>
+<p>What if <code class="docutils literal notranslate"><span class="pre">interactive=False</span></code>?</p>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -1072,9 +1343,13 @@ splitting them for easier processing later on.</p>
 splitting them for easier processing later on.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>interactive</strong> (<em>bool</em>) – Whether the session is set to be interactive or not</p>
+<dd class="field-odd"><p><strong>interactive</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – Whether the session is set to be interactive or not</p>
 </dd>
 </dl>
+<div class="admonition-todo admonition" id="id15">
+<p class="admonition-title">Todo</p>
+<p>What if <code class="docutils literal notranslate"><span class="pre">interactive=False</span></code>?</p>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -1083,16 +1358,16 @@ splitting them for easier processing later on.</p>
 <dd><p>Creates the “Databases” folder if it does not exist. If it does, it exits so as not to overwrite.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>interactive</strong> (<em>bool</em>) – Whether the session is set to be interactive or not</p>
+<dd class="field-odd"><p><strong>interactive</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – Whether the session is set to be interactive or not</p>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If the Databases folder already exists (so as not to overwrite)</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.8/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – If the Databases folder already exists (so as not to overwrite)</p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>True if successful, False otherwise.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>bool</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1104,7 +1379,7 @@ splitting them for easier processing later on.</p>
 splitting them for easier processing later on.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>interactive</strong> (<em>bool</em>) – Whether the session is set to be interactive or not</p>
+<dd class="field-odd"><p><strong>interactive</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – Whether the session is set to be interactive or not</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1116,7 +1391,7 @@ splitting them for easier processing later on.</p>
 splitting them for easier processing later on.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>interactive</strong> (<em>bool</em>) – Whether the session is set to be interactive or not</p>
+<dd class="field-odd"><p><strong>interactive</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – Whether the session is set to be interactive or not</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1132,11 +1407,11 @@ splitting them for easier processing later on.</p>
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="Tutorials.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="ToDoList.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Tutorials</p>
+            <p class="prev-next-title">To-Do List</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="CanGraph.ExposomeExplorer.html" title="next page">
@@ -1153,8 +1428,10 @@ splitting them for easier processing later on.</p>
     <div class="footer-content row">
         <footer class="col footer"><p>
   
+    By Pablo Marcos<br/>
+  
       &copy; Copyright 2022, Pablo Marcos &lt;software @ loreak . org&gt;.<br/>
-    Last updated on Aug 26, 2022.<br/>
+    Last updated on Aug 30, 2022.<br/>
 </p>
         </footer>
     </div>

@@ -96,24 +96,17 @@
             </li>
         </ul>
         <ul class="current nav bd-sidenav">
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="Tutorials.html">
-   Tutorials
+ <li class="toctree-l1">
+  <a class="reference internal" href="ToDoList.html">
+   To-Do List
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
-  <label for="toctree-checkbox-1">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul class="simple">
-  </ul>
  </li>
  <li class="toctree-l1 current active has-children">
   <a class="reference internal" href="CanGraph.html">
    CanGraph package
   </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-  <label for="toctree-checkbox-2">
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -448,7 +441,7 @@ to annotate existing metabolites (as showcased in <a class="reference internal" 
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
-<li><p><strong>filename</strong> (<em>str</em>) – The name of the CSV file that is being imported</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the CSV file that is being imported</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -477,7 +470,7 @@ Since this is done after the creation of said pathways in the last step, this wi
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
-<li><p><strong>filename</strong> (<em>str</em>) – The name of the CSV file that is being imported</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the CSV file that is being imported</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -487,6 +480,10 @@ Since this is done after the creation of said pathways in the last step, this wi
 <dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v4.4)">neo4j.work.result.Result</a></p>
 </dd>
 </dl>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>This file is really big. It could be divided into smaller ones.</p>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -497,7 +494,7 @@ Since this is done after the creation of said pathways in the last step, this wi
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
-<li><p><strong>filename</strong> (<em>str</em>) – The name of the CSV file that is being imported</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the CSV file that is being imported</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -515,6 +512,10 @@ Since this is done after the creation of said pathways in the last step, this wi
 <p class="admonition-title">Note</p>
 <p>This database clearly differentiates Metabolites and Proteins, so no overlap is accounted for</p>
 </div>
+<div class="admonition-todo admonition" id="id2">
+<p class="admonition-title">Todo</p>
+<p>Why is the SMPDB_ID property called like that and not SMDB_ID?</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Since no unique identifier was found, CREATE had to be used (instead of merge). This might create
@@ -530,11 +531,11 @@ duplicates. which should be accounted for.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v4.4)"><em>neo4j.work.simple.Session</em></a>) – The session under which the driver is running</p></li>
-<li><p><strong>seq_id</strong> (<em>str</em>) – The UniProt Database Identifier for the sequence that is been imported</p></li>
-<li><p><strong>seq_name</strong> (<em>str</em>) – The Name (i.e. FASTA header) of the Sequence that is been imported</p></li>
-<li><p><strong>seq_type</strong> (<em>bool</em>) – The type of the sequence; can be either of [“DNA”, “PROT”]</p></li>
-<li><p><strong>seq</strong> (<em>str</em>) – The seuqnce that is been imported; a text chain of nucleotides or aminoacids, identified by their acronyms</p></li>
-<li><p><strong>seq_format</strong> (<em>str</em>) – The format the sequence is provided under; default is “FASTA”, but its optional</p></li>
+<li><p><strong>seq_id</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The UniProt Database Identifier for the sequence that is been imported</p></li>
+<li><p><strong>seq_name</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The Name (i.e. FASTA header) of the Sequence that is been imported</p></li>
+<li><p><strong>seq_type</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – The type of the sequence; can be either of [“DNA”, “PROT”]</p></li>
+<li><p><strong>seq</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The seuqnce that is been imported; a text chain of nucleotides or aminoacids, identified by their acronyms</p></li>
+<li><p><strong>seq_format</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The format the sequence is provided under; default is “FASTA”, but its optional</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -556,11 +557,11 @@ version of it, with just one item per file (which is recommended due to memory l
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>databasepath</strong> (<em>str</em>) – The path to the database where all SMPDB CSVs are stored</p></li>
-<li><p><strong>filepath</strong> (<em>str</em>) – The path to the current file being imported</p></li>
-<li><p><strong>Neo4JImportPath</strong> (<em>str</em>) – The path from which Neo4J is importing data</p></li>
+<li><p><strong>databasepath</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The path to the database where all SMPDB CSVs are stored</p></li>
+<li><p><strong>filepath</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The path to the current file being imported</p></li>
+<li><p><strong>Neo4JImportPath</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The path from which Neo4J is importing data</p></li>
 <li><p><strong>driver</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Driver" title="(in Neo4j Python Driver v4.4)"><em>neo4j.Driver</em></a>) – Neo4J’s Bolt Driver currently in use</p></li>
-<li><p><strong>filetype</strong> (<em>bool</em>) – The type of file being imported; one of ether [“Metabolite”, “Protein”]- If the file is a FASTA sequence store, this will be auto-detected.</p></li>
+<li><p><strong>filetype</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – The type of file being imported; one of ether [“Metabolite”, “Protein”]- If the file is a FASTA sequence store, this will be auto-detected.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -578,7 +579,7 @@ version of it, with just one item per file (which is recommended due to memory l
 <section id="module-CanGraph.GraphifySMPDB.main">
 <span id="cangraph-graphifysmpdb-main-module"></span><h2>CanGraph.GraphifySMPDB.main module<a class="headerlink" href="#module-CanGraph.GraphifySMPDB.main" title="Permalink to this headline">#</a></h2>
 <p>A python module that leverages the functions present in the <a class="reference internal" href="#module-CanGraph.GraphifySMPDB.build_database" title="CanGraph.GraphifySMPDB.build_database"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_database</span></code></a>
-module to recreate <a class="reference external" href="http://http://smpdb.ca/">the SMPDB database</a> using a graph format and Neo4J,
+module to recreate <a class="reference external" href="http://smpdb.ca/">the SMPDB database</a> using a graph format and Neo4J,
 and then provides an GraphML export file.</p>
 <p>Please note that, to work, the functions here pre-suppose you have internet access, which will be used to download
 HMDB’s CSVs under <code class="docutils literal notranslate"><span class="pre">`./csvfolder/`</span></code> (please ensure you have read-write access there).</p>
@@ -590,7 +591,7 @@ HMDB’s CSVs under <code class="docutils literal notranslate"><span class="pre"
 The function assumes the file is availaible at <code class="docutils literal notranslate"><span class="pre">`./csvfolder/smpdb_gene.fasta`</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>Neo4JImportPath</strong> (<em>str</em>) – The path from which Neo4J is importing data</p>
+<dd class="field-odd"><p><strong>Neo4JImportPath</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The path from which Neo4J is importing data</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>This function modifies the Neo4J Database as desired, but does not produce any particular return.</p>
@@ -606,8 +607,8 @@ The function assumes <code class="docutils literal notranslate"><span class="pre
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> (<em>str</em>) – The name of the CSV file that is being imported</p></li>
-<li><p><strong>Neo4JImportPath</strong> (<em>str</em>) – The path from which Neo4J is importing data</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the CSV file that is being imported</p></li>
+<li><p><strong>Neo4JImportPath</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The path from which Neo4J is importing data</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -623,7 +624,7 @@ The function assumes <code class="docutils literal notranslate"><span class="pre
 The function assumes the file is availaible at <code class="docutils literal notranslate"><span class="pre">`./csvfolder/smpdb_gene.fasta`</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>Neo4JImportPath</strong> (<em>str</em>) – The path from which Neo4J is importing data</p>
+<dd class="field-odd"><p><strong>Neo4JImportPath</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The path from which Neo4J is importing data</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>This function modifies the Neo4J Database as desired, but does not produce any particular return.</p>
@@ -638,7 +639,7 @@ The function assumes the file is availaible at <code class="docutils literal not
 The function assumes the file is availaible at <code class="docutils literal notranslate"><span class="pre">`./csvfolder/smpdb_protein.fasta`</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>Neo4JImportPath</strong> (<em>str</em>) – The path from which Neo4J is importing data</p>
+<dd class="field-odd"><p><strong>Neo4JImportPath</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The path from which Neo4J is importing data</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>This function modifies the Neo4J Database as desired, but does not produce any particular return.</p>
@@ -654,8 +655,8 @@ The function assumes <code class="docutils literal notranslate"><span class="pre
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> (<em>str</em>) – The name of the CSV file that is being imported</p></li>
-<li><p><strong>Neo4JImportPath</strong> (<em>str</em>) – The path from which Neo4J is importing data</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the CSV file that is being imported</p></li>
+<li><p><strong>Neo4JImportPath</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The path from which Neo4J is importing data</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -702,8 +703,10 @@ The function assumes <code class="docutils literal notranslate"><span class="pre
     <div class="footer-content row">
         <footer class="col footer"><p>
   
+    By Pablo Marcos<br/>
+  
       &copy; Copyright 2022, Pablo Marcos &lt;software @ loreak . org&gt;.<br/>
-    Last updated on Aug 26, 2022.<br/>
+    Last updated on Aug 30, 2022.<br/>
 </p>
         </footer>
     </div>

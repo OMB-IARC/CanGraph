@@ -7,7 +7,7 @@
 
 """
 A python module that leverages the functions present in the :obj:`~CanGraph.GraphifySMPDB.build\_database`
-module to recreate `the SMPDB database <http://http://smpdb.ca/>`_ using a graph format and Neo4J,
+module to recreate `the SMPDB database <http://smpdb.ca/>`_ using a graph format and Neo4J,
 and then provides an GraphML export file.
 
 Please note that, to work, the functions here pre-suppose you have internet access, which will be used to download

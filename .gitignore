@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: MIT
 
-# Ignore the __pycache__ folder (unnecessary) in any subfolder
+# Ignore the __pycache__ folder (unnecessary) in any subfolder or the main folder
 **/__pycache__/
 __pycache__/
 
@@ -26,3 +26,5 @@ DataBases/
 # Ignore confidential sample input
 sample_input.csv
 
+# Ignore python docs' build data
+docs/_build

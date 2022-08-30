@@ -167,7 +167,7 @@ def link_to_original_data(row, import_based_on):
 def annotate_using_wikidata():
 
     #Once we finish the search, we annotate the existing nodes using WikiData
-    #TODO: WHEN FIXING QUERIES, FIX THE MAIN SUBSCRIPT ALSO
+    #.. TODO:: When fixing queries, fix the main subscript also
     with driver.session() as session:
         misc.repeat_transaction(WikiDataBase.add_wikidata_to_mesh, 10, session, bar)
         misc.repeat_transaction(WikiDataBase.add_metabolite_info, 10, session, bar, number = None, query = "ChEBI_ID")
@@ -208,6 +208,26 @@ def add_mesh_and_metanetx():
         session.run(MeSHandMetaNetXDataBases.get_kegg_pathways_for_metabolites())
 
 def main():
+    """
+    The function that executes the code
+
+    .. TODO:: CAMBIAR NOMBRE A LOS MESH PARA INDICAR EL TIPO. AÑADIR NAME A LOS WIKIDATA
+    .. TODO:: FIX THE REPEAT TRANSACTION FUNCTION
+    .. TODO:: Match partial InChIs based on DICE-MACCS
+    .. TODO:: QUE FUNCIONE -> ACTUALMENTE ESTA SECCION RALENTIZA MAZO
+    .. TODO:: CHECK APOC IS INSTALLED
+    .. TODO:: FIX MAIN
+    .. TODO:: MERGE BY INCHI, METANETX ID
+    .. TODO:: Fix find_protein_interactions_in_metanetx
+    .. TODO:: Mover esa funcion de setup a misc
+    .. TODO:: EDIT conf.py
+    .. TODO:: Detail Schema Changes
+
+    .. TODO:: Document the following Schema Changes:
+        For Subject, we have a composite PK: Exposome_Explorer_ID, Age, Gender e Information
+        Now, more diseases will have a WikiData_ID and a related MeSH. This will help with networking. And, this diseases dont even need to be a part of a cancer!
+        The Gene nodes no longer exist in the full db? -> They do
+    """
 
     # First, we prepare a scan of all the files available on our "DataBases" folder
     # We will cycle through them later on to try and find matches
@@ -256,24 +276,6 @@ def main():
                         #Each time we import some nodes, link them to our original data
                         #NOTE: This WILL duplicate nodes and relations, but we will fix this later when we purge the DB
                         link_to_original_data(row. import_based_on)
-
-                # TODO: CAMBIAR NOMBRE A LOS MESH PARA INDICAR EL TIPO. AÑADIR NAME A LOS WIKIDATA
-                # TODO: FIX THE REPEAT TRANSACTION FUNCTION
-                # TODO: Match partial InChIs based on DICE-MACCS
-                # TODO: QUE FUNCIONE -> ACTUALMENTE ESTA SECCION RALENTIZA MAZO
-                # TODO: CHECK APOC IS INSTALLED
-                # TODO: FIX MAIN
-                # TODO: MERGE BY INCHI, METANETX ID
-                # TODO: Fix find_protein_interactions_in_metanetx
-                # TODO: DOCSTRINGS ON SCRIPTS
-                # TODO: PYTHONIZE MAIN.PYs
-                # TODO: Mover esa funcion de setup a misc
-                # TODO: EDIT conf.py
-
-                # Section Schema Changes
-                # NOTE: For Subject, we have a composite PK: Exposome_Explorer_ID, Age, Gender e Information
-                # NOTE: Now, more diseases will have a WikiData_ID and a related MeSH. This will help with networking. And, this diseases dont even need to be a part of a cancer!
-                # NOTE: The Gene nodes no longer exist in the full db
 
                 # And advance, of course
                 bar()

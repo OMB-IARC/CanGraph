@@ -15,3 +15,4 @@ sphinx-design       # Sphinx extension for cuter docs
 myst-parser         # Enable MarkDown Documentation
 gitpython           # Manage Git directly from Python
 argparse            # Arguments pàrser for Python
+sphinx-argparse     # Auto-generate args for command line projects

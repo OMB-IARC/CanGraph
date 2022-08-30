@@ -18,7 +18,7 @@ liking, but it should at least contain the root `toctree` directive.
 :hidden: true
 :maxdepth: 3
 
-Tutorials
+ToDoList
 
 CanGraph
 ```
@@ -64,6 +64,19 @@ Get started
 
 CanGraph is a python program that allows you to extract information about a newly discovered or existing metabolite from the following databases:
 
+<!-- Since emojis are not availaible in LaTeX, lets include them only in the Web build,
+     replacing things for the LaTeX build-->
+
+```{only} latex
+* Human Metabolome DB
+* DrugBank
+* Exposome Explorer
+* WikiData
+* SMPDB
+* MesH and MetaNetX
+```
+
+```{only} html
 ::::{grid} 1 1 2 3
 :class-container: text-center
 :gutter: 3
@@ -137,6 +150,7 @@ Unified NameSpace for metabolites and Medical Subject Headings.
 :::
 
 ::::
+```
 
 For this purpose, CanGraph accepts any of the following inputs:
 
