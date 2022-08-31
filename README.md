@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: 2022 Pablo Marcos <software@loreak.org>
 SPDX-License-Identifier: MIT
 -->
 
-<div align="center"> <img src="_static/main_schema.png" width="75%"> </div>
+![The Schema for CanGraph, shown on Neo4J browser](./main_schema.png)
 <br>
 
 This Git Project, created as part of my Master's Intenship at IARC, contains a series of scripts that pulls information from a series of **five** databases from their native format (XML, CSV, etc) into a common, GraphML format, using a shared schema that has been defined to minimize the number of repeated nodes and properties. This databases are:

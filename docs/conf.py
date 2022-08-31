@@ -20,7 +20,6 @@ sys.path.insert(0, os.path.abspath('../MeSHandMetaNetX'))
 # -- Project information -----------------------------------------------------
 
 project = 'CanGraph'
-author = "Pablo Marcos"
 copyright = '2022, Pablo Marcos <software @ loreak . org>'
 
 version = '0.9'  # Short release number
@@ -31,14 +30,14 @@ release = '0.9'  # Full release number
 
 # Add any Sphinx extension module names here, as strings.
 extensions = [
-   'sphinx.ext.napoleon',         # Enable parsing of NumPy/Google style docstrings
-   'sphinx.ext.autodoc',          # Auto-document the code
-   'sphinx.ext.autosummary',      # Auto-create the summaries
-   'sphinx.ext.todo',             # Enable the TODO and TODOLIST directives
-   'sphinx.ext.intersphinx',      # Link to other projects’ documentation
-   'sphinx_design',               # Enable cute docs layouts
-   'myst_parser',                 # Enable MarkDown Documentation
-   'sphinxarg.ext',               # Auto-generate args for command line projects
+   'sphinx.ext.napoleon',        # Enable parsing of NumPy/Google style docstrings
+   'sphinx.ext.autodoc',         # Auto-document the code
+   'sphinx.ext.autosummary',     # Auto-create the summaries
+   'sphinx.ext.todo',            # Enable the TODO and TODOLIST directives
+   'sphinx.ext.intersphinx',     # Link to other projects’ documentation
+   'sphinx_design',              # Enable cute docs layouts
+   'myst_parser',                # Enable MarkDown Documentation
+   'sphinxarg.ext',              # Auto-generate args for command line projects
 ]
 
 # Enable correct parsing by myst and remove superflous MD warnings
@@ -52,7 +51,7 @@ autosummary_generate = True
 add_module_names = False
 
 # Include TO-DOs
-todo_include_todos = True
+todo_include_todos = False
 
 # Set the documents which Sphinx will process
 source_suffix = ['.rst', '.md']
@@ -70,7 +69,7 @@ nitpicky = True
 
 # Enable linking to external project's documentation
 intersphinx_mapping = {'neo4j': ('https://neo4j.com/docs/api/python-driver/current/', None),
-                       "python": ("https://docs.python.org/3.8", None),
+                       #"python": ("https://docs.python.org/3.8", None),
                        #"sphinx": ("https://www.sphinx-doc.org/en/master", None)
                        }
 
@@ -96,7 +95,6 @@ html_theme_options = {
   "toc_title": "In this page",
   "extra_navbar": '''Logo by <a href="https://www.instagram.com/danonino.caducado/"> Daniel Marcos </a> </br>
                      Website by <a href="https://www.pablomarcos.me/"> Pablo Marcos </a>''',
-   "show_toc_level": 2
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,

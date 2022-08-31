@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: 2022 Pablo Marcos <software@loreak.org>
 SPDX-License-Identifier: MIT
 -->
 
-<div align="center"> <img src="_static/smpdb_schema.png" width="50%"> </div>
+![The Schema for the GraphifySMPDB package, shown on Neo4J browser](./smpdb_schema.png)
 <br>
 
 This script, created as part of my Master's Intenship at IARC, transitions the [Small Molecule Pathway Database](http://smpdb.ca/) (a high quality database containing associations betweem metabolites, proteins and metabolomic pathways) to Neo4J format in an automated way, providing an export in GraphML format.

@@ -1,3 +1,7 @@
+rem  SPDX-FileCopyrightText: 2022 Pablo Marcos <software@loreak.org>
+
+rem SPDX-License-Identifier: MIT
+
 @ECHO OFF
 
 pushd %~dp0

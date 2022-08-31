@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: 2022 Pablo Marcos <software@loreak.org>
 SPDX-License-Identifier: MIT
 -->
 
-<div align="center"> <img src="_static/hmdb_schema.png" width="50%"> </div>
+![The Schema for the GraphifyHMDB package, shown on Neo4J browser](./hmdb_schema.png)
 <br>
 
 This script, created as part of my Master's Intenship at IARC, imports nodes from the [Human Metabolome Database](https://hmdb.ca/) (a high quality, database containing a list of metabolites and proteins associated to different diseases) to Neo4J format in an automated way, providing an export in GraphML format.

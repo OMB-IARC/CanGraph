@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: 2022 Pablo Marcos <software@loreak.org>
 SPDX-License-Identifier: MIT
 -->
 
-<div align="center"> <img src="_static/drugbank_schema.png" width="50%"> </div>
+![The Schema for the GraphifyDrugBank package, shown on Neo4J browser](./drugbank_schema.png)
 <br>
 
 This package, created as part of my Master's Intenship at IARC, imports nodes from the [DrugBank Database](https://www.drugbank.com/) (a high quality database containing a drugs and proteins with some characteristics) to Neo4J format in an automated way, providing an export in GraphML format.

@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: 2022 Pablo Marcos <software@loreak.org>
 SPDX-License-Identifier: MIT
 -->
 
-<div align="center"> <img src="_static/wikidata_schema.png" width="50%"> </div>
+![The Schema for the QueryWikidata package, shown on Neo4J browser](./wikidata_schema.png)
 <br>
 
 This script, created as part of my Master's Intenship at IARC, imports nodes from the [WikiData SPARQL Service](https://query.wikidata.org), creating a high-quality representation of the data therein. Although wikidata is manually curated using [the Wiki principles](https://en.wikipedia.org/wiki/Wiki), [some publications have found](https://pubmed.ncbi.nlm.nih.gov/32180547/) it might be a good source of information for life sciences, specially due to the breadth of information it contains. It also provides an export in GraphML format.

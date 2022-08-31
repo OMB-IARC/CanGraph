@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: 2022 Pablo Marcos <software@loreak.org>
 SPDX-License-Identifier: MIT
 -->
 
-<div align="center"> <img src="_static/exposome_explorer_header.png" width="50%"> </div>
+![Since the E-E schema is confidential, a representation of a graph, created using NetworkX on python](./exposome_explorer_header.png)
 <br>
 
 This package, created as part of my Master's Intenship at IARC, transitions the [exposome-explorer database](http://exposome-explorer.iarc.fr/) (a high quality, hand-curated database containing associations of foods and chemical compounds with cancer) to Neo4J format in an automated way, providing an export in GraphML format.

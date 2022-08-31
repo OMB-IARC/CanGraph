@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: 2022 Pablo Marcos <software@loreak.org>
 SPDX-License-Identifier: MIT
 -->
 
-<div align="center"> <img src="_static/meshandmetanetx_schema.png" width="50%"> </div>
+![The Schema for the MeSHandMetaNetX package, shown on Neo4J browser](./meshandmetanetx_schema.png)
 <br>
 
 This script, created as part of my Master's Intenship at IARC, transitions the [MetaNetX DataBase](https://www.metanetx.org/) (a high quality database that reconciles nomenclature for metabolites, proteins and metabolomic pathways) to Neo4J format in an automated way, providing an export in GraphML format.

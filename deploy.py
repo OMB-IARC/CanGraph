@@ -24,6 +24,7 @@ To use this module:
    :prog: python3 deploy.py
    :nodefault:
 
+
 .. NOTE:: For this program to work, the Git environment **has to be set up first**.
     You can ensure this by using: :obj:`CanGraph.setup.setup_git`
 
@@ -87,18 +88,20 @@ def git_push(path_to_repo, remote_name, commit_message):
     origin = repo.remote(name=remote_name)
     origin.push()
 
-def make_sphinx_prechecks(docs_folder = "./docs/", work_dir = "."):
+def make_sphinx_prechecks(docs_folder = "./docs/", work_dir = ".", gen_apidocs = False):
     """
     Generates sphinx api-docs for automatic documentation and uses ``make linkcheck``` to check for broken links
 
     Args:
+        gen_apidocs (bool): Whether to re-generate the API docs. Default is ``False`` since we use MD (we dont want RST files)
         docs_folder (str): The path to sphinx's docs folder, where the tests will be run; by default ``./docs/``
         work_dir (str): The current Working Directory; by default ``.``
     """
     cwd = os.getcwd(); os.chdir(os.path.abspath(docs_folder))
-    print("First, lets generate all the needed RST auto-doc files that don't already exist")
-    os.system("sphinx-apidoc -o . ..")
-    print("If everything is OK, press [ENTER]", end=""); response = input()
+    if gen_apidocs == True:
+        print("First, lets generate all the needed RST auto-doc files that don't already exist")
+        os.system("sphinx-apidoc -o . ..")
+        print("If everything is OK, press [ENTER]", end=""); response = input()
 
     print("Now, I will use sphinx's make linkcheck to list all broken links for you to fix them")
     os.system("make linkcheck")
@@ -189,6 +192,10 @@ def deploy_webdocs(docs_folder = "./docs/", work_dir = ".", prechecks_done=False
         with open("CNAME", "w+") as CNAME_file:
             CNAME_file.write("""cangraph.pablomarcos.me""")
 
+    # Now, add .nojekyll file so that GitHub doesnt try to use Jekyll... lol
+    with open(".nojekyll", "w") as domains_file:
+            domains_file.write(("\n"))
+
     # The repo is ready! Lets commit:
     print("Now, please provide a comment for Git ...")
     commit_message = input()
@@ -254,6 +261,7 @@ def deploy_pdf_manual(docs_folder = "./docs/", work_dir = ".", manual_location =
 def deploy_code(branch = "dev"):
     """
     Deploys code from a given branch to the corresponding remote.
+    If the "main" ``branch`` is selected, merge last commit from dev
 
     Args:
         branch (str): The name of the branch of the **local** git repo that we want to deploy
@@ -267,11 +275,16 @@ def deploy_code(branch = "dev"):
     print("First, please provide a comment for Git ...")
     commit_message = input()
 
+    # If branch is main, merge dev into main
+    if branch == "main":
+        repo.git.checkout("main")
+        repo.git.merge("dev")
+
     # And git add / commit / push
     print("Uploading to Codeberg ...")
-    git_push(".git", f"codeberg-{branch}", commit_message)
+    git_push(".git", f"codeberg", commit_message)
     print("Uploading to Github ...")
-    git_push(".git", f"github-{branch}", commit_message)
+    git_push(".git", f"github", commit_message)
 
 def main():
     """
