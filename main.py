@@ -10,7 +10,26 @@ A python module that leverages the functions present in the :obj:`~CanGraph.misc
 module and all other subpackages to annotate metabolites using a graph format and Neo4J,
 and then provides an GraphML export file.
 
-For more details on how to run this script, please consult the package's README
+CanGraph.main Usage
+---------------------
+
+To use this module:
+
+.. argparse::
+   :module: CanGraph.main
+   :func: args_parser
+   :prog: python3 main.py
+   :nodefault:
+
+You may find more info in the package's README.
+
+.. NOTE:: For this program to work, the Git environment **has to be set up first**.
+    You can ensure this by using: :obj:`CanGraph.setup.setup_git`
+
+CanGraph.main Functions
+-------------------------
+
+This module is comprised of:
 """
 
 # Import external modules necessary for the script
@@ -23,6 +42,7 @@ import rdkit                         # Cheminformatics and ML package
 from rdkit.Chem import MACCSkeys     # MACCS fingerprint calculation
 from Bio import SeqIO                # Bioinformatics package
 import re                            # Regular expression search
+import argparse                      # Arguments pàrser for Python
 
 # Import internal modules for the program
 import miscelaneous as misc
@@ -33,45 +53,99 @@ from ExposomeExplorer import build_database as ExposomeExplorerDataBase
 from QueryWikidata import build_database as WikiDataBase
 from MeSHandMetaNetX import build_database as MeSHandMetaNetXDataBases
 
-def scan_folder():
-    """ """
+def args_parser():
+    """
+    Parses the command line arguments into a more usable form, providing help and more
+
+    Returns:
+        argparse.ArgumentParser:
+            A dictionary of the different possible options for the program as keys, specifying their set value.
+            If no command-line arguments are provided, the help message is shown and the program exits.
+
+    .. NOTE:: Note that, in Google Docstrings, if you want a multi-line ``Returns`` comment,
+        you have to start it in a different line :(
+    .. NOTE:: The return **must** be of type :obj:`argparse.ArgumentParser` for the ``argparse``
+        directive to work and auto-gen docs
+    """
+    parser = argparse.ArgumentParser()
+    parser.add_argument("neo4jadress", help="the URL of the database, in neo4j:// or bolt:// format")
+    parser.add_argument("username", help="the username of the neo4j database in use")
+    parser.add_argument("password", help="the passowrd for the neo4j database in use. NOTE: "
+                                         "Since passed through bash, you may need to escape special characters")
+    parser.add_argument("databasefolder", help="The folder indicated to ```setup.py``` as the one where your databases "
+                                               "will be stored")
+    parser.add_argument("inputfile", help="The location of the CSV file in which the program will search for metabolites")
+
+    # If no args are provided, show the help message
+    if len(sys.argv)==1:
+        parser.print_help(sys.stderr)
+        sys.exit(1)
+
+    return parser
+
+def scan_folder(folder_path):
+    """
+    Scans a folder and finds all the files present in it
+
+    Args:
+        folder_path (str): The folder that is to be scanned
+    Returns:
+        list: A list of all the files in the folder, listed by their absolute path
+    """
     all_files = []
-    for root,dirs,files in os.walk(sys.argv[4]):
+    for root,dirs,files in os.walk(folder_path):
         for filename in files:
             all_files.append( os.path.abspath(os.path.join(root, filename)) )
     return all_files
 
-def find_reasons_to_import(text, filepath, chebi_ids, names, hmdb_ids, inchis):
-    """ """
-    import_based_on = []
+def find_reasons_to_import(filepath, chebi_ids, names, hmdb_ids, inchis):
+    """
+    Finds reasons to import a metabolite given a candidate filepath **with one metabolite per file**
+    and a series of lists containing all synonyms of the values considered reasons for import
+
+    Args:
+        filepath (str): The path to the file in which we will search for reasons to import
+        chebi_ids (list): A list of all the ChEBI_IDs which are considered a reason to import
+        names (list): A list of all the Names which are considered a reason to import
+        hmdb_ids (list): A list of all the HMDB_IDs which are considered a reason to import
+        inchis (list): A list of all the InChIs which are considered a reason to import
+
+    Returns:
+        list: A list of the methods that turned out to be valid for import, such as Name, ChEBI_ID...
+    """
+    import_based_on = []; text = ""
     relpath = os.path.relpath(filepath, ".")
+
+    with open(f'{filepath}', "r") as f:
+        text = f.read()
 
     # We try to find exact InChI matches:
     if any(inchi in text for inchi in inchis):
         import_based_on.append("Exact InChI")
     # If none if found, we use the "Similarity Evaluator" metric
     elif "InChI=" in text:
-        # SOURCE: https://chemistry.stackexchange.com/questions/82144/what-is-the-correct-regular-expression-for-inchi
-        results = re.search("InChI\=1S?\/[A-Za-z0-9\.]+(\+[0-9]+)?(\/[cnpqbtmsih][A-Za-z0-9\-\+\(\)\,\/\?\;\.]+)*(\"|\<)", text)
-        if results:
-            result = results.group(0).replace("<","").replace("\"","")
+        for inchi in inchis:
+            # SOURCE: https://chemistry.stackexchange.com/questions/82144/what-is-the-correct-regular-expression-for-inchi
+            results = re.search("InChI\=1S?\/[A-Za-z0-9\.]+(\+[0-9]+)?(\/[cnpqbtmsih][A-Za-z0-9\-\+\(\)\,\/\?\;\.]+)*(\"|\<)", text)
+            if results:
+                result = results.group(0).replace("<","").replace("\"","")
 
-            found_error = False
-            try:
-                Query = rdkit.Chem.MolFromInchi(f"{result}")
-                MACCSQuery = MACCSkeys.GenMACCSKeys(Query)
-            except Exception as error:
-                found_error = True
-                pass
+                found_error = False
+                try:
+                    Query = rdkit.Chem.MolFromInchi(f"{result}")
+                    MACCSQuery = MACCSkeys.GenMACCSKeys(Query)
+                except Exception as error:
+                    found_error = True
+                    pass
 
-            if found_error == False:
-                Subject = rdkit.Chem.MolFromInchi(row["InChI"])
-                MACCSSubject = MACCSkeys.GenMACCSKeys(Subject)
+                if found_error == False:
+                    Subject = rdkit.Chem.MolFromInchi(inchi)
+                    MACCSSubject = MACCSkeys.GenMACCSKeys(Subject)
 
 
-                DICE_MACCS = rdkit.DataStructs.DiceSimilarity(MACCSQuery, MACCSSubject)
-                if DICE_MACCS > 0.95:
-                    import_based_on.append(f"DICE-MACCS {100*round(DICE_MACCS, 4)} % similarity")
+                    DICE_MACCS = rdkit.DataStructs.DiceSimilarity(MACCSQuery, MACCSSubject)
+                    if DICE_MACCS > 0.95:
+                        import_based_on.append(f"DICE-MACCS {100*round(DICE_MACCS, 4)} % similarity")
 
     # For CHEBI, if we are using E-E, and since they dont have a prefix (i.e. they are only a number) we have to process the files.
     if "ExposomeExplorer/components" in relpath:
@@ -80,9 +154,10 @@ def find_reasons_to_import(text, filepath, chebi_ids, names, hmdb_ids, inchis):
         # NOTE: Here, we remove the optional CHEBI: prefix
         if chebi_query in [chebi_id.replace("CHEBI:", "").replace("chebi:", "") for chebi_id in chebi_ids]:
             import_based_on.append("ChEBI")
-    # And, even if its not E-E, we still need to convert it to tag format
-    elif row["ChEBI"].replace("CHEBI:", "<chebi_id>") in text:
-        import_based_on.append("ChEBI")
+    # And, even if its not E-E, we still need to add the tag before for things to match
+    for chebi_query in chebi_ids:
+        if f"<chebi_id>{chebi_query.replace('CHEBI:', '')}" in text:
+            import_based_on.append("ChEBI")
 
     # For the rest of the databases, we simply search for exact matches in our list and the texts:
     if any(hmdb in text for hmdb in hmdb_ids):
@@ -90,11 +165,23 @@ def find_reasons_to_import(text, filepath, chebi_ids, names, hmdb_ids, inchis):
     if any(name in text for name in names):
         import_based_on.append("Name")
 
-    return import_based_on
+    # We return a list of a dict from keys to remove duplicates from the "reasons to import" list
+    return list(dict.fromkeys(import_based_on))
 
 def build_from_file(filepath):
     """
-    TODO EXPLICAR PQ HAGO LO DE RELPATH
+    Imports a given metabolite from a sigle-metabolite containing file by checking its type
+    and calling the appropriate import functions.
+
+    Args:
+        filepath (str): The path to the file in which will be imported
+
+    Returns:
+        This function does not provide a particular return, but rather imports the requested file
+
+    .. NOTE:: The ``filepath`` may be absolute or relative, but it is transformed to a relative ``relpath``
+        in order to remove possible influence of higher-name folders in the import type selection. This is
+        also why the condition is stated as a big "if/elif/else" instead of a series of "ifs"
     """
     relpath = os.path.relpath(filepath, ".")
 
@@ -103,7 +190,7 @@ def build_from_file(filepath):
         DrugBankDataBase.build_from_file(f"{os.path.basename(filepath)}", driver)
         os.remove(f"{Neo4JImportPath}/{os.path.basename(filepath)}")
 
-    if "HMDB" in relpath:
+    elif "HMDB" in relpath:
         if "protein" in relpath:
             shutil.copyfile(filepath, f"{Neo4JImportPath}/{os.path.basename(filepath)}")
             HumanMetabolomeDataBase.build_from_protein_file(f"{os.path.basename(filepath)}", driver)
@@ -113,7 +200,7 @@ def build_from_file(filepath):
             HumanMetabolomeDataBase.build_from_metabolite_file(f"{os.path.basename(filepath)}", driver)
             os.remove(f"{Neo4JImportPath}/{os.path.basename(filepath)}")
 
-    if "SMPDB" in relpath:
+    elif "SMPDB" in relpath:
         # NOTE: Since this adds a ton of low-resolution nodes, maybe have this db run first?
         # We will ignore the smpdb_pathways file because it doesnt have "real" identifiers
         if "proteins" in relpath:
@@ -121,8 +208,9 @@ def build_from_file(filepath):
         if "metabolites" in relpath:
             SmallMoleculePathWayDataBase.build_from_file(sys.argv[4], filepath, Neo4JImportPath, driver, "Metabolite")
 
-    if "ExposomeExplorer/components" in relpath:
-            # NOTE: Since only "components" can result in a match based on our current criteria, we will build the DB based on the components only.
+    elif "ExposomeExplorer/components" in relpath:
+            # NOTE: Since only "components" can result in a match based on our current criteria,
+            #   we will build the DB starting with the components only.
             # Here, instead of using shutil.copyfile, we will use pandas to purge the _count columns when copying
             original_file = pd.read_csv(filepath)[[x for x in open(f"{filepath}").readline().rstrip().split(",")
                                                 if not x.endswith('_count')]]
@@ -134,8 +222,19 @@ def build_from_file(filepath):
             ExposomeExplorerDataBase.build_from_file( os.path.dirname(filepath), Neo4JImportPath, driver, False)
 
 
-def link_to_original_data(row, import_based_on):
-    """ """
+def link_to_original_data(driver, original_ids, import_based_on):
+    """
+    Links a recently-imported metabolite to the original data (that which caused it to be imported) by creating an
+    ``ÒriginalMetabolite`` node that is ``(n)-[r:ORIGINALLY_IDENTIFIED_AS]->(a)`` related to the imported data
+
+    Args:
+         driver (neo4j.Driver): Neo4J's Bolt Driver currently in use
+         original_ids (dict): A dictionary of the Original IDs in our query file, which was the basis for import
+         import_based_on (list): A list of the methods that turned out to be valid for import, such as Name, ChEBI_ID...
+
+    Returns:
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+    """
     with driver.session() as session:
         session.run( f"""
                     MATCH (a) WHERE a.InChI = "{row["InChI"]}"
@@ -164,31 +263,53 @@ def link_to_original_data(row, import_based_on):
                     SET r7.Identified_By = {import_based_on}
                     """ )
 
-def annotate_using_wikidata():
+def annotate_using_wikidata(driver):
+    """
+    Once we finish the search, we annotate the nodes added to the database using WikiData
 
-    #Once we finish the search, we annotate the existing nodes using WikiData
-    #.. TODO:: When fixing queries, fix the main subscript also
+    Args:
+         driver (neo4j.Driver): Neo4J's Bolt Driver currently in use
+
+    Returns:
+        This function modifies the Neo4J Database as desired, but does not produce any particular return.
+
+    .. TODO:: When fixing queries, fix the main subscript also
+    """
     with driver.session() as session:
-        misc.repeat_transaction(WikiDataBase.add_wikidata_to_mesh, 10, session, bar)
-        misc.repeat_transaction(WikiDataBase.add_metabolite_info, 10, session, bar, number = None, query = "ChEBI_ID")
-        misc.repeat_transaction(WikiDataBase.add_drug_external_ids, 10, session, bar, number = None, query = "DrugBank_ID")
-        misc.repeat_transaction(WikiDataBase.add_more_drug_info, 10, session, bar, query = "DrugBank_ID")
+        misc.repeat_transaction(WikiDataBase.add_wikidata_to_mesh, 10, session)
+        # The ``query`` param is, remember, so as to remove the wikidata_id search which is by default
+        misc.repeat_transaction(WikiDataBase.add_metabolite_info, 10, session, query = "ChEBI_ID")
+        misc.repeat_transaction(WikiDataBase.add_drug_external_ids, 10, session, query = "DrugBank_ID")
+        misc.repeat_transaction(WikiDataBase.add_more_drug_info, 10, session, query = "DrugBank_ID")
 
-        misc.repeat_transaction(WikiDataBase.find_subclass_of_cancer, 10, session, bar)
-        misc.repeat_transaction(WikiDataBase.find_subclass_of_cancer, 10, session, bar)
-        misc.repeat_transaction(WikiDataBase.find_subclass_of_cancer, 10, session, bar)
-        misc.repeat_transaction(WikiDataBase.find_instance_of_cancer, 10, session, bar)
-        for number in range(3):
-            misc.repeat_transaction(WikiDataBase.add_cancer_info, 10, session, bar, number)
-            misc.repeat_transaction(WikiDataBase.add_drugs, 10, session, bar, number)
-            misc.repeat_transaction(WikiDataBase.add_causes, 10, session, bar, number)
-            misc.repeat_transaction(WikiDataBase.add_genes, 10, session, bar, number)
-        misc.repeat_transaction(WikiDataBase.add_drug_external_ids, 10, session, bar)
-        misc.repeat_transaction(WikiDataBase.add_more_drug_info, 10, session, bar)
-        misc.repeat_transaction(WikiDataBase.add_gene_info, 10, session, bar)
-        misc.repeat_transaction(WikiDataBase.add_metabolite_info, 10, session, bar)
+        misc.repeat_transaction(WikiDataBase.find_subclass_of_cancer, 10, session)
+        misc.repeat_transaction(WikiDataBase.find_subclass_of_cancer, 10, session)
+        misc.repeat_transaction(WikiDataBase.find_subclass_of_cancer, 10, session)
+        misc.repeat_transaction(WikiDataBase.find_instance_of_cancer, 10, session)
 
-def add_mesh_and_metanetx():
+        # For each of the 10 numbers a wikidata_id may have as ending
+        for number in range(10):
+            misc.repeat_transaction(WikiDataBase.add_cancer_info, 10, session, number)
+            misc.repeat_transaction(WikiDataBase.add_drugs, 10, session, number)
+            misc.repeat_transaction(WikiDataBase.add_causes, 10, session, number)
+            misc.repeat_transaction(WikiDataBase.add_genes, 10, session, number)
+
+        misc.repeat_transaction(WikiDataBase.add_drug_external_ids, 10, session)
+        misc.repeat_transaction(WikiDataBase.add_more_drug_info, 10, session)
+        misc.repeat_transaction(WikiDataBase.add_gene_info, 10, session)
+        misc.repeat_transaction(WikiDataBase.add_metabolite_info, 10, session)
+
+def add_mesh_and_metanetx(driver):
+    """
+    Add MeSH Term IDs, Synonym relations and Protein interactions to existing nodes using MeSH and MetaNetX
+    Also, adds Kegg Pathway IDs
+
+    Args:
+         driver (neo4j.Driver): Neo4J's Bolt Driver currently in use
+
+    Returns:
+        This function modifies the Neo4J Database as desired, but does not produce any particular return.
+    """
     # We will also add MeSH terms to all nodes:
     with driver.session() as session:
         misc.repeat_transaction(MeSHandMetaNetXDataBases.add_mesh_by_name(), 10, session, bar)
@@ -224,14 +345,18 @@ def main():
     .. TODO:: Detail Schema Changes
 
     .. TODO:: Document the following Schema Changes:
-        For Subject, we have a composite PK: Exposome_Explorer_ID, Age, Gender e Information
-        Now, more diseases will have a WikiData_ID and a related MeSH. This will help with networking. And, this diseases dont even need to be a part of a cancer!
-        The Gene nodes no longer exist in the full db? -> They do
+        * For Subject, we have a composite PK: Exposome_Explorer_ID, Age, Gender e Information
+        * Now, more diseases will have a WikiData_ID and a related MeSH. This will help with networking. And, this diseases dont even need to be a part of a cancer!
+        * The Gene nodes no longer exist in the full db? -> They do
     """
+
+    # Parse the command line arguments
+    # Done first in order to show errors if bad commands are issued
+    parser = args_parser(); args = vars(parser.parse_args())
 
     # First, we prepare a scan of all the files available on our "DataBases" folder
     # We will cycle through them later on to try and find matches
-    all_files = scan_folder()
+    all_files = scan_folder(args["databasefolder"])
 
     raw_database = pd.read_csv(sys.argv[5], delimiter=',', header=0)
 
@@ -239,7 +364,7 @@ def main():
     with alive_bar(len(all_files)*len(raw_database)) as bar:
 
         # And connect to the Neo4J database
-        instance = f"{sys.argv[1]}"; user = f"{sys.argv[2]}"; passwd = f"{sys.argv[3]}"
+        instance = args["neo4jadresss"]; user = args["username"]; passwd = args["password"]
         driver = GraphDatabase.driver(instance, auth=(user, passwd))
 
         Neo4JImportPath = misc.get_import_path(driver)
@@ -263,19 +388,17 @@ def main():
 
              # And search for them in the all_files list we created earlier on based on a series of criteria:
             for filepath in all_files:
-                with open(f'{filepath}', "r") as f:
-                    text = f.read()
+                import_based_on = find_reasons_to_import(filepath, chebi_ids, names, hmdb_ids, inchis)
 
-                    import_based_on = find_reasons_to_import(text, filepath, chebi_ids, names, hmdb_ids, inchis)
+                # Once we know the reasons to import (this is done so that it only cycles one
+                # time through the code), we import the files themselves
+                if len(import_based_on) != 0:
+                    build_from_file(filepath)
 
-                    # Once we know the reasons to import (this is done so that it only cycles one
-                    # time through the code), we import the files themselves
-                    if len(import_based_on) != 0:
-                        build_from_file(filepath)
-
-                        #Each time we import some nodes, link them to our original data
-                        #NOTE: This WILL duplicate nodes and relations, but we will fix this later when we purge the DB
-                        link_to_original_data(row. import_based_on)
+                    #Each time we import some nodes, link them to our original data
+                    #NOTE: This WILL duplicate nodes and relations, but we will fix this later when we purge the DB
+                    original_ids = row.to_dict('records')[0] # Convert to dict first for the functions
+                    link_to_original_data(driver, original_ids, import_based_on)
 
                 # And advance, of course
                 bar()

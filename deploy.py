@@ -24,7 +24,6 @@ To use this module:
    :prog: python3 deploy.py
    :nodefault:
 
-
 .. NOTE:: For this program to work, the Git environment **has to be set up first**.
     You can ensure this by using: :obj:`CanGraph.setup.setup_git`
 
@@ -66,15 +65,16 @@ def args_parser():
 
     return parser
 
-def git_push(path_to_repo, remote_name, commit_message):
+def git_push(path_to_repo, remote_names, commit_message, force = False):
     """
     Pushes the current repo's state to a remote git repository
 
     Args:
         path_to_repo (str): The path to the local ``.git`` folder
-        remote_name (str): The name of the remote to which we want to commit, which must be previously
-            configured (see :obj:`CanGraph.setup.setup_git`)
+        remote_names (list or str): The names of the remote to which we want to commit, which must be previously
+            configured (see :obj:`CanGraph.setup.setup_git`). e.g.: ["github", "codeberg"]
         commit_message (str): The Git Commit Message for the current repo's state
+        force (bool): Whether to force the commit (necessary if you are resetting the HEAD)
 
     .. NOTE:: ``gitpython`` is not good at managing complex commit messages (i.e. those with a Subject and a Body).
         If you want to add one of those, please, use ``\\n`` as the separator; the function will take care of the rest
@@ -83,10 +83,23 @@ def git_push(path_to_repo, remote_name, commit_message):
         by `StackOverflow #41836988 <https://stackoverflow.com/questions/41836988/git-push-via-gitpython>`_
     """
     repo = Repo(path_to_repo)
-    repo.git.add('*')
+    repo.git.add('.')
     repo.index.commit(f"{commit_message}".replace("\\n", "\n"))
-    origin = repo.remote(name=remote_name)
-    origin.push()
+
+    i = 1
+    while i <= 3:
+        try:
+            if isinstance(remote_names, list):
+                for remote in remote_names:
+                    origin = repo.remote(name=remote)
+                    origin.push() if force == False else origin.push("--force")
+            elif isinstance(remote_names, str):
+                origin = repo.remote(name=remote)
+                origin.push() if force == False else origin.push("--force")
+            break
+        except:
+            i += 1
+            print(f"Error: Invalid Authentication for Git. Please try again {i}/3...")
 
 def make_sphinx_prechecks(docs_folder = "./docs/", work_dir = ".", gen_apidocs = False):
     """
@@ -160,16 +173,18 @@ def deploy_webdocs(docs_folder = "./docs/", work_dir = ".", prechecks_done=False
 
     # Then, we save the git repo's current state before checkout
     repo = Repo(".git")
-    repo.git.add('*')
+    repo.git.add('.')
     repo.git.stash('save')
+
+    # Annotating the current branch name for the future
+    current_branch = repo.git.branch().replace('* ', '').split('\n')[0]
 
     print("Let me clean the 'pages' repo first...")
 
     # And checkout to the pages branch
     repo.git.checkout('pages')
-    # Where we reset to the previous commit to make the repo smaller
-    repo.git.reset('HEAD~1')
-    # Remove previous contents
+
+    # Where we remove previous contents
     for item in os.listdir("."):
         if item not in ".git":
             if os.path.isfile(item):
@@ -177,7 +192,10 @@ def deploy_webdocs(docs_folder = "./docs/", work_dir = ".", prechecks_done=False
             elif os.path.isdir(item):
                 shutil.rmtree(item)
 
-    # And copy the contents of the saved "html" folder
+    # Reset to the previous commit to make the repo smaller
+    repo.git.add('.'); repo.git.reset('HEAD~1')
+
+    # And then copy the contents of the saved "html" folder
     shutil.copytree(os.path.abspath("../html/"), os.path.abspath("./"), dirs_exist_ok=True)
 
     # [OPTIONAL] And we add some files to enable accessing from domains
@@ -192,23 +210,22 @@ def deploy_webdocs(docs_folder = "./docs/", work_dir = ".", prechecks_done=False
         with open("CNAME", "w+") as CNAME_file:
             CNAME_file.write("""cangraph.pablomarcos.me""")
 
-    # Now, add .nojekyll file so that GitHub doesnt try to use Jekyll... lol
-    with open(".nojekyll", "w") as domains_file:
-            domains_file.write(("\n"))
+    # Add .nojekyll to force github to correctly process the pages branch
+    with open(".nojekyll", "w+") as nojekyll:
+            nojekyll.write("\n")
 
     # The repo is ready! Lets commit:
     print("Now, please provide a comment for Git ...")
     commit_message = input()
 
-    print("Uploading to Codeberg Pages ...")
-    git_push(".git", "codeberg-pages", commit_message)
-    print("Uploading to Github Pages ...")
-    git_push(".git", "github-pages", commit_message)
+    print("Uploading to Git Repos ...")
+    git_push(".git", ["github", "codeberg"], commit_message, force = True)
 
     # And leave everything as it was
     print("Site has been deployed")
     shutil.rmtree(os.path.abspath("../html/"))
-    repo.git.checkout('main')
+
+    repo.git.checkout(current_branch)
     repo.git.stash('apply')
 
     # Prechecks have been done
@@ -247,11 +264,13 @@ def deploy_pdf_manual(docs_folder = "./docs/", work_dir = ".", manual_location =
 
     # Generate the PDF docs
     print("Now, let me use sphinx's latexpdf to generate a PDF doc")
-    cwd = os.getcwd(); os.chdir(os.path.abspath(docs_folder)); os.system("make latexpdf")
+    cwd = os.getcwd(); os.chdir(os.path.abspath(docs_folder)); os.system("make latexpdf > /dev/null")
     print("If everything is OK, press [ENTER]", end=""); response = input()
 
     # And copy them in the appropriate place
     os.chdir(os.path.abspath(cwd))
+    if os.path.exists(manual_location):
+        os.remove(manual_location)
     shutil.copyfile(os.path.abspath("./docs/_build/latex/cangraph.pdf"), os.path.abspath(manual_location))
     print("The PDF Manual has been copied in the Repo's Root Folder (CanGraph_Manual.pdf)")
 
@@ -261,7 +280,6 @@ def deploy_pdf_manual(docs_folder = "./docs/", work_dir = ".", manual_location =
 def deploy_code(branch = "dev"):
     """
     Deploys code from a given branch to the corresponding remote.
-    If the "main" ``branch`` is selected, merge last commit from dev
 
     Args:
         branch (str): The name of the branch of the **local** git repo that we want to deploy
@@ -275,16 +293,30 @@ def deploy_code(branch = "dev"):
     print("First, please provide a comment for Git ...")
     commit_message = input()
 
-    # If branch is main, merge dev into main
+    repo = Repo('.git')
+
+    # Annotating the current branch name for the future
+    current_branch = repo.git.branch().replace('* ', '').split('\n')[0]
+
     if branch == "main":
+        repo.git.add('.')
+        repo.git.stash ("save")
         repo.git.checkout("main")
         repo.git.merge("dev")
 
-    # And git add / commit / push
-    print("Uploading to Codeberg ...")
-    git_push(".git", f"codeberg", commit_message)
-    print("Uploading to Github ...")
-    git_push(".git", f"github", commit_message)
+        commit_message = "🔀 Merged advances from dev into main"
+
+        git_push(".git", ["github", "codeberg"], commit_message, force = True)
+
+        # Finally, we reset the dev branch
+        repo.git.branch("-D", current_branch)
+        repo.git.checkout("-b", current_branch)
+
+    if branch == "dev":
+        # And git add / commit / push
+        print("Uploading to Git Repos ...")
+        git_push(".git", ["github", "codeberg"], commit_message, force = True)
+
 
 def main():
     """

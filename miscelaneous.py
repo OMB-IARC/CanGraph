@@ -57,11 +57,13 @@ def get_import_path(current_driver):
         Neo4JImportPath = session.read_transaction(neo4j_import_path_query)[0]
     return Neo4JImportPath
 
-def repeat_transaction(tx, num_retries, session, bar, number=None, query = "WikiData"):
+def repeat_transaction(tx, num_retries, session, number=None, query = "WikiData"):
     """
     A function that repeats transactions whenever an error is found.
     This may make an incorrect script unnecessarily repeat; however, since the error is printed,
     one can discriminate those out, and the function remains helpful to prevent SPARQL Read Time-Outs.
+
+    .. TODO:: bar processing should not be done here
     """
     for attempt in range(num_retries):
         try:
