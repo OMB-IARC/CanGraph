@@ -6,9 +6,15 @@
 # SPDX-License-Identifier: MIT
 
 """
-A python module that provides the necessary functions to transition the MetaNetX database (and related MeSH terms and KEGG IDs) to graph format,
-either from scratch importing all the nodes (as showcased in :obj:`CanGraph.MeSHandMetaNetX.main`) or in a case-by-case basis,
+A python module that provides the necessary functions to transition the MetaNetX database
+(and related MeSH terms and KEGG IDs) to graph format, either from scratch importing all
+the nodes (as showcased in :obj:`CanGraph.MeSHandMetaNetX.main`) or in a case-by-case basis,
 to annotate existing metabolites (as showcased in :obj:`CanGraph.main`).
+
+.. NOTE:: You may notice some functions here present the ``**kwargs`` arguments option.
+    This is in order to make the functions compatible with the
+    :obj:`CanGraph.miscelaneous.repeat_transaction` function, which might send back a variable
+    number of arguments (although technically it could work without the ``**kwargs`` option)
 """
 
 # ********* SPARQL queries to annotate existing nodes using MeSH ********* #
@@ -89,7 +95,7 @@ def add_prefixes():
            """)
 
 
-def get_identifiers(from_sparql=False):
+def get_identifiers(from_sparql=False, **kwargs):
     """
     Part of a CYPHER query that processes the outcome from a SPARQL query that searches for information on MetaNetX
     It takes an original metabolite (n) and a row variable, which should have columns named external_identifier,
@@ -99,6 +105,7 @@ def get_identifiers(from_sparql=False):
     Args:
         from_sparql (bool): A True/False param defining whether the identifiers are being parsed from a SPARQL query;
             default is False (i.e. imported from file)
+        **kwargs: Any number of arbitrary keyword arguments
 
     Returns:
         str: A text chain that represents the CYPHER query with the desired output. This can be run using: :obj:`neo4j.Session.run`
@@ -214,7 +221,7 @@ def get_identifiers(from_sparql=False):
         {sparql_parser[1]}
         """
 
-def write_synonyms_in_metanetx(query = None ):
+def write_synonyms_in_metanetx(query = None, **kwargs):
     """
     A SPARQL function that finds synonyms for metabolites, proteins or drugs in an existing Neo4J database, using MetaNetX.
     At the same time, it is able to annotate them a bit, adding Name, InChI, InChIKey, SMILES, Formula, Mass, some External IDs,
@@ -223,6 +230,7 @@ def write_synonyms_in_metanetx(query = None ):
     Args:
         query (str): The type of query that is being searched for. One of ["Name","KEGG_ID","ChEBI_ID","HMDB_ID","InChI","InChIKey"];
             default is None (i.e. the function will not process anything).
+        **kwargs: Any number of arbitrary keyword arguments
 
     Returns:
         str: A text chain that represents the CYPHER query with the desired output. This can be run using: :obj:`neo4j.Session.run`
@@ -289,7 +297,7 @@ def write_synonyms_in_metanetx(query = None ):
         }} IN TRANSACTIONS OF 100 rows
         """
 
-def read_synonyms_in_metanetx(tx, querytype = None, query = None ):
+def read_synonyms_in_metanetx(tx, querytype = None, query = None, **kwargs):
     """
     A SPARQL function that finds synonyms for metabolites, proteins or drugs based on a given `query`, using MetaNetX.
     At the same time, it is able to annotate them a bit, adding Name, InChI, InChIKey, SMILES, Formula, Mass, some External IDs,
@@ -300,6 +308,7 @@ def read_synonyms_in_metanetx(tx, querytype = None, query = None ):
         querytype   (str): The type of query that is being searched for. One of ["Name","KEGG_ID","ChEBI_ID","HMDB_ID","InChI","InChIKey"];
             default is :obj:`None` (i.e. the function will not process anything).
         query       (str): The query we are searching for; must be of type ```querytype```
+        **kwargs: Any number of arbitrary keyword arguments
 
 
     .. NOTE:: This is intended to be run as a read_transaction, only returning synonyms present in the DB. No modifications will be applied.

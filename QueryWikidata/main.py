@@ -54,38 +54,43 @@ def main():
 
         for number in range(3):
             with driver.session() as session:
-                misc.repeat_transaction(build_database.find_subclass_of_cancer, 10, session, bar)
-                misc.repeat_transaction(build_database.remove_duplicate_nodes, 10, session, bar)
+                misc.repeat_transaction(build_database.find_subclass_of_cancer, 10, driver)
+                misc.repeat_transaction(build_database.remove_duplicate_nodes, 10, driver)
+                bar(); bar()
 
         with driver.session() as session:
-            misc.repeat_transaction(build_database.find_instance_of_cancer, 10, session, bar)
-            misc.repeat_transaction(build_database.remove_duplicate_nodes, 10, session, bar)
+            misc.repeat_transaction(build_database.find_instance_of_cancer, 10, driver)
+            misc.repeat_transaction(build_database.remove_duplicate_nodes, 10, driver)
+            bar(); bar()
 
         for number in range(10):
             with driver.session() as session:
-                misc.repeat_transaction(build_database.add_cancer_info, 10, session, bar, number)
+                misc.repeat_transaction(build_database.add_cancer_info, 10, driver, number)
+                bar()
 
         for number in range(10):
             with driver.session() as session:
-                misc.repeat_transaction(build_database.add_drugs, 10, session, bar, number)
-                misc.repeat_transaction(build_database.add_causes, 10, session, bar, number)
-                misc.repeat_transaction(build_database.add_genes, 10, session, bar, number)
+                misc.repeat_transaction(build_database.add_drugs, 10, driver, number)
+                misc.repeat_transaction(build_database.add_causes, 10, driver, number)
+                misc.repeat_transaction(build_database.add_genes, 10, driver, number)
+                bar(); bar(); bar()
 
         with driver.session() as session:
             session.write_transaction(build_database.remove_duplicate_nodes)
             bar()
 
         with driver.session() as session:
-            misc.repeat_transaction(build_database.add_drug_external_ids, 10, session, bar)
-            misc.repeat_transaction(build_database.add_more_drug_info, 10, session, bar)
+            misc.repeat_transaction(build_database.add_drug_external_ids, 10, driver)
+            misc.repeat_transaction(build_database.add_more_drug_info, 10, driver)
+            bar(); bar()
 
         with driver.session() as session:
-            misc.repeat_transaction(build_database.add_gene_info, 10, session, bar)
+            misc.repeat_transaction(build_database.add_gene_info, 10, driver)
             bar()
 
         for number in range(4):
             with driver.session() as session:
-                misc.repeat_transaction(build_database.add_metabolite_info, 10, session, bar)
+                misc.repeat_transaction(build_database.add_metabolite_info, 10, driver)
                 bar()
 
         with driver.session() as session:

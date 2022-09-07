@@ -67,7 +67,7 @@ def args_parser():
 
 def git_push(path_to_repo, remote_names, commit_message, force = False):
     """
-    Pushes the current repo's state to a remote git repository
+    Pushes the current repo's state and current branch to a remote git repository
 
     Args:
         path_to_repo (str): The path to the local ``.git`` folder
@@ -84,7 +84,9 @@ def git_push(path_to_repo, remote_names, commit_message, force = False):
     """
     repo = Repo(path_to_repo)
     repo.git.add('.')
-    repo.index.commit(f"{commit_message}".replace("\\n", "\n"))
+
+    current_branch = repo.git.branch().replace('* ', '').replace(" ","").split('\n')[0]
+    repo.index.commit(commit_message.replace("\\n", "\n"))
 
     i = 1
     while i <= 3:
@@ -92,14 +94,14 @@ def git_push(path_to_repo, remote_names, commit_message, force = False):
             if isinstance(remote_names, list):
                 for remote in remote_names:
                     origin = repo.remote(name=remote)
-                    origin.push() if force == False else origin.push("--force")
+                    origin.push(refspec=f"{current_branch}:{current_branch}", force=force)
             elif isinstance(remote_names, str):
-                origin = repo.remote(name=remote)
-                origin.push() if force == False else origin.push("--force")
+                origin = repo.remote(name=remote_names)
+                origin.push(refspec=f"{current_branch}:{current_branch}", force=force)
             break
-        except:
+        except Exception as e:
             i += 1
-            print(f"Error: Invalid Authentication for Git. Please try again {i}/3...")
+            print(f"Error: {e} \nPlease try again ({i}/3)...")
 
 def make_sphinx_prechecks(docs_folder = "./docs/", work_dir = ".", gen_apidocs = False):
     """

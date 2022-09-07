@@ -11,14 +11,15 @@ scripts present in the CanGraph package, with various, useful functionalities
 """
 
 # Import external modules necessary for the script
-from neo4j import GraphDatabase      # The Neo4J python driver
-import urllib.request as request     # Extensible library for opening URLs
-from zipfile import ZipFile          # Work with ZIP files
-import os                            # Integration with the system
-import xml.etree.ElementTree as ET   # To parse and split XML files
-import re                            # To split XML files with a regex pattern
-from time import sleep               # Cute go slowly
-import pandas as pd                  # Analysis of tabular data
+from neo4j import GraphDatabase     # The Neo4J python driver
+import urllib.request as request    # Extensible library for opening URLs
+from zipfile import ZipFile         # Work with ZIP files
+import tarfile                      # Work with tar.gz files
+import os                           # Integration with the system
+import xml.etree.ElementTree as ET  # To parse and split XML files
+import re                           # To split XML files with a regex pattern
+from time import sleep              # Cute go slowly
+import pandas as pd                 # Analysis of tabular data
 
 from MeSHandMetaNetX import build_database as MeSHandMetaNetXDataBases
 
@@ -57,17 +58,27 @@ def get_import_path(current_driver):
         Neo4JImportPath = session.read_transaction(neo4j_import_path_query)[0]
     return Neo4JImportPath
 
-def repeat_transaction(tx, num_retries, session, number=None, query = "WikiData"):
+def repeat_transaction(tx, num_retries, driver, **kwargs):
     """
     A function that repeats transactions whenever an error is found.
     This may make an incorrect script unnecessarily repeat; however, since the error is printed,
     one can discriminate those out, and the function remains helpful to prevent SPARQL Read Time-Outs.
 
-    .. TODO:: bar processing should not be done here
+    Args:
+        tx (neo4j.work.simple.Session): The session under which the driver is running
+        num_retries (int): The number of times that we wish the transaction to be retried
+        driver (neo4j.Driver): Neo4J's Bolt Driver currently in use
+        **kwargs: Any number of arbitrary keyword arguments
+
+    Raises:
+        Exception:
+            An exception telling the user that the maximum number of retries
+            has been exceded, if such a thing happens
     """
     for attempt in range(num_retries):
         try:
-            session.write_transaction(tx, number, query = "WikiData")
+            with driver.session() as session:
+                session.write_transaction(tx, **kwargs)
             if attempt > 0: print(f"Error solved on attempt #{attempt}")
             break
         except Exception as error:
@@ -76,8 +87,8 @@ def repeat_transaction(tx, num_retries, session, number=None, query = "WikiData"
                 print(error)
                 print(f"Retrying... ({attempt + 1}/{num_retries})")
             else:
-                print(f"{num_retries} consecutive attempts were made at processing Nodes ending in #{number}. Aborting...")
-                raise error
+                raise Exception(f"{num_retries} consecutive attempts were made at processing Nodes ",
+                                f"ending in #{number}. Aborting...")
 
 # ********* Interact with the Neo4J Database ********* #
 
@@ -370,6 +381,84 @@ def import_graphml(tx, importname):
                                                        {{type: "UNWIND_BATCH", unwindBatchSize: 5}} }})
         """)
 
+def download(url, folder):
+    """
+    Downloads a file from the internet into a given folder
+
+    Args:
+        url (str): The Uniform Resource Locator for the Zipfile to be downloaded and unzipped
+        folder (str): The folder under which the file will be stored.
+
+    Returns:
+        str: The path where the file we just downloaded has been stored
+    """
+
+    folder = os.path.abspath(folder) # Set the folder to be an absolute path
+
+    # If the folder does not exist, we create it
+    if not os.path.exists(f"{folder}"):
+        os.makedirs(f"{folder}")
+
+    # Create some naming variables and request the file from the URL
+    filename = url.split('/')[-1].split('.')[0]
+    file_ext = url.split('.')[-1]
+    file_path = f"{folder}/{filename}.{file_ext}"
+    request.urlretrieve(url, file_path)
+
+    return file_path
+
+def unzip(file_path, folder):
+    """
+    Unizps a file present at a given ``file_path`` into a given ``folder``
+
+    Args:
+        url (str): The Uniform Resource Locator for the Zipfile to be unzipped
+        folder (str): The folder under which the file will be stored.
+
+    Returns:
+        str: The path where the file we just unzipped has been stored
+    """
+
+    folder = os.path.abspath(folder) # Set the folder to be an absolute path
+    filename = file_path.split('/')[-1].split('.')[0] # Create some naming variables
+
+    # If the folder does not exist, we create it
+    if not os.path.exists(f"{folder}"):
+        os.makedirs(f"{folder}")
+
+    # And we unzip the file
+    zf = ZipFile(file_path)
+    zf.extractall(path = f"{folder}/")
+    zf.close()
+
+    return filename
+
+def untargz(file_path, folder):
+    """
+    Untargzs a file present at a given ``file_path`` into a given ``folder``
+
+    Args:
+        url (str): The Uniform Resource Locator for the Tarfile to be untargz
+        folder (str): The folder under which the file will be stored.
+
+    Returns:
+        str: The path where the file we just untargz has been stored
+    """
+
+    folder = os.path.abspath(folder) # Set the folder to be an absolute path
+    filename = file_path.split('/')[-1].split('.')[0] # Create some naming variables
+
+    # If the folder does not exist, we create it
+    if not os.path.exists(f"{folder}"):
+        os.makedirs(f"{folder}")
+
+    # And we untargz the file
+    tf = tarfile.open(file_path)
+    tf.extractall(path = f"{folder}/")
+    tf.close()
+
+    return filename
+
 def download_and_unzip(url, folder):
     """
     Downloads and unzips a given Zipfile from the internet; useful for databases which provide zip access.
@@ -384,15 +473,24 @@ def download_and_unzip(url, folder):
     .. seealso:: Code snippets for this function were taken from `Shyamal Vaderia's Github <https://svaderia.github.io/articles/downloading-and-unzipping-a-zipfile/>`_
         and from `StackOverflow #32123394 <https://stackoverflow.com/questions/32123394/workflow-to-create-a-folder-if-it-doesnt-exist-already>`_
     """
-    zipresp = request.urlopen(url)
-    tempzip = open("/tmp/tempfile.zip", "wb")
-    tempzip.write(zipresp.read())
-    tempzip.close()
-    zf = ZipFile("/tmp/tempfile.zip")
-    if not os.path.exists(f"{folder}"):
-        os.makedirs(f"{folder}")
-    zf.extractall(path = f"{folder}/")
-    zf.close()
+    file_path = download(url, "/tmp")
+    unzip(file_path, folder)
+    os.remove(file_path)
+
+def download_and_untargz(url, folder):
+    """
+    Downloads and unzips a given ``tar.gz`` from the internet
+
+    Args:
+        url (str): The Uniform Resource Locator for the ``tar.gz`` to be downloaded and unzipped
+        folder (str): The folder under which the file will be stored.
+
+    Returns:
+        This function downloads and unzips the file in the desired folder, but does not produce any particular return.
+    """
+    file_path = download(url, "/tmp")
+    untargz(file_path, folder)
+    os.remove(file_path)
 
 def split_xml(filepath, splittag, bigtag):
     """
@@ -407,13 +505,23 @@ def split_xml(filepath, splittag, bigtag):
 
     Returns:
         int: The number of files that have been produced from the original
+
+    .. WARNING:: The original file will be removed
     """
+
+    # Set the filepath to be an absolute path
+    filepath = os.path.abspath(filename)
+
     # Set counters and text variables to null
     current_text = ""; current_line = 0; num_files = 0
+
+    # Open the file that we wish to split (but without reading! neat!)
     with open(f'{filepath}', "r") as f:
-        for line in f:
+        for line in f: # For each line, scan and recount
             current_text += line; current_line += 1
+
             # Whenever we find a closing tag, we know the info is over
+            # and we generate a new file
             if line.startswith(f"</{splittag}>"):
                 newfile = filepath.split(".")[0] + "_" + str(num_files) + ".xml"
                 with open(newfile, "w+") as f:
@@ -427,22 +535,11 @@ def split_xml(filepath, splittag, bigtag):
                 f.close()
                 num_files += 1
                 current_text = ""
+
+    # Remove the original file
+    os.remove(f"{filepath}")
+
     return num_files - 1
-
-def download(url, folder):
-    """
-    Downloads a file from the internet into a given folder
-
-    Args:
-        url (str): The Uniform Resource Locator for the Zipfile to be downloaded and unzipped
-        folder (str): The folder under which the file will be stored.
-
-    Returns:
-        This function downloads and unzips the file in the desired folder, but does not produce any particular return.
-    """
-    if not os.path.exists(f"{folder}"):
-        os.makedirs(f"{folder}")
-    request.urlretrieve(url, f"{folder}/{url.split('/')[-1].split('.')[0]}.{url.split('.')[-1]}")
 
 def split_csv(filename, folder, sep=",", sep_out=",", startFrom=0, withStepsOf=1):
     """
@@ -457,14 +554,20 @@ def split_csv(filename, folder, sep=",", sep_out=",", startFrom=0, withStepsOf=1
     Returns:
         int: The number of files that have been produced from the original
 
-    .. WARNING:: Original file will be removed
+    .. WARNING:: The original file will be removed
     """
-    bigfile = pd.read_csv(f"{folder}/{filename}", sep=sep, skiprows=startFrom)
+
+    # Set the filepath to be an absolute path
+    filepath = os.path.abspath(f"{folder}/{filename}")
+
+    # Read the file using pandas (and hope it does not crash"
+    bigfile = pd.read_csv(filepath, sep=sep, skiprows=startFrom)
     filenumber = 0
     for index in range(0, len(bigfile), withStepsOf):
         new_df = bigfile.iloc[index:(index+withStepsOf)]
         new_df.to_csv(f"{folder}/{os.path.splitext(filename)[0]}_{filenumber}.csv", index = False, sep=sep_out)
         filenumber += 1
 
-    os.remove(f"{folder}/{filename}")
+    os.remove(filepath) # And remove the file after finishing
+
     return filenumber

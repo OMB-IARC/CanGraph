@@ -28,3 +28,6 @@ sample_input.csv
 
 # Ignore python docs' build data
 docs/_build
+
+# Ignore location of neo4j database
+neo4j/

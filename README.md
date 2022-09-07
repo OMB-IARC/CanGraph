@@ -47,9 +47,11 @@ To generate this sub-networks (the original idea of the project) you should run:
 where:
 
 * **neo4jadress**: is the URL of the database, in neo4j:// or bolt:// format
-* **databasename**: the name of the database in use. If using the free version, there will only be one database per project (neo4j being the default name); if using the pro version, you can specify an alternate name here
-* **databasepassword**: the passowrd for the **databasename** DataBase. Since the arguments are passed by BaSH onto python3, you might need to escape special characters
+* **username**: the username for your neo4j instance. Remember, the default is neo4j
+* **password**: the passowrd for your database. Since the arguments are passed by BaSH onto python3, you might need to escape special characters
 * **databasefolder**: The folder indicated to ```setup.py``` as the one where your databases will be stored
 * **inputfile**: The location of the CSV file in which the program will search for metabolites. This file should be a Comma-Separated file, with the following format: ```MonoisotopicMass, SMILES, InChIKey, Name, InChI, Identifier, ChEBI```
 
 All images in this repository are [CC-BY-SA-4.0 International](https://creativecommons.org/licenses/by-sa/4.0/) Licensed.
+
+NOTE: When committing to the repo, try to use [GitMojis](https://gitmoji.dev/) to illustrate your commit :p

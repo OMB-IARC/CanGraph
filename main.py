@@ -276,28 +276,28 @@ def annotate_using_wikidata(driver):
     .. TODO:: When fixing queries, fix the main subscript also
     """
     with driver.session() as session:
-        misc.repeat_transaction(WikiDataBase.add_wikidata_to_mesh, 10, session)
+        misc.repeat_transaction(WikiDataBase.add_wikidata_to_mesh, 10, driver)
         # The ``query`` param is, remember, so as to remove the wikidata_id search which is by default
-        misc.repeat_transaction(WikiDataBase.add_metabolite_info, 10, session, query = "ChEBI_ID")
-        misc.repeat_transaction(WikiDataBase.add_drug_external_ids, 10, session, query = "DrugBank_ID")
-        misc.repeat_transaction(WikiDataBase.add_more_drug_info, 10, session, query = "DrugBank_ID")
+        misc.repeat_transaction(WikiDataBase.add_metabolite_info, 10, driver, query = "ChEBI_ID")
+        misc.repeat_transaction(WikiDataBase.add_drug_external_ids, 10, driver, query = "DrugBank_ID")
+        misc.repeat_transaction(WikiDataBase.add_more_drug_info, 10, driver, query = "DrugBank_ID")
 
-        misc.repeat_transaction(WikiDataBase.find_subclass_of_cancer, 10, session)
-        misc.repeat_transaction(WikiDataBase.find_subclass_of_cancer, 10, session)
-        misc.repeat_transaction(WikiDataBase.find_subclass_of_cancer, 10, session)
-        misc.repeat_transaction(WikiDataBase.find_instance_of_cancer, 10, session)
+        misc.repeat_transaction(WikiDataBase.find_subclass_of_cancer, 10, driver)
+        misc.repeat_transaction(WikiDataBase.find_subclass_of_cancer, 10, driver)
+        misc.repeat_transaction(WikiDataBase.find_subclass_of_cancer, 10, driver)
+        misc.repeat_transaction(WikiDataBase.find_instance_of_cancer, 10, driver)
 
         # For each of the 10 numbers a wikidata_id may have as ending
         for number in range(10):
-            misc.repeat_transaction(WikiDataBase.add_cancer_info, 10, session, number)
-            misc.repeat_transaction(WikiDataBase.add_drugs, 10, session, number)
-            misc.repeat_transaction(WikiDataBase.add_causes, 10, session, number)
-            misc.repeat_transaction(WikiDataBase.add_genes, 10, session, number)
+            misc.repeat_transaction(WikiDataBase.add_cancer_info, 10, driver, number)
+            misc.repeat_transaction(WikiDataBase.add_drugs, 10, driver, number)
+            misc.repeat_transaction(WikiDataBase.add_causes, 10, driver, number)
+            misc.repeat_transaction(WikiDataBase.add_genes, 10, driver, number)
 
-        misc.repeat_transaction(WikiDataBase.add_drug_external_ids, 10, session)
-        misc.repeat_transaction(WikiDataBase.add_more_drug_info, 10, session)
-        misc.repeat_transaction(WikiDataBase.add_gene_info, 10, session)
-        misc.repeat_transaction(WikiDataBase.add_metabolite_info, 10, session)
+        misc.repeat_transaction(WikiDataBase.add_drug_external_ids, 10, driver)
+        misc.repeat_transaction(WikiDataBase.add_more_drug_info, 10, driver)
+        misc.repeat_transaction(WikiDataBase.add_gene_info, 10, driver)
+        misc.repeat_transaction(WikiDataBase.add_metabolite_info, 10, driver)
 
 def add_mesh_and_metanetx(driver):
     """
@@ -312,7 +312,7 @@ def add_mesh_and_metanetx(driver):
     """
     # We will also add MeSH terms to all nodes:
     with driver.session() as session:
-        misc.repeat_transaction(MeSHandMetaNetXDataBases.add_mesh_by_name(), 10, session, bar)
+        misc.repeat_transaction(MeSHandMetaNetXDataBases.add_mesh_by_name(), 10, driver, bar)
     # We also add synonyms:
     with driver.session() as session:
         session.run(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx("Name"))

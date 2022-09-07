@@ -9,6 +9,11 @@
 A python module that provides the necessary functions to transition selected parts of the Wikidata database to graph format,
 either from scratch importing all the nodes (as showcased in :obj:`CanGraph.QueryWikidata.main`) or in a case-by-case basis,
 to annotate existing metabolites (as showcased in :obj:`CanGraph.main`).
+
+.. NOTE:: You may notice some functions here present the ``**kwargs`` arguments option.
+    This is in order to make the functions compatible with the
+    :obj:`CanGraph.miscelaneous.repeat_transaction` function, which might send back a variable
+    number of arguments (although technically it could work without the ``**kwargs`` option)
 """
 
 def initial_cancer_discovery(tx):
@@ -127,14 +132,16 @@ def find_instance_of_cancer(tx):
         CREATE (i)-[:INSTANCE_OF]->(c)
         """)
 
-def add_cancer_info(tx, number=None):
+def add_cancer_info(tx, number=None, **kwargs):
     """
     Adds info to "Cancer" nodes for which its WikiData_ID ends in a given number. This way, only some of the nodes
     are targeted, and the Java Machine does not run out of memory
 
     Args:
         tx          (neo4j.work.simple.Session): The session under which the driver is running
-        number (int): From 0 to 9, the number under which the WikiData_IDs to process should ends. This allows us tho divide the work, although its not very elegant.
+        number (int): From 0 to 9, the number under which the WikiData_IDs to process should ends.
+            This allows us tho divide the work, although its not very elegant.
+        **kwargs: Any number of arbitrary keyword arguments
 
     Returns:
         neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
@@ -180,13 +187,15 @@ def add_cancer_info(tx, number=None):
             c.ICD_11 = row['ICD_11']['value']
         """)
 
-def add_drugs(tx, number=None):
+def add_drugs(tx, number=None, **kwargs):
     """
     Creates drug nodes related with each of the "Cancer" nodes already on the database
 
     Args:
         tx          (neo4j.work.simple.Session): The session under which the driver is running
-        number (int): From 0 to 9, the number under which the WikiData_IDs to process should ends. This allows us tho divide the work, although its not very elegant.
+        number (int): From 0 to 9, the number under which the WikiData_IDs to process should ends.
+            This allows us tho divide the work, although its not very elegant.
+        **kwargs: Any number of arbitrary keyword arguments
 
     Returns:
         neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
@@ -225,13 +234,15 @@ def add_drugs(tx, number=None):
                 MERGE (c)-[:EQUALS]-(e))
         """)
 
-def add_causes(tx, number=None):
+def add_causes(tx, number=None, **kwargs):
     """
     Creates drug nodes related with each of the "Cancer" nodes already on the database
 
     Args:
         tx          (neo4j.work.simple.Session): The session under which the driver is running
-        number (int): From 0 to 9, the number under which the WikiData_IDs to process should ends. This allows us tho divide the work, although its not very elegant.
+        number (int): From 0 to 9, the number under which the WikiData_IDs to process should ends.
+            This allows us tho divide the work, although its not very elegant.
+        **kwargs: Any number of arbitrary keyword arguments
 
     Returns:
         neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
@@ -263,13 +274,15 @@ def add_causes(tx, number=None):
                 MERGE (c)-[:CAUSED_BY]->(ca))
         """)
 
-def add_genes(tx, number=None):
+def add_genes(tx, number=None, **kwargs):
     """
     Creates gene nodes related with each of the "Cancer" nodes already on the database
 
     Args:
         tx          (neo4j.work.simple.Session): The session under which the driver is running
-        number (int): From 0 to 9, the number under which the WikiData_IDs to process should ends. This allows us tho divide the work, although its not very elegant.
+        number (int): From 0 to 9, the number under which the WikiData_IDs to process should ends.
+            This allows us tho divide the work, although its not very elegant.
+        **kwargs: Any number of arbitrary keyword arguments
 
     Returns:
         neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
@@ -302,7 +315,7 @@ def add_genes(tx, number=None):
                 MERGE (g)-[:ASSOCIATED_DISEASE_GENE]->(c))
         """)
 
-def add_drug_external_ids(tx, query = "Wikidata"):
+def add_drug_external_ids(tx, query = "Wikidata", **kwargs):
     """
     Adds some external IDs to any "Drug" nodes already present on the database.
     Since the PDB information had too much values which caused triple duplicates that overcharged the system,
@@ -311,9 +324,11 @@ def add_drug_external_ids(tx, query = "Wikidata"):
     Args:
         tx          (neo4j.work.simple.Session): The session under which the driver is running
         query (str): One of ["DrugBank_ID","WikiData_ID"], a way to identify the nodes for which external IDs will be added.
+        **kwargs: Any number of arbitrary keyword arguments
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.work.result.Result:
+            A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     if query == "DrugBank_ID":
       query_text = """?item (wdt:P715) replace(d.DrugBank_ID, "DB", "")"""
@@ -408,7 +423,7 @@ def add_drug_external_ids(tx, query = "Wikidata"):
         MERGE (d)-[r3:RELATED_MESH]->(cc)
         """)
 
-def add_more_drug_info(tx, query = "WikiData_ID"):
+def add_more_drug_info(tx, query = "WikiData_ID", **kwargs):
     """
     Creates some nodes that are related with each of the "Drug" nodes already existing
     on the database: routes of administration, targeted metabolites and approved drugs
@@ -416,7 +431,9 @@ def add_more_drug_info(tx, query = "WikiData_ID"):
 
     Args:
         tx          (neo4j.work.simple.Session): The session under which the driver is running
-        query (str): One of ["DrugBank_ID","WikiData_ID"], a way to identify the nodes for which external IDs will be added; default is "WikiData_ID"
+        query (str): One of ["DrugBank_ID","WikiData_ID"], a way to identify the nodes for
+            which external IDs will be added; default is "WikiData_ID"
+        **kwargs: Any number of arbitrary keyword arguments
 
     Returns:
         neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
@@ -578,21 +595,24 @@ def add_gene_info(tx):
                 MERGE (g)-[:EQUALS]-(e))
         """)
 
-def add_metabolite_info(tx, query = "ChEBI_ID"):
+def add_metabolite_info(tx, query = "ChEBI_ID", **kwargs):
     """
-    A Cypher Query that adds some external IDs and properties to "Metabolite" nodes already existing on
-    the database. Two kind of metabolites exist: those that are encoded by a given gene, and those that interact
-    with a given drug. Both are adressed here, since they are similar, and, most likely, instances of proteins.
+    A Cypher Query that adds some external IDs and properties to "Metabolite" nodes
+    already existing on the database. Two kind of metabolites exist: those that are
+    encoded by a given gene, and those that interact with a given drug. Both are
+    adressed here, since they are similar, and, most likely, instances of proteins.
+
+    * This function forces all metabolites to have a "found_in_taxon:human" target
+    * The metabolites are not forced to be proteins, but if they are, this is kept in the "instance_of" record
 
     Args:
         tx          (neo4j.work.simple.Session): The session under which the driver is running
-        query (str): One of ["DrugBank_ID","WikiData_ID"], a way to identify the nodes for which external IDs will be added; default is "WikiData_ID"
+        query (str): One of ["DrugBank_ID","WikiData_ID"], a way to identify the nodes for
+            which external IDs will be added; default is "WikiData_ID"
+        **kwargs: Any number of arbitrary keyword arguments
 
     Returns:
         neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
-
-        * This function forces all metabolites to have a "found_in_taxon:human" target
-        * The metabolites are not forced to be proteins, but if they are, this is kept in the "instance_of" record
 
     .. TODO:: Might include P527 "has part or parts" for more info (it crashed java)
     """
