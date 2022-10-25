@@ -40,7 +40,7 @@ def initial_cancer_discovery(tx):
                 }' AS sparql
 
         CALL apoc.load.jsonParams(
-                replace("https://query.wikidata.org/sparql?query=" + sparql, "\n", ""),
+                replace("https://query.wikidata.org/sparql?query=" + apoc.text.urlencode(sparql), "\n", ""),
                 { Accept: "application/sparql-results+json" }, null )
         YIELD value
 
@@ -71,9 +71,13 @@ def find_subclass_of_cancer(tx):
 
     Returns:
         neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: We are forcing c.WikiData_ID to not be null or "". This is not necessary if we are just building the wikidata database,
+        because there will always be a WikiData_ID, but it is useful in the rest of the cases
     """
     return tx.run("""
         MATCH (c:Disease)
+        WHERE c.WikiData_ID IS NOT NULL AND c.WikiData_ID <> ""
         WITH 'SELECT DISTINCT ?cancer ?cancer_name
         WHERE {
                 ?cancer wdt:P279 wd:' + c.WikiData_ID + ' .
@@ -82,7 +86,7 @@ def find_subclass_of_cancer(tx):
                 }' AS sparql, c
 
         CALL apoc.load.jsonParams(
-                replace("https://query.wikidata.org/sparql?query=" + sparql, "\n", ""),
+                replace("https://query.wikidata.org/sparql?query=" + apoc.text.urlencode(sparql), "\n", ""),
                 { Accept: "application/sparql-results+json" }, null )
         YIELD value
 
@@ -107,9 +111,13 @@ def find_instance_of_cancer(tx):
 
     Returns:
         neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: We are forcing c.WikiData_ID to not be null or "". This is not necessary if we are just building the wikidata database,
+        because there will always be a WikiData_ID, but it is useful in the rest of the cases
     """
     return tx.run("""
         MATCH (c:Disease)
+        WHERE c.WikiData_ID IS NOT NULL AND c.WikiData_ID <> ""
         WITH 'SELECT DISTINCT ?cancer ?cancer_name
         WHERE {
                 ?cancer wdt:P31 wd:' + c.WikiData_ID + ' .
@@ -118,7 +126,7 @@ def find_instance_of_cancer(tx):
                 }' AS sparql, c
 
         CALL apoc.load.jsonParams(
-                replace("https://query.wikidata.org/sparql?query=" + sparql, "\n", ""),
+                replace("https://query.wikidata.org/sparql?query=" + apoc.text.urlencode(sparql), "\n", ""),
                 { Accept: "application/sparql-results+json" }, null )
         YIELD value
 
@@ -132,7 +140,7 @@ def find_instance_of_cancer(tx):
         CREATE (i)-[:INSTANCE_OF]->(c)
         """)
 
-def add_cancer_info(tx, number=None, **kwargs):
+def add_cancer_info(tx, number, **kwargs):
     """
     Adds info to "Cancer" nodes for which its WikiData_ID ends in a given number. This way, only some of the nodes
     are targeted, and the Java Machine does not run out of memory
@@ -145,6 +153,8 @@ def add_cancer_info(tx, number=None, **kwargs):
 
     Returns:
         neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: Here, there is no need to force c.WikiData_ID to not be null or "" because it will already be = ``number```(and, thus, exist)
     """
     return tx.run(f"""
         MATCH (c:Disease)
@@ -172,7 +182,7 @@ def add_cancer_info(tx, number=None, **kwargs):
             }}' AS sparql, c
 
             CALL apoc.load.jsonParams(
-                replace("https://query.wikidata.org/sparql?query=" + sparql, "\n", ""),
+                replace("https://query.wikidata.org/sparql?query=" + apoc.text.urlencode(sparql), "\n", ""),
                 {{ Accept: "application/sparql-results+json"}}, null)
         YIELD value
 
@@ -187,7 +197,7 @@ def add_cancer_info(tx, number=None, **kwargs):
             c.ICD_11 = row['ICD_11']['value']
         """)
 
-def add_drugs(tx, number=None, **kwargs):
+def add_drugs(tx, number, **kwargs):
     """
     Creates drug nodes related with each of the "Cancer" nodes already on the database
 
@@ -199,6 +209,8 @@ def add_drugs(tx, number=None, **kwargs):
 
     Returns:
         neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: Here, there is no need to force c.WikiData_ID to not be null or "" because it will already be = ``number```(and, thus, exist)
     """
     return tx.run(f"""
         MATCH (c:Disease)
@@ -216,7 +228,7 @@ def add_drugs(tx, number=None, **kwargs):
             }}' AS sparql, c
 
             CALL apoc.load.jsonParams(
-                replace("https://query.wikidata.org/sparql?query=" + sparql, "\n", ""),
+                replace("https://query.wikidata.org/sparql?query=" + apoc.text.urlencode(sparql), "\n", ""),
                 {{ Accept: "application/sparql-results+json"}}, null)
         YIELD value
 
@@ -234,7 +246,7 @@ def add_drugs(tx, number=None, **kwargs):
                 MERGE (c)-[:EQUALS]-(e))
         """)
 
-def add_causes(tx, number=None, **kwargs):
+def add_causes(tx, number, **kwargs):
     """
     Creates drug nodes related with each of the "Cancer" nodes already on the database
 
@@ -246,6 +258,8 @@ def add_causes(tx, number=None, **kwargs):
 
     Returns:
         neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: Here, there is no need to force c.WikiData_ID to not be null or "" because it will already be = ``number```(and, thus, exist)
     """
     return tx.run(f"""
         MATCH (c:Disease)
@@ -261,7 +275,7 @@ def add_causes(tx, number=None, **kwargs):
             }}' AS sparql, c
 
             CALL apoc.load.jsonParams(
-                replace("https://query.wikidata.org/sparql?query=" + sparql, "\n", ""),
+                replace("https://query.wikidata.org/sparql?query=" + apoc.text.urlencode(sparql), "\n", ""),
                 {{ Accept: "application/sparql-results+json"}}, null)
         YIELD value
 
@@ -274,7 +288,7 @@ def add_causes(tx, number=None, **kwargs):
                 MERGE (c)-[:CAUSED_BY]->(ca))
         """)
 
-def add_genes(tx, number=None, **kwargs):
+def add_genes(tx, number, **kwargs):
     """
     Creates gene nodes related with each of the "Cancer" nodes already on the database
 
@@ -286,6 +300,8 @@ def add_genes(tx, number=None, **kwargs):
 
     Returns:
         neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: Here, there is no need to force c.WikiData_ID to not be null or "" because it will already be = ``number```(and, thus, exist)
     """
     return tx.run(f"""
         MATCH (c:Disease)
@@ -302,7 +318,7 @@ def add_genes(tx, number=None, **kwargs):
             }}' AS sparql, c
 
             CALL apoc.load.jsonParams(
-                replace("https://query.wikidata.org/sparql?query=" + sparql, "\n", ""),
+                replace("https://query.wikidata.org/sparql?query=" + apoc.text.urlencode(sparql), "\n", ""),
                 {{ Accept: "application/sparql-results+json"}}, null)
         YIELD value
 
@@ -329,20 +345,26 @@ def add_drug_external_ids(tx, query = "Wikidata", **kwargs):
     Returns:
         neo4j.work.result.Result:
             A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+
+    .. NOTE:: We are forcing c.WikiData_ID to not be null or "". This is not necessary if we are just building the wikidata database,
+        because there will always be a WikiData_ID, but it is useful in the rest of the cases
     """
     if query == "DrugBank_ID":
-      query_text = """?item (wdt:P715) replace(d.DrugBank_ID, "DB", "")"""
+      query_text = ["",
+                    """?item (wdt:P715) ' + apoc.text.replace(d.DrugBank_ID, "DB", "") + '"""]
     else:
-      query_text = """filter (?item = wd:' + d.WikiData_ID + ')"""
+      query_text = ["""WHERE d.WikiData_ID IS NOT NULL AND d.WikiData_ID <> "" """,
+                    """filter (?item = wd:' + d.WikiData_ID + ')"""]
 
 
     return tx.run(f"""
         MATCH (d:Drug)
+        {query_text[0]}
         WITH 'SELECT DISTINCT *
         WHERE {{
             SERVICE wikibase:label {{ bd:serviceParam wikibase:language "[AUTO_LANGUAGE]". }}
 
-        {query_text}
+        {query_text[1]}
 
         OPTIONAL{{
             ?item wdt:P715 ?DrugBank }}
@@ -392,7 +414,7 @@ def add_drug_external_ids(tx, query = "Wikidata", **kwargs):
             }}' AS sparql, d
 
             CALL apoc.load.jsonParams(
-                replace("https://query.wikidata.org/sparql?query=" + sparql, "\n", ""),
+                replace("https://query.wikidata.org/sparql?query=" + apoc.text.urlencode(sparql), "\n", ""),
                 {{ Accept: "application/sparql-results+json" }}, null )
         YIELD value
 
@@ -442,19 +464,25 @@ def add_more_drug_info(tx, query = "WikiData_ID", **kwargs):
     .. TODO:: ADD ROLE to metabolite interactions
 
     .. NOTE:: This transaction has been separated in order to keep response times low
+
+    .. NOTE:: We are forcing c.WikiData_ID to not be null or "". This is not necessary if we are just building the wikidata database,
+        because there will always be a WikiData_ID, but it is useful in the rest of the cases
     """
     if query == "DrugBank_ID":
-      query_text = """?item (wdt:P715) replace(d.DrugBank_ID, "DB", "") . """
+      query_text = ["",
+                    """?item (wdt:P715) ' + apoc.text.replace(d.DrugBank_ID, "DB", "") + '"""]
     else:
-      query_text = """filter (?item = wd:' + d.WikiData_ID + ')"""
+      query_text = ["""WHERE d.WikiData_ID IS NOT NULL AND d.WikiData_ID <> "" """,
+                    """filter (?item = wd:' + d.WikiData_ID + ')"""]
 
     return tx.run(f"""
         MATCH (d:Drug)
+        {query_text[0]}
         WITH 'SELECT DISTINCT *
         WHERE {{
             SERVICE wikibase:label {{ bd:serviceParam wikibase:language "[AUTO_LANGUAGE]". }}
 
-        {query_text}
+        {query_text[1]}
 
         OPTIONAL{{
             ?item wdt:P636 ?Route_of_Admin
@@ -471,7 +499,7 @@ def add_more_drug_info(tx, query = "WikiData_ID", **kwargs):
             }}' AS sparql, d
 
             CALL apoc.load.jsonParams(
-                replace("https://query.wikidata.org/sparql?query=" + sparql, "\n", ""),
+                replace("https://query.wikidata.org/sparql?query=" + apoc.text.urlencode(sparql), "\n", ""),
                 {{ Accept: "application/sparql-results+json"}}, null)
         YIELD value
 
@@ -512,10 +540,14 @@ def add_gene_info(tx):
 
     .. NOTE:: Genomic Start and ends keep just the 2nd position, as reported in wikidata
 
+    .. NOTE:: We are forcing c.WikiData_ID to not be null or "". This is not necessary if we are just building the wikidata database,
+        because there will always be a WikiData_ID, but it is useful in the rest of the cases
+
     .. TODO:: Might include P684 "Orthologues" for more info (it crashed java)
     """
     return tx.run("""
         MATCH (g:Gene)
+        WHERE g.WikiData_ID IS NOT NULL AND g.WikiData_ID <> ""
         WITH 'SELECT *
             WHERE{
                 filter (?item = wd:' + g.WikiData_ID + ')
@@ -560,7 +592,7 @@ def add_gene_info(tx):
             }' AS sparql, g
 
             CALL apoc.load.jsonParams(
-                replace("https://query.wikidata.org/sparql?query=" + sparql, "\n", ""),
+                replace("https://query.wikidata.org/sparql?query=" + apoc.text.urlencode(sparql), "\n", ""),
                 { Accept: "application/sparql-results+json" }, null )
         YIELD value
 
@@ -615,19 +647,25 @@ def add_metabolite_info(tx, query = "ChEBI_ID", **kwargs):
         neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. TODO:: Might include P527 "has part or parts" for more info (it crashed java)
+
+    .. NOTE:: We are forcing c.WikiData_ID to not be null or "". This is not necessary if we are just building the wikidata database,
+        because there will always be a WikiData_ID, but it is useful in the rest of the cases
     """
     if query == "ChEBI_ID":
-      query_text = """?item (wdt:P683) m.ChEBI_ID ."""
+      query_text = ["",
+                    """?item (wdt:P683) " m.ChEBI_ID " ."""]
     else:
-      query_text = """filter (?item = wd:' + m.WikiData_ID + ')"""
+      query_text = ["""WHERE m.WikiData_ID IS NOT NULL AND m.WikiData_ID <> "" """,
+                    """filter (?item = wd:' + m.WikiData_ID + ')"""]
 
     return tx.run(f"""
         MATCH (m:Metabolite)
+        {query_text[0]}
         WITH 'SELECT DISTINCT *
         WHERE {{
             SERVICE wikibase:label {{ bd:serviceParam wikibase:language "[AUTO_LANGUAGE]". }}
 
-        {query_text}
+        {query_text[1]}
 
         OPTIONAL{{
             ?item wdt:P31 ?Instance_of
@@ -678,7 +716,7 @@ def add_metabolite_info(tx, query = "ChEBI_ID", **kwargs):
             }}' AS sparql, m
 
             CALL apoc.load.jsonParams(
-                replace("https://query.wikidata.org/sparql?query=" + sparql, "\n", ""),
+                replace("https://query.wikidata.org/sparql?query=" + apoc.text.urlencode(sparql), "\n", ""),
                 {{ Accept: "application/sparql-results+json"}}, null)
         YIELD value
 
@@ -730,6 +768,7 @@ def add_toomuch_metabolite_info(tx):
     """
     return tx.run("""
         MATCH (m:Metabolite)
+        WHERE m.WikiData_ID IS NOT NULL AND m.WikiData_ID <> ""
         WITH 'SELECT *
             WHERE{
                 filter (?item = wd:' + m.WikiData_ID + ')
@@ -751,7 +790,7 @@ def add_toomuch_metabolite_info(tx):
         }' AS sparql, m
 
             CALL apoc.load.jsonParams(
-                replace("https://query.wikidata.org/sparql?query=" + sparql, "\n", ""),
+                replace("https://query.wikidata.org/sparql?query=" + apoc.text.urlencode(sparql), "\n", ""),
                 { Accept: "application/sparql-results+json" }, null )
         YIELD value
 
@@ -793,7 +832,7 @@ def add_wikidata_to_mesh(tx):
         MATCH (d)
         WITH 'SELECT DISTINCT *
         WHERE{
-            ?item ?label d.Name@en.
+            ?item ?label "d.Name"@en.
             SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
 
         OPTIONAL{
@@ -808,7 +847,7 @@ def add_wikidata_to_mesh(tx):
         }' AS sparql, d
 
             CALL apoc.load.jsonParams(
-                replace("https://query.wikidata.org/sparql?query=" + sparql, "\n", ""),
+                replace("https://query.wikidata.org/sparql?query=" + apoc.text.urlencode(sparql), "\n", ""),
                 { Accept: "application/sparql-results+json" }, null )
         YIELD value
 

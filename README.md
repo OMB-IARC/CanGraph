@@ -25,7 +25,7 @@ This repo contains two kind of scripts: first, some ```build_database.py``` scri
 
 To use this script, you should first clone it into your personal computer. The easiest way to do this is to [git clone](https://docs.codeberg.org/git/clone-commit-via-cli/) the repo:
 
-1. Install git (if not already installed). On linux: ```sudo apt install git```
+1. Install git (if not already installed) and other requirements. On linux: ```sudo apt install git curl```
 2. Clone the repo: ```git clone https://codeberg.org/FlyingFlamingo/graphify-databases```
 3. Step into the directory ```cd graphify-databases```
 
@@ -48,10 +48,28 @@ where:
 
 * **neo4jadress**: is the URL of the database, in neo4j:// or bolt:// format
 * **username**: the username for your neo4j instance. Remember, the default is neo4j
-* **password**: the passowrd for your database. Since the arguments are passed by BaSH onto python3, you might need to escape special characters
+* **password**: the password for your database. Since the arguments are passed by BaSH onto python3, you might need to escape special characters
 * **databasefolder**: The folder indicated to ```setup.py``` as the one where your databases will be stored
 * **inputfile**: The location of the CSV file in which the program will search for metabolites. This file should be a Comma-Separated file, with the following format: ```MonoisotopicMass, SMILES, InChIKey, Name, InChI, Identifier, ChEBI```
 
 All images in this repository are [CC-BY-SA-4.0 International](https://creativecommons.org/licenses/by-sa/4.0/) Licensed.
 
 NOTE: When committing to the repo, try to use [GitMojis](https://gitmoji.dev/) to illustrate your commit :p
+
+## Important Notices
+
+* Some databases are auto-integrated based on their URLs. This URLs, as well as those of existing dependencies, may change over time. Please make sure to have them updated in case you want to run the latest version of the databases
+
+* We have made our best efforts to make the script as multi-platform as possible; however, the script has been developed with Linux in mind, and you may need to install additional packages if you want to run it on Windows or MacOS. Please, check the ``dependencies`` section for more info
+
+## Dependencies
+
+This python package has the following known dependencies:
+
+| Package | Description | Order to install |
+| -------- | -------- | -------- |
+| Python 3.8 | the python programming language | `sudo apt install python3` |
+| cURL | command line tool for transferring data from URLs  | `sudo apt install curl` |
+| neo4j | a graph dbms  | `python3 -c'import setup; setup.setup_neo4j("neo4j", True)'` |
+
+Alternatively, as a one-liner: ``sudo apt install python3 curl; python3 -c'import setup; setup.setup_neo4j("neo4j", True)``

@@ -85,7 +85,7 @@ def git_push(path_to_repo, remote_names, commit_message, force = False):
     repo = Repo(path_to_repo)
     repo.git.add('.')
 
-    current_branch = repo.git.branch().replace('* ', '').replace(" ","").split('\n')[0]
+    current_branch = repo.active_branch.name
     repo.index.commit(commit_message.replace("\\n", "\n"))
 
     i = 1
@@ -179,7 +179,7 @@ def deploy_webdocs(docs_folder = "./docs/", work_dir = ".", prechecks_done=False
     repo.git.stash('save')
 
     # Annotating the current branch name for the future
-    current_branch = repo.git.branch().replace('* ', '').split('\n')[0]
+    current_branch = repo.active_branch.name
 
     print("Let me clean the 'pages' repo first...")
 
@@ -298,7 +298,7 @@ def deploy_code(branch = "dev"):
     repo = Repo('.git')
 
     # Annotating the current branch name for the future
-    current_branch = repo.git.branch().replace('* ', '').split('\n')[0]
+    current_branch = repo.active_branch.name
 
     if branch == "main":
         repo.git.add('.')

@@ -1,0 +1,102 @@
+# SPDX-FileCopyrightText: 2022 Pablo Marcos <software@loreak.org>
+#
+# SPDX-License-Identifier: MIT
+
+Bootstrap: docker # Shamelessly steal bandwidth from Docker
+From: debian:11
+
+%setup
+    # This section is where the Setup script is located. This script will be
+    # run before each ``apptainer build``, to prepare the container itself
+
+    # And thus, we first setup the python requirements and the database folders
+    # python3 ../setup.py -i --databases ../DataBases --requirements ../requirements.txt
+
+%files
+    # This section is where the files that will conform the container are declared.
+    # Since the container is inmutable, only files that will NOT be changed should be here
+
+    # NOTE: Neo4j is not included in the container because, as a DB, it is NOT inmutable
+
+    ../DataBases/          /home/CanGraph/
+    ../GraphifyHMDB/       /home/CanGraph/
+    ../GraphifySMPDB/      /home/CanGraph/
+    ../GraphifyDrugBank/   /home/CanGraph/
+    ../ExposomeExplorer/   /home/CanGraph/
+    ../MeSHandMetaNetX/    /home/CanGraph/
+    ../QueryWikidata/      /home/CanGraph/
+    ../README.md           /home/CanGraph/README.md
+    ../requirements.txt    /home/CanGraph/requirements.txt
+    ../miscelaneous.py     /home/CanGraph/miscelaneous.py
+    ../setup.py            /home/CanGraph/setup.py
+    ../main.py             /home/CanGraph/main.py
+
+    CanGraph-Private.sh    /home/CanGraph/runscript.sh
+
+%post
+    # Here, we indicate which actions we want to perform in the just-created container,
+    # before it is made forever inmutable. Thus,
+
+    apt update              # We can use it to update
+    apt full-upgrade -y     # and upgrade its software
+
+    # Installing all the packages that are not on debian by default
+    apt -qq install -y python3.9 \
+                       python3-pip \
+                       python-is-python3 \
+                       default-jdk \
+                       default-jre \
+                       git \
+                       curl
+
+    # And cleaning and removing everything that is not used after the upgrade
+    apt -y autoremove; apt -y clean
+
+    # Then, we update pip
+    python3 -m pip --no-cache-dir install --upgrade pip
+    # And we use it to install all dependencies from the
+    # Python Package Index
+    python3 -m pip install -r /home/CanGraph/requirements.txt
+
+
+%environment
+    # Here we can declare some variables that will always be accessible to the container
+
+    export CANGRAPH_HOME=/home/CanGraph
+
+%runscript
+    # And, here comes the runscript! This is what you will invoke if you double-click the
+    # ``sif`` image, if you run it using ./Cangraph.sif, or if you use ``apptainer run``
+
+    /home/CanGraph/runscript.sh $@
+
+%labels
+    # Finally, we can add some informative labels
+
+    Author Pablo Marcos <software@loreak.org>
+    Website https://omb-iarc.github.io/CanGraph/
+    Codeberg https://codeberg.org/FlyingFlamingo/CanGraph
+    Github https://github.com/OMB-IARC/CanGraph
+    Version 0.9
+
+%help
+    # And a help, to be displayed when running ``apptainer run-help``
+
+    This is a Singularity-packaged version of the CanGraph software, the source
+    code of which can be found at https://codeberg.org/FlyingFlamingo/CanGraph
+
+    This version of the software may include some confidential databases,
+    as well as copyrighted software such as neo4j. Thus, it shouldn't be used or
+    distributed outside of authorised premises.
+
+    For information on usage, ``apptainer run CanGraph-Private.sif -h``, or check
+    the README ``apptainer exec CanGraph-Private.sif cat /home/CanGraph/README.md``
+
+    You MUST provide the command-line program with an ``inputfile``; optionally, a
+    ``neo4jadress`` with username and password can be provided; if it is not, a new
+    neo4j database will be started using the default user and the ``.neo4jpassword``
+    file; if none is found, a new neo4j will be installed. For the "DataBases" folder,
+    you might provide one, or else the pre-packaged one will be used.
+
+    For information on how to compile the project and it technical characteristics,
+    please refer to the official documentation at https://omb-iarc.github.io/CanGraph/

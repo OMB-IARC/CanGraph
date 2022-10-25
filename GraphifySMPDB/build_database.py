@@ -121,7 +121,7 @@ def add_sequence(tx, seq_id, seq_name, seq_type, seq, seq_format="FASTA"):
         MERGE (p)-[r:SEQUENCED_AS]->(s)
         """)
 
-def build_from_file(databasepath, filepath, Neo4JImportPath, driver, filetype):
+def build_from_file(filepath, Neo4JImportPath, driver, filetype):
     """
     A function able to build a portion of the SMPDB in graph format, provided that one CSV is supplied to it.
     This CSVs are downloaded from the website, and can be presented either as the full file, or as a splitted
@@ -130,7 +130,6 @@ def build_from_file(databasepath, filepath, Neo4JImportPath, driver, filetype):
     Since file title represents a different pathway, the function automatically picks up and import the relative pathway node.
 
     Args:
-        databasepath (str): The path to the database where all SMPDB CSVs are stored
         filepath (str): The path to the current file being imported
         Neo4JImportPath (str): The path from which Neo4J is importing data
         driver (neo4j.Driver): Neo4J's Bolt Driver currently in use
@@ -141,7 +140,10 @@ def build_from_file(databasepath, filepath, Neo4JImportPath, driver, filetype):
 
      .. NOTE:: Since this adds a ton of low-resolution nodes, maybe have this db run first?
     """
-    shutil.copyfile(os.path.abspath(filepath), f"{Neo4JImportPath}/{os.path.basename(filepath)}")
+    filepath = os.path.abspath(filepath)
+    databasepath = filepath.split("/SMPDB/")[0]
+
+    shutil.copyfile(filepath, f"{Neo4JImportPath}/{os.path.basename(filepath)}")
     pathway_id = filepath.split("/")[-1].split("_")[0]
     all_the_proteins = pd.read_csv(f"{os.path.abspath(databasepath)}/SMPDB/smpdb_proteins/{pathway_id}_proteins.csv")
 

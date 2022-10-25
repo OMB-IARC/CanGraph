@@ -11,19 +11,38 @@ scripts present in the CanGraph package, with various, useful functionalities
 """
 
 # Import external modules necessary for the script
-from neo4j import GraphDatabase     # The Neo4J python driver
-import urllib.request as request    # Extensible library for opening URLs
-from zipfile import ZipFile         # Work with ZIP files
-import tarfile                      # Work with tar.gz files
-import os                           # Integration with the system
-import xml.etree.ElementTree as ET  # To parse and split XML files
-import re                           # To split XML files with a regex pattern
-from time import sleep              # Cute go slowly
-import pandas as pd                 # Analysis of tabular data
-
-from MeSHandMetaNetX import build_database as MeSHandMetaNetXDataBases
+from neo4j import GraphDatabase      # The Neo4J python driver
+import urllib.request as request     # Extensible library for opening URLs
+from zipfile import ZipFile          # Work with ZIP files
+import tarfile                       # Work with tar.gz files
+import os                            # Integration with the system
+import xml.etree.ElementTree as ET   # To parse and split XML files
+import re                            # To split XML files with a regex pattern
+import time                          # Manage the time, and wait times, in python
+import pandas as pd                  # Analysis of tabular data
+import subprocess                    # Manage python sub-processes
+import logging                       # Make ``verbose`` messages easier to show
+import psutil                        # Kill the burden of the neo4j process
+import argparse                      # Arguments pàrser for Python
+from alive_progress import alive_bar # A cute progress bar
 
 # ********* Manage the Neo4J Database Connection and Transactions ********* #
+
+def restart_neo4j(neo4j_home = "neo4j"):
+    """
+    A simple function that (re)starts a neo4j server and returns its bolt adress
+
+    Args:
+        neo4j_home (str): the installation directory for the ``neo4j`` program; by default, ``neo4j``
+
+    .. NOTE:: Re-starting is better than starting, as it tries to kills old sessions (a task at which it fails
+        miserably, thus the need for :obj:`~CanGraph.miscelaneous.kill_neo4j`), and, most importantly,
+        because it returns the currently used bolt port
+    """
+    result = subprocess.run([f"{os.path.abspath(neo4j_home)}/bin/neo4j", "restart"],
+                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    neo4j_message = print(result.stdout.decode("utf-8"), type(result.stdout.decode("utf-8")))
+
 
 def neo4j_import_path_query(tx):
     """
@@ -58,6 +77,71 @@ def get_import_path(current_driver):
         Neo4JImportPath = session.read_transaction(neo4j_import_path_query)[0]
     return Neo4JImportPath
 
+def connect_to_neo4j(port = "bolt://localhost:7687", username = "neo4j", password="neo4j"):
+    """
+    A function that establishes a connection to the neo4j server and returns a :obj:`~neo4j.Driver`
+    into which transactions can be passed
+
+    Args:
+        port (str): The URL where the database is available to be queried. It must be of ``bolt://`` format
+        username (str): the username for your neo4j database; by default, ``neo4j``
+        password (str): the password for your database; by default, ``neo4j``
+
+    Returns:
+        neo4j.Driver: An instance of Neo4J's Bolt Driver that can be used
+
+    .. NOTE:: Since this is a really short function, this doesn't really simplify the code that much,
+        but it makes it much more re-usable and understandable
+    """
+    instance = port; user = username; passwd = password
+
+    try:
+        driver = GraphDatabase.driver(instance, auth=(user, passwd))
+        return driver
+    except Exception as E:
+        exit(f"Could not connect to Neo4J due to error: {E}")
+
+
+def kill_neo4j(neo4j_home = "neo4j"):
+    """
+    A simple function that kills any process that was started using a cmd argument including "neo4j"
+
+    Args:
+        neo4j_home (str): the installation directory for the ``neo4j`` program; by default, ``neo4j``
+
+    .. WARNING:: This function may unintendedly kill any command run from the ``neo4j`` folder.
+        This is unfortunate, but the creation of this function was essential given that ``neo4j stop``
+        does not work properly; instead of dying, the process lingers on, interfering
+        with :obj:`~CanGraph.setup.find_neo4j_installation_status` and hindering the main program
+    """
+    neo4j_home = os.path.abspath(neo4j_home)
+
+    neo4j_dead = False
+
+    if os.path.exists(f"{neo4j_home}/run/neo4j.pid"):
+        with open(f"{neo4j_home}/run/neo4j.pid") as f:
+            neo4j_pid = f.readline().rstrip()
+
+        for proc in psutil.process_iter():
+            if proc.pid == neo4j_pid:
+                proc.terminate()
+                neo4j_dead = True
+
+        os.remove(f"{neo4j_home}/run/neo4j.pid")
+
+    if os.path.exists(neo4j_home):
+        subprocess.run([f"{os.path.abspath(neo4j_home)}/bin/neo4j", "stop"],
+                        stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+        neo4j_dead = True
+
+    for proc in psutil.process_iter():
+        if os.path.abspath(neo4j_home) in " ".join(proc.cmdline()):
+            proc.kill()
+            neo4j_dead = True
+
+    if neo4j_dead == True: sleep_with_counter(5, message = "Killing existing Neo4j sessions...")
+
+
 def repeat_transaction(tx, num_retries, driver, **kwargs):
     """
     A function that repeats transactions whenever an error is found.
@@ -74,6 +158,9 @@ def repeat_transaction(tx, num_retries, driver, **kwargs):
         Exception:
             An exception telling the user that the maximum number of retries
             has been exceded, if such a thing happens
+
+    .. NOTE:: This function does not accept args, but only kwargs (named keyword arguments).
+        Thus, if you wish to add a parameter (say, ``number``, you should add it as: ``number=33``
     """
     for attempt in range(num_retries):
         try:
@@ -83,18 +170,17 @@ def repeat_transaction(tx, num_retries, driver, **kwargs):
             break
         except Exception as error:
             if attempt < (num_retries - 1):
-                print(f"The following error was found while processing Nodes ending in #{number}")
-                print(error)
+                print(f"An error with error code: {error.code} was found.")
                 print(f"Retrying... ({attempt + 1}/{num_retries})")
             else:
-                raise Exception(f"{num_retries} consecutive attempts were made at processing Nodes ",
-                                f"ending in #{number}. Aborting...")
+                raise Exception(f"{num_retries} consecutive attempts were made on a function. Aborting...")
 
 # ********* Interact with the Neo4J Database ********* #
 
 def call_db_schema_visualization(tx):
     """
-    Shows the DB Schema. This function is intended to be run only in Neo4J's console, since it produces no output when called from the driver.
+    Shows the DB Schema. This function is intended to be run only in Neo4J's console,
+    since it produces no output when called from the driver.
 
     Args:
         tx          (neo4j.work.simple.Session): The session under which the driver is running
@@ -275,8 +361,8 @@ def purge_database(driver):
         session.write_transaction(remove_duplicate_nodes, "", """n.InChI as inchi, n.InChIKey as inchikey, n.Name as name, n.SMILES as smiles,
                                                                       n.Identifier as hmdb_id, n.ChEBI as chebi, n.Monisotopic_Molecular_Weight as mass""",
                                                                    "WHERE n:Metabolite OR n:Protein OR n:OriginalMetabolite OR n:Drug")
-        # And all Metabolites that do not match our Schema
-        session.run("MATCH (m:Metabolite) WHERE n.ChEBI_ID IS NULL OR n.ChEBI_ID = "" OR n.CAS_Number IS NULL OR n.CAS_Number = "" DETACH DELETE m")
+        # And all Metabolites that do not match our Schema - Be careful with the \" character
+        session.run('MATCH (n:Metabolite) WHERE n.ChEBI_ID IS NULL OR n.ChEBI_ID = "" OR n.CAS_Number IS NULL OR n.CAS_Number = "" DETACH DELETE n')
 
         # We also remove all non-unique Subjects. We do this by passing on all three parameters this nodes may have to apoc.mergeNodes
         # .. NOTE:: This concerns only those nodes that DO NOT COME from Exposome_Explorer
@@ -303,42 +389,56 @@ def purge_database(driver):
         #At last, we may remove any duplicate relationships, which, since we have merged nodes, will surely be there:
         session.write_transaction(remove_duplicate_relationships)
 
-def find_synonyms_in_metanetx(driver, query_type, query):
+# ********* Work with Files ********* #
+
+def check_file(filepath):
     """
-    A function that automates finding synonyms in MetaNetX for a given metabolite,
-    using :obj:`CanGraph.MeSHandMetaNetX.build_database.read_synonyms_in_metanetx`.
+    Checks for the presence of a file or folder. If it exists, it returns the filepath; if it doesn't, it
+    raises an :obj:`argparse.ArgumentTypeError`, which tells argparse how to process file exclussion
+
+    .. NOTE:: Perhaps its not ideal, but I will be using this also to check for file existence
+        throughout the CanGraph project, although the error type might not be correct
 
     Args:
-        driver (neo4j.Driver): Neo4J's Bolt Driver currently in use
-        query_type (str): one of ["HMDB_ID","ChEBI_ID","InChI","Name"]; the type of query we will be searching synonyms in
-        query (str): The value of an identifier based on which we want to find synonyms for a metabolite
+        filepath (str): The path of the file or folder whose existence is being checked
 
     Returns:
-        list: a list of the synonyms that MetaNetx can find for ``query``, including the query itself
+        str: The original filepath, which now is sure to exist
+
+    Raises:
+        argparse.ArgumentTypeError: If the file does not exist
     """
-    # First, we declare a list to store the synonyms and we store the original IDs there
-    items_list = []; items_list.append(query)
+    # First, turn the path into abspath for consistency
+    filepath = os.path.abspath(filepath)
 
-    # Then, we find the synonyms based on the original query
-    with driver.session() as session:
-        graph_response = session.read_transaction(MeSHandMetaNetXDataBases.read_synonyms_in_metanetx, query_type, query)
+    # Check if the filepath does exist
+    if not os.path.exists(filepath):
+        raise argparse.ArgumentTypeError(f"Missing file: {filepath}. Please add the file and run the script back")
 
-    # And we process it to add it to the appropriate list
-    for element in graph_response:
+    return filepath # Return the same string for argparse to work
 
-        if element["databasename"].lower() == "hmdb" and query_type == "HMDB_ID":
-            if element["databaseid"] not in items_list: items_list.append(element["databaseid"])
+def check_neo4j_protocol(string):
+    """
+    Checks that a given ``string`` starts with any of the protocols accepted by the :obj:`neo4j.Driver`
 
-        if element["databasename"].lower() == "chebi" and query_type == "ChEBI_ID":
-            if element["databaseid"] not in items_list: items_list.append(element["databaseid"])
+    Args:
+        string (str): A string, which will normally represent the neo4j adress
 
-        if element["InChI"] not in items_list and query_type == "InChI": items_list.append(graph_response[0]["InChI"])
+    Returns:
+        str: The same string that was provided as an argument (required by :obj:`argparse.ArgumentParser`)
 
-        if element["Name"] not in items_list and query_type == "Name": items_list.append(graph_response[0]["Name"])
+    Raises:
+        argparse.ArgumentTypeError: If the string is not of the correct protocol
+    """
+    # First, declare a list of accepted formats
+    accepted_formats = ['bolt', 'bolt+ssc', 'bolt+s', 'neo4j', 'neo4j+ssc', 'neo4j+s']
 
-    return items_list
+    # This must be converted into a tuple for :obj:`str.startswith`
+    if not string.startswith(tuple(accepted_formats)):
+        msg = f"Invalid format. Your string must start with one of {accepted_formats}"
+        raise argparse.ArgumentTypeError(msg)
 
-# ********* Work with Files ********* #
+    return string # Return the same string for argparse to work
 
 def export_graphml(tx, exportname):
     """
@@ -510,7 +610,7 @@ def split_xml(filepath, splittag, bigtag):
     """
 
     # Set the filepath to be an absolute path
-    filepath = os.path.abspath(filename)
+    filepath = os.path.abspath(filepath)
 
     # Set counters and text variables to null
     current_text = ""; current_line = 0; num_files = 0
@@ -571,3 +671,79 @@ def split_csv(filename, folder, sep=",", sep_out=",", startFrom=0, withStepsOf=1
     os.remove(filepath) # And remove the file after finishing
 
     return filenumber
+
+def countlines(start, header=True, lines=0, begin_start=None):
+    """
+    A function that counts all the lines of code present in a given directory; useful to show off in Sphinx Docs
+
+    Args:
+        start (str): The directory from which to start the line counting
+        header (bool): whether to print a header, or not
+        lines (int): Number of lines already counted; do not fill, only for recursion
+        begin_start (str): The subdirectory currently in use; do not fill, only for recursion
+
+    Returns:
+        int: The number of lines present in ``start``
+
+    .. seealso:: This function was taken from `StackOverflow #38543709
+        <https://stackoverflow.com/questions/38543709/count-lines-of-code-in-directory-using-python/>`_
+    """
+    if header:
+        print('{:>10} |{:>10} | {:<20}'.format('ADDED', 'TOTAL', 'FILE'))
+        print('{:->11}|{:->11}|{:->20}'.format('', '', ''))
+
+    for thing in os.listdir(start):
+        thing = os.path.join(start, thing)
+        if os.path.isfile(thing):
+            if thing.endswith('.py'):
+                with open(thing, 'r') as f:
+                    newlines = f.readlines()
+                    newlines = len(newlines)
+                    lines += newlines
+
+                    if begin_start is not None:
+                        reldir_of_thing = '.' + thing.replace(begin_start, '')
+                    else:
+                        reldir_of_thing = '.' + thing.replace(start, '')
+
+                    print('{:>10} |{:>10} | {:<20}'.format(
+                            newlines, lines, reldir_of_thing))
+
+
+    for thing in os.listdir(start):
+        thing = os.path.join(start, thing)
+        if os.path.isdir(thing):
+            lines = countlines(thing, header=False, lines=lines, begin_start=start)
+
+    return lines
+
+# ********* Other useful functions ********* #
+
+def sleep_with_counter(seconds, step = 20, message = "Waiting..."):
+    """
+    A function that waits while showing a cute animation
+
+    Args:
+        seconds (int): The number of seconds that we would like the program to wait for
+        step (int): The number times the counter wheel will turn in a second; by default, 20
+        message (str): An optional, text message to add to the waiting period
+    """
+    with alive_bar(seconds*step, title=message) as bar:
+        for i in range(seconds*step):
+            time.sleep(1/step); bar()
+
+    # OLD VERSION BELOW:
+    # animation = "|/-\\"; # The animation vector
+    #
+    # index = 0 # Initialize the index
+    # total_steps = seconds*step # Calculate the number of steps
+    #
+    # while index < total_steps:
+    #
+    #     # Calculate the current step on base 100
+    #     current_step_100 = round(index*100/total_steps)
+    #     print(f"{message}  {animation[index % len(animation)]}\t{current_step_100}/100", end="\r")
+    #
+    #     index += 1; time.sleep(1/step)
+    #
+    # print(f"{message}  ✱\t100/100 [COMPLETED]")

@@ -21,13 +21,21 @@ graphify-drugbank/graph.graphml
 graphify-smpdb/graph.graphml
 
 # Ignore the folder with the databases and everything inside:
-DataBases/
+**/DataBases/
+# And the Results, too
+**/Results/
 
 # Ignore confidential sample input
 sample_input.csv
+sample_input_metabolites.csv
+sample_input_cancers.csv
 
 # Ignore python docs' build data
 docs/_build
 
-# Ignore location of neo4j database
-neo4j/
+# Ignore location of neo4j database and its password
+**/neo4j/
+**/.neo4jpassword
+
+# Ignore the private version of the CanGraph-Singularity packaged file
+**/CanGraph-Private.sif

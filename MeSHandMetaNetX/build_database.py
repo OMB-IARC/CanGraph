@@ -17,22 +17,34 @@ to annotate existing metabolites (as showcased in :obj:`CanGraph.main`).
     number of arguments (although technically it could work without the ``**kwargs`` option)
 """
 
+import json                          # Read JSON files from Python
+import urllib.request as request     # Extensible library for opening URLs
+import urllib.parse                  # Parse URLs in Python
+import re                            # Regular expression search
+import time                          # Manage the time, and wait times, in python
+
 # ********* SPARQL queries to annotate existing nodes using MeSH ********* #
 
 def add_mesh_by_name():
     """
     A function that adds some MeSH nodes to any existing nodes, based on their Name property.
+    Only currently active MeSH_IDs are parsed
 
     Returns:
         str: A text chain that represents the CYPHER query with the desired output. This can be run using: :obj:`neo4j.Session.run`
 
     .. NOTE:: Only exact matches work here, which is not ideal.
+
+    .. NOTE:: Be careful when writing CYPHER commands for the driver: sometimes, \" != \' !!!
     """
     return """
+
         CALL {
 
         MATCH (n)
-        WHERE n.Name IS NOT null AND n.Name <> ""
+        WHERE (n:Metabolite OR n:Protein OR n:Drug OR n:Disease OR n:Pathway OR n:Tissue
+            OR n:CelularLocation OR n:BioSpecimen OR n:Gene OR n:Cause OR n:AdministrationRoute)
+            AND n.Name IS NOT null AND n.Name <> ""
         WITH '
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -50,15 +62,19 @@ def add_mesh_by_name():
         { ?MeSH_Descriptor_ID
                      a              meshv:Descriptor ;
                      meshv:concept  ?MeSH_Concept_ID ;
+                     meshv:active 1 ;
                      rdfs:label     ?MeSH_Descriptor_Name .
           ?MeSH_Concept_ID
-                      rdfs:label     ?MeSH_Concept_Name
-          FILTER ( ( ?MeSH_Descriptor_Name = \"' +  n.Name + '\"@en ) || ( ?MeSH_Concept_Name = \"' +  n.Name + '\"@en ) )
+                     meshv:active 1 ;
+                     rdfs:label     ?MeSH_Concept_Name
+
+          FILTER( REGEX(?MeSH_Descriptor_Name, \"(?=.*' +  split(n.Name, ' ')[0] + ')(?=.*' +  split(n.Name, ' ')[0] + ') \", \"i\") ||
+                  REGEX(?MeSH_Concept_Name, \"(?=.*' +  split(n.Name, ' ')[0] + ')(?=.*' +  split(n.Name, ' ')[0] + ') \", \"i\") )
         }' AS sparql, n
 
-            CALL apoc.load.jsonParams(
-                replace("https://id.nlm.nih.gov/mesh/sparql?query=" + sparql + "&format=JSON&limit=50&offset=0&inference=true", "\n", ""),
-                { Accept: "application/sparql-results+json" }, null )
+        CALL apoc.load.jsonParams(
+            replace("https://id.nlm.nih.gov/mesh/sparql?query=" + apoc.text.urlencode(sparql) + "&format=JSON&limit=50&offset=0&inference=true", "\n", ""),
+            { Accept: "application/sparql-results+json" }, null )
         YIELD value
 
         UNWIND value['results']['bindings'] as row
@@ -68,8 +84,62 @@ def add_mesh_by_name():
         MERGE (cc:MeSH { MeSH_ID:split(row['MeSH_Concept_ID']['value'],'/')[-1] , Type:"Concept", Name: row['MeSH_Concept_Name']['value']})
         MERGE (n)-[r2:RELATED_MESH]->(cc)
 
-        } IN TRANSACTIONS OF 100 rows
+        } IN TRANSACTIONS OF 10 rows
         """
+
+def find_metabolites_related_to_mesh(tx, mesh_id):
+    """
+    A function that finds Metabolites related to a given MeSH ID, on the MeSH DataBase
+
+    Args:
+        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        mesh_id (str): The MeSH_ID of the thing for which we want to find related proteins
+
+    Returns:
+        list: The result of the query: a list of dictionaries with ``Metabolite``, ``Name`` and ``Species`` keys
+
+    .. NOTE:: This is intended to be run as a read_transaction, only returning synonyms present in the DB. No modifications will be applied.
+
+    .. NOTE:: Could be turned into a read query by substituting ``mesh_id`` with ``' + n.MeSH_ID + '``
+    """
+    graph_response = tx.run(f"""
+        WITH '
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+        PREFIX owl: <http://www.w3.org/2002/07/owl#>
+        PREFIX meshv: <http://id.nlm.nih.gov/mesh/vocab#>
+        PREFIX mesh: <http://id.nlm.nih.gov/mesh/>
+        PREFIX mesh2022: <http://id.nlm.nih.gov/mesh/2022/>
+        PREFIX mesh2021: <http://id.nlm.nih.gov/mesh/2021/>
+        PREFIX mesh2020: <http://id.nlm.nih.gov/mesh/2020/>
+
+        SELECT DISTINCT *
+        FROM <http://id.nlm.nih.gov/mesh>
+        WHERE
+        {{  ?MeSH_ID a meshv:SCR_Chemical .
+            ?MeSH_ID meshv:active 1 .
+            ?MeSH_ID ?o mesh:{mesh_id} .
+
+            OPTIONAL{{ ?MeSH_ID rdfs:label ?MetaboliteName }}
+        }}  ' AS sparql
+
+        CALL apoc.load.jsonParams(
+            replace("https://id.nlm.nih.gov/mesh/sparql?query=" + apoc.text.urlencode(sparql) + "&format=JSON0&inference=true", "\n", ""),
+            {{ Accept: "application/sparql-results+json" }}, null )
+        YIELD value
+
+        UNWIND value['results']['bindings'] as row
+
+        WITH
+            row["MeSH_ID"]["value"] as MeSH_ID,
+            split(row["MetaboliteName"]["value"], ",")[0] as Name,
+            split(row["MetaboliteName"]["value"], ",")[1] as Species
+
+        RETURN MeSH_ID, Name, Species
+        """)
+
+    return [record.data() for record in graph_response]
 
 # ********* SPARQL queries to annotate existing nodes using MetaNetX ********* #
 
@@ -131,16 +201,24 @@ def get_identifiers(from_sparql=False, **kwargs):
             split(row['Isomers']['value'],'/')[-1] as Isomer,
             n
 
-        SET n.MetaNetX_ID = MetaNetX_ID
-
+        FOREACH(ignoreme in case when MetaNetX_ID IS NOT NULL AND MetaNetX_ID <> "" then [1] else [] end |
+            SET n.MetaNetX_ID = MetaNetX_ID
+        )
         FOREACH(ignoreme in case when InChIKey IS NOT NULL AND InChIKey <> "" then [1] else [] end |
             SET n.InChIKey = InChIKey
         )
         FOREACH(ignoreme in case when InChI IS NOT NULL AND InChI <> "" then [1] else [] end |
             SET n.InChI = InChI
         )
-
-        SET n.Formula = Formula, n.Average_Mass = Mass, n.SMILES = SMILES
+        FOREACH(ignoreme in case when Formula IS NOT NULL AND Formula <> "" then [1] else [] end |
+            SET n.Formula = Formula
+        )
+        FOREACH(ignoreme in case when Mass IS NOT NULL AND Mass <> "" then [1] else [] end |
+            SET n.Average_Mass = Mass
+        )
+        FOREACH(ignoreme in case when SMILES IS NOT NULL AND SMILES <> "" then [1] else [] end |
+            SET n.SMILES = SMILES
+        )
             """,
             """
         WITH n, databasename, databaseid, MetaNetX_ID, Isomer
@@ -149,12 +227,16 @@ def get_identifiers(from_sparql=False, **kwargs):
         FOREACH(ignoreme in case when databasename = "hmdb" then [1] else [] end |
             FOREACH(ignoreme in case when databaseid IN n.Secondary_HMDB_IDs then [1] else [] end |
                 MERGE (n)-[r:SYNONYM_OF]-(m)
-                SET m.MetaNetX_ID = MetaNetX_ID
+                 FOREACH(ignoreme in case when MetaNetX_ID IS NOT NULL AND MetaNetX_ID <> "" then [1] else [] end |
+                     SET m.MetaNetX_ID = MetaNetX_ID
+                )
             )
         )
 
-        MERGE (z:Metabolite { MetaNetX_ID:Isomer })
-        MERGE (z)-[r:ISOMER_OF]-(n)
+        FOREACH(ignoreme in case when Isomer IS NOT NULL AND Isomer <> "" then [1] else [] end |
+            MERGE (z:Metabolite { MetaNetX_ID:Isomer })
+            MERGE (z)-[r:ISOMER_OF]-(n)
+        )
             """]
     else: sparql_parser = ["",""]
 
@@ -221,19 +303,21 @@ def get_identifiers(from_sparql=False, **kwargs):
         {sparql_parser[1]}
         """
 
-def write_synonyms_in_metanetx(query = None, **kwargs):
+def write_synonyms_in_metanetx(query, **kwargs):
     """
     A SPARQL function that finds synonyms for metabolites, proteins or drugs in an existing Neo4J database, using MetaNetX.
     At the same time, it is able to annotate them a bit, adding Name, InChI, InChIKey, SMILES, Formula, Mass, some External IDs,
     and finding whether the metabolite in question has any known isomers, anootating if so.
 
     Args:
-        query (str): The type of query that is being searched for. One of ["Name","KEGG_ID","ChEBI_ID","HMDB_ID","InChI","InChIKey"];
-            default is None (i.e. the function will not process anything).
+        query (str): The type of query that is being searched for. One of ["Name","KEGG_ID","ChEBI_ID","HMDB_ID","InChI","InChIKey"].
         **kwargs: Any number of arbitrary keyword arguments
 
     Returns:
         str: A text chain that represents the CYPHER query with the desired output. This can be run using: :obj:`neo4j.Session.run`
+
+    Raises:
+        ValueError: If the query type is not one of those accepted by the function
 
     .. NOTE:: This is intended to be run as a write_transaction, modifying the existing database.
     """
@@ -249,9 +333,8 @@ def write_synonyms_in_metanetx(query = None, **kwargs):
       query_text = """?mnx_url  mnx:inchi  \"' +  n.InChI + '\" . """
     elif query == "InChIKey":
       query_text = """?mnx_url  mnx:inchikey  \"InChIKey=' +  n.InChIKey + '\" . """
-
     else:
-      query_text = ["" ""]
+      raise ValueError(f"Error: {query} is not a valid query type")
 
     return f"""
         CALL {{
@@ -282,7 +365,7 @@ def write_synonyms_in_metanetx(query = None, **kwargs):
             }}' AS sparql, n
 
         CALL apoc.load.jsonParams(
-            replace("https://rdf.metanetx.org/sparql/?query=" + sparql, "\n", ""),
+            replace("https://rdf.metanetx.org/sparql/?query=" + apoc.text.urlencode(sparql), "\n", ""),
             {{ Accept: "application/sparql-results+json" }}, null )
         YIELD value
 
@@ -294,10 +377,10 @@ def write_synonyms_in_metanetx(query = None, **kwargs):
 
         { get_identifiers(from_sparql = True) }
 
-        }} IN TRANSACTIONS OF 100 rows
+        }} IN TRANSACTIONS OF 10 rows
         """
 
-def read_synonyms_in_metanetx(tx, querytype = None, query = None, **kwargs):
+def read_synonyms_in_metanetx(tx, querytype, query, **kwargs):
     """
     A SPARQL function that finds synonyms for metabolites, proteins or drugs based on a given `query`, using MetaNetX.
     At the same time, it is able to annotate them a bit, adding Name, InChI, InChIKey, SMILES, Formula, Mass, some External IDs,
@@ -305,11 +388,15 @@ def read_synonyms_in_metanetx(tx, querytype = None, query = None, **kwargs):
 
     Args:
         tx          (neo4j.work.simple.Session): The session under which the driver is running
-        querytype   (str): The type of query that is being searched for. One of ["Name","KEGG_ID","ChEBI_ID","HMDB_ID","InChI","InChIKey"];
-            default is :obj:`None` (i.e. the function will not process anything).
+        querytype   (str): The type of query that is being searched for. One of ["Name","KEGG_ID","ChEBI_ID","HMDB_ID","InChI","InChIKey"]
         query       (str): The query we are searching for; must be of type ```querytype```
         **kwargs: Any number of arbitrary keyword arguments
 
+    Returns:
+        list: The result of the query: a list of dictionaries with ``databasename`` and ``databaseid`` keys
+
+    Raises:
+        ValueError: If the query type is not one of those accepted by the function
 
     .. NOTE:: This is intended to be run as a read_transaction, only returning synonyms present in the DB. No modifications will be applied.
     """
@@ -323,6 +410,8 @@ def read_synonyms_in_metanetx(tx, querytype = None, query = None, **kwargs):
       query_text = f"""?mnx_url  mnx:inchi  \"{ query }\" . """
     elif querytype == "InChIKey":
       query_text = f"""?mnx_url  mnx:inchikey  \"InChIKey={ query }\" . """
+    else:
+      raise ValueError(f"Error: {querytype} is not a valid query type")
 
     graph_response = tx.run(f"""
         WITH '
@@ -349,7 +438,7 @@ def read_synonyms_in_metanetx(tx, querytype = None, query = None, **kwargs):
             }}' AS sparql
 
         CALL apoc.load.jsonParams(
-            replace("https://rdf.metanetx.org/sparql/?query=" + sparql, "\n", ""),
+            replace("https://rdf.metanetx.org/sparql/?query=" + apoc.text.urlencode(sparql), "\n", ""),
             {{ Accept: "application/sparql-results+json" }}, null )
         YIELD value
 
@@ -409,7 +498,7 @@ def find_protein_interactions_in_metanetx():
             }}' AS sparql, p
 
         CALL apoc.load.jsonParams(
-            replace("https://rdf.metanetx.org/sparql/?default-graph-uri=https://rdf.metanetx.org/&query=" + sparql, "\n", ""),
+            replace("https://rdf.metanetx.org/sparql/?default-graph-uri=https://rdf.metanetx.org/&query=" + apoc.text.urlencode(sparql), "\n", ""),
             {{ Accept: "application/sparql-results+json" }}, null )
         YIELD value
 
@@ -423,7 +512,7 @@ def find_protein_interactions_in_metanetx():
 
         { get_identifiers(from_sparql = True) }
 
-        }} IN TRANSACTIONS OF 100 rows
+        }} IN TRANSACTIONS OF 10 rows
         """
 
 def find_protein_data_in_metanetx():
@@ -463,7 +552,7 @@ def find_protein_data_in_metanetx():
             }}' AS sparql, p
 
         CALL apoc.load.jsonParams(
-            replace("https://rdf.metanetx.org/sparql/?query=" + sparql, "\n", ""),
+            replace("https://rdf.metanetx.org/sparql/?query=" + apoc.text.urlencode(sparql), "\n", ""),
             {{ Accept: "application/sparql-results+json" }}, null )
         YIELD value
 
@@ -485,7 +574,7 @@ def find_protein_data_in_metanetx():
             MERGE (g)-[:ENCODES]->(p)
         )
 
-        }} IN TRANSACTIONS OF 100 rows
+        }} IN TRANSACTIONS OF 10 rows
         """
 
 # ********* Build the entire MetaNetX DB as a graph under our format ********* #
@@ -669,7 +758,7 @@ def add_pept():
             WITH row
             MERGE (p:Metabolite {{MetaNetX_ID:split(row['protein']['value'],'/')[-1]}})
             SET p:Protein, p.UniProt_ID = split(row['cross_refference']['value'],'/')[-1]
-        }} IN TRANSACTIONS OF 1000 rows
+        }} IN TRANSACTIONS OF 100 rows
         """
 
 # ********* Annotate existing nodes using KEGG Pathways and Component IDs ********* #
@@ -701,8 +790,53 @@ def get_kegg_pathways_for_metabolites():
                 MERGE (n)-[r:PART_OF_PATHWAY]-(p)
         )
 
-        } IN TRANSACTIONS OF 100 rows
+        } IN TRANSACTIONS OF 10 rows
         """
+
+# ********* Translate a given identifier to another using The Chemical Translation Service ********* #
+
+def find_synonyms_in_cts(fromIdentifier, toIdentifier, searchTerm):
+    """
+    Finds synonyms for a given metabolite in CTS, The Chemical Translation Service
+
+    Args:
+        fromIdentifier (str): The name of the database from which we want the conversion
+        toIdentifier (str): The name of the database to which we want the conversion
+        searchTerm (str): The search termm, which should be an ID of database: ``fromIdentifier``
+
+    Returns:
+        str: The requested synonym
+
+    .. NOTE:: Please, be sure to use a database name that is in compliance with those specified in
+        CTS itself; if you dont, this function will fail with a 500 error
+
+    .. NOTE:: To prevent random downtimes from crashing the function, any one URL will be tried at least 5 times
+        before crashing (see: `StackOverflow #9446387 <https://stackoverflow.com/questions/9446387/how-to-retry-urllib2-request-when-fails>`_
+    """
+    src   = urllib.parse.quote(fromIdentifier)
+    dest  = urllib.parse.quote(toIdentifier)
+    query = urllib.parse.quote(searchTerm)
+
+    for x in range(5):
+        try:
+            results_file = request.urlopen(f"https://cts.fiehnlab.ucdavis.edu/rest/convert/{src}/{dest}/{query}")
+            data = json.load(results_file)
+            result = data[0]['results']
+            break # success
+        except request.URLError as E:
+            # For timeouts and internal server errors, just asume no result would be given
+            # (weird that I'm finding these)
+            if E.code == 500 or E.code == 504:
+                result = ""
+                break
+            else:
+                if x < 4:
+                    print("An error with the URL has been detected. Retrying in 2 seconds...")
+                    time.sleep(2)
+                else:
+                    raise Exception(f"An HTTP Error with Code: {E.code} was found. Aborting...")
+
+    return  result
 
 # ********* Build from file ********* #
 

@@ -21,7 +21,7 @@ sys.path.insert(0, os.path.abspath('../MeSHandMetaNetX'))
 
 project = 'CanGraph'
 author = "Pablo Marcos"
-copyright = '2022, Pablo Marcos <software @ loreak . org>'
+copyright = '2022, Pablo Marcos <software@loreak.org>'
 
 version = '0.9'  # Short release number
 release = '0.9'  # Full release number
@@ -39,6 +39,7 @@ extensions = [
    'sphinx_design',               # Enable cute docs layouts
    'myst_parser',                 # Enable MarkDown Documentation
    'sphinxarg.ext',               # Auto-generate args for command line projects
+   'sphinx.ext.viewcode',         # Add the code itself to the docs
 ]
 
 # Enable correct parsing by myst and remove superflous MD warnings

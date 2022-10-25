@@ -43,6 +43,9 @@ from rdkit.Chem import MACCSkeys     # MACCS fingerprint calculation
 from Bio import SeqIO                # Bioinformatics package
 import re                            # Regular expression search
 import argparse                      # Arguments pàrser for Python
+from contextlib import redirect_stdout # Redirect stdout, to not show things on the stdout
+from copy import deepcopy            # Do deep copies of python objects
+import bioservices                   # Query web bio-databases from python
 
 # Import internal modules for the program
 import miscelaneous as misc
@@ -66,20 +69,34 @@ def args_parser():
         you have to start it in a different line :(
     .. NOTE:: The return **must** be of type :obj:`argparse.ArgumentParser` for the ``argparse``
         directive to work and auto-gen docs
+    .. NOTE:: By using :obj:`argparse.const` instead of :obj:`argparse.default`, the check_file function will check ""
+        (the current dir, always exists) if the arg is not provided, not breaking the function; if it is, it checks it.
     """
     parser = argparse.ArgumentParser()
-    parser.add_argument("neo4jadress", help="the URL of the database, in neo4j:// or bolt:// format")
-    parser.add_argument("username", help="the username of the neo4j database in use")
-    parser.add_argument("password", help="the passowrd for the neo4j database in use. NOTE: "
-                                         "Since passed through bash, you may need to escape special characters")
-    parser.add_argument("databasefolder", help="The folder indicated to ```setup.py``` as the one where your databases "
-                                               "will be stored")
-    parser.add_argument("inputfile", help="The location of the CSV file in which the program will search for metabolites")
+    parser.add_argument("-c", "--check_arguments", action="store_true",
+                        help="Checks if the rest of the arguments are OK, then exits")
+
+    parser.add_argument("inputfile", type=misc.check_file,
+                        help="The location of the CSV file in which the program will search for metabolites")
+    parser.add_argument("databasefolder", type=misc.check_file, nargs='?', default="DataBases",
+                        help="The folder indicated to ```setup.py``` as the one where your databases will be stored; "
+                             "default is ``./DataBases``")
+    parser.add_argument("neo4jadress", help="the URL of the database, in neo4j:// or bolt:// format",
+                        type=misc.check_neo4j_protocol, nargs='?', default="bolt://localhost:7687")
+    parser.add_argument("username", help="the username of the neo4j database in use",
+                        nargs='?', default="neo4j")
+    parser.add_argument("password", help="the password for the neo4j database in use. NOTE: "
+                                         "Since passed through bash, you may need to escape some chars",
+                        nargs='?', default="neo4j")
 
     # If no args are provided, show the help message
     if len(sys.argv)==1:
         parser.print_help(sys.stderr)
         sys.exit(1)
+
+    if "--check_arguments" in sys.argv:
+        parser.parse_args()
+        exit(0)
 
     return parser
 
@@ -98,7 +115,114 @@ def scan_folder(folder_path):
             all_files.append( os.path.abspath(os.path.join(root, filename)) )
     return all_files
 
-def find_reasons_to_import(filepath, chebi_ids, names, hmdb_ids, inchis):
+def improve_search_terms(driver, chebi_ids, names, hmdb_ids, inchis, mesh_ids):
+    """
+
+
+    # TODO FIX LOS INCHIS QUE TIENEN QUE SER INCHIKEYS
+    # TODO A little query to UniProt would make things better here
+
+    Args:
+        driver (neo4j.Driver): Neo4J's Bolt Driver currently in use
+        chebi_ids (str): A string of ";" separated values of all the ChEBI_IDs representing the current metabolite
+        names (list): A string of ";" separated values of all the Names representing the current metabolite
+        hmdb_ids (list): A string of ";" separated values of all the HMDB_IDs representing the current metabolite
+        inchis (list): A string of ";" separated values of all the InChIs representing the current metabolite
+        mesh_ids (list): A string of ";" separated values of all the MeSH_IDs representing the current metabolite
+
+    Returns:
+        list: A list containing [ chebi_ids, names, hmdb_ids, inchis, mesh_ids ], with all their synonyms
+
+    """
+    # First, we convert the strings we have received from the function call into lists, by splitting for ";":
+    replace_chebis = re.compile(re.escape('ChEBI:'), re.IGNORECASE);
+    replace_meshes = re.compile(re.escape('MeSH:'), re.IGNORECASE)
+
+    chebi_ids = replace_chebis.sub('', chebi_ids).split(";")
+    mesh_ids = replace_meshes.sub('', mesh_ids).split(";")
+    names = names.split(";");    hmdb_ids = hmdb_ids.split(";");     inchis = inchis.split(";")
+
+    # Then, we may search for synonyms for each field using MetaNetX
+    # To do this, we organize a dict so that we can iterate more easily
+    query_dict = {"ChEBI_ID": chebi_ids, "HMDB_ID": hmdb_ids, "InChI": inchis, "Name": names, "MeSH_ID": mesh_ids}
+    query_dict = deepcopy(query_dict) # Make a deepcopy of the dict so that it doesn't update while on the loop
+
+    # And then, proceed to search for synonyms and append the appropriate results if they are not already there
+    for query_type, query_list in query_dict.items():
+        for query in query_list:
+            if not query.isspace() and query:
+                # First in MetaNetX
+                with driver.session() as session:
+                    # For MeSH, we cannot search for synonyms in MetaNetX (it doesn't index them), so we instead
+                    # look for related metabolites in MeSH itself, so that the import makes more sense
+                    if query_type == "MeSH_ID":
+                        graph_response = session.read_transaction(
+                            MeSHandMetaNetXDataBases.find_metabolites_related_to_mesh, query)
+                    else:
+                        graph_response = session.read_transaction(
+                            MeSHandMetaNetXDataBases.read_synonyms_in_metanetx, query_type, query)
+
+                for element in graph_response:
+                    element = {key: element[key] for key in element if element[key] != None }
+                    # With .get, the lookup does not fail, even if query_type == "MeSH_ID"
+                    if element.get("databasename", "").lower() == "hmdb":
+                        if element["databaseid"] not in hmdb_ids: hmdb_ids.append(element.get("databaseid", ""))
+
+                    if element.get("databasename", "").lower() == "chebi":
+                        if element["databaseid"] not in chebi_ids: chebi_ids.append(element.get("databaseid", ""))
+
+                    if element.get("InChI", "").lower() not in inchis: inchis.append(element.get("InChI", ""))
+
+                    if element.get("Name", "").lower() not in names: names.append(element.get("Name", ""))
+
+    # Once we have all the synonyms that we could find on MeSHandMetaNetX, we remove all duplicates
+    chebi_ids = list(filter(None, set(chebi_ids)));   names = list(filter(None, set(names)));
+    inchis = list(filter(None, set(inchis)));         mesh_ids = list(filter(None, set(mesh_ids)))
+    hmdb_ids = list(filter(None, set(hmdb_ids)))
+
+    # And re-generate the query_dict
+    query_dict = {"ChEBI_ID": chebi_ids, "HMDB_ID": hmdb_ids, "InChI": inchis, "Name": names, "MeSH_ID": mesh_ids}
+    query_dict = deepcopy(query_dict) # Make a deepcopy of the dict so that it doesn't update while on the loop
+
+    # And search for even more synonyms on CTS, the Chemical Translation Service!
+    # This is done separately because, while MeSHandMetaNetX do not overlap, they do overlap with CTS
+    for query_type, query_list in {key: query_dict[key] for key in query_dict if key != 'MeSH_ID' and any(query_dict[key])  }.items():
+        for query in query_list:
+            # We get the correct names for the identifiers we want to turn into:
+            oldIdentifier = [ x for x in query_dict.keys() if x not in [query_type, "MeSH_ID"] ]
+
+            replace_keys = {"ChEBI_ID":"ChEBI", "HMDB_ID":"Human Metabolome Database", "Name":"Chemical Name", "InChI":"InChIKey"}
+            toIdentifierList = list(map(replace_keys.get, oldIdentifier, oldIdentifier))
+            fromIdentifier = replace_keys.get(query_type, query_type)
+
+            # Convert the InChIs to InChIKeys (required by CTS)
+            if query_type == "InChI":
+                rdkit_mol = rdkit.Chem.MolFromInchi(query)
+                searchTerm = rdkit.Chem.MolToInchiKey(rdkit_mol)
+            else:
+                searchTerm = query
+
+            # And run the CTS search:
+            for toIdentifier in toIdentifierList:
+                result = MeSHandMetaNetXDataBases.find_synonyms_in_cts(fromIdentifier, toIdentifier, searchTerm)
+
+                for element in result: # And append its results to the correct list
+                    if toIdentifier == "Human Metabolome Database" and element not in hmdb_ids:
+                        hmdb_ids.append(element)
+                    if toIdentifier == "ChEBI" and element.replace("CHEBI:", "") not in chebi_ids:
+                        chebi_ids.append(element.replace("CHEBI:", ""))
+                    if toIdentifier == "Chemical Name" and element not in names:
+                        names.append(element)
+                    if toIdentifier == "InChIKey": # Convert key to InChI
+                        unichem = bioservices.UniChem()
+                        inchis_from_unichem = unichem.get_inchi_from_inchikey(element)
+                        inchis.append(inchis_from_unichem[0]["standardinchi"])
+
+    return [ list(filter(None, set(chebi_ids))),    list(filter(None, set(names))),
+             list(filter(None, set(hmdb_ids))),     list(filter(None, set(inchis))),
+             list(filter(None, set(mesh_ids))) ]
+
+def find_reasons_to_import(filepath, chebi_ids, names, hmdb_ids, inchis, mesh_ids):
     """
     Finds reasons to import a metabolite given a candidate filepath **with one metabolite per file**
     and a series of lists containing all synonyms of the values considered reasons for import
@@ -109,6 +233,7 @@ def find_reasons_to_import(filepath, chebi_ids, names, hmdb_ids, inchis):
         names (list): A list of all the Names which are considered a reason to import
         hmdb_ids (list): A list of all the HMDB_IDs which are considered a reason to import
         inchis (list): A list of all the InChIs which are considered a reason to import
+        mesh_ids (list): A list of all the MeSH_IDs which are considered a reason to import
 
     Returns:
         list: A list of the methods that turned out to be valid for import, such as Name, ChEBI_ID...
@@ -150,14 +275,21 @@ def find_reasons_to_import(filepath, chebi_ids, names, hmdb_ids, inchis):
     # For CHEBI, if we are using E-E, and since they dont have a prefix (i.e. they are only a number) we have to process the files.
     if "ExposomeExplorer/components" in relpath:
         component = pd.read_csv(os.path.abspath(filepath))
-        chebi_query = component["chebi_id"]
+        chebi_query = component["chebi_id"][0]
         # NOTE: Here, we remove the optional CHEBI: prefix
-        if chebi_query in [chebi_id.replace("CHEBI:", "").replace("chebi:", "") for chebi_id in chebi_ids]:
+        if chebi_query in [chebi_id.replace("CHEBI:", "").replace("chebi:", "") for chebi_id in chebi_ids] and chebi_query:
             import_based_on.append("ChEBI")
     # And, even if its not E-E, we still need to add the tag before for things to match
     for chebi_query in chebi_ids:
-        if f"<chebi_id>{chebi_query.replace('CHEBI:', '')}" in text:
+        replace_tag_exp = re.compile(re.escape('ChEBI:'), re.IGNORECASE)
+        if f"<chebi_id>{replace_tag_exp.sub('', chebi_query)}" in text:
             import_based_on.append("ChEBI")
+
+    # For MeSH, we just check for the tags
+    for mesh_id in mesh_ids:
+        replace_tag_exp = re.compile(re.escape('MeSH:'), re.IGNORECASE)
+        if f"<mesh-id>{replace_tag_exp.sub('', mesh_id)}" in text:
+            import_based_on.append("MeSH")
 
     # For the rest of the databases, we simply search for exact matches in our list and the texts:
     if any(hmdb in text for hmdb in hmdb_ids):
@@ -168,13 +300,15 @@ def find_reasons_to_import(filepath, chebi_ids, names, hmdb_ids, inchis):
     # We return a list of a dict from keys to remove duplicates from the "reasons to import" list
     return list(dict.fromkeys(import_based_on))
 
-def build_from_file(filepath):
+def build_from_file(filepath, Neo4JImportPath, driver):
     """
     Imports a given metabolite from a sigle-metabolite containing file by checking its type
     and calling the appropriate import functions.
 
     Args:
         filepath (str): The path to the file in which will be imported
+        Neo4JImportPath (str): The path which Neo4J will use to import data
+        driver (neo4j.Driver): Neo4J's Bolt Driver currently in use
 
     Returns:
         This function does not provide a particular return, but rather imports the requested file
@@ -184,29 +318,28 @@ def build_from_file(filepath):
         also why the condition is stated as a big "if/elif/else" instead of a series of "ifs"
     """
     relpath = os.path.relpath(filepath, ".")
+    filepath = os.path.abspath(filepath)
+    fixedpath = os.path.basename(filepath).replace(" ", "_")
+    shutil.copyfile(filepath, f"{Neo4JImportPath}/{fixedpath}")
 
     if "DrugBank" in relpath:
-        shutil.copyfile(filepath, f"{Neo4JImportPath}/{os.path.basename(filepath)}")
-        DrugBankDataBase.build_from_file(f"{os.path.basename(filepath)}", driver)
-        os.remove(f"{Neo4JImportPath}/{os.path.basename(filepath)}")
+        DrugBankDataBase.build_from_file(f"{fixedpath}", driver)
+        os.remove(f"{Neo4JImportPath}/{os.path.basename(fixedpath)}")
 
     elif "HMDB" in relpath:
         if "protein" in relpath:
-            shutil.copyfile(filepath, f"{Neo4JImportPath}/{os.path.basename(filepath)}")
-            HumanMetabolomeDataBase.build_from_protein_file(f"{os.path.basename(filepath)}", driver)
-            os.remove(f"{Neo4JImportPath}/{os.path.basename(filepath)}")
+            HumanMetabolomeDataBase.build_from_protein_file(f"{fixedpath}", driver)
         elif "metabolite" in relpath:
-            shutil.copyfile(filepath, f"{Neo4JImportPath}/{os.path.basename(filepath)}")
-            HumanMetabolomeDataBase.build_from_metabolite_file(f"{os.path.basename(filepath)}", driver)
-            os.remove(f"{Neo4JImportPath}/{os.path.basename(filepath)}")
+            HumanMetabolomeDataBase.build_from_metabolite_file(f"{fixedpath}", driver)
+        os.remove(f"{Neo4JImportPath}/{os.path.basename(fixedpath)}")
 
     elif "SMPDB" in relpath:
         # NOTE: Since this adds a ton of low-resolution nodes, maybe have this db run first?
         # We will ignore the smpdb_pathways file because it doesnt have "real" identifiers
         if "proteins" in relpath:
-            SmallMoleculePathWayDataBase.build_from_file(sys.argv[4], filepath, Neo4JImportPath, driver, "Protein")
+            SmallMoleculePathWayDataBase.build_from_file(filepath, Neo4JImportPath, driver, "Protein")
         if "metabolites" in relpath:
-            SmallMoleculePathWayDataBase.build_from_file(sys.argv[4], filepath, Neo4JImportPath, driver, "Metabolite")
+            SmallMoleculePathWayDataBase.build_from_file(filepath, Neo4JImportPath, driver, "Metabolite")
 
     elif "ExposomeExplorer/components" in relpath:
             # NOTE: Since only "components" can result in a match based on our current criteria,
@@ -220,7 +353,6 @@ def build_from_file(filepath):
             os.remove(f"{Neo4JImportPath}/{os.path.basename(filepath)}")
 
             ExposomeExplorerDataBase.build_from_file( os.path.dirname(filepath), Neo4JImportPath, driver, False)
-
 
 def link_to_original_data(driver, original_ids, import_based_on):
     """
@@ -237,16 +369,17 @@ def link_to_original_data(driver, original_ids, import_based_on):
     """
     with driver.session() as session:
         session.run( f"""
-                    MATCH (a) WHERE a.InChI = "{row["InChI"]}"
-                    MATCH (c) WHERE c.Name = "{row["Name"]}"
-                    MATCH (d) WHERE d.SMILES = "{row["SMILES"]}"
-                    MATCH (e) WHERE e.InChI = "{row["InChI"]}"
-                    MATCH (f) WHERE f.HMDB_ID = "{row["Identifier"]}"
-                    MATCH (g) WHERE g.Monisotopic_Molecular_Weight = "{row["MonoisotopicMass"]}"
+                    MATCH (a) WHERE a.InChI = "{original_ids["InChI"]}"
+                    MATCH (c) WHERE c.Name = "{original_ids["Name"]}"
+                    MATCH (d) WHERE d.SMILES = "{original_ids["SMILES"]}"
+                    MATCH (e) WHERE e.InChI = "{original_ids["InChI"]}"
+                    MATCH (f) WHERE f.HMDB_ID = "{original_ids["Identifier"]}"
+                    MATCH (g) WHERE g.Monisotopic_Molecular_Weight = "{original_ids["MonoisotopicMass"]}"
                     CREATE (n:OriginalMetabolite)
-                    SET n.InChI = "{row["InChI"]}", n.Name = "{row["Name"]}", n.ChEBI = "{row["ChEBI"]}",
-                        n.SMILES = "{row["SMILES"]}", n.HMDB_ID = "{row["Identifier"]}",
-                        n.Monisotopic_Molecular_Weight = "{row["MonoisotopicMass"]}"
+                    SET n.InChI = "{original_ids["InChI"]}", n.Name = "{original_ids["Name"]}",
+                        n.ChEBI = "{original_ids["ChEBI"]}",
+                        n.SMILES = "{original_ids["SMILES"]}", n.HMDB_ID = "{original_ids["Identifier"]}",
+                        n.Monisotopic_Molecular_Weight = "{original_ids["MonoisotopicMass"]}"
                     MERGE (n)-[r1:ORIGINALLY_IDENTIFIED_AS]->(a)
                     MERGE (n)-[r2:ORIGINALLY_IDENTIFIED_AS]->(b)
                     MERGE (n)-[r3:ORIGINALLY_IDENTIFIED_AS]->(c)
@@ -289,10 +422,10 @@ def annotate_using_wikidata(driver):
 
         # For each of the 10 numbers a wikidata_id may have as ending
         for number in range(10):
-            misc.repeat_transaction(WikiDataBase.add_cancer_info, 10, driver, number)
-            misc.repeat_transaction(WikiDataBase.add_drugs, 10, driver, number)
-            misc.repeat_transaction(WikiDataBase.add_causes, 10, driver, number)
-            misc.repeat_transaction(WikiDataBase.add_genes, 10, driver, number)
+            misc.repeat_transaction(WikiDataBase.add_cancer_info, 10, driver, number=number)
+            misc.repeat_transaction(WikiDataBase.add_drugs, 10, driver, number=number)
+            misc.repeat_transaction(WikiDataBase.add_causes, 10, driver, number=number)
+            misc.repeat_transaction(WikiDataBase.add_genes, 10, driver, number=number)
 
         misc.repeat_transaction(WikiDataBase.add_drug_external_ids, 10, driver)
         misc.repeat_transaction(WikiDataBase.add_more_drug_info, 10, driver)
@@ -312,7 +445,7 @@ def add_mesh_and_metanetx(driver):
     """
     # We will also add MeSH terms to all nodes:
     with driver.session() as session:
-        misc.repeat_transaction(MeSHandMetaNetXDataBases.add_mesh_by_name(), 10, driver, bar)
+        session.run(MeSHandMetaNetXDataBases.add_mesh_by_name())
     # We also add synonyms:
     with driver.session() as session:
         session.run(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx("Name"))
@@ -332,6 +465,9 @@ def main():
     """
     The function that executes the code
 
+    .. NOTE:: This function disables rdkit's log messages, since rdkit seems to dislike the way
+        some of the InChI strings it is getting from the databases are formatted
+
     .. TODO:: CAMBIAR NOMBRE A LOS MESH PARA INDICAR EL TIPO. AÑADIR NAME A LOS WIKIDATA
     .. TODO:: FIX THE REPEAT TRANSACTION FUNCTION
     .. TODO:: Match partial InChIs based on DICE-MACCS
@@ -342,7 +478,6 @@ def main():
     .. TODO:: Fix find_protein_interactions_in_metanetx
     .. TODO:: Mover esa funcion de setup a misc
     .. TODO:: EDIT conf.py
-    .. TODO:: Detail Schema Changes
 
     .. TODO:: Document the following Schema Changes:
         * For Subject, we have a composite PK: Exposome_Explorer_ID, Age, Gender e Information
@@ -352,20 +487,23 @@ def main():
 
     # Parse the command line arguments
     # Done first in order to show errors if bad commands are issued
-    parser = args_parser(); args = vars(parser.parse_args())
+    parser = args_parser(); args = parser.parse_args()
+
+    # We may also disable rdkit's log messages
+    rdkit.RDLogger.DisableLog('rdApp.*')
 
     # First, we prepare a scan of all the files available on our "DataBases" folder
     # We will cycle through them later on to try and find matches
-    all_files = scan_folder(args["databasefolder"])
+    all_files = scan_folder(args.databasefolder)
 
-    raw_database = pd.read_csv(sys.argv[5], delimiter=',', header=0)
+    # And we read the query file
+    raw_database = pd.read_csv(args.inputfile, delimiter=',', header=0)
 
     # Set up the progress bar
-    with alive_bar(len(all_files)*len(raw_database)) as bar:
+    with alive_bar((len(all_files)+15)*len(raw_database)) as bar:
 
         # And connect to the Neo4J database
-        instance = args["neo4jadresss"]; user = args["username"]; passwd = args["password"]
-        driver = GraphDatabase.driver(instance, auth=(user, passwd))
+        driver = misc.connect_to_neo4j(args.neo4jadress, args.username, args.password)
 
         Neo4JImportPath = misc.get_import_path(driver)
         print("Connected to Neo4J")
@@ -378,41 +516,52 @@ def main():
                 session.run( misc.clean_database() )
                 if index == 0: print("Cleaned DataBase") # Only the first time so as not to repeat
 
-            print(f"Importing metabolites: {index+1}/{len(raw_database)}")
+            print(f"Searching Synonyms for Metabolite {index+1}/{len(raw_database)} ...")
 
-            # And then, we can calculate synonyms for each metabolite we will search
-            names = misc.find_synonyms(driver, "Name", row.Name)
-            inchis = misc.find_synonyms(driver, "InChI", row.InChI)
-            hmdb_ids = misc.find_synonyms(driver, "HMDB_ID", row.Identifier)
-            chebi_ids = misc.find_synonyms(driver, "ChEBI_ID", row.ChEBI.replace("CHEBI:", ""))
+            # Then, we fill the empty values so that the program does not crash
+            row.fillna("", inplace=True)
+
+            chebi_ids, names, hmdb_ids, inchis, mesh_ids = improve_search_terms(driver, row.ChEBI, row.Name, row.Identifier, row.InChI, row.MeSH)
+
+            print(f"Annotating Metabolite {index+1}/{len(raw_database)} using Built-In DataBases...")
 
              # And search for them in the all_files list we created earlier on based on a series of criteria:
             for filepath in all_files:
-                import_based_on = find_reasons_to_import(filepath, chebi_ids, names, hmdb_ids, inchis)
+                import_based_on = find_reasons_to_import(filepath, chebi_ids, names, hmdb_ids, inchis, mesh_ids)
 
                 # Once we know the reasons to import (this is done so that it only cycles one
                 # time through the code), we import the files themselves
                 if len(import_based_on) != 0:
-                    build_from_file(filepath)
+                    build_from_file(filepath, Neo4JImportPath, driver)
 
                     #Each time we import some nodes, link them to our original data
                     #NOTE: This WILL duplicate nodes and relations, but we will fix this later when we purge the DB
-                    original_ids = row.to_dict('records')[0] # Convert to dict first for the functions
+                    original_ids = row.to_dict() # Convert to dict first for the functions
                     link_to_original_data(driver, original_ids, import_based_on)
 
                 # And advance, of course
                 bar()
 
-            # Finally, we purge the database by removing nodes considered as duplicated
-            # We only purge once at the end, to limit processing time
-            misc.purge_database(driver)
+            print(f"Annotating Metabolite {index+1}/{len(raw_database)} using Web DataBases...")
+
+            # Finally, we apply some functions that, although they could be run each time,
+            # are so resource intensive that its better to just use once:
+
+            # # We annotate the existing nodes using WikiData
+            # annotate_using_wikidata(driver); bar(); bar(); bar(); bar(); bar(); bar(); bar()
+            # # Add their MeSH and MetaNetX IDs and synonyms
+            # add_mesh_and_metanetx(driver); bar(); bar(); bar(); bar(); bar(); bar(); bar()
+            # And purge any duplicates
+            misc.purge_database(driver); bar(); bar(); bar(); bar(); bar(); bar()
 
             # And save it in GraphML format
             with driver.session() as session:
                 session.write_transaction(misc.export_graphml, f"metabolite_{index+1}.graphml")
 
-            print(f"Metabolite {index+1}/{len(raw_database)} processed. You can find a copy of the associated knowledge graph at {os.path.abspath(sys.argv[4])}/metabolite_{index+1}.graphml")
-            shutil.copyfile(f"{Neo4JImportPath}/metabolite_{index+1}.graphml", f"{os.path.abspath(sys.argv[4])}/metabolite_{index+1}.graphml")
+            print(f"Metabolite {index+1}/{len(raw_database)} processed. You can find a copy of the associated knowledge "
+                  f"graph at {os.path.abspath(args.databasefolder)}/metabolite_{index+1}.graphml")
+            shutil.copyfile(f"{Neo4JImportPath}/metabolite_{index+1}.graphml",
+                            f"./metabolite_{index+1}.graphml")
 
 if __name__ == '__main__':
 

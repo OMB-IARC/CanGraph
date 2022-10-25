@@ -18,6 +18,8 @@ liking, but it should at least contain the root `toctree` directive.
 :hidden: true
 :maxdepth: 3
 
+Tutorials
+
 ToDoList
 
 CanGraph
@@ -56,6 +58,7 @@ Get started
 <!-- The SVG rendering breaks latex builds for the GitHub badge, so only include in HTML -->
 ```{only} html
 [![GitHub Stars](https://img.shields.io/github/stars/OMB-IARC/CanGraph?style=social)](https://github.com/OMB-IARC/CanGraph)
+[![Lines of Code](https://img.shields.io/tokei/lines/codeberg.org/FlyingFlamingo/CanGraph?color=77b5fe&label=Lines%20of%20Code)](https://codeberg.org/FlyingFlamingo/CanGraph)
 [![License](https://img.shields.io/github/license/OMB-IARC/CanGraph)](https://mit-license.org/)
 ```
 
@@ -124,7 +127,7 @@ Dedicated to biomarkers of exposure to environmental risk factors for disease, s
 WikiData 📊
 ^^^^^^^^^^
 
-Connect your book with Binder, JupyterHub, and other live environments
+The free knowledge base with 99,190,630 data items that anyone can edit
 :::
 
 :::{grid-item-card}
@@ -164,20 +167,56 @@ which must be provided as explained in [CanGraph's README](CanGraph.rst)
 
 # Acknowledgements
 
-::::{grid} 2 2 2 2
+::::{grid} 1 1 2 2
 
 :::{grid-item}
-:columns: 7
-CanGraph has been possible thanks to the [International Agency for Research on Cancer's](https://www.iarc.who.int/) [OncoMetaBolomics Team](https://github.com/OMB-IARC), which provided funding for the project
+:columns: 11
+This research was funded by the [Agence Nationale de la Recherche](https://anr.fr/en/) Project number [ANR-19-CE45-0021](https://anr.fr/Project-ANR-19-CE45-0021) (New approaches to bridge the gap between genome-scale metabolic networks and untargeted metabolomics – **MetClassNet**) and the [Deutsche ForschungsGemeinschaft](https://www.dfg.de/) Project number [431572533](https://gepris.dfg.de/gepris/projekt/431572533?language=en) (**MetClassNet**: new approaches to bridge the gap between genome-scale metabolic networks and untargeted metabolomics )
+
 :::
 
 :::{grid-item}
-:columns: 4
+:columns: 5
 
-```{image} ./_static/IARC-logo.png
-:class: m-auto
+```{image} ./_static/ANR-logo.png
+:align: center
+:target: https://anr.fr/Project-ANR-19-CE45-0021
 :width: 100px
 ```
 :::
+
+:::{grid-item}
+:columns: 5
+
+```{image} ./_static/DFG-logo.jpg
+:align: center
+:target: https://gepris.dfg.de/gepris/projekt/431572533?language=en
+:width: 100px
+```
+:::
+
+:::{grid-item}
+:columns: 11
+You can check MetClassNet's Official Website [here](http://www.metclassnet.org/)
+:::
+
+:::{grid-item}
+:columns: 11
+Most of the work for this project has been carried out at the [International Agency for Research on Cancer's](https://www.iarc.who.int/) [OncoMetaBolomics Team](https://github.com/OMB-IARC)
+:::
+
+:::{grid-item}
+:columns: 11
+:margin: 3
+<!-- Leave some space for IARC's logo -->
+
+```{image} ./_static/IARC-logo-long.jpg
+:align: center
+:target: https://www.iarc.who.int/
+:class: m-auto
+:width: 50%
+```
+:::
+
 
 ::::

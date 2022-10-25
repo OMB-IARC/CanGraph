@@ -2,17 +2,25 @@
 #
 # SPDX-License-Identifier: MIT
 
-# This file includes all the required packages for this project to run. You can simply install them by running: `pip install -r requirements.txt`
+# This file includes all the required packages for this project to run. You can simply install them by running: `pip install -r requirements.txt` :p
+
+# These are the packages necessary for the program itself
 
 neo4j               # The Neo4J python driver
 alive_progress      # A cute progress bar that shows the script is still running
 Bio                 # To parse FASTA files
 rdkit               # Cheminformatics and ML package
 pandas              # Analysis of tabular data
-sphix               # Documentation server
-sphinx-book-theme   # Documentation server theme
-sphinx-design       # Sphinx extension for cuter docs
 myst-parser         # Enable MarkDown Documentation
 gitpython           # Manage Git directly from Python
 argparse            # Arguments pàrser for Python
+texttable           # Draw cute tables in python
+psutil              # Manage system processes from python
+bioservices         # Query web bio-databases from python
+
+# And these are those used by the Sphinx docs
+
+sphinx              # Documentation server
+sphinx-book-theme   # Documentation server theme
+sphinx-design       # Sphinx extension for cuter docs
 sphinx-argparse     # Auto-generate args for command line projects
