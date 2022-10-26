@@ -1077,19 +1077,19 @@ def build_from_protein_file(newfile, driver):
         This function modifies the Neo4J Database as desired, but does not produce any particular return.
     """
     with driver.session() as session:
-        session.write_transaction(add_proteins, newfile)
+        session.execute_write(add_proteins, newfile)
     with driver.session() as session:
-        session.write_transaction(add_go_classifications, newfile)
+        session.execute_write(add_go_classifications, newfile)
     with driver.session() as session:
-        session.write_transaction(add_gene_properties, newfile)
+        session.execute_write(add_gene_properties, newfile)
     with driver.session() as session:
-        session.write_transaction(add_protein_properties, newfile)
+        session.execute_write(add_protein_properties, newfile)
     with driver.session() as session:
-        session.write_transaction(add_metabolite_associations, newfile)
+        session.execute_write(add_metabolite_associations, newfile)
     with driver.session() as session:
-        session.write_transaction(add_metabolite_references, newfile)
+        session.execute_write(add_metabolite_references, newfile)
     with driver.session() as session:
-        session.write_transaction(add_general_references, newfile, "protein")
+        session.execute_write(add_general_references, newfile, "protein")
 
 
 def build_from_metabolite_file(newfile, driver):
@@ -1106,21 +1106,21 @@ def build_from_metabolite_file(newfile, driver):
         This function modifies the Neo4J Database as desired, but does not produce any particular return.
     """
     with driver.session() as session:
-        session.write_transaction(add_metabolites, newfile)
+        session.execute_write(add_metabolites, newfile)
     with driver.session() as session:
-        session.write_transaction(add_protein_associations, newfile)
+        session.execute_write(add_protein_associations, newfile)
     with driver.session() as session:
-        session.write_transaction(add_diseases, newfile)
+        session.execute_write(add_diseases, newfile)
     with driver.session() as session:
-        session.write_transaction(add_concentrations_normal, newfile)
+        session.execute_write(add_concentrations_normal, newfile)
     with driver.session() as session:
-        session.write_transaction(add_concentrations_abnormal, newfile)
+        session.execute_write(add_concentrations_abnormal, newfile)
     with driver.session() as session:
-        session.write_transaction(add_taxonomy, newfile)
+        session.execute_write(add_taxonomy, newfile)
     with driver.session() as session:
-        session.write_transaction(add_biological_properties, newfile)
+        session.execute_write(add_biological_properties, newfile)
     with driver.session() as session:
-        session.write_transaction(add_experimental_properties, newfile)
-        session.write_transaction(add_predicted_properties, newfile)
+        session.execute_write(add_experimental_properties, newfile)
+        session.execute_write(add_predicted_properties, newfile)
     with driver.session() as session:
-        session.write_transaction(add_general_references, newfile, "metabolite")
+        session.execute_write(add_general_references, newfile, "metabolite")

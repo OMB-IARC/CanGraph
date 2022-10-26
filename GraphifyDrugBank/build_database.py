@@ -1107,31 +1107,31 @@ def build_from_file(newfile, driver):
         This function modifies the Neo4J Database as desired, but does not produce any particular return.
     """
     with driver.session() as session:
-        session.write_transaction(add_drugs, newfile)
+        session.execute_write(add_drugs, newfile)
     with driver.session() as session:
-        session.write_transaction(add_general_references, newfile)
+        session.execute_write(add_general_references, newfile)
     with driver.session() as session:
-        session.write_transaction(add_taxonomy, newfile)
+        session.execute_write(add_taxonomy, newfile)
     with driver.session() as session:
-        session.write_transaction(add_products, newfile)
+        session.execute_write(add_products, newfile)
     with driver.session() as session:
-        session.write_transaction(add_mixtures, newfile)
+        session.execute_write(add_mixtures, newfile)
     with driver.session() as session:
-        session.write_transaction(add_categories, newfile)
+        session.execute_write(add_categories, newfile)
     with driver.session() as session:
-        session.write_transaction(add_manufacturers, newfile)
-        session.write_transaction(add_packagers, newfile)
-        session.write_transaction(add_dosages, newfile)
+        session.execute_write(add_manufacturers, newfile)
+        session.execute_write(add_packagers, newfile)
+        session.execute_write(add_dosages, newfile)
     with driver.session() as session:
-        session.write_transaction(add_atc_codes, newfile)
-        session.write_transaction(add_drug_interactions, newfile)
-        session.write_transaction(add_sequences, newfile)
+        session.execute_write(add_atc_codes, newfile)
+        session.execute_write(add_drug_interactions, newfile)
+        session.execute_write(add_sequences, newfile)
     with driver.session() as session:
-        session.write_transaction(add_experimental_properties, newfile)
-        session.write_transaction(add_external_identifiers, newfile)
-        session.write_transaction(add_external_equivalents, newfile)
+        session.execute_write(add_experimental_properties, newfile)
+        session.execute_write(add_external_identifiers, newfile)
+        session.execute_write(add_external_equivalents, newfile)
     with driver.session() as session:
-        session.write_transaction(add_pathways_and_relations, newfile)
+        session.execute_write(add_pathways_and_relations, newfile)
     with driver.session() as session:
         for element in ["enzymes", "carriers", "transporters"]:
-            session.write_transaction(add_targets_enzymes_carriers_and_transporters, newfile, element)
+            session.execute_write(add_targets_enzymes_carriers_and_transporters, newfile, element)

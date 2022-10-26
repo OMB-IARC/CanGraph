@@ -51,7 +51,7 @@ def main(args):
         shutil.copyfile(f"{os.path.abspath(sys.argv[4])}components.csv", f"{Neo4JImportPath}/components.csv")
 
         with driver.session() as session:
-                session.write_transaction(ExposomeExplorerDatabase.add_components, "components.csv")
+                session.execute_write(ExposomeExplorerDatabase.add_components, "components.csv")
         os.remove(f"{Neo4JImportPath}/components.csv")
 
         with driver.session() as session:
@@ -62,7 +62,7 @@ def main(args):
 
         # And export it:
         with driver.session() as session:
-            session.write_transaction(misc.export_graphml, "graph.graphml")
+            session.execute_write(misc.export_graphml, "graph.graphml")
             bar()
 
     print(f"You can find the exported graph at {Neo4JImportPath}/graph.graphml")

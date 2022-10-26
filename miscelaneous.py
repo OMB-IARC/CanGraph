@@ -64,7 +64,7 @@ def get_import_path(current_driver):
     A function that runs :obj:`~CanGraph.miscelaneous.neo4j_import_path_query` to get Neo4J's Import Path
 
     .. NOTE:: By doing the Neo4JImportPath search this way (in two functions), we are able to run the query as
-        a :obj: read_transaction, which, unlike autocommit transactions, allows the query to be better controlled,
+        a :obj: execute_read, which, unlike autocommit transactions, allows the query to be better controlled,
         and repeated in case it fails.
 
     Args:
@@ -74,7 +74,7 @@ def get_import_path(current_driver):
         str: Neo4J's Import Path, i.e., where Neo4J will pick up files to be imported using the ```file:///``` schema
     """
     with current_driver.session() as session:
-        Neo4JImportPath = session.read_transaction(neo4j_import_path_query)[0]
+        Neo4JImportPath = session.execute_read(neo4j_import_path_query)[0]
     return Neo4JImportPath
 
 def connect_to_neo4j(port = "bolt://localhost:7687", username = "neo4j", password="neo4j"):
@@ -165,7 +165,7 @@ def repeat_transaction(tx, num_retries, driver, **kwargs):
     for attempt in range(num_retries):
         try:
             with driver.session() as session:
-                session.write_transaction(tx, **kwargs)
+                session.execute_write(tx, **kwargs)
             if attempt > 0: print(f"Error solved on attempt #{attempt}")
             break
         except Exception as error:
@@ -345,20 +345,20 @@ def purge_database(driver):
     """
     with driver.session() as session:
         # Fist, we purge Publications by PubMed_ID, using the abstract to merge those that have no PubMed_ID
-        session.write_transaction(remove_duplicate_nodes, "Publication", "n.Pubmed_ID as id", "WHERE n.Pubmed_ID IS NOT null")
-        session.write_transaction(remove_duplicate_nodes, "Publication", "n.Abstract as abs", "WHERE n.Abstract IS NOT null AND n.Pubmed_ID IS null")
+        session.execute_write(remove_duplicate_nodes, "Publication", "n.Pubmed_ID as id", "WHERE n.Pubmed_ID IS NOT null")
+        session.execute_write(remove_duplicate_nodes, "Publication", "n.Abstract as abs", "WHERE n.Abstract IS NOT null AND n.Pubmed_ID IS null")
 
         # Now, we work on Proteins/Metabolites/Drugs:
         # We merge those that have the same InChI or InChIKey:
-        session.write_transaction(remove_duplicate_nodes, "", "n.InChI as inchi", "WHERE n:Protein OR n:Metabolite OR n:Drug AND n.InChI IS NOT null")
-        session.write_transaction(remove_duplicate_nodes, "", "n.InChIKey as key", "WHERE n:Protein OR n:Metabolite OR n:Drug AND n.InChIKey IS NOT null")
+        session.execute_write(remove_duplicate_nodes, "", "n.InChI as inchi", "WHERE n:Protein OR n:Metabolite OR n:Drug AND n.InChI IS NOT null")
+        session.execute_write(remove_duplicate_nodes, "", "n.InChIKey as key", "WHERE n:Protein OR n:Metabolite OR n:Drug AND n.InChIKey IS NOT null")
         # We merge Proteins by UniProt_ID, and, when there is none, by Name:
-        session.write_transaction(remove_duplicate_nodes, "Protein", "n.UniProt_ID as id", "WHERE n.UniProt_ID IS NOT null")
-        session.write_transaction(remove_duplicate_nodes, "Protein", "n.Name as id", "WHERE n.UniProt_ID IS null AND n.Name IS NOT null")
+        session.execute_write(remove_duplicate_nodes, "Protein", "n.UniProt_ID as id", "WHERE n.UniProt_ID IS NOT null")
+        session.execute_write(remove_duplicate_nodes, "Protein", "n.Name as id", "WHERE n.UniProt_ID IS null AND n.Name IS NOT null")
         # We merge Metabolites by HMDB_ID (normally, it should be unique):
-        session.write_transaction(remove_duplicate_nodes, "", "n.HMDB_ID as hmdb_id", "WHERE n:Protein OR n:Metabolite AND n.HMDB_ID IS NOT null")
+        session.execute_write(remove_duplicate_nodes, "", "n.HMDB_ID as hmdb_id", "WHERE n:Protein OR n:Metabolite AND n.HMDB_ID IS NOT null")
         # We can also remove all OriginalMetabolites (or other) that are non-unique
-        session.write_transaction(remove_duplicate_nodes, "", """n.InChI as inchi, n.InChIKey as inchikey, n.Name as name, n.SMILES as smiles,
+        session.execute_write(remove_duplicate_nodes, "", """n.InChI as inchi, n.InChIKey as inchikey, n.Name as name, n.SMILES as smiles,
                                                                       n.Identifier as hmdb_id, n.ChEBI as chebi, n.Monisotopic_Molecular_Weight as mass""",
                                                                    "WHERE n:Metabolite OR n:Protein OR n:OriginalMetabolite OR n:Drug")
         # And all Metabolites that do not match our Schema - Be careful with the \" character
@@ -366,18 +366,18 @@ def purge_database(driver):
 
         # We also remove all non-unique Subjects. We do this by passing on all three parameters this nodes may have to apoc.mergeNodes
         # .. NOTE:: This concerns only those nodes that DO NOT COME from Exposome_Explorer
-        session.write_transaction(remove_duplicate_nodes, "Subject", "n.Age_Mean as age, n.Gender as gender, n.Information as inf", "WHERE n.Exposome_Explorer_ID IS null")
+        session.execute_write(remove_duplicate_nodes, "Subject", "n.Age_Mean as age, n.Gender as gender, n.Information as inf", "WHERE n.Exposome_Explorer_ID IS null")
 
         # We can do the same for the different Dosages:
-        session.write_transaction(remove_duplicate_nodes, "Dosage", "n.Form as frm, n.Stength as str, n.Route as rt")
+        session.execute_write(remove_duplicate_nodes, "Dosage", "n.Form as frm, n.Stength as str, n.Route as rt")
 
         # For products, we merge all those with the same EMA_MA_Number or FDA_Application_Number to try to minimize duplicates, although this is not the best approach
-        session.write_transaction(remove_duplicate_nodes, "Product", "n.EMA_MA_Number as ema_nb", "WHERE n.EMA_MA_Number IS NOT null")
-        session.write_transaction(remove_duplicate_nodes, "Product", "n.FDA_Application_Number as fda_nb", "WHERE n.FDA_Application_Number IS NOT null")
+        session.execute_write(remove_duplicate_nodes, "Product", "n.EMA_MA_Number as ema_nb", "WHERE n.EMA_MA_Number IS NOT null")
+        session.execute_write(remove_duplicate_nodes, "Product", "n.FDA_Application_Number as fda_nb", "WHERE n.FDA_Application_Number IS NOT null")
 
         # For CelularLocations and BioSpecimens, we merge those with the same Name:
-        session.write_transaction(remove_duplicate_nodes, "CelularLocation", "n.Name as name")
-        session.write_transaction(remove_duplicate_nodes, "BioSpecimen", "n.Name as name")
+        session.execute_write(remove_duplicate_nodes, "CelularLocation", "n.Name as name")
+        session.execute_write(remove_duplicate_nodes, "BioSpecimen", "n.Name as name")
 
         # Finally, we delete all empty nodes. This shouldn't be created on the first place, but, in case anyone escapes, this makes the DB cleaner.
         # .. NOTE:: In the case of Taxonomys, these "empty nodes" are actually created on purpose. This, they are here removed.
@@ -387,7 +387,7 @@ def purge_database(driver):
         session.run("MATCH (s:Sequence) WHERE size(keys(properties(s))) < 2 DETACH DELETE s")
 
         #At last, we may remove any duplicate relationships, which, since we have merged nodes, will surely be there:
-        session.write_transaction(remove_duplicate_relationships)
+        session.execute_write(remove_duplicate_relationships)
 
 # ********* Work with Files ********* #
 

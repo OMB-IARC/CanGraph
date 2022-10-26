@@ -156,10 +156,10 @@ def improve_search_terms(driver, chebi_ids, names, hmdb_ids, inchis, mesh_ids):
                     # For MeSH, we cannot search for synonyms in MetaNetX (it doesn't index them), so we instead
                     # look for related metabolites in MeSH itself, so that the import makes more sense
                     if query_type == "MeSH_ID":
-                        graph_response = session.read_transaction(
+                        graph_response = session.execute_read(
                             MeSHandMetaNetXDataBases.find_metabolites_related_to_mesh, query)
                     else:
-                        graph_response = session.read_transaction(
+                        graph_response = session.execute_read(
                             MeSHandMetaNetXDataBases.read_synonyms_in_metanetx, query_type, query)
 
                 for element in graph_response:
@@ -349,7 +349,7 @@ def build_from_file(filepath, Neo4JImportPath, driver):
                                                 if not x.endswith('_count')]]
             original_file.to_csv(f"{Neo4JImportPath}/{os.path.basename(filepath)}", index=False)
             with driver.session() as session:
-                    session.write_transaction(ExposomeExplorerDataBase.add_components, os.path.basename(filepath))
+                    session.execute_write(ExposomeExplorerDataBase.add_components, os.path.basename(filepath))
             os.remove(f"{Neo4JImportPath}/{os.path.basename(filepath)}")
 
             ExposomeExplorerDataBase.build_from_file( os.path.dirname(filepath), Neo4JImportPath, driver, False)
@@ -556,7 +556,7 @@ def main():
 
             # And save it in GraphML format
             with driver.session() as session:
-                session.write_transaction(misc.export_graphml, f"metabolite_{index+1}.graphml")
+                session.execute_write(misc.export_graphml, f"metabolite_{index+1}.graphml")
 
             print(f"Metabolite {index+1}/{len(raw_database)} processed. You can find a copy of the associated knowledge "
                   f"graph at {os.path.abspath(args.databasefolder)}/metabolite_{index+1}.graphml")

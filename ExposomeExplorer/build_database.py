@@ -657,34 +657,34 @@ def build_from_file(databasepath, Neo4JImportPath, driver, keep_counts_and_displ
 
     # Fist, we build the "scaffolding" - the nodes we will annotate later on
     with driver.session() as session:
-        session.write_transaction(add_measurements_stuff, "measurements.csv")
-        session.write_transaction(add_reproducibilities, "reproducibilities.csv")
-        session.write_transaction(add_samples, "samples.csv")
-        session.write_transaction(add_subjects, "subjects.csv")
-        session.write_transaction(add_microbial_metabolite_identifications, "microbial_metabolites.csv")
-        session.write_transaction(add_cancer_associations, "cancer_associations.csv")
-        session.write_transaction(add_metabolomic_associations, "metabolomic_associations.csv")
-        session.write_transaction(add_correlations, "correlations.csv")
+        session.execute_write(add_measurements_stuff, "measurements.csv")
+        session.execute_write(add_reproducibilities, "reproducibilities.csv")
+        session.execute_write(add_samples, "samples.csv")
+        session.execute_write(add_subjects, "subjects.csv")
+        session.execute_write(add_microbial_metabolite_identifications, "microbial_metabolites.csv")
+        session.execute_write(add_cancer_associations, "cancer_associations.csv")
+        session.execute_write(add_metabolomic_associations, "metabolomic_associations.csv")
+        session.execute_write(add_correlations, "correlations.csv")
 
     # Now, we annotate those metabolites
     with driver.session() as session:
-        session.write_transaction(add_measurements, "measurements.csv")
-        session.write_transaction(add_samples, "samples.csv")
-        session.write_transaction(add_experimental_methods, "experimental_methods.csv")
-        session.write_transaction(add_units, "units.csv")
-        session.write_transaction(add_auto_units, "units.csv")
-        session.write_transaction(add_cancers, "cancers.csv")
-        session.write_transaction(add_cohorts, "cohorts.csv")
-        session.write_transaction(add_microbial_metabolite_info, "microbial_metabolites.csv")
-        session.write_transaction(add_publications, "publications.csv")
-        session.write_transaction(add_reproducibilities, "reproducibilities.csv")
-        session.write_transaction(add_specimens, "specimens.csv")
-        session.write_transaction(add_subjects, "subjects.csv")
+        session.execute_write(add_measurements, "measurements.csv")
+        session.execute_write(add_samples, "samples.csv")
+        session.execute_write(add_experimental_methods, "experimental_methods.csv")
+        session.execute_write(add_units, "units.csv")
+        session.execute_write(add_auto_units, "units.csv")
+        session.execute_write(add_cancers, "cancers.csv")
+        session.execute_write(add_cohorts, "cohorts.csv")
+        session.execute_write(add_microbial_metabolite_info, "microbial_metabolites.csv")
+        session.execute_write(add_publications, "publications.csv")
+        session.execute_write(add_reproducibilities, "reproducibilities.csv")
+        session.execute_write(add_specimens, "specimens.csv")
+        session.execute_write(add_subjects, "subjects.csv")
 
     # Finally, we remove the cross-properties that are of no use anymore (this is optional, of course)
     if keep_cross_properties == False:
         with driver.session() as session:
-            session.write_transaction(remove_cross_properties)
+            session.execute_write(remove_cross_properties)
 
     os.remove(f"{Neo4JImportPath}/measurements.csv");               os.remove(f"{Neo4JImportPath}/samples.csv")
     os.remove(f"{Neo4JImportPath}/experimental_methods.csv");       os.remove(f"{Neo4JImportPath}/units.csv")

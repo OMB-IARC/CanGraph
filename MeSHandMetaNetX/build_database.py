@@ -98,7 +98,7 @@ def find_metabolites_related_to_mesh(tx, mesh_id):
     Returns:
         list: The result of the query: a list of dictionaries with ``Metabolite``, ``Name`` and ``Species`` keys
 
-    .. NOTE:: This is intended to be run as a read_transaction, only returning synonyms present in the DB. No modifications will be applied.
+    .. NOTE:: This is intended to be run as a execute_read, only returning synonyms present in the DB. No modifications will be applied.
 
     .. NOTE:: Could be turned into a read query by substituting ``mesh_id`` with ``' + n.MeSH_ID + '``
     """
@@ -319,7 +319,7 @@ def write_synonyms_in_metanetx(query, **kwargs):
     Raises:
         ValueError: If the query type is not one of those accepted by the function
 
-    .. NOTE:: This is intended to be run as a write_transaction, modifying the existing database.
+    .. NOTE:: This is intended to be run as a execute_write, modifying the existing database.
     """
     if query == "Name":
       query_text = """?mnx_url  rdfs:comment  \"' +  n.Name + '\" . """
@@ -398,7 +398,7 @@ def read_synonyms_in_metanetx(tx, querytype, query, **kwargs):
     Raises:
         ValueError: If the query type is not one of those accepted by the function
 
-    .. NOTE:: This is intended to be run as a read_transaction, only returning synonyms present in the DB. No modifications will be applied.
+    .. NOTE:: This is intended to be run as a execute_read, only returning synonyms present in the DB. No modifications will be applied.
     """
     if querytype == "Name":
       query_text = f"""?mnx_url  rdfs:comment  \"{ query }\" . """
@@ -856,16 +856,16 @@ def build_from_file(filename, driver):
     """
     if "chem_xref" in filename:
         with driver.session() as session:
-            session.write_transaction(add_chem_xref, filename)
+            session.execute_write(add_chem_xref, filename)
     elif "chem_prop" in filename:
         with driver.session() as session:
-            session.write_transaction(add_chem_prop, filename)
+            session.execute_write(add_chem_prop, filename)
     elif "chem_isom" in filename:
         with driver.session() as session:
-            session.write_transaction(add_chem_isom, filename)
+            session.execute_write(add_chem_isom, filename)
     elif "comp_xref" in filename:
         with driver.session() as session:
-            session.write_transaction(add_comp_xref, filename)
+            session.execute_write(add_comp_xref, filename)
     elif "comp_prop" in filename:
         with driver.session() as session:
-            session.write_transaction(add_comp_prop, filename)
+            session.execute_write(add_comp_prop, filename)

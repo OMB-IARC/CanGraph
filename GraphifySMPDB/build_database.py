@@ -149,14 +149,14 @@ def build_from_file(filepath, Neo4JImportPath, driver, filetype):
 
     if filetype == "Metabolite":
         with driver.session() as session:
-            session.write_transaction(add_metabolites, f"{os.path.basename(filepath)}")
+            session.execute_write(add_metabolites, f"{os.path.basename(filepath)}")
             shutil.copyfile(f"{os.path.abspath(databasepath)}/SMPDB/smpdb_proteins/{pathway_id}_proteins.csv", f"{Neo4JImportPath}/corresponding.csv")
-            session.write_transaction(add_proteins, "corresponding.csv")
+            session.execute_write(add_proteins, "corresponding.csv")
     elif filetype == "Protein":
         with driver.session() as session:
-            session.write_transaction(add_proteins, f"{os.path.basename(filepath)}")
+            session.execute_write(add_proteins, f"{os.path.basename(filepath)}")
             shutil.copyfile(f"{os.path.abspath(databasepath)}/SMPDB/smpdb_metabolites/{pathway_id}_metabolites.csv", f"{Neo4JImportPath}/corresponding.csv")
-            session.write_transaction(add_metabolites, "corresponding.csv")
+            session.execute_write(add_metabolites, "corresponding.csv")
 
     # We then import pathway info
     all_pathways = pd.read_csv(f"{os.path.abspath(databasepath)}/SMPDB/smpdb_pathways.csv", delimiter=',', header=0)
@@ -173,7 +173,7 @@ def build_from_file(filepath, Neo4JImportPath, driver, filetype):
             Name =  " ".join(fasta.description.split(" ")[1:]).replace("("+UniProt_ID+")", "")
             Sequence = str(fasta.description) + "\n" + str(fasta.seq); Format = "FASTA"; Type = "DNA"
             with driver.session() as session:
-                session.write_transaction(add_sequence, UniProt_ID, Name, Type, Sequence, Format)
+                session.execute_write(add_sequence, UniProt_ID, Name, Type, Sequence, Format)
 
     proteic_sequences = SeqIO.parse(open(f"{os.path.abspath(databasepath)}/SMPDB/smpdb_protein.fasta"),'fasta')
     for fasta in proteic_sequences:
@@ -182,5 +182,5 @@ def build_from_file(filepath, Neo4JImportPath, driver, filetype):
             Name =  " ".join(fasta.description.split(" ")[1:]).replace("("+UniProt_ID+")", "")
             Sequence = str(fasta.description) + "\n" + str(fasta.seq); Format = "FASTA"; Type = "PROT"
             with driver.session() as session:
-                session.write_transaction(add_sequence, UniProt_ID, Name, Type, Sequence, Format)
+                session.execute_write(add_sequence, UniProt_ID, Name, Type, Sequence, Format)
     os.remove(f"{Neo4JImportPath}/just_this_pathway.csv"); os.remove(f"{Neo4JImportPath}/corresponding.csv"); os.remove(f"{Neo4JImportPath}/{os.path.basename(filepath)}")

@@ -48,8 +48,8 @@ def main():
         print("Cleaned DataBase")
 
         with driver.session() as session:
-            session.write_transaction(build_database.initial_cancer_discovery)
-            session.write_transaction(build_database.remove_duplicate_nodes)
+            session.execute_write(build_database.initial_cancer_discovery)
+            session.execute_write(build_database.remove_duplicate_nodes)
             bar()
 
         for number in range(3):
@@ -76,7 +76,7 @@ def main():
                 bar(); bar(); bar()
 
         with driver.session() as session:
-            session.write_transaction(build_database.remove_duplicate_nodes)
+            session.execute_write(build_database.remove_duplicate_nodes)
             bar()
 
         with driver.session() as session:
@@ -95,10 +95,10 @@ def main():
 
         with driver.session() as session:
             #NOTE: We purge by merging all products with the same EMA_MA_Number or FDA_Application_Number
-            session.write_transaction(misc.remove_duplicate_nodes, "", "n.WikiData_ID as wdt")
+            session.execute_write(misc.remove_duplicate_nodes, "", "n.WikiData_ID as wdt")
             # And, then, we delete duplicate relationships
             #NOTE: We will just do this once to decrease processing time
-            session.write_transaction(misc.remove_duplicate_relationships)
+            session.execute_write(misc.remove_duplicate_relationships)
             bar()
 
         # # At the end, purge the database
@@ -107,8 +107,8 @@ def main():
         # And export it:
         with driver.session() as session:
             # We might want to remove ExternalEquivalent nodes
-            #session.write_transaction(misc.remove_ExternalEquivalent)
-            session.write_transaction(misc.export_graphml, "graph.graphml")
+            #session.execute_write(misc.remove_ExternalEquivalent)
+            session.execute_write(misc.export_graphml, "graph.graphml")
             bar()
 
     print(f"You can find the exported graph at {Neo4JImportPath}/graph.graphml")
