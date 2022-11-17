@@ -836,7 +836,7 @@ def find_synonyms_in_cts(fromIdentifier, toIdentifier, searchTerm):
                 else:
                     raise Exception(f"An HTTP Error with Code: {E.code} was found. Aborting...")
 
-    return  result
+    return result
 
 # ********* Build from file ********* #
 

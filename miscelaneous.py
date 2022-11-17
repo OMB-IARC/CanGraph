@@ -293,46 +293,60 @@ def remove_duplicate_relationships(tx):
             RETURN rel
         """)
 
-def remove_duplicate_nodes(tx, node_type, condition, optional_where=""):
+def remove_duplicate_nodes(tx, node_types, node_property, optional_condition="", more_props=""):
     """
     Removes any two nodes of any given ```node_type``` with the same ```condition```.
 
     Args:
-        tx              (neo4j.work.simple.Session): The session under which the driver is running
-        node_type       (str): The label of the nodes that will be selected for merging. If more than one, leave null and set
-            optional_where = ``WHERE (n:Label1 ÒR n:Label2) AND ...``
-        condition       (str): The node properties used for collecting, if not using all properties. This can be expressed as:
-            ``n.{property_1} as a, n.{property_n} as b``
-        optional_where  (str): An optional ``WHERE`` Neo4J Statement to constrain the nodes that are picked up; default is "" (no statement)
+        tx (neo4j.work.simple.Session): The session under which the driver is running
+        node_types (str): The labels of the nodes that will
+            be selected for merging; i.e. ``n:Fruit OR n:Vegetable`
+        node_property (str): The node properties used for collecting,
+            if not using all properties.
+        optional_condition (str): An optional Neo4J Statement, starting
+            with "AND", to be added after the ``WHERE`` clause.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.work.result.Result: A Neo4J connexion to the database that
+            modifies it according to the CYPHER statement contained in the function.
 
-    .. WARNING:: When using, take good care on how the keys names are written: sometimes, if a key is not present, all nodes will be merged!
+    .. WARNING:: When using, take good care on how the keys names are written:
+        sometimes, if a key is not present, all nodes will be merged!
     """
-    if len(str(node_type))>0:
-        return tx.run(f"""
-                MATCH (n:{node_type})
-                {optional_where}
-                WITH {condition}, COLLECT(n) AS ns
-                WHERE size(ns) > 1
-                        CALL apoc.refactor.mergeNodes(ns, {{properties:"combine"}}) YIELD node
-                RETURN node;
-            """)
-    else:
-        return tx.run(f"""
-                MATCH (n)
-                {optional_where}
-                WITH {condition}, COLLECT(n) AS ns
-                WHERE size(ns) > 1
-                        CALL apoc.refactor.mergeNodes(ns, {{properties:"combine"}}) YIELD node
-                RETURN node;
-            """)
+    if not more_props:
+        condition_any = (f"AND ( ANY(x IN n.{node_property} "
+                         f"WHERE x IN m.{node_property}) )")
+        more_props = f"head(COLLECT([n, m])) AS alt_thing"
+    else: condition_any = ""
+    return tx.run(f"""
+        MATCH (n), (m)
+        WHERE
+            ({node_types})
+            AND
+            ({node_types.replace("n:", "m:")})
+
+            AND (n.{node_property} IS NOT null)
+            AND (m.{node_property} IS NOT null)
+            AND ID(n) < ID(m)
+
+            {condition_any}
+
+            {optional_condition}
+
+        WITH {more_props}, head(COLLECT([n, m])) AS ns
+        WHERE size(ns) > 1
+            CALL apoc.refactor.mergeNodes(ns,
+                {{properties:"combine"}})
+        YIELD node
+        RETURN node
+        """)
+
 
 def purge_database(driver):
     """
-    A series of commands that purge a database, removing unnecessary, duplicated or empty nodes and merging those without necessary properties
-    This has been converted into a common function to standarize the ways the nodes are merged.
+    A series of commands that purge a database, removing unnecessary, duplicated or empty nodes
+    and merging those without required properties. This has been converted into a common function
+    to standarize the ways the nodes are merged.
 
      Args:
         driver (neo4j.Driver): Neo4J's Bolt Driver currently in use
@@ -340,44 +354,53 @@ def purge_database(driver):
     Returns:
         This function modifies the Neo4J Database as desired, but does not produce any particular return.
 
-    .. WARNING:: When modifying, take good care on how the keys names are written: with :obj:`~CanGraph.miscelaneous.remove_duplicate_nodes`,
+    .. WARNING:: When modifying, take good care on how the keys names are written:
+        with :obj:`~CanGraph.miscelaneous.remove_duplicate_nodes`,
         sometimes, if a key is not present, all nodes will be merged!
     """
     with driver.session() as session:
         # Fist, we purge Publications by PubMed_ID, using the abstract to merge those that have no PubMed_ID
-        session.execute_write(remove_duplicate_nodes, "Publication", "n.Pubmed_ID as id", "WHERE n.Pubmed_ID IS NOT null")
-        session.execute_write(remove_duplicate_nodes, "Publication", "n.Abstract as abs", "WHERE n.Abstract IS NOT null AND n.Pubmed_ID IS null")
+        session.execute_write(remove_duplicate_nodes, "n:Publication", "Pubmed_ID")
+        session.execute_write(remove_duplicate_nodes, "n:Publication", "Abstract", "AND (n.Pubmed_ID IS null)")
 
         # Now, we work on Proteins/Metabolites/Drugs:
-        # We merge those that have the same InChI or InChIKey:
-        session.execute_write(remove_duplicate_nodes, "", "n.InChI as inchi", "WHERE n:Protein OR n:Metabolite OR n:Drug AND n.InChI IS NOT null")
-        session.execute_write(remove_duplicate_nodes, "", "n.InChIKey as key", "WHERE n:Protein OR n:Metabolite OR n:Drug AND n.InChIKey IS NOT null")
         # We merge Proteins by UniProt_ID, and, when there is none, by Name:
-        session.execute_write(remove_duplicate_nodes, "Protein", "n.UniProt_ID as id", "WHERE n.UniProt_ID IS NOT null")
-        session.execute_write(remove_duplicate_nodes, "Protein", "n.Name as id", "WHERE n.UniProt_ID IS null AND n.Name IS NOT null")
-        # We merge Metabolites by HMDB_ID (normally, it should be unique):
-        session.execute_write(remove_duplicate_nodes, "", "n.HMDB_ID as hmdb_id", "WHERE n:Protein OR n:Metabolite AND n.HMDB_ID IS NOT null")
-        # We can also remove all OriginalMetabolites (or other) that are non-unique
-        session.execute_write(remove_duplicate_nodes, "", """n.InChI as inchi, n.InChIKey as inchikey, n.Name as name, n.SMILES as smiles,
-                                                                      n.Identifier as hmdb_id, n.ChEBI as chebi, n.Monisotopic_Molecular_Weight as mass""",
-                                                                   "WHERE n:Metabolite OR n:Protein OR n:OriginalMetabolite OR n:Drug")
-        # And all Metabolites that do not match our Schema - Be careful with the \" character
-        session.run('MATCH (n:Metabolite) WHERE n.ChEBI_ID IS NULL OR n.ChEBI_ID = "" OR n.CAS_Number IS NULL OR n.CAS_Number = "" DETACH DELETE n')
+        session.execute_write(remove_duplicate_nodes, "n:Protein", "UniProt_ID")
+        session.execute_write(remove_duplicate_nodes, "n:Protein", "Name", "AND (n.UniProt_ID IS null)")
+        # We merge by HMDB_ID, ChEBI_ID, Name, InChI and InChIKey (normally, they should be unique):
+        session.execute_write(remove_duplicate_nodes,
+            "n:Protein OR n:Metabolite OR n:Drug OR n:OriginalMetabolite", "HMDB_ID")
+        session.execute_write(remove_duplicate_nodes,
+            "n:Protein OR n:Metabolite OR n:Drug OR n:OriginalMetabolite", "ChEBI_ID")
+        session.execute_write(remove_duplicate_nodes,
+            "n:Protein OR n:Metabolite OR n:Drug OR n:OriginalMetabolite", "Name")
+        session.execute_write(remove_duplicate_nodes,
+            "n:Protein OR n:Metabolite OR n:Drug OR n:OriginalMetabolite", "InChI")
+        session.execute_write(remove_duplicate_nodes,
+            "n:Protein OR n:Metabolite OR n:Drug OR n:OriginalMetabolite", "InChIKey")
 
-        # We also remove all non-unique Subjects. We do this by passing on all three parameters this nodes may have to apoc.mergeNodes
+        # And those that do not match our Schema - Be careful with the \" character
+        session.run('MATCH (n:Metabolite) WHERE n.ChEBI_ID IS NULL OR n.ChEBI_ID = "" '
+                    'OR n.CAS_Number IS NULL OR n.CAS_Number = "" DETACH DELETE n')
+
+        # We also remove all non-unique Subjects. We do this by passing on all three parameters
+        # this nodes may have to apoc.mergeNodes
         # .. NOTE:: This concerns only those nodes that DO NOT COME from Exposome_Explorer
-        session.execute_write(remove_duplicate_nodes, "Subject", "n.Age_Mean as age, n.Gender as gender, n.Information as inf", "WHERE n.Exposome_Explorer_ID IS null")
+        session.execute_write(remove_duplicate_nodes, "n:Subject", "Age_Mean",
+                              more_props="n.Gender as gender, n.Information as inf",
+                              optional_condition="AND (n.Exposome_Explorer_ID IS null)")
 
         # We can do the same for the different Dosages:
-        session.execute_write(remove_duplicate_nodes, "Dosage", "n.Form as frm, n.Stength as str, n.Route as rt")
+        session.execute_write(remove_duplicate_nodes, "n:Dosage", "Form", more_props="n.Stength as str, n.Route as rt")
 
-        # For products, we merge all those with the same EMA_MA_Number or FDA_Application_Number to try to minimize duplicates, although this is not the best approach
-        session.execute_write(remove_duplicate_nodes, "Product", "n.EMA_MA_Number as ema_nb", "WHERE n.EMA_MA_Number IS NOT null")
-        session.execute_write(remove_duplicate_nodes, "Product", "n.FDA_Application_Number as fda_nb", "WHERE n.FDA_Application_Number IS NOT null")
+        # For products, we merge all those with the same EMA_MA_Number or FDA_Application_Number to
+        # try to minimize duplicates, although this is not the best approach
+        session.execute_write(remove_duplicate_nodes, "n:Product", "EMA_MA_Number")
+        session.execute_write(remove_duplicate_nodes, "n:Product", "FDA_Application_Number")
 
         # For CelularLocations and BioSpecimens, we merge those with the same Name:
-        session.execute_write(remove_duplicate_nodes, "CelularLocation", "n.Name as name")
-        session.execute_write(remove_duplicate_nodes, "BioSpecimen", "n.Name as name")
+        session.execute_write(remove_duplicate_nodes, "n:CelularLocation", "Name")
+        session.execute_write(remove_duplicate_nodes, "n:BioSpecimen", "Name")
 
         # Finally, we delete all empty nodes. This shouldn't be created on the first place, but, in case anyone escapes, this makes the DB cleaner.
         # .. NOTE:: In the case of Taxonomys, these "empty nodes" are actually created on purpose. This, they are here removed.
@@ -671,6 +694,21 @@ def split_csv(filename, folder, sep=",", sep_out=",", startFrom=0, withStepsOf=1
     os.remove(filepath) # And remove the file after finishing
 
     return filenumber
+
+def scan_folder(folder_path):
+    """
+    Scans a folder and finds all the files present in it
+
+    Args:
+        folder_path (str): The folder that is to be scanned
+    Returns:
+        list: A list of all the files in the folder, listed by their absolute path
+    """
+    all_files = []
+    for root,dirs,files in os.walk(folder_path):
+        for filename in files:
+            all_files.append( os.path.abspath(os.path.join(root, filename)) )
+    return all_files
 
 def countlines(start, header=True, lines=0, begin_start=None):
     """

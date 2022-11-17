@@ -29,21 +29,24 @@ This module is comprised of:
 """
 
 # Import external modules necessary for the script
-import neo4j                        # Import the whole package for error management
-from neo4j import GraphDatabase     # The Neo4J python driver
-import os, sys, shutil              # Vital modules to interact with the filesystem
-import re                           # Work with regular expressions
-import time                         # Manage the time, and wait times, in python
-from zipfile import ZipFile         # Work with ZIP files
-import subprocess                   # Manage python sub-processes
-import logging                      # Make ``verbose`` messages easier to show
-import random, string               # For now, used to generate passwords
-from git import Repo                # Manage Git directly from Python
-import psutil                       # Kill the burden of the neo4j process
-import argparse                     # Arguments pàrser for Python
-from texttable import Texttable     # Draw cute tables in python
+import neo4j                         # Import the whole package for error management
+from neo4j import GraphDatabase      # The Neo4J python driver
+import os, sys, shutil               # Vital modules to interact with the filesystem
+import re                            # Work with regular expressions
+import time                          # Manage the time, and wait times, in python
+from zipfile import ZipFile          # Work with ZIP files
+import subprocess                    # Manage python sub-processes
+import logging                       # Make ``verbose`` messages easier to show
+import random, string                # For now, used to generate passwords
+from git import Repo                 # Manage Git directly from Python
+import psutil                        # Kill the burden of the neo4j process
+import argparse                      # Arguments pàrser for Python
+from texttable import Texttable      # Draw cute tables in python
+import pandas as pd                  # Analysis of tabular data
+import json                          # Read JSON files from Python
+from alive_progress import alive_bar # A cute progress bar that shows the script is still running
 
-import miscelaneous as misc         # A collection of useful functions
+import miscelaneous as misc          # A collection of useful functions
 
 # ********* Miscelaneous functions ********* #
 
@@ -800,6 +803,112 @@ def setup_drugbank(databasefolder = "./DataBases", interactive = False):
 
     return drugbank_ok
 
+def setup_database_index(databasefolder = "./DataBases"):
+    """
+    Prepares the index file for all the databases present in the ``databasefolder`` folder,
+    which will helpfully reduce processing time a lot
+
+    Args:
+        databasefolder (str): The main folder where all the databases we will be using are to be found
+
+    Returns:
+        dict:
+            A dictionary containing the index for all the databases in ``databasefolder``.
+            This index will be written as JSON in ``databasefolder``/index.json
+    """
+    print(f"Generating search index for all the files in {databasefolder}...")
+
+    # Set the databasefolder to be an absolute path
+    databasefolder = os.path.abspath(databasefolder)
+
+    # First, we prepare a scan of all the files available on our "DataBases" folder
+    # We will cycle through them later on to try and find the index keys
+    all_files = misc.scan_folder(databasefolder)
+    all_files = [ x for x in all_files if "index.json" not in x]
+
+    # Prepare the dictionary which will hold the index
+    index_dict = {"ChEBI_ID":{}, "HMDB_ID":{}, "InChI":{}, "MeSH_ID":{}, "Name":{}}
+    inchi_regexp = "InChI\=1S?\/[A-Za-z0-9\.]+(\+[0-9]+)?(\/[cnpqbtmsih][A-Za-z0-9\-\+\(\)\,\/\?\;\.]+)*(\"|\<)"
+
+    # Declare the progress bar we will use:
+    with  alive_bar(len(all_files), title = "Generating Search Index...") as bar:
+
+        # And run the indexer!
+        for filepath in all_files:
+            relpath = os.path.relpath(filepath, databasefolder)
+            hmdb_ids, mesh_ids, inchis, chebi_ids, names = [], [], [], [], []
+            with open(f'{filepath}', "r") as f:
+                text = f.read()
+
+            if "InChI" in text:
+                results =  re.finditer(inchi_regexp, text)
+                inchis = [x.group(0) for x in results]
+
+            if "ExposomeExplorer/components" in relpath:
+                component = pd.read_csv(os.path.abspath(filepath), dtype = str)
+                chebi_ids = str(component["chebi_id"][0])
+                names.append(component["name"][0])
+                if str(component["alternative_names"][0]) != "nan":
+                    names.extend(component["alternative_names"][0].split(";"))
+            elif "SMPDB/smpdb_metabolites" in relpath:
+                component = pd.read_csv(os.path.abspath(filepath), dtype = str)
+                chebi_ids = list(component["ChEBI ID"])
+                names.extend(list(component["Metabolite Name"]))
+            elif "SMPDB/smpdb_proteins" in relpath:
+                component = pd.read_csv(os.path.abspath(filepath), dtype = str)
+                names.extend(list(component["Protein Name"]))
+            elif "<chebi_id>" in text:
+                chebi_ids = [ str(x.replace("<chebi_id>","").replace("</chebi_id>","")) for x in
+                              list( re.findall("<chebi_id>.*</chebi_id>", text) ) ]
+
+            if "<name>" in text:
+                names.extend( [ x.replace("<name>","").replace("</name>","") for x in
+                             list( re.findall("<name>.*</name>", text) ) ] )
+            if "<synonym>" in text:
+                names.extend( [ x.replace("<synonym>","").replace("</synonym>","") for x in
+                             list( re.findall("<synonym>.*</synonym>", text) ) ] )
+            if "DrugBank" in relpath:
+                if "<kind>" in text:
+                    names.extend( [ x.replace("Name</kind>\n      <value>","").replace("</value>","") for x in
+                                list( re.findall("Name</kind>\n      <value>.*</value>", text) ) ] )
+            elif "HMDB" in relpath:
+                if "<iupac_name>" in text:
+                    names.extend( [ x.replace("<iupac_name>","").replace("</iupac_name>","") for x in
+                                list( re.findall("<iupac_name>.*</iupac_name>", text) ) ] )
+                if "<traditional_iupac>" in text:
+                    names.extend( [ x.replace("<traditional_iupac>","").replace("</traditional_iupac>","") for x in
+                                list( re.findall("<traditional_iupac>.*</traditional_iupac>", text) ) ] )
+                if "<uniprot_name>" in text:
+                    names.extend( [ x.replace("<uniprot_name>","").replace("</uniprot_name>","") for x in
+                                list( re.findall("<uniprot_name>.*</uniprot_name>", text) ) ] )
+
+            if "<mesh-id>" in text:
+                mesh_ids = [ x.replace("<mesh-id>","").replace("</mesh-id>","") for x in
+                             list( re.findall("<mesh-id>.*</mesh-id>", text) ) ]
+
+            if "HMDB" in text:
+                hmdb_ids = list( re.findall("HMDB\d\d\d\d\d", text) )
+
+            def create_and_append_to_index(item_list, item_type, relpath):
+                for item in [x for x in item_list if x and str(x) != "nan"]:
+                    index_dict[item_type].setdefault(item, [])
+                    if relpath not in index_dict[item_type][item]:
+                        index_dict[item_type][item].append(relpath)
+
+            create_and_append_to_index(chebi_ids, "ChEBI_ID", relpath)
+            create_and_append_to_index(hmdb_ids, "HMDB_ID", relpath)
+            create_and_append_to_index(inchis, "InChI", relpath)
+            create_and_append_to_index(mesh_ids, "MeSH_ID", relpath)
+            create_and_append_to_index(names, "Name", relpath)
+
+            bar()
+
+    logging.info("Saving the index file...")
+    with open(f"{databasefolder}/index.json", "w") as outfile:
+        json.dump(index_dict, outfile)
+
+    return index_dict
+
 def setup_databases(databasefolder = "./DataBases", interactive = False):
     """
     Set Up the ``databasefolder`` from where the :obj:`~CanGraph.main` script will take its data. It
@@ -816,9 +925,6 @@ def setup_databases(databasefolder = "./DataBases", interactive = False):
     smpdb_ok = setup_smpdb(databasefolder)
     drugbank_ok = setup_drugbank(databasefolder, interactive)
 
-    logging.info("This is all! Since the WikiData and MetaNetX databases are auto-consulted ")
-    logging.info("using RDF, there is no need to set up anything more!")
-
     print(f"The following databases have been set up in the {databasefolder} folder:")
     t = Texttable()
     t.add_rows([
@@ -826,6 +932,21 @@ def setup_databases(databasefolder = "./DataBases", interactive = False):
                 ["False" if item == 0 else "True" for item in [exposome_explorer_ok, hmdb_ok, smpdb_ok, drugbank_ok]]
                 ])
     print(t.draw())
+
+    logging.info("This is all! Since the WikiData and MetaNetX databases are auto-consulted ")
+    logging.info("using RDF, the only thing we have left is generating the search index!")
+
+    index_dict = setup_database_index(databasefolder, interactive)
+
+    logging.info(f"The following number of identifiers have been indexed:")
+    t = Texttable()
+    t.add_rows([
+                ['ChEBI_ID', 'HMDB_ID', 'InChI', 'MeSH_ID', "Name"],
+                [ len(index_dict["ChEBI_ID"]), len(index_dict["HMDB_ID"]),
+                  len(index_dict["InChI"]), len(index_dict["MeSH_ID"]),
+                  len(index_dict["Name"])]
+                ])
+    logging.info(t.draw())
 
 # ********* And, finally, the main function ********* #
 

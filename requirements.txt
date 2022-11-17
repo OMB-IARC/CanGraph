@@ -17,6 +17,7 @@ argparse            # Arguments pàrser for Python
 texttable           # Draw cute tables in python
 psutil              # Manage system processes from python
 bioservices         # Query web bio-databases from python
+ijson               # Read JSON files from Python in an iterative way
 
 # And these are those used by the Sphinx docs
 
