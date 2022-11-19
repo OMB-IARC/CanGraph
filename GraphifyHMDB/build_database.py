@@ -85,7 +85,9 @@ def add_metabolites(tx, filename):
             m.Phenol_Explorer_Compound_ID = phenol_explorer_compound_id, m.KNApSAcK_ID = knapsack_id, m.KEGG_ID = kegg_id,
             m.Bigg_ID = bigg_id, m.WikiPedia_Article = wikipedia_id, m.METLIN_ID = metlin_id, m.VMH_ID = vmh_id
 
-        WITH secondary_accessions, synonyms, m, split(split(synthesis_reference, ",")[-3], ".")[-2] AS ref_title, synthesis_reference
+        WITH split(split(synthesis_reference, ",")[-3], ".")[-2] AS ref_title,
+             secondary_accessions, synonyms, synthesis_reference, m
+
         FOREACH(ignoreMe IN CASE WHEN synthesis_reference IS NOT null THEN [1] ELSE [] END |
             FOREACH(ignoreMe IN CASE WHEN ref_title IS NOT null THEN [1] ELSE [] END |
                 MERGE (p:Publication {{ Title: ref_title }})
@@ -180,7 +182,9 @@ def add_diseases(tx, filename):
 
         MERGE (m)-[r:ASSOCIATED_DISEASE_METABOLITE]-(d)
 
-        WITH split(replace(reference_text, split(reference_text, ":")[0]+": ", ""), ".")[0] AS ref_title, pubmed_id, reference_text
+        WITH split(replace(reference_text, split(reference_text, ":")[0]+": ", ""), ".")[0] AS ref_title,
+             pubmed_id, reference_text, m
+
         FOREACH(ignoreMe IN CASE WHEN ref_title IS NOT null THEN [1] ELSE [] END |
             MERGE (p:Publication {{ Title: ref_title }})
             SET p.Authors = split(reference_text, ":")[0]
@@ -262,9 +266,11 @@ def add_concentrations_normal(tx, filename):
         SET c.Value = value, c.Comments = comment
 
         CREATE (sb:Subject)
-        SET sb.Age = replace(subject_age, "&gt;", ">"), sb.Gender = replace(subject_sex, "Both", "Female + Male"), sb.Information = subject_condition
+        SET sb.Age = replace(subject_age, "&gt;", ">"),
+            sb.Gender = replace(subject_sex, "Both", "Female + Male"),
+            sb.Information = subject_condition
 
-        MERGE (m)-[r5:MEASURED_AS]->(me)
+        MERGE (m)-[r5:MEASURED_AS]->(c)
         MERGE (c)-[r7:TAKEN_FROM_SUBJECT]->(sb)
 
         FOREACH(ignoreMe IN CASE WHEN units IS NOT null THEN [1] ELSE [] END |
@@ -279,7 +285,9 @@ def add_concentrations_normal(tx, filename):
         SET r5.PubMed_ID = ""
         SET r5.PubMed_ID = pubmed_id + "," + r5.PubMed_ID
 
-        WITH split(replace(reference_text, split(reference_text, ":")[0]+": ", ""), ".")[0] AS ref_title, pubmed_id, reference_text
+        WITH split(replace(reference_text, split(reference_text, ":")[0]+": ", ""), ".")[0] AS ref_title,
+        pubmed_id, reference_text, c
+
         FOREACH(ignoreMe IN CASE WHEN ref_title IS NOT null THEN [1] ELSE [] END |
             MERGE (p:Publication {{ Title: ref_title }})
             SET p.Authors = split(reference_text, ":")[0]
@@ -360,7 +368,7 @@ def add_concentrations_abnormal(tx, filename):
         CREATE (sb:Subject)
         SET sb.Age = replace(patient_age, "&gt;", ">"), sb.Gender = replace(patient_sex, "Both", "Female + Male"), sb.Information = patient_information
 
-        MERGE (m)-[r5:MEASURED_AS]->(me)
+        MERGE (m)-[r5:MEASURED_AS]->(c)
         MERGE (c)-[r7:TAKEN_FROM_SUBJECT]->(sb)
 
         FOREACH(ignoreMe IN CASE WHEN units IS NOT null THEN [1] ELSE [] END |
@@ -375,7 +383,9 @@ def add_concentrations_abnormal(tx, filename):
         SET r5.PubMed_ID = ""
         SET r5.PubMed_ID = pubmed_id + "," + r5.PubMed_ID
 
-        WITH split(replace(reference_text, split(reference_text, ":")[0]+": ", ""), ".")[0] AS ref_title, pubmed_id, reference_text
+        WITH split(replace(reference_text, split(reference_text, ":")[0]+": ", ""), ".")[0] AS ref_title,
+            pubmed_id, reference_text, c
+
         FOREACH(ignoreMe IN CASE WHEN ref_title IS NOT null THEN [1] ELSE [] END |
             MERGE (p:Publication {{ Title: ref_title }})
             SET p.Authors = split(reference_text, ":")[0]
@@ -440,6 +450,8 @@ def add_taxonomy(tx, filename):
 
         SET m.Description = apoc.text.capitalize(description)
 
+        // First, we create the Taxonomy nodes independently
+
         FOREACH(ignoreMe IN CASE WHEN kingdom IS NOT null THEN [1] ELSE [] END |
             MERGE (k:Taxonomy {{Type:"Kingdom", Name:kingdom}})
         )
@@ -457,9 +469,47 @@ def add_taxonomy(tx, filename):
             MERGE (m)-[:PART_OF_CLADE]->(dp)
         )
 
-        MERGE (sp)-[:PART_OF_CLADE]->(k)
-        MERGE (c)-[:PART_OF_CLADE]->(sp)
-        MERGE (sb)-[:PART_OF_CLADE]->(c)
+        // Then, we add a hierarchy connecting the nodes as much as possible between them
+
+        FOREACH(ignoreMe IN CASE WHEN kingdom IS NOT null AND super_class IS NOT null THEN [1] ELSE [] END |
+            MERGE (k:Taxonomy {{ Type:"Kingdom", Name:kingdom }})
+            MERGE (sp:Taxonomy {{ Type:"Super Class", Name:super_class }})
+            MERGE (k)-[:PART_OF_CLADE]->(sp)
+        )
+        FOREACH(ignoreMe IN CASE WHEN class IS NOT null AND super_class IS NOT null THEN [1] ELSE [] END |
+            MERGE (c:Taxonomy {{ Type:"Class", Name:class }})
+            MERGE (sp:Taxonomy {{ Type:"Super Class", Name:super_class }})
+            MERGE (sp)-[:PART_OF_CLADE]->(c)
+        )
+        FOREACH(ignoreMe IN CASE WHEN sub_class IS NOT null AND class IS NOT null THEN [1] ELSE [] END |
+            MERGE (c:Taxonomy {{ Type:"Class", Name:class }})
+            MERGE (sb:Taxonomy {{ Type:"Sub Class", Name:sub_class }})
+            MERGE (sb)-[:PART_OF_CLADE]->(c)
+        )
+
+        // And we connect the hierarchy to the main node just once
+
+        FOREACH(ignoreMe IN CASE WHEN sub_class IS NOT null THEN [1] ELSE [] END |
+            MERGE (ta:Taxonomy {{ Name:sub_class }})
+            MERGE (m)-[:PART_OF_CLADE]->(ta)
+        )
+        FOREACH(ignoreMe IN CASE WHEN class IS NOT null
+                AND sub_class IS null THEN [1] ELSE [] END |
+            MERGE (ta:Taxonomy {{ Name:class }})
+            MERGE (m)-[:PART_OF_CLADE]->(ta)
+        )
+        FOREACH(ignoreMe IN CASE WHEN super_class IS NOT null
+                AND sub_class IS null AND class IS null THEN [1] ELSE [] END |
+            MERGE (ta:Taxonomy {{ Name:super_class }})
+            MERGE (m)-[:PART_OF_CLADE]->(ta)
+        )
+        FOREACH(ignoreMe IN CASE WHEN kingdom IS NOT null AND sub_class IS null
+                AND class IS null AND super_class IS null  THEN [1] ELSE [] END |
+            MERGE (ta:Taxonomy {{ Name:kingdom }})
+            MERGE (m)-[:PART_OF_CLADE]->(ta)
+        )
+
+        // We add the alternative_parents in the appropriate format
 
         FOREACH(element in alternative_parents|
             FOREACH(taxonomy in element._children|
@@ -467,6 +517,13 @@ def add_taxonomy(tx, filename):
                 MERGE (m)-[:PART_OF_CLADE]->(t)
             )
         )
+
+        // If any Taxonomy is left without a connection, we connect it to the main graph
+        // Beware: if any disconnected taxonomy is left from before, this could lead to errors
+
+        WITH m, alternative_parents
+        MATCH (tt:Taxonomy) WHERE NOT (tt)--()
+        MERGE (m)-[:PART_OF_CLADE]->(tt)
         """)
 
 def add_experimental_properties(tx, filename):
@@ -891,7 +948,8 @@ def add_general_references(tx, filename, type_of):
             [X in my_reference._children WHERE X._type = "pubmed_id"][0]._text AS pubmed_id,
             m
 
-        WITH split(replace(reference_text, split(reference_text, ":")[0]+": ", ""), ".")[0] AS ref_title, pubmed_id, reference_text
+        WITH split(replace(reference_text, split(reference_text, ":")[0]+": ", ""), ".")[0] AS ref_title,
+             pubmed_id, reference_text, m
         FOREACH(ignoreMe IN CASE WHEN ref_title IS NOT null THEN [1] ELSE [] END |
             MERGE (p:Publication {{ Title: ref_title }})
             SET p.Authors = split(reference_text, ":")[0]
@@ -905,7 +963,7 @@ def add_general_references(tx, filename, type_of):
             SET p.Pages = split(split(reference_text, ":")[-1], ".")[0]
             SET p.PubMed_ID = pubmed_id
 
-            MERGE (c)-[r2:CITED_IN]->(p)
+            MERGE (m)-[r:CITED_IN]->(p)
         )
 
         """)
@@ -1045,20 +1103,21 @@ def add_metabolite_references(tx, filename):
             MERGE (m)-[r:INTERACTS_WITH]-(p)
             )
 
-        WITH split(replace(reference_text, split(reference_text, ":")[0]+": ", ""), ".")[0] AS ref_title, pubmed_id, reference_text
+        WITH split(replace(reference_text, split(reference_text, ":")[0]+": ", ""), ".")[0] AS ref_title,
+             pubmed_id, reference_text, p
         FOREACH(ignoreMe IN CASE WHEN ref_title IS NOT null THEN [1] ELSE [] END |
-            MERGE (p:Publication {{ Title: ref_title }})
-            SET p.Authors = split(reference_text, ":")[0]
+            MERGE (pu:Publication {{ Title: ref_title }})
+            SET pu.Authors = split(reference_text, ":")[0]
 
-            SET p.Publication = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[0]
-            SET p.Notes = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[2]
-            SET p.Date = split(split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[1],";")[0]
-            SET p.Volume = split(split(reference_text, ";")[1], "(")[0]
-            SET p.Issue = split(split(reference_text, "(")[1], ")")[0]
-            SET p.Pages = split(split(reference_text, ":")[-1], ".")[0]
-            SET p.PubMed_ID = pubmed_id
+            SET pu.Publication = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[0]
+            SET pu.Notes = split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[2]
+            SET pu.Date = split(split(replace(reference_text, split(reference_text, ".")[0]+". ",""), ".")[1],";")[0]
+            SET pu.Volume = split(split(reference_text, ";")[1], "(")[0]
+            SET pu.Issue = split(split(reference_text, "(")[1], ")")[0]
+            SET pu.Pages = split(split(reference_text, ":")[-1], ".")[0]
+            SET pu.PubMed_ID = pubmed_id
 
-            MERGE (c)-[r2:CITED_IN]->(p)
+            MERGE (p)-[r:CITED_IN]->(pu)
         )
 
         """)

@@ -327,20 +327,18 @@ def remove_duplicate_nodes(tx, node_types, node_property, optional_condition="",
 
             AND (n.{node_property} IS NOT null)
             AND (m.{node_property} IS NOT null)
-            AND ID(n) < ID(m)
 
             {condition_any}
 
             {optional_condition}
 
-        WITH {more_props}, head(COLLECT([n, m])) AS ns
+        WITH {more_props}, DISTINCT(HEAD(COLLECT([n, m]))) AS ns
         WHERE size(ns) > 1
             CALL apoc.refactor.mergeNodes(ns,
-                {{properties:"combine"}})
+                {{properties:"combine", mergeRels:true}})
         YIELD node
         RETURN node
         """)
-
 
 def purge_database(driver):
     """
@@ -380,8 +378,11 @@ def purge_database(driver):
             "n:Protein OR n:Metabolite OR n:Drug OR n:OriginalMetabolite", "InChIKey")
 
         # And those that do not match our Schema - Be careful with the \" character
-        session.run('MATCH (n:Metabolite) WHERE n.ChEBI_ID IS NULL OR n.ChEBI_ID = "" '
-                    'OR n.CAS_Number IS NULL OR n.CAS_Number = "" DETACH DELETE n')
+        session.run(""" MATCH (n:Metabolite)
+                        WHERE n.Microbial_Metabolite IS null
+                        AND (n.ChEBI_ID IS NULL OR n.ChEBI_ID = ""
+                             OR n.CAS_Number IS NULL OR n.CAS_Number = "")
+                        DETACH DELETE n""")
 
         # We also remove all non-unique Subjects. We do this by passing on all three parameters
         # this nodes may have to apoc.mergeNodes
@@ -403,11 +404,14 @@ def purge_database(driver):
         session.execute_write(remove_duplicate_nodes, "n:BioSpecimen", "Name")
 
         # Finally, we delete all empty nodes. This shouldn't be created on the first place, but, in case anyone escapes, this makes the DB cleaner.
-        # .. NOTE:: In the case of Taxonomys, these "empty nodes" are actually created on purpose. This, they are here removed.
+        # .. NOTE:: In the case of Taxonomys, these "empty nodes" are actually created on purpose. Here, they are removed.
         session.run("MATCH (n) WHERE size(keys(properties(n))) < 1 CALL { WITH n DETACH DELETE n } IN TRANSACTIONS OF 1000 ROWS")
         # For Measurements and Sequences, 2 properties are the minimum, since they always have some boolean values
         session.run("MATCH (m:Measurement) WHERE size(keys(properties(m))) < 2 DETACH DELETE m")
         session.run("MATCH (s:Sequence) WHERE size(keys(properties(s))) < 2 DETACH DELETE s")
+
+        # We will also remove all disconnected nodes (they give no useful information)
+        session.run("MATCH (n) WHERE NOT (n)--() DETACH DELETE n")
 
         #At last, we may remove any duplicate relationships, which, since we have merged nodes, will surely be there:
         session.execute_write(remove_duplicate_relationships)

@@ -27,7 +27,7 @@ def import_csv(tx, filename, label):
         label       (str): The label of the Neo4J nodes that will be imported, with the columns of the CSV being its properties.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
 
     .. NOTE:: For this to work, you HAVE TO have APOC availaible on your Neo4J installation
     """
@@ -45,17 +45,21 @@ def add_components(tx, filename):
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
             MERGE (c:Metabolite {{ Exposome_Explorer_ID:"Component_"+line["id"] }})
-            SET c.Name = line.name, c.Description = line.description, c.Alternative_Names = replace(line.alternative_names, ";", ","), c.Level = line.level,
+            SET c.Name = line.name, c.Description = line.description,
+                c.Alternative_Names = replace(line.alternative_names, ";", ","), c.Level = line.level,
                 c.CAS_Number = line.cas_number, c.PubChem_ID = line.pubchem_compound_id, c.ChEBI_ID = line.chebi_id,
-                c.FooDB_Compound_ID = line.foodb_compound_id, c.FooDB_Food_ID = line.foodb_food_id,
-                c.SMILES = line.moldb_smiles, c.Formula = line.moldb_formula, c.InChI = line.moldb_inchi,
-                c.InChIKey = line.moldb_inchikey, c.Average_Molecular_Weight = line.moldb_average_mass, c.Monisotopic_Molecular_Weight = line.moldb_mono_mass,
-                c.HMDB_ID = line.hmdb_id, c.Displayed_Excretion_Concentration_Count = line.displayed_excretion_concentration_count,
+                c.FooDB_Compound_ID = line.foodb_compound_id, c.HMDB_ID = line.hmdb_id,
+                c.FooDB_Food_ID = line.foodb_food_id,
+                c.SMILES = line.moldb_smiles, c.Formula = line.moldb_formula,
+                c.InChI = line.moldb_inchi, c.InChIKey = line.moldb_inchikey,
+                c.Average_Molecular_Weight = line.moldb_average_mass,
+                c.Monisotopic_Molecular_Weight = line.moldb_mono_mass,
+                c.Displayed_Excretion_Concentration_Count = line.displayed_excretion_concentration_count,
                 c.Displayed_Correlated_Biomarker_Count = line.displayed_correlated_biomarker_count,
                 c.Displayed_Metabolomic_Associated_Biomarker_Count = line.displayed_metabolomic_associated_biomarker_count,
                 c.Displayed_Associated_Biomarker_Count = line.displayed_associated_biomarker_count,
@@ -91,7 +95,7 @@ def add_measurements_stuff(tx, filename):
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
@@ -118,7 +122,7 @@ def add_reproducibilities(tx, filename):
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
@@ -139,7 +143,7 @@ def add_samples(tx, filename):
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
@@ -162,17 +166,19 @@ def add_subjects(tx, filename):
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
             MATCH (s:Subject {{ Exposome_Explorer_ID: "Subject_"+line.id }})
 
             MERGE (p:Publication {{ Exposome_Explorer_ID: "Publication_"+line.publication_id }})
-            MERGE (c:Cohort {{ Exposome_Explorer_ID: "Cohort_"+line.cohort_id }})
-
-            MERGE (s)-[r1:PART_OF_COHORT]->(c)
             MERGE (s)-[r2:CITED_IN]->(p)
+
+            FOREACH(ignoreMe IN CASE WHEN line.cohort_id IS NOT null THEN [1] ELSE [] END |
+                MERGE (c:Cohort {{ Exposome_Explorer_ID: "Cohort_"+line.cohort_id }})
+                MERGE (s)-[r1:PART_OF_COHORT]->(c)
+            )
         """)
 
 def add_microbial_metabolite_identifications(tx, filename):
@@ -186,17 +192,16 @@ def add_microbial_metabolite_identifications(tx, filename):
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
-            MATCH (c:Metabolite {{ Exposome_Explorer_ID: "Component_"+line.component_id }})
+            MATCH (m:Metabolite {{ Exposome_Explorer_ID: "Component_"+line.component_id }})
 
-            MERGE (m:Metabolite {{ Exposome_Explorer_ID: "MicrobialMetabolite_"+line.id, Microbial_Metabolite:"True" }})
+            SET m.MicobialMetabolite_ID = line.id
             MERGE (p:Publication {{ Exposome_Explorer_ID: "Publication_"+line.publication_id }})
 
             MERGE (m)-[r1:CITED_IN]->(p)
-            MERGE (c)-[r2:IDENTIFIED_AS]->(m)
 
             FOREACH(ignoreMe IN CASE WHEN line.specimen_id IS NOT null THEN [1] ELSE [] END |
                 MERGE (s:BioSpecimen {{ Exposome_Explorer_ID: "Specimen_"+line.specimen_id }})
@@ -214,7 +219,7 @@ def add_cancer_associations(tx, filename):
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
@@ -239,7 +244,7 @@ def add_metabolomic_associations(tx, filename):
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
@@ -259,7 +264,7 @@ def add_metabolomic_associations(tx, filename):
 
 def add_correlations(tx, filename):
     """
-    Imports the 'correlations' database as a relation between to measurements:
+    Imports the 'correlations' database as a relation between two measurements:
     the intake_id, a food taken by the organism and registered using dietary questionnaires
     and the excretion_id, a chemical found in human biological samples, such that, when one
     takes one component, one will excrete the other. Data comes from epidemiological studies
@@ -270,7 +275,7 @@ def add_correlations(tx, filename):
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
@@ -291,7 +296,7 @@ def add_correlations(tx, filename):
 
 # ********* Finally, we can annotate the nodes created ********* #
 
-def add_measurements(tx, filename):
+def annotate_measurements(tx, filename):
     """
     Adds "Measurement" nodes from Exposome-Explorer's measurements.csv
 
@@ -300,31 +305,42 @@ def add_measurements(tx, filename):
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
             MATCH (m:Measurement {{ Exposome_Explorer_ID:"Measurement_"+line["id"] }})
-            SET m.Concentration_Mean = line.concentration_mean, m.Concentration_Median = line.concentration_median,
-                m.Concentration_Min = line.concentration_min, m.Concentration_Max = line.concentration_max,
-                m.Concentration_Percentile_05 = line.concentration_percentile_05, m.Concentration_Percentile_10 = line.concentration_percentile_10,
-                m.Concentration_Percentile_25 = line.concentration_percentile_25, m.Concentration_Percentile_75 = line.concentration_percentile_75,
-                m.Concentration_Percentile_90 = line.concentration_percentile_90, m.Concentration_Percentile_95 = line.concentration_percentile_95,
+            SET m.Concentration_Mean = line.concentration_mean,
+                m.Concentration_Median = line.concentration_median,
+                m.Concentration_Min = line.concentration_min,
+                m.Concentration_Max = line.concentration_max,
+                m.Concentration_Percentile_05 = line.concentration_percentile_05,
+                m.Concentration_Percentile_10 = line.concentration_percentile_10,
+                m.Concentration_Percentile_25 = line.concentration_percentile_25,
+                m.Concentration_Percentile_75 = line.concentration_percentile_75,
+                m.Concentration_Percentile_90 = line.concentration_percentile_90,
+                m.Concentration_Percentile_95 = line.concentration_percentile_95,
                 m.Concentration_InterQuartile_Range = line.concentration_interquartile_range,
-                m.Confidence_Interval_95_Lower = line.confidence_interval_95_lower, m.Confidence_Interval_95_Upper = line.confidence_interval_95_upper,
-                m.Concentration_SD = line.Concentration_SD, m.Size = line.size, m.Component_ID = line.component_id, m.Sample_ID = line.sample_id,
-                m.Experimental_Method_ID = line.experimental_method_id, m.Ancestry = line.ancestry, m.Regressed_On = line.regressed_on, m.Unit_ID = line.unit_id,
-                m.Adjustment_Type = line.adjustment_type, m.Adjusted_On = line.adjusted_on, m.Expressed_as_ID = line.expressed_as_id,
-                m.Supplement_Inclusion = line.supplement_inclusion, m.Detected_Proportion = line.detected_proportion,
+                m.Confidence_Interval_95_Lower = line.confidence_interval_95_lower,
+                m.Confidence_Interval_95_Upper = line.confidence_interval_95_upper,
+                m.Concentration_SD = line.Concentration_SD, m.Size = line.size,
+                m.Component_ID = line.component_id, m.Sample_ID = line.sample_id,
+                m.Experimental_Method_ID = line.experimental_method_id,
+                m.Ancestry = line.ancestry, m.Regressed_On = line.regressed_on,
+                m.Unit_ID = line.unit_id, m.Adjustment_Type = line.adjustment_type,
+                m.Adjusted_On = line.adjusted_on, m.Expressed_as_ID = line.expressed_as_id,
+                m.Supplement_Inclusion = line.supplement_inclusion,
+                m.Detected_Proportion = line.detected_proportion,
                 m.Detected_Size = line.detected_size, m.Food_Items = line.food_items,
-                m.Concentration_GeoMean = line.concentration_geomean, m.Concentration_GeoSD = line.concentration_geosd,
+                m.Concentration_GeoMean = line.concentration_geomean,
+                m.Concentration_GeoSD = line.concentration_geosd,
                 m.Concentration_Detected_Min = line.concentration_detected_min,
                 m.Detected_Only = line.detected_only,
                 m.Confidence_Interval_95_Geo_Lower = line.confidence_interval_95_geo_lower,
                 m.Confidence_Interval_95_Geo_Upper = line.confidence_interval_95_geo_upper
         """)
 
-def add_samples(tx, filename):
+def annotate_samples(tx, filename):
     """
     Adds "Sample" nodes from Exposome-Explorer's samples.csv
     From a Sample, one can take a series of measurements
@@ -334,17 +350,19 @@ def add_samples(tx, filename):
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
             MATCH (s:Sample {{ Exposome_Explorer_ID:"Sample_"+line["id"] }})
-            SET s.Subject_ID = line.subject_id, s.Ancestry = line.ancestry, s.Repetitions = line.repetitions, s.Time = line.time, s.Specimen_ID = line.specimen_id,
-                s.Time_Definition = line.time_definition, s.Intake_Tool = line.intake_tool, s.Intake_Food_Coverage = line.intake_food_coverage,
+            SET s.Subject_ID = line.subject_id, s.Ancestry = line.ancestry,
+                s.Repetitions = line.repetitions, s.Time = line.time, s.Specimen_ID = line.specimen_id,
+                s.Time_Definition = line.time_definition, s.Intake_Tool = line.intake_tool,
+                s.Intake_Food_Coverage = line.intake_food_coverage,
                 s.Intake_Time_Coverage = line.intake_time_coverage, s.Intervention_Dose = line.intervention_dose
         """)
 
-def add_experimental_methods(tx, filename):
+def annotate_experimental_methods(tx, filename):
     """
     Adds "ExperimentalMethod" nodes from Exposome-Explorer's experimental_methods.csv
 
@@ -353,12 +371,13 @@ def add_experimental_methods(tx, filename):
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
             MATCH (em:ExperimentalMethod {{ Exposome_Explorer_ID:"ExperimentalMethod_"+line["id"] }})
-            SET em.Name = line.name, em.Method_Type = line.method_type, em.Alternative_Names = replace(line.alternative_names, ";", ","),
+            SET em.Name = line.name, em.Method_Type = line.method_type,
+                em.Alternative_Names = replace(line.alternative_names, ";", ","),
                 em.Displayed_Excretion_Concentration_Count = line.displayed_excretion_concentration_count,
                 em.Displayed_Biomarker_Count = line.displayed_biomarker_count,
                 em.Displayed_Publication_Count = line.displayed_publication_count,
@@ -367,7 +386,7 @@ def add_experimental_methods(tx, filename):
                 em.Displayed_Cancer_Association_Count = line.displayed_cancer_association_count
         """)
 
-def add_units(tx, filename):
+def annotate_units(tx, filename):
     """
     Adds "Unit" nodes from Exposome-Explorer's units.csv
     A unit can be converted into other (for example, for normalization)
@@ -377,7 +396,7 @@ def add_units(tx, filename):
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
@@ -385,7 +404,7 @@ def add_units(tx, filename):
             SET u.Name = line.name, u.Type = line.unit_type, u.Group = line.unit_group, u.Converted_to_ID = line.converted_to_id
         """)
 
-def add_auto_units(tx, filename):
+def annotate_auto_units(tx, filename):
     """
     Shows the correlations between two units, converted using the rubygem 'https://github.com/masa16/phys-units'
     which standarizes units of measurement for our data
@@ -395,7 +414,7 @@ def add_auto_units(tx, filename):
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
@@ -405,7 +424,7 @@ def add_auto_units(tx, filename):
             MERGE (u1)-[r:CONVERTED_INTO]->(u2)
         """)
 
-def add_cancers(tx, filename):
+def annotate_cancers(tx, filename):
     """
     Adds "Cancer" nodes from Exposome-Explorer's cancers.csv
 
@@ -414,18 +433,19 @@ def add_cancers(tx, filename):
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
-            MERGE (c:Disease {{ Exposome_Explorer_ID:"Cancer_"+line["id"] }})
-            SET c.Name = line.name, c.Alternative_Names = replace(line.alternative_names, ";", ","), c.Displayed_Publication_Count = line.displayed_publication_count,
+            MATCH (c:Disease {{ Exposome_Explorer_ID:"Cancer_"+line["id"] }})
+            SET c.Name = line.name, c.Alternative_Names = replace(line.alternative_names, ";", ","),
+                c.Displayed_Publication_Count = line.displayed_publication_count,
                 c.Displayed_Cancer_Association_Count = line.displayed_cancer_association_count,
                 c.Displayed_Biomarker_Count = line.displayed_biomarker_count
 
         """)
 
-def add_cohorts(tx, filename):
+def annotate_cohorts(tx, filename):
     """
     Adds "Cohort" nodes from Exposome-Explorer's cohorts.csv
 
@@ -434,44 +454,45 @@ def add_cohorts(tx, filename):
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
-            MERGE (c:Cohort {{ Exposome_Explorer_ID:"Cohort_"+line["id"] }})
-            SET c.Name = line.name, c.Abbreviation = line.abbreviation, c.Description = c.description, c.Citation = line.citation,
+            MATCH (c:Cohort {{ Exposome_Explorer_ID:"Cohort_"+line["id"] }})
+            SET c.Name = line.name, c.Abbreviation = line.abbreviation,
+                c.Description = c.description, c.Citation = line.citation,
                 c.Displayed_Biomarker_Count = line.displayed_biomarker_count,
                 c.Displayed_Excretion_Concentration_Count = line.displayed_excretion_concentration_count,
-                c.Study_Design_Type = line.study_design_type, c.PubMed_ID = line.pmid, c.URL = line.url, c.Country = line.country,
-                c.Displayed_Publication_Count = line.displayed_publication_count, c.Displayed_Intake_Value_Count = line.displayed_intake_value_count,
+                c.Study_Design_Type = line.study_design_type, c.PubMed_ID = line.pmid,
+                c.URL = line.url, c.Country = line.country,
+                c.Displayed_Publication_Count = line.displayed_publication_count,
+                c.Displayed_Intake_Value_Count = line.displayed_intake_value_count,
                 c.Displayed_Correlation_Count = line.displayed_correlation_count,
                 c.Displayed_Metabolomic_Association_Count = line.displayed_metabolomic_association_count,
                 c.Displayed_Cancer_Association_Count = line.displayed_cancer_association_count
         """)
 
-def add_microbial_metabolite_info(tx, filename):
+def annotate_microbial_metabolite_info(tx, filename):
     """
     Adds "Metabolite" nodes from Exposome-Explorer's microbial_metabolite_identifications.csv
     These represent all metabolites that have been re-identified as present, for instance, in the microbiome.
-    To distinguish this metabolites from the only-human "Components", a Microbial_Metabolite = "True" label has been added
 
     Args:
         tx          (neo4j.work.simple.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
-            MERGE (mm:Metabolite {{ Exposome_Explorer_ID:"MicrobialMetabolite_"+line["id"] }})
+            MATCH (mm:Metabolite {{ Exposome_Explorer_ID:"Component_"+line["component_id"] }})
             SET mm.Publication_ID = line.publication_id, mm.Component_ID = line.component_id, mm.Antibiotic = line.antibiotic,
                 mm.Identification_Method = line.identified_by, mm.Specimen_ID = line.specimen_id,
-                mm.Bacterial_Source = line.bacterial_source, mm.Substrate = line.substrate, mm.Organism = line.organism,
-                mm.Microbial_Metabolite = "True"
+                mm.Bacterial_Source = line.bacterial_source, mm.Substrate = line.substrate, mm.Organism = line.organism
         """)
 
-def add_publications(tx, filename):
+def annotate_publications(tx, filename):
     """
     Adds "Publication" nodes from Exposome-Explorer's publications.csv
 
@@ -480,21 +501,27 @@ def add_publications(tx, filename):
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
-            MERGE (p:Publication {{ Exposome_Explorer_ID:"Publication_"+line["id"] }})
-            SET p.Title = line.title, p.First_Author = line.author_first, p.Date = line.year,  p.Publication = line.journal, p.Volume = line.volume, p.Issue = line.issue,
-                p.Pages = line.Pages, p.PubMed_ID = line.pmid, p.Authors = line.authors, p.DOI = line.doi, p.Public = line.public, p.Metabolomics = line.metabolomics,
-                p.Intake_Count = line.intake_count, p.Intake_Value_Count = line.intake_value_count, p.Excretion_Count = line.excretion_count, p.Excretion_Value_Count = line.excretion_value_count,
-                p.Correlation_Value_Count = line.correlation_value_count, p.Reproducibility_Value_Count = line.reproducibility_value_count,
-                p.Metabolomic_Association_Count = line.metabolomic_association_count, p.Study_Design_Type = line.study_design_type, p.Full_Annotation = line.full_annotation,
-                p.Cancer_Association_Count = line.cancer_association_count, p.Displayed_Biomarker_Count = line.displayed_biomarker_count,
+            MATCH (p:Publication {{ Exposome_Explorer_ID:"Publication_"+line["id"] }})
+            SET p.Title = line.title, p.First_Author = line.author_first, p.Date = line.year,
+            p.Publication = line.journal, p.Volume = line.volume, p.Issue = line.issue,
+                p.Pages = line.Pages, p.PubMed_ID = line.pmid, p.Authors = line.authors,
+                p.DOI = line.doi, p.Public = line.public, p.Metabolomics = line.metabolomics,
+                p.Intake_Count = line.intake_count, p.Intake_Value_Count = line.intake_value_count,
+                p.Excretion_Count = line.excretion_count, p.Excretion_Value_Count = line.excretion_value_count,
+                p.Correlation_Value_Count = line.correlation_value_count,
+                p.Reproducibility_Value_Count = line.reproducibility_value_count,
+                p.Metabolomic_Association_Count = line.metabolomic_association_count,
+                p.Study_Design_Type = line.study_design_type, p.Full_Annotation = line.full_annotation,
+                p.Cancer_Association_Count = line.cancer_association_count,
+                p.Displayed_Biomarker_Count = line.displayed_biomarker_count,
                 p.Microbial_Metabolite_Identification_Count = line.microbial_metabolite_identification_count
         """)
 
-def add_reproducibilities(tx, filename):
+def annotate_reproducibilities(tx, filename):
     """
     Adds "Reproducibility" nodes from Exposome-Explorer's reproducibilities.csv
     These represent the conditions under which a given study/measurement was carried
@@ -504,21 +531,21 @@ def add_reproducibilities(tx, filename):
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
-            MERGE (r:Reproducibility {{ Exposome_Explorer_ID:"Reproducibility_"+line["id"] }})
-            SET r.Initial_ID = line.initial_id, r.ICC = line.icc, r.ICC_Confidence_Interval_95_Lower = line.icc_confidence_interval_95_lower,
-                r.ICC_Confidence_Interval_95_Upper = line.ICC_Confidence_Interval_95_Upper, r.CV_Within = line.cv_within, r.CV_Between = line.cv_between,
+            MATCH (r:Reproducibility {{ Exposome_Explorer_ID:"Reproducibility_"+line["id"] }})
+            SET r.Initial_ID = line.initial_id, r.ICC = line.icc,
+                r.ICC_Confidence_Interval_95_Lower = line.icc_confidence_interval_95_lower,
+                r.ICC_Confidence_Interval_95_Upper = line.ICC_Confidence_Interval_95_Upper,
+                r.CV_Within = line.cv_within, r.CV_Between = line.cv_between,
                 r.Variance_Within = line.variance_within, r.Size = line.size
         """)
 
-
-
-def add_specimens(tx, filename):
+def annotate_specimens(tx, filename):
     """
-    Adds "BioSpecimen" nodes from Exposome-Explorer's specimens.csv
+    Annotates "BioSpecimen" nodes from Exposome-Explorer's specimens.csv whose ID is already present on the DB
     A biospecimen is a type of tissue where a measurement can originate, such as orine, csf fluid, etc
 
     Args:
@@ -526,40 +553,49 @@ def add_specimens(tx, filename):
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
-            MERGE (s:BioSpecimen {{ Exposome_Explorer_ID:"Specimen_"+line["id"] }})
-            SET s.Name = line.name, s.Specimen_Type = line.specimen_type, s.Displayed_Excretion_Concentration_Count = line.displayed_excretion_concentration_count,
-                s.Displayed_Biomarker_Count = line.displayed_biomarker_count, s.Displayed_Publication_Count = line.displayed_publication_count,
+            MATCH (s:BioSpecimen {{ Exposome_Explorer_ID:"Specimen_"+line["id"] }})
+            SET s.Name = line.name, s.Specimen_Type = line.specimen_type,
+                s.Displayed_Excretion_Concentration_Count = line.displayed_excretion_concentration_count,
+                s.Displayed_Biomarker_Count = line.displayed_biomarker_count,
+                s.Displayed_Publication_Count = line.displayed_publication_count,
                 s.Displayed_Reproducibility_Count = line.displayed_reproducibility_count,
                 s.Displayed_Excretions_Correlated_with_Intake_Count = line.displayed_excretions_correlated_with_intake_count,
                 s.Displayed_Excretions_Associated_with_Intake_Count = line.displayed_excretions_associated_with_intake_count,
                 s.Displayed_Cancer_Association_Count = line.displayed_cancer_association_count
         """)
 
-def add_subjects(tx, filename):
+def annotate_subjects(tx, filename):
     """
-    Adds "Subject" nodes from Exposome-Explorer's subjects.csv
+    Annotates "Subject" nodes from Exposome-Explorer's subjects.csv whose ID is already present on the DB
 
     Args:
         tx          (neo4j.work.simple.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///subjects.csv') AS line
-            MERGE (su:Subject {{ Exposome_Explorer_ID:"Subject_"+line["id"] }})
-            SET su.Name = line.name, su.Description = line.description, su.Health_Condition = line.health_condition, su.Country = line.country, su.Ethnicity = line.ethny,
-                su.Gender = line.gender, su.Female_Proportion = line.female_proportion, su.Size = line.size, su.Age_Mean = line.age_mean, su.Age_Min = line.age_min,
-                su.Age_Max = line.age_max, su.Age_Median = line.age_median, su.Age_SD = line.age_sd, su.Height_Mean = line.height_mean, su.Height_Min = line.height_min,
-                su.Height_Max = line.height_max, su.Height_Median = line.height_median, su.Height_SD = line.height_sd, su.Weight_Mean = line.weight_mean, su.Weight_Min = line.weight_min,
-                su.Weight_Max = line.weight_max, su.Weight_Median = line.weight_median, su.Weight_SD = line.weight_sd, su.BMI_Mean = line.bmi_mean, su.BMI_Min = line.bmi_min,
-                su.BMI_Max = line.bmi_max, su.BMI_Median = line.bmi_median, su.BMI_SD = line.bmi_sd, su.Publication_ID = line.publication_id, su.Ancestry = line.ancestry,
-                su.Supplement_Exclusion = line.supplement_exclusion, su.Smoker_Proportion = line.smoker_proportion, su.Cohort_ID = line.cohort_id,
+            MATCH (su:Subject {{ Exposome_Explorer_ID:"Subject_"+line["id"] }})
+            SET su.Name = line.name, su.Description = line.description, su.Health_Condition = line.health_condition,
+                su.Country = line.country, su.Ethnicity = line.ethny,
+                su.Gender = line.gender, su.Female_Proportion = line.female_proportion, su.Size = line.size,
+                su.Age_Mean = line.age_mean, su.Age_Min = line.age_min,
+                su.Age_Max = line.age_max, su.Age_Median = line.age_median, su.Age_SD = line.age_sd,
+                su.Height_Mean = line.height_mean, su.Height_Min = line.height_min,
+                su.Height_Max = line.height_max, su.Height_Median = line.height_median,
+                su.Height_SD = line.height_sd, su.Weight_Mean = line.weight_mean, su.Weight_Min = line.weight_min,
+                su.Weight_Max = line.weight_max, su.Weight_Median = line.weight_median,
+                su.Weight_SD = line.weight_sd, su.BMI_Mean = line.bmi_mean, su.BMI_Min = line.bmi_min,
+                su.BMI_Max = line.bmi_max, su.BMI_Median = line.bmi_median, su.BMI_SD = line.bmi_sd,
+                su.Publication_ID = line.publication_id, su.Ancestry = line.ancestry,
+                su.Supplement_Exclusion = line.supplement_exclusion,
+                su.Smoker_Proportion = line.smoker_proportion, su.Cohort_ID = line.cohort_id,
                 su.Nb_of_Cases = line.nb_of_cases, su.Nb_of_Controls = line.nb_of_controls
         """)
 
@@ -593,7 +629,7 @@ def remove_cross_properties(tx):
         tx          (neo4j.work.simple.Session): The session under which the driver is running
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         MATCH (n)
@@ -618,42 +654,76 @@ def build_from_file(databasepath, Neo4JImportPath, driver, keep_counts_and_displ
     Returns:
         This function modifies the Neo4J Database as desired, but does not produce any particular return.
 
-    .. NOTE: This wont work if a "Component" (Metabolite) node is not already present; when building the database,
-             either full or by parts, you should import the respective Components first
-
+    .. NOTE:: This wont work if a "Component" (Metabolite) node is not already present; when building the database,
+        either full or by parts, you should import the respective Components first
+    .. WARNING:: Due to the script's design, only nodes which have a connection to nodes previously present
+        on the database will be imported. This is on purpose: unconnected nodes don't mean much in a Graph DataBase
     """
+    # Set the databasepath to be an absolute path
+    databasepath = os.path.abspath(databasepath)
+
     if keep_counts_and_displayeds == False:
-        remove_counts_and_displayeds(f"{os.path.abspath(databasepath)}/measurements.csv", f"{Neo4JImportPath}/measurements.csv")
-        remove_counts_and_displayeds(f"{os.path.abspath(databasepath)}/samples.csv", f"{Neo4JImportPath}/samples.csv")
-        remove_counts_and_displayeds(f"{os.path.abspath(databasepath)}/experimental_methods.csv", f"{Neo4JImportPath}/experimental_methods.csv")
-        remove_counts_and_displayeds(f"{os.path.abspath(databasepath)}/units.csv", f"{Neo4JImportPath}/units.csv")
-        remove_counts_and_displayeds(f"{os.path.abspath(databasepath)}/reproducibilities.csv", f"{Neo4JImportPath}/reproducibilities.csv")
-        remove_counts_and_displayeds(f"{os.path.abspath(databasepath)}/subjects.csv", f"{Neo4JImportPath}/subjects.csv")
-        remove_counts_and_displayeds(f"{os.path.abspath(databasepath)}/microbial_metabolite_identifications.csv", f"{Neo4JImportPath}/microbial_metabolites.csv")
-        remove_counts_and_displayeds(f"{os.path.abspath(databasepath)}/cancer_associations.csv", f"{Neo4JImportPath}/cancer_associations.csv")
-        remove_counts_and_displayeds(f"{os.path.abspath(databasepath)}/metabolomic_associations.csv", f"{Neo4JImportPath}/metabolomic_associations.csv")
-        remove_counts_and_displayeds(f"{os.path.abspath(databasepath)}/correlations.csv", f"{Neo4JImportPath}/correlations.csv")
-        remove_counts_and_displayeds(f"{os.path.abspath(databasepath)}/cancers.csv", f"{Neo4JImportPath}/cancers.csv")
-        remove_counts_and_displayeds(f"{os.path.abspath(databasepath)}/cohorts.csv", f"{Neo4JImportPath}/cohorts.csv")
-        remove_counts_and_displayeds(f"{os.path.abspath(databasepath)}/publications.csv", f"{Neo4JImportPath}/publications.csv")
-        remove_counts_and_displayeds(f"{os.path.abspath(databasepath)}/specimens.csv", f"{Neo4JImportPath}/specimens.csv")
-        remove_counts_and_displayeds(f"{os.path.abspath(databasepath)}/subjects.csv", f"{Neo4JImportPath}/subjects.csv")
+        remove_counts_and_displayeds(f"{databasepath}/measurements.csv",
+                                     f"{Neo4JImportPath}/measurements.csv")
+        remove_counts_and_displayeds(f"{databasepath}/samples.csv",
+                                     f"{Neo4JImportPath}/samples.csv")
+        remove_counts_and_displayeds(f"{databasepath}/experimental_methods.csv",
+                                     f"{Neo4JImportPath}/experimental_methods.csv")
+        remove_counts_and_displayeds(f"{databasepath}/units.csv",
+                                     f"{Neo4JImportPath}/units.csv")
+        remove_counts_and_displayeds(f"{databasepath}/reproducibilities.csv",
+                                     f"{Neo4JImportPath}/reproducibilities.csv")
+        remove_counts_and_displayeds(f"{databasepath}/subjects.csv",
+                                     f"{Neo4JImportPath}/subjects.csv")
+        remove_counts_and_displayeds(f"{databasepath}/microbial_metabolite_identifications.csv",
+                                     f"{Neo4JImportPath}/microbial_metabolites.csv")
+        remove_counts_and_displayeds(f"{databasepath}/cancer_associations.csv",
+                                     f"{Neo4JImportPath}/cancer_associations.csv")
+        remove_counts_and_displayeds(f"{databasepath}/metabolomic_associations.csv",
+                                     f"{Neo4JImportPath}/metabolomic_associations.csv")
+        remove_counts_and_displayeds(f"{databasepath}/correlations.csv",
+                                     f"{Neo4JImportPath}/correlations.csv")
+        remove_counts_and_displayeds(f"{databasepath}/cancers.csv",
+                                     f"{Neo4JImportPath}/cancers.csv")
+        remove_counts_and_displayeds(f"{databasepath}/cohorts.csv",
+                                     f"{Neo4JImportPath}/cohorts.csv")
+        remove_counts_and_displayeds(f"{databasepath}/publications.csv",
+                                     f"{Neo4JImportPath}/publications.csv")
+        remove_counts_and_displayeds(f"{databasepath}/specimens.csv",
+                                     f"{Neo4JImportPath}/specimens.csv")
+        remove_counts_and_displayeds(f"{databasepath}/subjects.csv",
+                                     f"{Neo4JImportPath}/subjects.csv")
     else:
-        shutil.copyfile(f"{os.path.abspath(databasepath)}/measurements.csv", f"{Neo4JImportPath}/measurements.csv")
-        shutil.copyfile(f"{os.path.abspath(databasepath)}/samples.csv", f"{Neo4JImportPath}/samples.csv")
-        shutil.copyfile(f"{os.path.abspath(databasepath)}/experimental_methods.csv", f"{Neo4JImportPath}/experimental_methods.csv")
-        shutil.copyfile(f"{os.path.abspath(databasepath)}/units.csv", f"{Neo4JImportPath}/units.csv")
-        shutil.copyfile(f"{os.path.abspath(databasepath)}/reproducibilities.csv", f"{Neo4JImportPath}/reproducibilities.csv")
-        shutil.copyfile(f"{os.path.abspath(databasepath)}/subjects.csv", f"{Neo4JImportPath}/subjects.csv")
-        shutil.copyfile(f"{os.path.abspath(databasepath)}/microbial_metabolite_identifications.csv", f"{Neo4JImportPath}/microbial_metabolites.csv")
-        shutil.copyfile(f"{os.path.abspath(databasepath)}/cancer_associations.csv", f"{Neo4JImportPath}/cancer_associations.csv")
-        shutil.copyfile(f"{os.path.abspath(databasepath)}/metabolomic_associations.csv", f"{Neo4JImportPath}/metabolomic_associations.csv")
-        shutil.copyfile(f"{os.path.abspath(databasepath)}/correlations.csv", f"{Neo4JImportPath}/correlations.csv")
-        shutil.copyfile(f"{os.path.abspath(databasepath)}/cancers.csv", f"{Neo4JImportPath}/cancers.csv")
-        shutil.copyfile(f"{os.path.abspath(databasepath)}/cohorts.csv", f"{Neo4JImportPath}/cohorts.csv")
-        shutil.copyfile(f"{os.path.abspath(databasepath)}/publications.csv", f"{Neo4JImportPath}/publications.csv")
-        shutil.copyfile(f"{os.path.abspath(databasepath)}/specimens.csv", f"{Neo4JImportPath}/specimens.csv")
-        shutil.copyfile(f"{os.path.abspath(databasepath)}/subjects.csv", f"{Neo4JImportPath}/subjects.csv")
+        shutil.copyfile(f"{databasepath}/measurements.csv",
+                        f"{Neo4JImportPath}/measurements.csv")
+        shutil.copyfile(f"{databasepath}/samples.csv",
+                        f"{Neo4JImportPath}/samples.csv")
+        shutil.copyfile(f"{databasepath}/experimental_methods.csv",
+                        f"{Neo4JImportPath}/experimental_methods.csv")
+        shutil.copyfile(f"{databasepath}/units.csv",
+                        f"{Neo4JImportPath}/units.csv")
+        shutil.copyfile(f"{databasepath}/reproducibilities.csv",
+                        f"{Neo4JImportPath}/reproducibilities.csv")
+        shutil.copyfile(f"{databasepath}/subjects.csv",
+                        f"{Neo4JImportPath}/subjects.csv")
+        shutil.copyfile(f"{databasepath}/microbial_metabolite_identifications.csv",
+                        f"{Neo4JImportPath}/microbial_metabolites.csv")
+        shutil.copyfile(f"{databasepath}/cancer_associations.csv",
+                        f"{Neo4JImportPath}/cancer_associations.csv")
+        shutil.copyfile(f"{databasepath}/metabolomic_associations.csv",
+                        f"{Neo4JImportPath}/metabolomic_associations.csv")
+        shutil.copyfile(f"{databasepath}/correlations.csv",
+                        f"{Neo4JImportPath}/correlations.csv")
+        shutil.copyfile(f"{databasepath}/cancers.csv",
+                        f"{Neo4JImportPath}/cancers.csv")
+        shutil.copyfile(f"{databasepath}/cohorts.csv",
+                        f"{Neo4JImportPath}/cohorts.csv")
+        shutil.copyfile(f"{databasepath}/publications.csv",
+                        f"{Neo4JImportPath}/publications.csv")
+        shutil.copyfile(f"{databasepath}/specimens.csv",
+                        f"{Neo4JImportPath}/specimens.csv")
+        shutil.copyfile(f"{databasepath}/subjects.csv",
+                        f"{Neo4JImportPath}/subjects.csv")
 
     # Fist, we build the "scaffolding" - the nodes we will annotate later on
     with driver.session() as session:
@@ -661,25 +731,27 @@ def build_from_file(databasepath, Neo4JImportPath, driver, keep_counts_and_displ
         session.execute_write(add_reproducibilities, "reproducibilities.csv")
         session.execute_write(add_samples, "samples.csv")
         session.execute_write(add_subjects, "subjects.csv")
-        session.execute_write(add_microbial_metabolite_identifications, "microbial_metabolites.csv")
+        session.execute_write(add_microbial_metabolite_identifications,
+                              "microbial_metabolites.csv")
         session.execute_write(add_cancer_associations, "cancer_associations.csv")
-        session.execute_write(add_metabolomic_associations, "metabolomic_associations.csv")
+        session.execute_write(add_metabolomic_associations,
+                              "metabolomic_associations.csv")
         session.execute_write(add_correlations, "correlations.csv")
 
     # Now, we annotate those metabolites
     with driver.session() as session:
-        session.execute_write(add_measurements, "measurements.csv")
-        session.execute_write(add_samples, "samples.csv")
-        session.execute_write(add_experimental_methods, "experimental_methods.csv")
-        session.execute_write(add_units, "units.csv")
-        session.execute_write(add_auto_units, "units.csv")
-        session.execute_write(add_cancers, "cancers.csv")
-        session.execute_write(add_cohorts, "cohorts.csv")
-        session.execute_write(add_microbial_metabolite_info, "microbial_metabolites.csv")
-        session.execute_write(add_publications, "publications.csv")
-        session.execute_write(add_reproducibilities, "reproducibilities.csv")
-        session.execute_write(add_specimens, "specimens.csv")
-        session.execute_write(add_subjects, "subjects.csv")
+        session.execute_write(annotate_measurements, "measurements.csv")
+        session.execute_write(annotate_samples, "samples.csv")
+        session.execute_write(annotate_experimental_methods, "experimental_methods.csv")
+        session.execute_write(annotate_units, "units.csv")
+        session.execute_write(annotate_auto_units, "units.csv")
+        session.execute_write(annotate_cancers, "cancers.csv")
+        session.execute_write(annotate_cohorts, "cohorts.csv")
+        session.execute_write(annotate_microbial_metabolite_info, "microbial_metabolites.csv")
+        session.execute_write(annotate_publications, "publications.csv")
+        session.execute_write(annotate_reproducibilities, "reproducibilities.csv")
+        session.execute_write(annotate_specimens, "specimens.csv")
+        session.execute_write(annotate_subjects, "subjects.csv")
 
     # Finally, we remove the cross-properties that are of no use anymore (this is optional, of course)
     if keep_cross_properties == False:

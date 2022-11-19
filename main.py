@@ -74,8 +74,10 @@ def args_parser():
     .. NOTE:: By using :obj:`argparse.const` instead of :obj:`argparse.default`, the check_file function will check ""
         (the current dir, always exists) if the arg is not provided, not breaking the function; if it is, it checks it.
     """
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-c", "--check_arguments", action="store_true",
+    parser = argparse.ArgumentParser(
+        description = "A python utility to study and analyse cancer-associated metabolites "
+                      "using knowledge graphs ")
+    parser.add_argument("-c", "--check_args", action="store_true",
                         help="Checks if the rest of the arguments are OK, then exits")
     parser.add_argument("-n", "--noindex", action="store_true",
                         help="Runs the program checking each file one-by-one, instead of using a JSON index")
@@ -110,7 +112,7 @@ def args_parser():
         parser.print_help(sys.stderr)
         sys.exit(1)
 
-    if "--check_arguments" in sys.argv:
+    if "--check_args" in sys.argv:
         parser.parse_args()
         exit(0)
 
@@ -517,7 +519,7 @@ def import_based_on_index(databasefolder, Neo4JImportPath, driver, similarity, c
             # exist if using an index generated with a different number of DBs / DB version
             if os.path.isfile(filepath):
                 build_from_file(filepath, Neo4JImportPath, driver)
-                if i % 10 == 0 and i > 1: logging.info(f"Importing file: {i} / {len(all_files)}")
+                if i % 150 == 0 and i > 1: logging.info(f"Importing file: {i} / {len(all_files)}")
             i += 1; bar() # And advance, of course
 
 def link_to_original_data(tx, item_type, item, import_based_on):
@@ -682,10 +684,7 @@ def main():
 
         print(f"Annotating Metabolite {index+1}/{len(raw_database)} using Web DataBases...")
 
-        exit()
-
-        # WARNING DO IT TWICE TO PREVENT USELESS DEMANDS TO HEAVY INTERNET USAGE
-        # TODO FIX PURGE: REMOVE UNCONNECTED NODES, VER QUE HACE QUE LOS NODES SE UNCONNECTEN
+        # We first purge the database to prevent useless nodes from supercharging the web queries
         misc.purge_database(driver)
 
         # Finally, we apply some functions that, although they could be run each time,
@@ -697,7 +696,7 @@ def main():
         #     # Add their MeSH and MetaNetX IDs and synonyms
         #     add_mesh_and_metanetx(driver)
 
-        # And purge any duplicates
+        # And purge any duplicates once again
         misc.purge_database(driver)
 
         # And save it in GraphML format

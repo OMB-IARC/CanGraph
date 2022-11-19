@@ -262,25 +262,28 @@ def add_taxonomy(tx, filename):
 
             [X IN my_nodes._children WHERE X._type = "alternative-parent"] AS alternative_parents,
             [X IN my_nodes._children WHERE X._type = "substituents"] AS substituents,
-            d
+            d as m
 
+                // First, we create the Taxonomy nodes independently
 
         FOREACH(ignoreMe IN CASE WHEN kingdom IS NOT null THEN [1] ELSE [] END |
-            MERGE (k:Taxonomy {{ Type:"Kingdom", Name:kingdom }})
+            MERGE (k:Taxonomy {{Type:"Kingdom", Name:kingdom}})
         )
         FOREACH(ignoreMe IN CASE WHEN super_class IS NOT null THEN [1] ELSE [] END |
-            MERGE (sp:Taxonomy {{ Type:"Super Class", Name:super_class }})
+            MERGE (sp:Taxonomy {{Type:"Super Class", Name:super_class}})
         )
         FOREACH(ignoreMe IN CASE WHEN class IS NOT null THEN [1] ELSE [] END |
-            MERGE (c:Taxonomy {{ Type:"Class", Name:class }})
+            MERGE (c:Taxonomy {{Type:"Class", Name:class}})
         )
         FOREACH(ignoreMe IN CASE WHEN sub_class IS NOT null THEN [1] ELSE [] END |
-            MERGE (sb:Taxonomy {{ Type:"Sub Class", Name:sub_class }})
+            MERGE (sb:Taxonomy {{Type:"Sub Class", Name:sub_class}})
         )
         FOREACH(ignoreMe IN CASE WHEN direct_parent IS NOT null THEN [1] ELSE [] END |
-            MERGE (dp:Taxonomy {{ Name:direct_parent }})
-            MERGE (d)-[:PART_OF_CLADE]->(dp)
+            MERGE (dp:Taxonomy {{Name:direct_parent}})
+            MERGE (m)-[:PART_OF_CLADE]->(dp)
         )
+
+        // Then, we add a hierarchy connecting the nodes as much as possible between them
 
         FOREACH(ignoreMe IN CASE WHEN kingdom IS NOT null AND super_class IS NOT null THEN [1] ELSE [] END |
             MERGE (k:Taxonomy {{ Type:"Kingdom", Name:kingdom }})
@@ -298,10 +301,41 @@ def add_taxonomy(tx, filename):
             MERGE (sb)-[:PART_OF_CLADE]->(c)
         )
 
+        // And we connect the hierarchy to the main node just once
+
+        FOREACH(ignoreMe IN CASE WHEN sub_class IS NOT null THEN [1] ELSE [] END |
+            MERGE (ta:Taxonomy {{ Name:sub_class }})
+            MERGE (m)-[:PART_OF_CLADE]->(ta)
+        )
+        FOREACH(ignoreMe IN CASE WHEN class IS NOT null
+                AND sub_class IS null THEN [1] ELSE [] END |
+            MERGE (ta:Taxonomy {{ Name:class }})
+            MERGE (m)-[:PART_OF_CLADE]->(ta)
+        )
+        FOREACH(ignoreMe IN CASE WHEN super_class IS NOT null
+                AND sub_class IS null AND class IS null THEN [1] ELSE [] END |
+            MERGE (ta:Taxonomy {{ Name:super_class }})
+            MERGE (m)-[:PART_OF_CLADE]->(ta)
+        )
+        FOREACH(ignoreMe IN CASE WHEN kingdom IS NOT null AND sub_class IS null
+                AND class IS null AND super_class IS null  THEN [1] ELSE [] END |
+            MERGE (ta:Taxonomy {{ Name:kingdom }})
+            MERGE (m)-[:PART_OF_CLADE]->(ta)
+        )
+
+        // We add the alternative_parents in the appropriate format
+
         FOREACH(element in alternative_parents|
             MERGE (t:Taxonomy {{Name:element._text}})
-            MERGE (d)-[:PART_OF_CLADE]->(t)
+            MERGE (m)-[:PART_OF_CLADE]->(t)
         )
+
+        // If any Taxonomy is left without a connection, we connect it to the main graph
+        // Beware: if any disconnected taxonomy is left from before, this could lead to errors
+
+        WITH m, alternative_parents
+        MATCH (tt:Taxonomy) WHERE NOT (tt)--()
+        MERGE (m)-[:PART_OF_CLADE]->(tt)
         """)
 
 def add_products(tx, filename):

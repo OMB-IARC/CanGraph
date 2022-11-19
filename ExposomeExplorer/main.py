@@ -48,7 +48,7 @@ def main(args):
         print("Cleaned DataBase")
         bar()
 
-        shutil.copyfile(f"{os.path.abspath(sys.argv[4])}components.csv", f"{Neo4JImportPath}/components.csv")
+        shutil.copyfile(f"{os.path.abspath(sys.argv[4])}/components.csv", f"{Neo4JImportPath}/components.csv")
 
         with driver.session() as session:
                 session.execute_write(ExposomeExplorerDatabase.add_components, "components.csv")
