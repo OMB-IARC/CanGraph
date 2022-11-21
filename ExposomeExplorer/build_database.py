@@ -52,7 +52,7 @@ def add_components(tx, filename):
             MERGE (c:Metabolite {{ Exposome_Explorer_ID:"Component_"+line["id"] }})
             SET c.Name = line.name, c.Description = line.description,
                 c.Alternative_Names = replace(line.alternative_names, ";", ","), c.Level = line.level,
-                c.CAS_Number = line.cas_number, c.PubChem_ID = line.pubchem_compound_id, c.ChEBI_ID = line.chebi_id,
+                c.CAS_Number = line.cas_number, c.PubChem_ID = line.pubchem_compound_id, c.ChEBI_ID = toInteger(line.chebi_id),
                 c.FooDB_Compound_ID = line.foodb_compound_id, c.HMDB_ID = line.hmdb_id,
                 c.FooDB_Food_ID = line.foodb_food_id,
                 c.SMILES = line.moldb_smiles, c.Formula = line.moldb_formula,
@@ -637,7 +637,8 @@ def remove_cross_properties(tx):
                n.Converted_to_ID, n.Publication_ID, n.Component_ID, n.Specimen_ID, n.Initial_ID, n.Cohort_ID
         """)
 
-def build_from_file(databasepath, Neo4JImportPath, driver, keep_counts_and_displayeds = True, keep_cross_properties = False):
+def build_from_file(databasepath, Neo4JImportPath, driver, bar = None,
+                    do_all = False, keep_counts_and_displayeds = True, keep_cross_properties = False):
     """
     A function able to build a portion of the Exposome-Explorer database in graph format, provided that at least one "Component" (Metabolite)
     node is present in said database. It works by using that node as an starting point from which to search in the rest of the Exposome_Explorer
@@ -647,6 +648,8 @@ def build_from_file(databasepath, Neo4JImportPath, driver, keep_counts_and_displ
         databasepath (str): The path to the database where all Exposome-Explorer CSVs are stored
         Neo4JImportPath (str): The path from which Neo4J is importing data
         driver (neo4j.Driver): Neo4J's Bolt Driver currently in use
+        bar: The bar() object from alive_bar, in case we want the function to run with do_all=True
+        do_all (bool): True if importing the whole database; False if just importing a part of it
         keep_counts_and_displayeds (bool): Whether to keep the properties ending with ```_count``` &  ```displayed_``` that, although present
                                            in the original DB, might be considered not useful for us.
         keep_cross_properties (bool): Whether to keep the properties used to cross-reference in the original Neo4J database.
@@ -728,30 +731,52 @@ def build_from_file(databasepath, Neo4JImportPath, driver, keep_counts_and_displ
     # Fist, we build the "scaffolding" - the nodes we will annotate later on
     with driver.session() as session:
         session.execute_write(add_measurements_stuff, "measurements.csv")
+        if do_all: bar()
         session.execute_write(add_reproducibilities, "reproducibilities.csv")
+        if do_all: bar()
         session.execute_write(add_samples, "samples.csv")
+        if do_all: bar()
         session.execute_write(add_subjects, "subjects.csv")
+        if do_all: bar()
         session.execute_write(add_microbial_metabolite_identifications,
                               "microbial_metabolites.csv")
+        if do_all: bar()
         session.execute_write(add_cancer_associations, "cancer_associations.csv")
+        if do_all: bar()
         session.execute_write(add_metabolomic_associations,
                               "metabolomic_associations.csv")
+        if do_all: bar()
         session.execute_write(add_correlations, "correlations.csv")
+        if do_all: bar()
 
     # Now, we annotate those metabolites
     with driver.session() as session:
         session.execute_write(annotate_measurements, "measurements.csv")
+        if do_all: bar()
         session.execute_write(annotate_samples, "samples.csv")
-        session.execute_write(annotate_experimental_methods, "experimental_methods.csv")
+        if do_all: bar()
+        session.execute_write(annotate_experimental_methods,
+                              "experimental_methods.csv")
+        if do_all: bar()
         session.execute_write(annotate_units, "units.csv")
+        if do_all: bar()
         session.execute_write(annotate_auto_units, "units.csv")
+        if do_all: bar()
         session.execute_write(annotate_cancers, "cancers.csv")
+        if do_all: bar()
         session.execute_write(annotate_cohorts, "cohorts.csv")
-        session.execute_write(annotate_microbial_metabolite_info, "microbial_metabolites.csv")
+        if do_all: bar()
+        session.execute_write(annotate_microbial_metabolite_info,
+                              "microbial_metabolites.csv")
+        if do_all: bar()
         session.execute_write(annotate_publications, "publications.csv")
+        if do_all: bar()
         session.execute_write(annotate_reproducibilities, "reproducibilities.csv")
+        if do_all: bar()
         session.execute_write(annotate_specimens, "specimens.csv")
+        if do_all: bar()
         session.execute_write(annotate_subjects, "subjects.csv")
+        if do_all: bar()
 
     # Finally, we remove the cross-properties that are of no use anymore (this is optional, of course)
     if keep_cross_properties == False:

@@ -142,7 +142,7 @@ def kill_neo4j(neo4j_home = "neo4j"):
     if neo4j_dead == True: sleep_with_counter(5, message = "Killing existing Neo4j sessions...")
 
 
-def repeat_transaction(tx, num_retries, driver, **kwargs):
+def repeat_transaction(tx, driver, num_retries = 10, **kwargs):
     """
     A function that repeats transactions whenever an error is found.
     This may make an incorrect script unnecessarily repeat; however, since the error is printed,
@@ -150,8 +150,8 @@ def repeat_transaction(tx, num_retries, driver, **kwargs):
 
     Args:
         tx (neo4j.work.simple.Session): The session under which the driver is running
-        num_retries (int): The number of times that we wish the transaction to be retried
         driver (neo4j.Driver): Neo4J's Bolt Driver currently in use
+        num_retries (int): The number of times that we wish the transaction to be retried
         **kwargs: Any number of arbitrary keyword arguments
 
     Raises:
@@ -165,13 +165,16 @@ def repeat_transaction(tx, num_retries, driver, **kwargs):
     for attempt in range(num_retries):
         try:
             with driver.session() as session:
-                session.execute_write(tx, **kwargs)
+                session.run(tx, **kwargs)
             if attempt > 0: print(f"Error solved on attempt #{attempt}")
             break
         except Exception as error:
             if attempt < (num_retries - 1):
                 print(f"An error with error code: {error.code} was found.")
                 print(f"Retrying... ({attempt + 1}/{num_retries})")
+            elif error.code == "Neo.ClientError.Procedure.ProcedureCallFailed":
+                print("Falied to invoke a procedure, most likely due to a read time out")
+                print("Skipping this function...")
             else:
                 raise Exception(f"{num_retries} consecutive attempts were made on a function. Aborting...")
 
@@ -193,10 +196,13 @@ def call_db_schema_visualization(tx):
 
 def clean_database():
     """
-    A CYPHER query that gets all the nodes in a Neo4J database and removes them, in transactions of 1000 rows to alleviate memory load
+    A CYPHER query that gets all the nodes in a Neo4J database and
+    removes them, in transactions of 100 rows to alleviate memory load
 
     Returns:
-        str: A text chain that represents the CYPHER query with the desired output. This can be run using: :obj:`neo4j.Session.run`
+        str:
+            A text chain that represents the CYPHER query with the desired
+            output. This can be run using: :obj:`neo4j.Session.run`
 
     .. NOTE:: This is an **autocommit transaction**. This means that, in order to not keep data in memory
         (and make running it with a huge amount of data) more efficient, you will need to add ```:auto ```
@@ -206,7 +212,7 @@ def clean_database():
         MATCH (n)
         CALL { WITH n
         DETACH DELETE n
-        } IN TRANSACTIONS OF 1000 ROWS
+        } IN TRANSACTIONS OF 100 ROWS
         """
 
 def create_n10s_graphconfig(tx):
@@ -263,7 +269,9 @@ def remove_ExternalEquivalent(tx):
         tx          (neo4j.work.simple.Session): The session under which the driver is running
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.work.result.Result:
+            A Neo4J connexion to the database that
+            modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run("""
         MATCH (e:ExternalEquivalent)
@@ -278,7 +286,9 @@ def remove_duplicate_relationships(tx):
         tx          (neo4j.work.simple.Session): The session under which the driver is running
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.work.result.Result:
+            A Neo4J connexion to the database that
+            modifies it according to the CYPHER statement contained in the function.
 
     .. NOTE:: Only deletes DIRECTED relationships between THE SAME nodes, combining their properties
 
@@ -293,7 +303,7 @@ def remove_duplicate_relationships(tx):
             RETURN rel
         """)
 
-def remove_duplicate_nodes(tx, node_types, node_property, optional_condition="", more_props=""):
+def merge_duplicate_nodes(tx, node_types, node_property, optional_condition="", more_props=""):
     """
     Removes any two nodes of any given ```node_type``` with the same ```condition```.
 
@@ -316,8 +326,9 @@ def remove_duplicate_nodes(tx, node_types, node_property, optional_condition="",
     if not more_props:
         condition_any = (f"AND ( ANY(x IN n.{node_property} "
                          f"WHERE x IN m.{node_property}) )")
-        more_props = f"head(COLLECT([n, m])) AS alt_thing"
+        more_props = f"HEAD(COLLECT(DISTINCT [n, m])) AS alt_thing"
     else: condition_any = ""
+
     return tx.run(f"""
         MATCH (n), (m)
         WHERE
@@ -327,12 +338,13 @@ def remove_duplicate_nodes(tx, node_types, node_property, optional_condition="",
 
             AND (n.{node_property} IS NOT null)
             AND (m.{node_property} IS NOT null)
+            AND ID(n) < ID(m)
 
             {condition_any}
 
             {optional_condition}
 
-        WITH {more_props}, DISTINCT(HEAD(COLLECT([n, m]))) AS ns
+        WITH {more_props}, HEAD(COLLECT(DISTINCT [n, m])) AS ns
         WHERE size(ns) > 1
             CALL apoc.refactor.mergeNodes(ns,
                 {{properties:"combine", mergeRels:true}})
@@ -340,7 +352,7 @@ def remove_duplicate_nodes(tx, node_types, node_property, optional_condition="",
         RETURN node
         """)
 
-def purge_database(driver):
+def purge_database(driver, method = ["merge", "delete"]):
     """
     A series of commands that purge a database, removing unnecessary, duplicated or empty nodes
     and merging those without required properties. This has been converted into a common function
@@ -348,73 +360,91 @@ def purge_database(driver):
 
      Args:
         driver (neo4j.Driver): Neo4J's Bolt Driver currently in use
+        method (list): The part of the function that we want to execute; if ["delete"], only call
+            queries that delete nodes; if ["merge"], only call those that merge; if both, do both
 
     Returns:
         This function modifies the Neo4J Database as desired, but does not produce any particular return.
 
     .. WARNING:: When modifying, take good care on how the keys names are written:
-        with :obj:`~CanGraph.miscelaneous.remove_duplicate_nodes`,
+        with :obj:`~CanGraph.miscelaneous.merge_duplicate_nodes`,
         sometimes, if a key is not present, all nodes will be merged!
     """
-    with driver.session() as session:
+    method = list(method)
+    session = driver.session()
+
+    if "merge" in method:
         # Fist, we purge Publications by PubMed_ID, using the abstract to merge those that have no PubMed_ID
-        session.execute_write(remove_duplicate_nodes, "n:Publication", "Pubmed_ID")
-        session.execute_write(remove_duplicate_nodes, "n:Publication", "Abstract", "AND (n.Pubmed_ID IS null)")
+        session.execute_write(merge_duplicate_nodes, "n:Publication", "Pubmed_ID")
+        session.execute_write(merge_duplicate_nodes, "n:Publication", "Abstract", "AND (n.Pubmed_ID IS null)")
 
         # Now, we work on Proteins/Metabolites/Drugs:
         # We merge Proteins by UniProt_ID, and, when there is none, by Name:
-        session.execute_write(remove_duplicate_nodes, "n:Protein", "UniProt_ID")
-        session.execute_write(remove_duplicate_nodes, "n:Protein", "Name", "AND (n.UniProt_ID IS null)")
+        session.execute_write(merge_duplicate_nodes, "n:Protein", "UniProt_ID")
+        session.execute_write(merge_duplicate_nodes, "n:Protein", "Name", "AND (n.UniProt_ID IS null)")
         # We merge by HMDB_ID, ChEBI_ID, Name, InChI and InChIKey (normally, they should be unique):
-        session.execute_write(remove_duplicate_nodes,
+        session.execute_write(merge_duplicate_nodes,
             "n:Protein OR n:Metabolite OR n:Drug OR n:OriginalMetabolite", "HMDB_ID")
-        session.execute_write(remove_duplicate_nodes,
+        session.execute_write(merge_duplicate_nodes,
             "n:Protein OR n:Metabolite OR n:Drug OR n:OriginalMetabolite", "ChEBI_ID")
-        session.execute_write(remove_duplicate_nodes,
+        session.execute_write(merge_duplicate_nodes,
             "n:Protein OR n:Metabolite OR n:Drug OR n:OriginalMetabolite", "Name")
-        session.execute_write(remove_duplicate_nodes,
+        session.execute_write(merge_duplicate_nodes,
             "n:Protein OR n:Metabolite OR n:Drug OR n:OriginalMetabolite", "InChI")
-        session.execute_write(remove_duplicate_nodes,
+        session.execute_write(merge_duplicate_nodes,
             "n:Protein OR n:Metabolite OR n:Drug OR n:OriginalMetabolite", "InChIKey")
-
-        # And those that do not match our Schema - Be careful with the \" character
-        session.run(""" MATCH (n:Metabolite)
-                        WHERE n.Microbial_Metabolite IS null
-                        AND (n.ChEBI_ID IS NULL OR n.ChEBI_ID = ""
-                             OR n.CAS_Number IS NULL OR n.CAS_Number = "")
-                        DETACH DELETE n""")
 
         # We also remove all non-unique Subjects. We do this by passing on all three parameters
         # this nodes may have to apoc.mergeNodes
         # .. NOTE:: This concerns only those nodes that DO NOT COME from Exposome_Explorer
-        session.execute_write(remove_duplicate_nodes, "n:Subject", "Age_Mean",
-                              more_props="n.Gender as gender, n.Information as inf",
-                              optional_condition="AND (n.Exposome_Explorer_ID IS null)")
+        session.execute_write(merge_duplicate_nodes, "n:Subject", "Age_Mean",
+                            more_props="n.Gender as gender, n.Information as inf",
+                            optional_condition="AND (n.Exposome_Explorer_ID IS null)")
 
-        # We can do the same for the different Dosages:
-        session.execute_write(remove_duplicate_nodes, "n:Dosage", "Form", more_props="n.Stength as str, n.Route as rt")
+        # We can do the same for the different Dosages; this has to be done manually
+        # because otherwise the database somehow crases (no idea why)
+        repeat_transaction("""MATCH (n:Dosage)
+                WITH n.Form as frm, n.Stength as str, n.Route as rt, COLLECT(n) AS ns
+                WHERE size(ns) > 1
+                    CALL apoc.refactor.mergeNodes(ns, {properties:"combine", mergeRels:True})
+                YIELD node RETURN node""", driver, 10)
 
         # For products, we merge all those with the same EMA_MA_Number or FDA_Application_Number to
         # try to minimize duplicates, although this is not the best approach
-        session.execute_write(remove_duplicate_nodes, "n:Product", "EMA_MA_Number")
-        session.execute_write(remove_duplicate_nodes, "n:Product", "FDA_Application_Number")
+        session.execute_write(merge_duplicate_nodes, "n:Product", "EMA_MA_Number")
+        session.execute_write(merge_duplicate_nodes, "n:Product", "FDA_Application_Number")
 
         # For CelularLocations and BioSpecimens, we merge those with the same Name:
-        session.execute_write(remove_duplicate_nodes, "n:CelularLocation", "Name")
-        session.execute_write(remove_duplicate_nodes, "n:BioSpecimen", "Name")
+        session.execute_write(merge_duplicate_nodes, "n:CelularLocation", "Name")
+        session.execute_write(merge_duplicate_nodes, "n:BioSpecimen", "Name")
 
-        # Finally, we delete all empty nodes. This shouldn't be created on the first place, but, in case anyone escapes, this makes the DB cleaner.
-        # .. NOTE:: In the case of Taxonomys, these "empty nodes" are actually created on purpose. Here, they are removed.
-        session.run("MATCH (n) WHERE size(keys(properties(n))) < 1 CALL { WITH n DETACH DELETE n } IN TRANSACTIONS OF 1000 ROWS")
-        # For Measurements and Sequences, 2 properties are the minimum, since they always have some boolean values
-        session.run("MATCH (m:Measurement) WHERE size(keys(properties(m))) < 2 DETACH DELETE m")
-        session.run("MATCH (s:Sequence) WHERE size(keys(properties(s))) < 2 DETACH DELETE s")
+    if "delete" in method:
+
+        # Finally, we delete all empty nodes. This shouldn't be created on the first place,
+        # but, in case anyone escapes, this makes the DB cleaner.
+        # .. NOTE:: In the case of Taxonomies, these "empty nodes" are
+        #       actually created on purpose. Here, they are removed.
+        repeat_transaction("MATCH (n) WHERE size(keys(properties(n))) < 1 CALL "
+                            "{ WITH n DETACH DELETE n } IN TRANSACTIONS OF 1000 ROWS", driver, 10)
+        # For Measurements and Sequences, 2 properties are the minimum, since they are always booleans
+        repeat_transaction("MATCH (m:Measurement) "
+                           "WHERE size(keys(properties(m))) < 2 DETACH DELETE m", driver, 10)
+        repeat_transaction("MATCH (s:Sequence) "
+                           "WHERE size(keys(properties(s))) < 2 DETACH DELETE s", driver, 10)
+
+        # And those that do not match our Schema - Be careful with the \" character
+        repeat_transaction(""" MATCH (n:Metabolite)
+                        WHERE (n.ChEBI_ID IS NULL OR n.ChEBI_ID = ""
+                             OR n.CAS_Number IS NULL OR n.CAS_Number = "")
+                        DETACH DELETE n""", driver, 10)
 
         # We will also remove all disconnected nodes (they give no useful information)
-        session.run("MATCH (n) WHERE NOT (n)--() DETACH DELETE n")
+        repeat_transaction("MATCH (n) WHERE NOT (n)--() DETACH DELETE n", driver, 10)
 
-        #At last, we may remove any duplicate relationships, which, since we have merged nodes, will surely be there:
-        session.execute_write(remove_duplicate_relationships)
+    #At last, we may remove any duplicate relationships, which, since we have merged nodes, will surely be there:
+    session.execute_write(remove_duplicate_relationships)
+
+    session.close()
 
 # ********* Work with Files ********* #
 
@@ -597,7 +627,8 @@ def download_and_unzip(url, folder):
     Returns:
         This function downloads and unzips the file in the desired folder, but does not produce any particular return.
 
-    .. seealso:: Code snippets for this function were taken from `Shyamal Vaderia's Github <https://svaderia.github.io/articles/downloading-and-unzipping-a-zipfile/>`_
+    .. seealso:: Code snippets for this function were taken from
+        `Shyamal Vaderia's Github <https://svaderia.github.io/articles/downloading-and-unzipping-a-zipfile/>`_
         and from `StackOverflow #32123394 <https://stackoverflow.com/questions/32123394/workflow-to-create-a-folder-if-it-doesnt-exist-already>`_
     """
     file_path = download(url, "/tmp")

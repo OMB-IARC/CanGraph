@@ -51,11 +51,12 @@ def main(args):
         shutil.copyfile(f"{os.path.abspath(sys.argv[4])}/components.csv", f"{Neo4JImportPath}/components.csv")
 
         with driver.session() as session:
-                session.execute_write(ExposomeExplorerDatabase.add_components, "components.csv")
+            session.execute_write(ExposomeExplorerDatabase.add_components, "components.csv")
         os.remove(f"{Neo4JImportPath}/components.csv")
 
         with driver.session() as session:
-            build_database.build_from_file( sys.argv[4], Neo4JImportPath, driver, False)
+            build_database.build_from_file(sys.argv[4], Neo4JImportPath, driver, bar,
+                                           do_all = True, keep_counts_and_displayeds = False)
 
         # At the end, purge the database
         misc.purge_database(driver)
@@ -63,7 +64,6 @@ def main(args):
         # And export it:
         with driver.session() as session:
             session.execute_write(misc.export_graphml, "graph.graphml")
-            bar()
 
     print(f"You can find the exported graph at {Neo4JImportPath}/graph.graphml")
     shutil.copyfile(f"{Neo4JImportPath}/graph.graphml", f"./graph.graphml")

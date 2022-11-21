@@ -1,0 +1,7 @@
+MonoisotopicMass,SMILES,InChIKey,Name,InChI,Identifier,ChEBI,MeSH
+245.1627082,CCC(C)C(=O)OC(CC([O-])=O)C[N+](C)(C)C,IHCPDBBYTYJYIL-UHFFFAOYSA-N,2-Methylbutyrylcarnitine,"InChI=1S/C12H23NO4/c1-6-9(2)12(16)17-10(7-11(14)15)8-13(3,4)5/h9-10H,6-8H2,1-5H3",HMDB0000378,CHEBI:73026,
+75.06841392,CC(O)CN,HXKKHQJGJAFBHI-UHFFFAOYSA-N,1-Amino-2-propanol,"InChI=1S/C3H9NO/c1-3(5)2-4/h3,5H,2,4H2,1H3",HMDB0012136,CHEBI:19030,
+,,,Hepatocellular Carcinoma;Cholic acid;Chenodeoxycholic acid;Hyocholic acid;Deoxycholic acid;Ursodeoxycholic acid;Glycocholic acid;Glycochenodeoxycholic acid;Glycodeoxycholic acid;Glycolithocholic acid;Glycoursodeoxycholic acid;Tauro-alfa-muricholic acid;Taurocholic acid;Taurochenodeoxycholic acid;Taurodeoxycholic acid;Tauroursodeoxycholic acid,,,,D006528
+,,,Colorectal Neoplasm;Tauro-alpha-muricholic acid;Cholic acid;Chenodeoxycholic acid;Hyocholic acid;Glycocholic acid;Taurocholic acid;Glycochenodeoxycholic acid;Taurochenodeoxycholic acid;Glycohyocholic acid;Taurohyocholic acid;Deoxycholic acid;Glycodeoxycholic acid;Taurodeoxycholic acid;Glycolithocholic acid;Ursodeoxycholic acid;Glycoursodeoxycholic acid;Tauroursodeoxycholic acid,,,,D015179
+,,,Hepatocellular Carcinoma,,,,D006528
+,,,Colorectal Neoplasm;,,,,D015179

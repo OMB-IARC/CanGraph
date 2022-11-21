@@ -60,22 +60,20 @@ def initial_cancer_discovery(tx):
         DETACH DELETE n
         """)
 
-def find_subclass_of_cancer(tx):
+def find_subclass_of_disease():
     """
-    A Neo4J Cypher Statment that queries wikidata for subclasses of "Cancer" nodes already
-    present on the Database. Since this are expected to only affect humans, this subclasses
+    A Neo4J Cypher Statment that queries wikidata for subclasses of "Disease" nodes already
+    present on the Database. Since these are expected to only affect humans, this subclasses
     should also, only affect humans
 
-    Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
-
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        str: A CYPHER query that modifies the DB according to the CYPHER statement contained in the function.
 
     .. NOTE:: We are forcing c.WikiData_ID to not be null or "". This is not necessary if we are just building the wikidata database,
         because there will always be a WikiData_ID, but it is useful in the rest of the cases
     """
-    return tx.run("""
+    return """
+        CALL {
         MATCH (c:Disease)
         WHERE c.WikiData_ID IS NOT NULL AND c.WikiData_ID <> ""
         WITH 'SELECT DISTINCT ?cancer ?cancer_name
@@ -98,24 +96,23 @@ def find_subclass_of_cancer(tx):
             s.WikiData_ID = split(row['cancer']['value'],'/')[-1]
 
         CREATE (s)-[:SUBCLASS_OF]->(c)
-        """)
+        } IN TRANSACTIONS OF 10 rows
+        """
 
-def find_instance_of_cancer(tx):
+def find_instance_of_disease():
     """
-    A Neo4J Cypher Statment that queries wikidata for instances of "Cancer" nodes already
-    present on the Database. Since this are expected to only affect humans, this subclasses
+    A Neo4J Cypher Statment that queries wikidata for instances of "Disease" nodes already
+    present on the Database. Since these are expected to only affect humans, this subclasses
     should also, only affect humans
 
-    Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
-
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        str: A CYPHER query that modifies the DB according to the CYPHER statement contained in the function.
 
     .. NOTE:: We are forcing c.WikiData_ID to not be null or "". This is not necessary if we are just building the wikidata database,
         because there will always be a WikiData_ID, but it is useful in the rest of the cases
     """
-    return tx.run("""
+    return """
+        CALL {
         MATCH (c:Disease)
         WHERE c.WikiData_ID IS NOT NULL AND c.WikiData_ID <> ""
         WITH 'SELECT DISTINCT ?cancer ?cancer_name
@@ -138,25 +135,26 @@ def find_instance_of_cancer(tx):
             i.WikiData_ID = split(row['cancer']['value'],'/')[-1]
 
         CREATE (i)-[:INSTANCE_OF]->(c)
-        """)
+        } IN TRANSACTIONS OF 10 rows
+        """
 
-def add_cancer_info(tx, number, **kwargs):
+def add_disease_info(number, **kwargs):
     """
-    Adds info to "Cancer" nodes for which its WikiData_ID ends in a given number. This way, only some of the nodes
-    are targeted, and the Java Machine does not run out of memory
+    Adds info to "Disease" nodes for which its WikiData_ID ends in a given number. This way, only some of the nodes
+    are targeted, and the Java Virtual Machine does not run out of memory
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
         number (int): From 0 to 9, the number under which the WikiData_IDs to process should ends.
             This allows us tho divide the work, although its not very elegant.
         **kwargs: Any number of arbitrary keyword arguments
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        str: A CYPHER query that modifies the DB according to the CYPHER statement contained in the function.
 
     .. NOTE:: Here, there is no need to force c.WikiData_ID to not be null or "" because it will already be = ``number```(and, thus, exist)
     """
-    return tx.run(f"""
+    return f"""
+        CALL {{
         MATCH (c:Disease)
             WHERE toFloat(split(c.WikiData_ID,"")[-1]) = toFloat({number})
         WITH 'SELECT *
@@ -195,24 +193,27 @@ def add_cancer_info(tx, number, **kwargs):
             c.ICD_1O = row['ICD_1O']['value'],
             c.OMIM_ID = row['OMIM_ID']['value'],
             c.ICD_11 = row['ICD_11']['value']
-        """)
 
-def add_drugs(tx, number, **kwargs):
+        }} IN TRANSACTIONS OF 10 rows
+        """
+
+def add_drugs(number, **kwargs):
     """
     Creates drug nodes related with each of the "Cancer" nodes already on the database
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
         number (int): From 0 to 9, the number under which the WikiData_IDs to process should ends.
             This allows us tho divide the work, although its not very elegant.
         **kwargs: Any number of arbitrary keyword arguments
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        str: A CYPHER query that modifies the DB according to the CYPHER statement contained in the function.
 
     .. NOTE:: Here, there is no need to force c.WikiData_ID to not be null or "" because it will already be = ``number```(and, thus, exist)
     """
-    return tx.run(f"""
+    return f"""
+        CALL {{
+
         MATCH (c:Disease)
             WHERE toFloat(split(c.WikiData_ID,"")[-1]) = toFloat({number})
         WITH 'SELECT *
@@ -234,34 +235,37 @@ def add_drugs(tx, number, **kwargs):
 
         UNWIND value['results']['bindings'] as row
 
-        FOREACH(ignoreme in case when row['Drugs'] is not null then [1] else [] end |
+        FOREACH(ignoreMe IN CASE WHEN row['Drugs'] IS NOT NULL THEN [1] ELSE [] END |
                 MERGE (d:Drug{{URL:row['Drugs']['value'],
                                WikiData_ID:split(row['Drugs']['value'],'/')[-1],
                                Name:row['DrugName']['value'] }} )
                 MERGE (c)-[:TARGETED_BY]->(d))
 
-        FOREACH(ignoreme in case when row['Exact_Matches'] is not null then [1] else [] end |
+        FOREACH(ignoreMe IN CASE WHEN row['Exact_Matches'] IS NOT NULL THEN [1] ELSE [] END |
                 MERGE (e:ExternalEquivalent{{URL:row['Exact_Matches']['value'],
                                             WikiData_ID:split(row['Exact_Matches']['value'],'/')[-1]}})
                 MERGE (c)-[:EQUALS]-(e))
-        """)
 
-def add_causes(tx, number, **kwargs):
+        }} IN TRANSACTIONS OF 10 rows
+        """
+
+def add_causes(number, **kwargs):
     """
     Creates drug nodes related with each of the "Cancer" nodes already on the database
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
         number (int): From 0 to 9, the number under which the WikiData_IDs to process should ends.
             This allows us tho divide the work, although its not very elegant.
         **kwargs: Any number of arbitrary keyword arguments
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        str: A CYPHER query that modifies the DB according to the CYPHER statement contained in the function.
 
     .. NOTE:: Here, there is no need to force c.WikiData_ID to not be null or "" because it will already be = ``number```(and, thus, exist)
     """
-    return tx.run(f"""
+    return f"""
+        CALL {{
+
         MATCH (c:Disease)
             WHERE toFloat(split(c.WikiData_ID,"")[-1]) = toFloat({number})
         WITH 'SELECT ?Causes ?CauseName
@@ -281,29 +285,32 @@ def add_causes(tx, number, **kwargs):
 
         UNWIND value['results']['bindings'] as row
 
-        FOREACH(ignoreme in case when row['Causes'] is not null then [1] else [] end |
+        FOREACH(ignoreMe IN CASE WHEN row['Causes'] IS NOT NULL THEN [1] ELSE [] END |
                 MERGE (ca:Cause{{URL:row['Causes']['value'],
                                 WikiData_ID:split(row['Causes']['value'],'/')[-1],
                                 Name:row['CauseName']['value'] }} )
                 MERGE (c)-[:CAUSED_BY]->(ca))
-        """)
 
-def add_genes(tx, number, **kwargs):
+        }} IN TRANSACTIONS OF 10 rows
+        """
+
+def add_genes(number, **kwargs):
     """
     Creates gene nodes related with each of the "Cancer" nodes already on the database
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
         number (int): From 0 to 9, the number under which the WikiData_IDs to process should ends.
             This allows us tho divide the work, although its not very elegant.
         **kwargs: Any number of arbitrary keyword arguments
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        str: A CYPHER query that modifies the DB according to the CYPHER statement contained in the function.
 
     .. NOTE:: Here, there is no need to force c.WikiData_ID to not be null or "" because it will already be = ``number```(and, thus, exist)
     """
-    return tx.run(f"""
+    return f"""
+        CALL {{
+
         MATCH (c:Disease)
             WHERE toFloat(split(c.WikiData_ID,"")[-1]) = toFloat({number})
         WITH 'SELECT *
@@ -324,21 +331,22 @@ def add_genes(tx, number, **kwargs):
 
         UNWIND value['results']['bindings'] as row
 
-        FOREACH(ignoreme in case when row['Genetic_Associations'] is not null and row['GeneName'] is not null then [1] else [] end |
+        FOREACH(ignoreMe IN CASE WHEN row['Genetic_Associations'] is not null and row['GeneName'] IS NOT NULL THEN [1] ELSE [] END |
                 MERGE (g:Gene{{URL:row['Genetic_Associations']['value'],
                               WikiData_ID:split(row['Genetic_Associations']['value'],'/')[-1],
                               Name:row['GeneName']['value'] }})
                 MERGE (g)-[:ASSOCIATED_DISEASE_GENE]->(c))
-        """)
 
-def add_drug_external_ids(tx, query = "Wikidata", **kwargs):
+        }} IN TRANSACTIONS OF 10 rows
+        """
+
+def add_drug_external_ids(query = "Wikidata_ID", **kwargs):
     """
     Adds some external IDs to any "Drug" nodes already present on the database.
     Since the PDB information had too much values which caused triple duplicates that overcharged the system,
     they were intentionally left out.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
         query (str): One of ["DrugBank_ID","WikiData_ID"], a way to identify the nodes for which external IDs will be added.
         **kwargs: Any number of arbitrary keyword arguments
 
@@ -350,14 +358,16 @@ def add_drug_external_ids(tx, query = "Wikidata", **kwargs):
         because there will always be a WikiData_ID, but it is useful in the rest of the cases
     """
     if query == "DrugBank_ID":
-      query_text = ["",
-                    """?item (wdt:P715) ' + apoc.text.replace(d.DrugBank_ID, "DB", "") + '"""]
+      query_text = [""" WHERE d.DrugBank_ID IS NOT NULL AND d.DrugBank_ID <> "" """,
+                    """?item (wdt:P715) \"' + apoc.text.replace(d.DrugBank_ID, "DB", "") + '\" """]
     else:
       query_text = ["""WHERE d.WikiData_ID IS NOT NULL AND d.WikiData_ID <> "" """,
                     """filter (?item = wd:' + d.WikiData_ID + ')"""]
 
 
-    return tx.run(f"""
+    return f"""
+        CALL {{
+
         MATCH (d:Drug)
         {query_text[0]}
         WITH 'SELECT DISTINCT *
@@ -368,11 +378,6 @@ def add_drug_external_ids(tx, query = "Wikidata", **kwargs):
 
         OPTIONAL{{
             ?item wdt:P715 ?DrugBank }}
-
-        OPTIONAL{{
-            ?item wdt:P234 ?InChI }}
-        OPTIONAL{{
-            ?item wdt:P235 ?InChIKey }}
 
         OPTIONAL{{
             ?item wdt:P683 ?ChEBI_ID }}
@@ -390,27 +395,10 @@ def add_drug_external_ids(tx, query = "Wikidata", **kwargs):
             ?item wdt:P267 ?ATC_Code }}
 
         OPTIONAL{{
-            ?item p:P486 ?statement1 .
-            ?statement1 ps:P486 ?MeSH_Descriptor_ID .
-            ?statement1 pq:P1810 ?MeSH_Descriptor_Name .
-            }}
-        OPTIONAL{{
-            ?item p:P6694 ?statement2 .
-            ?statement2 ps:P6694 ?MeSH_Concept_ID .
-            ?statement2 pq:P1810 ?MeSH_Concept_Name . }}
-
-        OPTIONAL{{
-            ?item wdt:P2067 ?Mass }}
-        OPTIONAL{{
-            ?item wdt:P274 ?Chemical_Formula }}
-        OPTIONAL{{
-            ?item wdt:P233 ?Canonical_Smiles }}
-        OPTIONAL{{
-            ?item wdt:P3489 ?Pregnancy_Category
+            ?item wdt:P2175 ?Medical_condition_treated
             SERVICE wikibase:label {{ bd:serviceParam wikibase:language "en".
-                                    ?Pregnancy_Category rdfs:label ?Pregnancy_Category_Name. }} }}
-        OPTIONAL{{
-            ?item wdt:P7830 ?LiverTox }}
+                                    ?Medical_condition_treated rdfs:label ?Medical_condition_treated_name. }} }}
+
             }}' AS sparql, d
 
             CALL apoc.load.jsonParams(
@@ -427,38 +415,41 @@ def add_drug_external_ids(tx, query = "Wikidata", **kwargs):
             d.KEGG_ID = row['KEGG_ID']['value'],
             d.DrugBank_ID = row['DrugBank']['value'],
             d.CAS_Number = row['CAS_Number']['value'],
-            d.ChemSpider_ID = row['ChemSpider_ID']['value'],
-            d.InChI = row['InChI']['value'],
-            d.InChIKey = row['InChIKey']['value'],
-            d.Average_Mass = row['Mass']['value'],
-            d.Formula = row['Chemical_Formula']['value'],
-            d.SMILES = row['Canonical_Smiles']['value'],
-            d.Pregnancy_Category = row['Pregnancy_Category_Name']['value'],
-            d.LiverTox = row['LiverTox']['value']
+            d.ChemSpider_ID = row['ChemSpider_ID']['value']
 
-        MERGE (pri:ATC {{ Code:row['ATC_Code']['value'] }})
+        FOREACH(ignoreMe IN CASE WHEN row['ATC_Code'] IS NOT NULL THEN [1] ELSE [] END |
+            MERGE (pri:ATC {{ Code:row['ATC_Code']['value'] }})
             MERGE (d)-[r:RELATED_ATC]->(pri)
+        )
 
-        MERGE (c:MeSH {{ MeSH_ID:row['MeSH_Descriptor_ID']['value'] , Type:"Descriptor", Name: row['MeSH_Descriptor_Name']['value']}})
-        MERGE (d)-[r2:RELATED_MESH]->(c)
-        MERGE (cc:MeSH {{ MeSH_ID:row['MeSH_Concept_ID']['value'] , Type:"Concept", Name: row['MeSH_Concept_Name']['value']}})
-        MERGE (d)-[r3:RELATED_MESH]->(cc)
-        """)
+        FOREACH(ignoreMe IN CASE WHEN row['MeSH_Descriptor_Name'] IS NOT NULL THEN [1] ELSE [] END |
+            MERGE (c:MeSH {{ MeSH_ID:row['MeSH_Descriptor_ID']['value'] ,
+                             Type:"Descriptor", Name: row['MeSH_Descriptor_Name']['value']}})
+            MERGE (d)-[r2:RELATED_MESH]->(c)
+        )
 
-def add_more_drug_info(tx, query = "WikiData_ID", **kwargs):
+        FOREACH(ignoreMe IN CASE WHEN row['MeSH_Concept_Name'] IS NOT NULL THEN [1] ELSE [] END |
+            MERGE (cc:MeSH {{ MeSH_ID:row['MeSH_Concept_ID']['value'] ,
+                              Type:"Concept", Name: row['MeSH_Concept_Name']['value']}})
+            MERGE (d)-[r3:RELATED_MESH]->(cc)
+        )
+
+        }} IN TRANSACTIONS OF 10 rows
+        """
+
+def add_more_drug_info(query = "WikiData_ID", **kwargs):
     """
     Creates some nodes that are related with each of the "Drug" nodes already existing
     on the database: routes of administration, targeted metabolites and approved drugs
     that tehy are been used in
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
         query (str): One of ["DrugBank_ID","WikiData_ID"], a way to identify the nodes for
             which external IDs will be added; default is "WikiData_ID"
         **kwargs: Any number of arbitrary keyword arguments
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        str: A CYPHER query that modifies the DB according to the CYPHER statement contained in the function.
 
 
     .. TODO:: ADD ROLE to metabolite interactions
@@ -469,13 +460,81 @@ def add_more_drug_info(tx, query = "WikiData_ID", **kwargs):
         because there will always be a WikiData_ID, but it is useful in the rest of the cases
     """
     if query == "DrugBank_ID":
-      query_text = ["",
+      query_text = [""" WHERE d.DrugBank_ID IS NOT NULL AND d.DrugBank_ID <> "" """,
+                    """?item (wdt:P715) \"' + apoc.text.replace(d.DrugBank_ID, "DB", "") + '\" """]
+    else:
+      query_text = ["""WHERE d.WikiData_ID IS NOT NULL AND d.WikiData_ID <> "" """,
+                    """filter (?item = wd:' + d.WikiData_ID + ')"""]
+
+
+    return f"""
+        CALL {{
+
+        MATCH (d:Drug)
+        {query_text[0]}
+        WITH 'SELECT DISTINCT *
+        WHERE {{
+            SERVICE wikibase:label {{ bd:serviceParam wikibase:language "[AUTO_LANGUAGE]". }}
+
+        {query_text[1]}
+
+        OPTIONAL{{
+            ?item wdt:P234 ?InChI }}
+        OPTIONAL{{
+            ?item wdt:P235 ?InChIKey }}
+        OPTIONAL{{
+            ?item wdt:P2067 ?Mass }}
+        OPTIONAL{{
+            ?item wdt:P274 ?Chemical_Formula }}
+        OPTIONAL{{
+            ?item wdt:P233 ?Canonical_Smiles }}
+        OPTIONAL{{
+            ?item wdt:P7830 ?LiverTox }}
+            }}' AS sparql, d
+
+            CALL apoc.load.jsonParams(
+                replace("https://query.wikidata.org/sparql?query=" + apoc.text.urlencode(sparql), "\n", ""),
+                {{ Accept: "application/sparql-results+json" }}, null )
+        YIELD value
+
+        UNWIND value['results']['bindings'] as row
+
+        SET d.WikiData_ID = split(row['item']['value'],'/')[-1],
+            d.InChI = row['InChI']['value'],
+            d.InChIKey = row['InChIKey']['value'],
+            d.Average_Mass = row['Mass']['value'],
+            d.Formula = row['Chemical_Formula']['value'],
+            d.SMILES = row['Canonical_Smiles']['value'],
+            d.Pregnancy_Category = row['Pregnancy_Category_Name']['value'],
+            d.LiverTox = row['LiverTox']['value']
+
+        }} IN TRANSACTIONS OF 10 rows
+        """
+
+def add_yet_more_drug_info(query = "WikiData_ID", **kwargs):
+    """
+    Creates some nodes that are related with each of the "Drug" nodes already existing
+    on the database: routes of administration, targeted metabolites and approved drugs
+    that tehy are been used in
+
+    Args:
+        query (str): One of ["DrugBank_ID","WikiData_ID"], a way to identify the nodes for
+            which external IDs will be added; default is "WikiData_ID"
+        **kwargs: Any number of arbitrary keyword arguments
+
+    Returns:
+        str: A CYPHER query that modifies the DB according to the CYPHER statement contained in the function.
+    """
+    if query == "DrugBank_ID":
+      query_text = [""" WHERE d.DrugBank_ID IS NOT NULL AND d.DrugBank_ID <> "" """,
                     """?item (wdt:P715) ' + apoc.text.replace(d.DrugBank_ID, "DB", "") + '"""]
     else:
       query_text = ["""WHERE d.WikiData_ID IS NOT NULL AND d.WikiData_ID <> "" """,
                     """filter (?item = wd:' + d.WikiData_ID + ')"""]
 
-    return tx.run(f"""
+    return f"""
+        CALL {{
+
         MATCH (d:Drug)
         {query_text[0]}
         WITH 'SELECT DISTINCT *
@@ -507,36 +566,35 @@ def add_more_drug_info(tx, query = "WikiData_ID", **kwargs):
 
         SET d.WikiData_ID = split(row['item']['value'],'/')[-1]
 
-        FOREACH(ignoreme in case when row['Interacts_with'] is not null then [1] else [] end |
+        FOREACH(ignoreMe IN CASE WHEN row['Interacts_with'] IS NOT NULL THEN [1] ELSE [] END |
             MERGE (m:Metabolite{{URL:row['Interacts_with']['value'],
                         WikiData_ID:split(row['Interacts_with']['value'],'/')[-1],
                         Name:row['Interacts_with_name']['value'] }})
             MERGE (d)-[:INTERACTS_WITH]-(m))
 
-        FOREACH(ignoreme in case when row['Route_of_Admin'] is not null then [1] else [] end |
+        FOREACH(ignoreMe IN CASE WHEN row['Route_of_Admin'] IS NOT NULL THEN [1] ELSE [] END |
             MERGE (r:AdministrationRoute{{URL:row['Route_of_Admin']['value'],
                         WikiData_ID:split(row['Route_of_Admin']['value'],'/')[-1],
                         Name:row['Route_of_Admin_name']['value'] }})
             MERGE (d)-[:ADMINISTERED_VIA]->(r))
 
-        FOREACH(ignoreme in case when row['Active_ingredient_in'] is not null then [1] else [] end |
+        FOREACH(ignoreMe IN CASE WHEN row['Active_ingredient_in'] IS NOT NULL THEN [1] ELSE [] END |
             MERGE (me:Product{{URL:row['Active_ingredient_in']['value'],
                         WikiData_ID:split(row['Active_ingredient_in']['value'],'/')[-1],
                         Name:row['Active_ingredient_in_name']['value'] }})
             MERGE (d)-[:PART_OF_PRODUCT]->(me))
-        """)
 
-def add_gene_info(tx):
+        }} IN TRANSACTIONS OF 10 rows
+        """
+
+def add_gene_info():
     """
     A Cypher Query that adds some external IDs and properties to "Gene" nodes already existing on
     the database. This query forces the genes to have a "found_in_taxon:homo_sapiens" label. This means
     that any non-human genes will not be annotated (.. TODO:: delete those)
 
-    Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
-
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        str: A CYPHER query that modifies the DB according to the CYPHER statement contained in the function.
 
     .. NOTE:: Genomic Start and ends keep just the 2nd position, as reported in wikidata
 
@@ -545,7 +603,9 @@ def add_gene_info(tx):
 
     .. TODO:: Might include P684 "Orthologues" for more info (it crashed java)
     """
-    return tx.run("""
+    return """
+        CALL {
+
         MATCH (g:Gene)
         WHERE g.WikiData_ID IS NOT NULL AND g.WikiData_ID <> ""
         WITH 'SELECT *
@@ -609,25 +669,27 @@ def add_gene_info(tx):
             g.Genomic_Start = row['Genomic_Start']['value'],
             g.Genomic_End = row['Genomic_End']['value']
 
-        FOREACH(ignoreme in case when row['Encodes'] is not null then [1] else [] end |
+        FOREACH(ignoreMe IN CASE WHEN row['Encodes'] IS NOT NULL THEN [1] ELSE [] END |
                     MERGE (m:Metabolite{URL:row['Encodes']['value'],
                                 WikiData_ID:split(row['Encodes']['value'],'/')[-1],
                                 Name:row['Encodes_name']['value'] })
                     MERGE (g)-[:ENCODES]->(m))
 
-        FOREACH(ignoreme in case when row['Expressed_in'] is not null then [1] else [] end |
+        FOREACH(ignoreMe IN CASE WHEN row['Expressed_in'] IS NOT NULL THEN [1] ELSE [] END |
                     MERGE (t:Tissue{URL:row['Expressed_in']['value'],
                                 WikiData_ID:split(row['Expressed_in']['value'],'/')[-1],
                                 Name:row['Expressed_in_name']['value'] })
                     MERGE (g)-[:EXPRESSED_IN]->(t))
 
-        FOREACH(ignoreme in case when row['Exact_Matches'] is not null then [1] else [] end |
+        FOREACH(ignoreMe IN CASE WHEN row['Exact_Matches'] IS NOT NULL THEN [1] ELSE [] END |
                 MERGE (e:ExternalEquivalent{URL:row['Exact_Matches']['value'],
                                             WikiData_ID:split(row['Exact_Matches']['value'],'/')[-1]})
                 MERGE (g)-[:EQUALS]-(e))
-        """)
 
-def add_metabolite_info(tx, query = "ChEBI_ID", **kwargs):
+        } IN TRANSACTIONS OF 10 rows
+        """
+
+def add_metabolite_info(query = "ChEBI_ID", **kwargs):
     """
     A Cypher Query that adds some external IDs and properties to "Metabolite" nodes
     already existing on the database. Two kind of metabolites exist: those that are
@@ -638,13 +700,12 @@ def add_metabolite_info(tx, query = "ChEBI_ID", **kwargs):
     * The metabolites are not forced to be proteins, but if they are, this is kept in the "instance_of" record
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
         query (str): One of ["DrugBank_ID","WikiData_ID"], a way to identify the nodes for
             which external IDs will be added; default is "WikiData_ID"
         **kwargs: Any number of arbitrary keyword arguments
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        str: A CYPHER query that modifies the DB according to the CYPHER statement contained in the function.
 
     .. TODO:: Might include P527 "has part or parts" for more info (it crashed java)
 
@@ -652,13 +713,15 @@ def add_metabolite_info(tx, query = "ChEBI_ID", **kwargs):
         because there will always be a WikiData_ID, but it is useful in the rest of the cases
     """
     if query == "ChEBI_ID":
-      query_text = ["",
-                    """?item (wdt:P683) " m.ChEBI_ID " ."""]
+      query_text = [""" WHERE m.ChEBI_ID IS NOT NULL AND m.ChEBI_ID <> "" """,
+                    """?item (wdt:P683) \"' +  m.ChEBI_ID + '\" ."""]
     else:
       query_text = ["""WHERE m.WikiData_ID IS NOT NULL AND m.WikiData_ID <> "" """,
                     """filter (?item = wd:' + m.WikiData_ID + ')"""]
 
-    return tx.run(f"""
+    return f"""
+        CALL {{
+
         MATCH (m:Metabolite)
         {query_text[0]}
         WITH 'SELECT DISTINCT *
@@ -737,36 +800,43 @@ def add_metabolite_info(tx, query = "ChEBI_ID", **kwargs):
             m.FooDB_Compound_ID = row['FooDB_Compound_ID']['value'],
             m.Transporter_DB_ID = row['Transporter_DB_ID']['value']
 
-        MERGE (c:MeSH {{ MeSH_ID:row['MeSH_Descriptor_ID']['value'] , Type:"Descriptor", Name: row['MeSH_Descriptor_Name']['value']}})
-        MERGE (m)-[r:RELATED_MESH]->(c)
-        MERGE (cc:MeSH {{ MeSH_ID:row['MeSH_Concept_ID']['value'] , Type:"Concept", Name: row['MeSH_Concept_Name']['value']}})
-        MERGE (m)-[r2:RELATED_MESH]->(cc)
+        FOREACH(ignoreMe IN CASE WHEN row['MeSH_Descriptor_Name'] IS NOT NULL THEN [1] ELSE [] END |
+            MERGE (c:MeSH {{ MeSH_ID:row['MeSH_Descriptor_ID']['value'] ,
+                             Type:"Descriptor", Name: row['MeSH_Descriptor_Name']['value']}})
+            MERGE (m)-[r:RELATED_MESH]->(c)
+        )
 
-        FOREACH(ignoreme in case when row['Interacts_with'] is not null then [1] else [] end |
+        FOREACH(ignoreMe IN CASE WHEN row['MeSH_Concept_Name'] IS NOT NULL THEN [1] ELSE [] END |
+            MERGE (cc:MeSH {{ MeSH_ID:row['MeSH_Concept_ID']['value'] ,
+                              Type:"Concept", Name: row['MeSH_Concept_Name']['value']}})
+            MERGE (m)-[r2:RELATED_MESH]->(cc)
+        )
+
+        FOREACH(ignoreMe IN CASE WHEN row['Interacts_with'] IS NOT NULL THEN [1] ELSE [] END |
                     MERGE (me:Metabolite{{URL:row['Interacts_with']['value'],
                                 WikiData_ID:split(row['Interacts_with']['value'],'/')[-1],
                                 Name:row['Interacts_with_name']['value'] }})
                     MERGE (m)-[:INTERACTS_WITH]-(me))
 
-        FOREACH(ignoreme in case when row['Exact_Matches'] is not null then [1] else [] end |
+        FOREACH(ignoreMe IN CASE WHEN row['Exact_Matches'] IS NOT NULL THEN [1] ELSE [] END |
                 MERGE (e:ExternalEquivalent{{URL:row['Exact_Matches']['value'],
                                             WikiData_ID:split(row['Exact_Matches']['value'],'/')[-1]}})
                 MERGE (m)-[:EQUALS]-(e))
-        """)
 
-def add_toomuch_metabolite_info(tx):
+        }} IN TRANSACTIONS OF 10 rows
+        """
+
+def add_toomuch_metabolite_info():
     """
     A function that adds loads of info to existing "Metabolite" nodes. This was left out, first because
     it might be too much information, (specially when it is already availaible by clicking the "url" field),
     and because, due to it been so much, it crashes the JVM.
 
-    Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
-
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        str: A CYPHER query that modifies the DB according to the CYPHER statement contained in the function.
     """
-    return tx.run("""
+    return """
+        CALL {
         MATCH (m:Metabolite)
         WHERE m.WikiData_ID IS NOT NULL AND m.WikiData_ID <> ""
         WITH 'SELECT *
@@ -815,33 +885,41 @@ def add_toomuch_metabolite_info(tx):
         WITH m, row, CASE WHEN EXISTS(m.A) THEN m.A ELSE [] END AS nA
             WHERE NONE (x IN nA WHERE x = row['PDB_Structure_ID']['value'])
         SET m.A = nA + row['PDB_Structure_ID']['value']
-        """)
 
-def add_wikidata_to_mesh(tx):
+        } IN TRANSACTIONS OF 10 rows
+        """
+
+def add_wikidata_and_mesh_by_name():
     """
-    A function that adds some MeSH nodes and WikiData_IDs to existing nodes, based on their name.
-    Since WikiData is not really specified on this, this wont add much info
+    A function that adds some MeSH nodes and WikiData_IDs
+    to existing nodes, based on their Wikipedia Article Title.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx (neo4j.work.simple.Session): The session under which the driver is running
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.work.result.Result:
+            A Neo4J connexion to the database that modifies it according
+            to the CYPHER statement contained in the function.
     """
-    return tx.run("""
+    return """
+        CALL {
         MATCH (d)
+        WHERE (d:AdministrationRoute OR d:Cause OR d:Disease OR d:Drug OR d:ExternalEquivalent
+                                     OR d:Gene OR d:Metabolite OR d:Product OR d:Tissue)
+        AND (d.Name IS NOT null)
         WITH 'SELECT DISTINCT *
         WHERE{
-            ?item ?label "d.Name"@en.
-            SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
-
+            ?sitelink schema:about ?WikiData_ID;
+                    schema:isPartOf <https://en.wikipedia.org/>;
+                    schema:name \"' +  replace(d.Name, "  ", " ") + '\"@en.
         OPTIONAL{
-            ?item p:P486 ?statement1 .
+            ?WikiData_ID p:P486 ?statement1 .
             ?statement1 ps:P486 ?MeSH_Descriptor_ID .
             ?statement1 pq:P1810 ?MeSH_Descriptor_Name .
             }
         OPTIONAL{
-            ?item p:P6694 ?statement2 .
+            ?WikiData_ID p:P6694 ?statement2 .
             ?statement2 ps:P6694 ?MeSH_Concept_ID .
             ?statement2 pq:P1810 ?MeSH_Concept_Name . }
         }' AS sparql, d
@@ -853,10 +931,19 @@ def add_wikidata_to_mesh(tx):
 
         UNWIND value['results']['bindings'] as row
 
-        SET d.WikiData_ID = split(row['item']['value'],'/')[-1]
+        SET d.WikiData_ID = split(row['WikiData_ID']['value'],'/')[-1]
 
-        MERGE (c:MeSH { MeSH_ID:row['MeSH_Descriptor_ID']['value'] , Type:"Descriptor", Name: row['MeSH_Descriptor_Name']['value']})
-        MERGE (d)-[r:RELATED_MESH]->(c)
-        MERGE (cc:MeSH { MeSH_ID:row['MeSH_Concept_ID']['value'] , Type:"Concept", Name: row['MeSH_Concept_Name']['value']})
-        MERGE (d)-[r2:RELATED_MESH]->(cc)
-        """)
+        FOREACH(ignoreMe IN CASE WHEN row['MeSH_Descriptor_Name'] IS NOT NULL THEN [1] ELSE [] END |
+            MERGE (c:MeSH { MeSH_ID:row['MeSH_Descriptor_ID']['value'] ,
+                            Type:"Descriptor", Name: row['MeSH_Descriptor_Name']['value']})
+            MERGE (d)-[r:RELATED_MESH]->(c)
+        )
+
+        FOREACH(ignoreMe IN CASE WHEN row['MeSH_Concept_Name'] IS NOT NULL THEN [1] ELSE [] END |
+            MERGE (cc:MeSH { MeSH_ID:row['MeSH_Concept_ID']['value'] ,
+                            Type:"Concept", Name: row['MeSH_Concept_Name']['value']})
+            MERGE (d)-[r2:RELATED_MESH]->(cc)
+        )
+
+        } IN TRANSACTIONS OF 10 rows
+        """

@@ -118,6 +118,103 @@ def args_parser():
 
     return parser
 
+def improve_search_terms_with_metanetx(query, query_type,
+                                       driver, chebi_ids, names, hmdb_ids, inchis, mesh_ids):
+    """
+    Improves the search terms already provided to the CanGraph programme
+    by using the MetaNetX web service to find synonyms in IDs
+
+    Args:
+        query (str): The term we are currently querying for
+        query_type (str): The kind of query to search; one of ["ChEBI_ID", "HMDB_ID", "Name", "InChI", "MeSH_ID"]
+        driver (neo4j.Driver): Neo4J's Bolt Driver currently in use
+        chebi_ids (str): A string of ";" separated values of all the ChEBI_ID representing the current metabolite
+        names (list): A string of ";" separated values of all the Name representing the current metabolite
+        hmdb_ids (list): A string of ";" separated values of all the HMDB_ID representing the current metabolite
+        inchis (list): A string of ";" separated values of all the InChI representing the current metabolite
+        mesh_ids (list): A string of ";" separated values of all the MeSH_ID representing the current metabolite
+
+    Returns:
+        list: A list containing [ chebi_ids, names, hmdb_ids, inchis, mesh_ids ], with all their synonyms
+    """
+    # First in MetaNetX
+    with driver.session() as session:
+        # For MeSH, we cannot search for synonyms in MetaNetX (it doesn't index them), so we instead
+        # look for related metabolites in MeSH itself, so that the import makes more sense
+        if query_type == "MeSH_ID":
+            graph_response = session.execute_read(
+                MeSHandMetaNetXDataBases.find_metabolites_related_to_mesh, query)
+        else:
+            graph_response = session.execute_read(
+                MeSHandMetaNetXDataBases.read_synonyms_in_metanetx, query_type, query)
+
+    for element in graph_response:
+        element = {key: element[key] for key in element if element[key] != None }
+        # With .get, the lookup does not fail, even if query_type == "MeSH_ID"
+        if element.get("databasename", "").lower() == "hmdb":
+            if element["databaseid"] not in hmdb_ids: hmdb_ids.append(element.get("databaseid", ""))
+
+        if element.get("databasename", "").lower() == "chebi":
+            if element["databaseid"] not in chebi_ids: chebi_ids.append(element.get("databaseid", ""))
+
+        if element.get("InChI", "").lower() not in inchis: inchis.append(element.get("InChI", ""))
+
+        if element.get("Name", "").lower() not in names: names.append(element.get("Name", ""))
+
+    return [ chebi_ids, names, hmdb_ids, inchis, mesh_ids ]
+
+def improve_search_terms_with_cts(query, query_type,
+                                  chebi_ids, names, hmdb_ids, inchis, mesh_ids):
+    """
+    Improves the search terms already provided to the CanGraph programme
+    by using The Chemical Translation Service to find synonyms in IDs
+
+    Args:
+        query (str): The term we are currently querying for
+        query_type (str): The kind of query to search; one of ["ChEBI_ID", "HMDB_ID", "Name", "InChI", "MeSH_ID"]
+        driver (neo4j.Driver): Neo4J's Bolt Driver currently in use
+        chebi_ids (str): A string of ";" separated values of all the ChEBI_ID representing the current metabolite
+        names (list): A string of ";" separated values of all the Name representing the current metabolite
+        hmdb_ids (list): A string of ";" separated values of all the HMDB_ID representing the current metabolite
+        inchis (list): A string of ";" separated values of all the InChI representing the current metabolite
+        mesh_ids (list): A string of ";" separated values of all the MeSH_ID representing the current metabolite
+
+    Returns:
+        list: A list containing [ chebi_ids, names, hmdb_ids, inchis, mesh_ids ], with all their synonyms
+    """
+    # We get the correct names for the identifiers we want to turn into:
+    query_dict_keys = ["ChEBI_ID", "HMDB_ID", "Name", "InChI", "MeSH_ID"]
+    oldIdentifier = [ x for x in query_dict_keys if x not in [query_type, "MeSH_ID"] ]
+
+    replace_keys = {"ChEBI_ID":"ChEBI", "HMDB_ID":"Human Metabolome Database", "Name":"Chemical Name", "InChI":"InChIKey"}
+    toIdentifierList = list(map(replace_keys.get, oldIdentifier, oldIdentifier))
+    fromIdentifier = replace_keys.get(query_type, query_type)
+
+    # Convert the InChI to InChIKeys (required by CTS)
+    if query_type == "InChI":
+        rdkit_mol = rdkit.Chem.MolFromInchi(query)
+        searchTerm = rdkit.Chem.MolToInchiKey(rdkit_mol)
+    else:
+        searchTerm = query
+
+    # And run the CTS search:
+    for toIdentifier in toIdentifierList:
+        result = MeSHandMetaNetXDataBases.find_synonyms_in_cts(fromIdentifier, toIdentifier, searchTerm)
+
+        for element in result: # And append its results to the correct list
+            if toIdentifier == "Human Metabolome Database" and element not in hmdb_ids:
+                hmdb_ids.append(element)
+            if toIdentifier == "ChEBI" and element.replace("CHEBI:", "") not in chebi_ids:
+                chebi_ids.append(element.replace("CHEBI:", ""))
+            if toIdentifier == "Chemical Name" and element not in names:
+                names.append(element)
+            if toIdentifier == "InChIKey": # Convert key to InChI
+                unichem = bioservices.UniChem()
+                inchis_from_unichem = unichem.get_inchi_from_inchikey(element)
+                inchis.append(inchis_from_unichem[0]["standardinchi"])
+
+    return [ chebi_ids, names, hmdb_ids, inchis, mesh_ids ]
+
 def improve_search_terms(driver, chebi_ids, names, hmdb_ids, inchis, mesh_ids):
     """
     Improves the search terms already provided to the CanGraph programme by processing the
@@ -148,79 +245,41 @@ def improve_search_terms(driver, chebi_ids, names, hmdb_ids, inchis, mesh_ids):
     query_dict = deepcopy(query_dict) # Make a deepcopy of the dict so that it doesn't update while on the loop
 
     # And then, proceed to search for synonyms and append the appropriate results if they are not already there
-    for query_type, query_list in query_dict.items():
-        for query in query_list:
-            if not query.isspace() and query:
-                # First in MetaNetX
-                with driver.session() as session:
-                    # For MeSH, we cannot search for synonyms in MetaNetX (it doesn't index them), so we instead
-                    # look for related metabolites in MeSH itself, so that the import makes more sense
-                    if query_type == "MeSH_ID":
-                        graph_response = session.execute_read(
-                            MeSHandMetaNetXDataBases.find_metabolites_related_to_mesh, query)
-                    else:
-                        graph_response = session.execute_read(
-                            MeSHandMetaNetXDataBases.read_synonyms_in_metanetx, query_type, query)
+    with alive_bar( sum( [len(v) for v in query_dict.values() ] ) + 4, title="Finding Synonyms...") as bar:
+        for query_type, query_list in query_dict.items():
+            for query in query_list:
+                if not query.isspace() and query:
+                    chebi_ids, names, hmdb_ids, inchis, mesh_ids = (
+                    improve_search_terms_with_metanetx(query, query_type, driver,
+                                                    chebi_ids, names, hmdb_ids, inchis, mesh_ids))
 
-                for element in graph_response:
-                    element = {key: element[key] for key in element if element[key] != None }
-                    # With .get, the lookup does not fail, even if query_type == "MeSH_ID"
-                    if element.get("databasename", "").lower() == "hmdb":
-                        if element["databaseid"] not in hmdb_ids: hmdb_ids.append(element.get("databaseid", ""))
+            bar()
 
-                    if element.get("databasename", "").lower() == "chebi":
-                        if element["databaseid"] not in chebi_ids: chebi_ids.append(element.get("databaseid", ""))
+        # Once we have all the synonyms that we could find on MeSHandMetaNetX, we remove all duplicates
+        chebi_ids = list(filter(None, set(chebi_ids)));   names = list(filter(None, set(names)));
+        inchis = list(filter(None, set(inchis)));         mesh_ids = list(filter(None, set(mesh_ids)))
+        hmdb_ids = list(filter(None, set(hmdb_ids)))
 
-                    if element.get("InChI", "").lower() not in inchis: inchis.append(element.get("InChI", ""))
+        # And re-generate the query_dict
+        query_dict = {"ChEBI_ID": chebi_ids, "HMDB_ID": hmdb_ids, "InChI": inchis, "Name": names, "MeSH_ID": mesh_ids}
+        query_dict = deepcopy(query_dict) # Make a deepcopy of the dict so that it doesn't update while on the loop
 
-                    if element.get("Name", "").lower() not in names: names.append(element.get("Name", ""))
+        # And search for even more synonyms on CTS, the Chemical Translation Service!
+        # This is done separately because, while MeSHandMetaNetX do not overlap, they do overlap with CTS
+        for query_type, query_list in {key: query_dict[key]
+                                    for key in query_dict if key != 'MeSH_ID'
+                                                            and any(query_dict[key])  }.items():
+            for query in query_list:
+                chebi_ids, names, hmdb_ids, inchis, mesh_ids = (
+                    improve_search_terms_with_cts(query, query_type,
+                                            chebi_ids, names, hmdb_ids, inchis, mesh_ids))
 
-    # Once we have all the synonyms that we could find on MeSHandMetaNetX, we remove all duplicates
-    chebi_ids = list(filter(None, set(chebi_ids)));   names = list(filter(None, set(names)));
-    inchis = list(filter(None, set(inchis)));         mesh_ids = list(filter(None, set(mesh_ids)))
-    hmdb_ids = list(filter(None, set(hmdb_ids)))
+            bar()
 
-    # And re-generate the query_dict
-    query_dict = {"ChEBI_ID": chebi_ids, "HMDB_ID": hmdb_ids, "InChI": inchis, "Name": names, "MeSH_ID": mesh_ids}
-    query_dict = deepcopy(query_dict) # Make a deepcopy of the dict so that it doesn't update while on the loop
 
-    # And search for even more synonyms on CTS, the Chemical Translation Service!
-    # This is done separately because, while MeSHandMetaNetX do not overlap, they do overlap with CTS
-    for query_type, query_list in {key: query_dict[key] for key in query_dict if key != 'MeSH_ID' and any(query_dict[key])  }.items():
-        for query in query_list:
-            # We get the correct names for the identifiers we want to turn into:
-            oldIdentifier = [ x for x in query_dict.keys() if x not in [query_type, "MeSH_ID"] ]
-
-            replace_keys = {"ChEBI_ID":"ChEBI", "HMDB_ID":"Human Metabolome Database", "Name":"Chemical Name", "InChI":"InChIKey"}
-            toIdentifierList = list(map(replace_keys.get, oldIdentifier, oldIdentifier))
-            fromIdentifier = replace_keys.get(query_type, query_type)
-
-            # Convert the InChI to InChIKeys (required by CTS)
-            if query_type == "InChI":
-                rdkit_mol = rdkit.Chem.MolFromInchi(query)
-                searchTerm = rdkit.Chem.MolToInchiKey(rdkit_mol)
-            else:
-                searchTerm = query
-
-            # And run the CTS search:
-            for toIdentifier in toIdentifierList:
-                result = MeSHandMetaNetXDataBases.find_synonyms_in_cts(fromIdentifier, toIdentifier, searchTerm)
-
-                for element in result: # And append its results to the correct list
-                    if toIdentifier == "Human Metabolome Database" and element not in hmdb_ids:
-                        hmdb_ids.append(element)
-                    if toIdentifier == "ChEBI" and element.replace("CHEBI:", "") not in chebi_ids:
-                        chebi_ids.append(element.replace("CHEBI:", ""))
-                    if toIdentifier == "Chemical Name" and element not in names:
-                        names.append(element)
-                    if toIdentifier == "InChIKey": # Convert key to InChI
-                        unichem = bioservices.UniChem()
-                        inchis_from_unichem = unichem.get_inchi_from_inchikey(element)
-                        inchis.append(inchis_from_unichem[0]["standardinchi"])
-
-    # Finally, we remove outdated HMDB IDs
-    regex = re.compile(r'^HMDB\d\d\d\d\d$')
-    hmdb_ids = [i for i in hmdb_ids if regex.match(str(i))]
+        # Finally, we remove outdated HMDB IDs
+        regex = re.compile(r'^HMDB\d\d\d\d\d$')
+        hmdb_ids = [i for i in hmdb_ids if regex.match(str(i))]
 
     # And return the simplified versions of the lists
     return [ list(filter(None, set(chebi_ids))),    list(filter(None, set(names))),
@@ -402,7 +461,8 @@ def build_from_file(filepath, Neo4JImportPath, driver):
                     session.execute_write(ExposomeExplorerDataBase.add_components, os.path.basename(filepath))
             os.remove(f"{Neo4JImportPath}/{os.path.basename(filepath)}")
 
-            ExposomeExplorerDataBase.build_from_file( os.path.dirname(filepath), Neo4JImportPath, driver, False)
+            ExposomeExplorerDataBase.build_from_file( os.path.dirname(filepath),
+                                                      Neo4JImportPath, driver, keep_counts_and_displayeds = False)
 
 def import_based_on_all_files(all_files, Neo4JImportPath, driver, similarity, chebi_ids, names, hmdb_ids, inchis, mesh_ids):
     """
@@ -554,29 +614,30 @@ def annotate_using_wikidata(driver):
 
     .. TODO:: When fixing queries, fix the main subscript also
     """
-    with driver.session() as session:
-        misc.repeat_transaction(WikiDataBase.add_wikidata_to_mesh, 10, driver)
+    with driver.session() as session, alive_bar( 53, title="Querying WikiData...") as bar:
+        misc.repeat_transaction(WikiDataBase.add_wikidata_and_mesh_by_name(), driver); bar()
         # The ``query`` param is, remember, so as to remove the wikidata_id search which is by default
-        misc.repeat_transaction(WikiDataBase.add_metabolite_info, 10, driver, query = "ChEBI_ID")
-        misc.repeat_transaction(WikiDataBase.add_drug_external_ids, 10, driver, query = "DrugBank_ID")
-        misc.repeat_transaction(WikiDataBase.add_more_drug_info, 10, driver, query = "DrugBank_ID")
+        misc.repeat_transaction(WikiDataBase.add_metabolite_info(query = "ChEBI_ID"), driver); bar()
+        misc.repeat_transaction(WikiDataBase.add_drug_external_ids(query = "DrugBank_ID"), driver); bar()
+        misc.repeat_transaction(WikiDataBase.add_more_drug_info(query = "DrugBank_ID"), driver); bar()
 
-        misc.repeat_transaction(WikiDataBase.find_subclass_of_cancer, 10, driver)
-        misc.repeat_transaction(WikiDataBase.find_subclass_of_cancer, 10, driver)
-        misc.repeat_transaction(WikiDataBase.find_subclass_of_cancer, 10, driver)
-        misc.repeat_transaction(WikiDataBase.find_instance_of_cancer, 10, driver)
+        misc.repeat_transaction(WikiDataBase.find_subclass_of_disease(), driver); bar()
+        misc.repeat_transaction(WikiDataBase.find_subclass_of_disease(), driver); bar()
+        misc.repeat_transaction(WikiDataBase.find_subclass_of_disease(), driver); bar()
+        misc.repeat_transaction(WikiDataBase.find_instance_of_disease(), driver); bar()
 
         # For each of the 10 numbers a wikidata_id may have as ending
         for number in range(10):
-            misc.repeat_transaction(WikiDataBase.add_cancer_info, 10, driver, number=number)
-            misc.repeat_transaction(WikiDataBase.add_drugs, 10, driver, number=number)
-            misc.repeat_transaction(WikiDataBase.add_causes, 10, driver, number=number)
-            misc.repeat_transaction(WikiDataBase.add_genes, 10, driver, number=number)
+            misc.repeat_transaction(WikiDataBase.add_disease_info(number=number), driver); bar()
+            misc.repeat_transaction(WikiDataBase.add_drugs(number=number), driver); bar()
+            misc.repeat_transaction(WikiDataBase.add_causes(number=number), driver); bar()
+            misc.repeat_transaction(WikiDataBase.add_genes(number=number), driver); bar()
 
-        misc.repeat_transaction(WikiDataBase.add_drug_external_ids, 10, driver)
-        misc.repeat_transaction(WikiDataBase.add_more_drug_info, 10, driver)
-        misc.repeat_transaction(WikiDataBase.add_gene_info, 10, driver)
-        misc.repeat_transaction(WikiDataBase.add_metabolite_info, 10, driver)
+        misc.repeat_transaction(WikiDataBase.add_drug_external_ids(), driver); bar()
+        misc.repeat_transaction(WikiDataBase.add_more_drug_info(), driver); bar()
+        misc.repeat_transaction(WikiDataBase.add_yet_more_drug_info(), driver); bar()
+        misc.repeat_transaction(WikiDataBase.add_gene_info(), driver); bar()
+        misc.repeat_transaction(WikiDataBase.add_metabolite_info(), driver); bar()
 
 def add_mesh_and_metanetx(driver):
     """
@@ -589,23 +650,21 @@ def add_mesh_and_metanetx(driver):
     Returns:
         This function modifies the Neo4J Database as desired, but does not produce any particular return.
     """
+    with driver.session() as session, alive_bar( 10, title="Querying MeSH and MetaNetX...") as bar:
     # We will also add MeSH terms to all nodes:
-    with driver.session() as session:
-        session.run(MeSHandMetaNetXDataBases.add_mesh_by_name())
+        misc.repeat_transaction(MeSHandMetaNetXDataBases.add_mesh_by_name(), driver); bar()
     # We also add synonyms:
-    with driver.session() as session:
-        session.run(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx("Name"))
-        session.run(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx("KEGG_ID"))
-        session.run(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx("ChEBI_ID"))
-        session.run(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx("HMDB_ID"))
-        session.run(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx("InChI"))
-        session.run(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx("InChIKey"))
+        misc.repeat_transaction(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx("Name"), driver); bar()
+        misc.repeat_transaction(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx("KEGG_ID"), driver); bar()
+        misc.repeat_transaction(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx("ChEBI_ID"), driver); bar()
+        misc.repeat_transaction(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx("HMDB_ID"), driver); bar()
+        misc.repeat_transaction(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx("InChI"), driver); bar()
+        misc.repeat_transaction(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx("InChIKey"), driver); bar()
 
     # And some protein interactions, together with their pathways, too:
-    with driver.session() as session:
-        session.run(MeSHandMetaNetXDataBases.find_protein_data_in_metanetx())
-        session.run(MeSHandMetaNetXDataBases.find_protein_interactions_in_metanetx())
-        session.run(MeSHandMetaNetXDataBases.get_kegg_pathways_for_metabolites())
+        misc.repeat_transaction(MeSHandMetaNetXDataBases.find_protein_data_in_metanetx(), driver); bar()
+        misc.repeat_transaction(MeSHandMetaNetXDataBases.find_protein_interactions_in_metanetx(), driver); bar()
+        misc.repeat_transaction(MeSHandMetaNetXDataBases.get_kegg_pathways_for_metabolites(), driver); bar()
 
 def main():
     """
@@ -656,7 +715,7 @@ def main():
 
         # We start by cleaning the database (important if this is not the first run)
         with driver.session() as session:
-            session.run( misc.clean_database() )
+            misc.repeat_transaction( misc.clean_database(), driver)
             logging.info("Cleaned DataBase")
 
         print(f"Searching Synonyms for Metabolite {index+1}/{len(raw_database)} ...")
@@ -684,17 +743,17 @@ def main():
 
         print(f"Annotating Metabolite {index+1}/{len(raw_database)} using Web DataBases...")
 
-        # We first purge the database to prevent useless nodes from supercharging the web queries
-        misc.purge_database(driver)
+        # We first purge the database by deleting useless noded that might overcharge the web queries
+        misc.purge_database(driver, method = "delete")
 
         # Finally, we apply some functions that, although they could be run each time,
         # are so resource intensive that its better to just use once:
 
-        # if args.webdbs:
-        #     # We annotate the existing nodes using WikiData
-        #     annotate_using_wikidata(driver)
-        #     # Add their MeSH and MetaNetX IDs and synonyms
-        #     add_mesh_and_metanetx(driver)
+        if args.webdbs:
+            # # We annotate the existing nodes using WikiData
+            annotate_using_wikidata(driver)
+            # Add their MeSH and MetaNetX IDs and synonyms
+            add_mesh_and_metanetx(driver)
 
         # And purge any duplicates once again
         misc.purge_database(driver)
@@ -712,7 +771,6 @@ def main():
         logging.info(f"Metabolite {index+1}/{len(raw_database)} processed. You can find "
                      f"a copy of the associated knowledge graph at "
                      f"{os.path.abspath(args.results)}/metabolite_{index+1}.graphml")
-
 
     logging.info("Metabolite Processing has finished")
 

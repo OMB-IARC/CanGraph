@@ -36,6 +36,9 @@ def add_mesh_by_name():
     .. NOTE:: Only exact matches work here, which is not ideal.
 
     .. NOTE:: Be careful when writing CYPHER commands for the driver: sometimes, \" != \' !!!
+
+    .. versionchanged:: 1.0
+        Reverted the filtering to old version in order to make the search more specific
     """
     return """
 
@@ -68,12 +71,13 @@ def add_mesh_by_name():
                      meshv:active 1 ;
                      rdfs:label     ?MeSH_Concept_Name
 
-          FILTER( REGEX(?MeSH_Descriptor_Name, \"(?=.*' +  split(n.Name, ' ')[0] + ')(?=.*' +  split(n.Name, ' ')[0] + ') \", \"i\") ||
-                  REGEX(?MeSH_Concept_Name, \"(?=.*' +  split(n.Name, ' ')[0] + ')(?=.*' +  split(n.Name, ' ')[0] + ') \", \"i\") )
+          FILTER ( ( ?MeSH_Descriptor_Name = \"' +  replace(n.Name, "  ", " ") + '\"@en ) ||
+                    ( ?MeSH_Concept_Name = \"' +  replace(n.Name, "  ", " ") + '\"@en ) )
         }' AS sparql, n
 
         CALL apoc.load.jsonParams(
-            replace("https://id.nlm.nih.gov/mesh/sparql?query=" + apoc.text.urlencode(sparql) + "&format=JSON&limit=50&offset=0&inference=true", "\n", ""),
+            replace("https://id.nlm.nih.gov/mesh/sparql?query="
+                    + apoc.text.urlencode(sparql) + "&format=JSON&limit=50&offset=0&inference=true", "\n", ""),
             { Accept: "application/sparql-results+json" }, null )
         YIELD value
 
@@ -201,22 +205,28 @@ def get_identifiers(from_sparql=False, **kwargs):
             split(row['Isomers']['value'],'/')[-1] as Isomer,
             n
 
-        FOREACH(ignoreme in case when MetaNetX_ID IS NOT NULL AND MetaNetX_ID <> "" then [1] else [] end |
+        FOREACH(ignoreme in case when MetaNetX_ID IS NOT NULL
+                AND MetaNetX_ID <> "" then [1] else [] end |
             SET n.MetaNetX_ID = MetaNetX_ID
         )
-        FOREACH(ignoreme in case when InChIKey IS NOT NULL AND InChIKey <> "" then [1] else [] end |
+        FOREACH(ignoreme in case when InChIKey IS NOT NULL
+                AND InChIKey <> "" then [1] else [] end |
             SET n.InChIKey = InChIKey
         )
-        FOREACH(ignoreme in case when InChI IS NOT NULL AND InChI <> "" then [1] else [] end |
+        FOREACH(ignoreme in case when InChI IS NOT NULL
+                AND InChI <> "" then [1] else [] end |
             SET n.InChI = InChI
         )
-        FOREACH(ignoreme in case when Formula IS NOT NULL AND Formula <> "" then [1] else [] end |
+        FOREACH(ignoreme in case when Formula IS NOT NULL
+                AND Formula <> "" then [1] else [] end |
             SET n.Formula = Formula
         )
-        FOREACH(ignoreme in case when Mass IS NOT NULL AND Mass <> "" then [1] else [] end |
+        FOREACH(ignoreme in case when Mass IS NOT NULL
+                AND Mass <> "" then [1] else [] end |
             SET n.Average_Mass = Mass
         )
-        FOREACH(ignoreme in case when SMILES IS NOT NULL AND SMILES <> "" then [1] else [] end |
+        FOREACH(ignoreme in case when SMILES IS NOT NULL
+                AND SMILES <> "" then [1] else [] end |
             SET n.SMILES = SMILES
         )
             """,
@@ -244,7 +254,8 @@ def get_identifiers(from_sparql=False, **kwargs):
 
         {sparql_parser[0]}
 
-        FOREACH(ignoreme in case when databasename = "chebi" AND n.ChEBI_ID <> databaseid then [1] else [] end |
+        FOREACH(ignoreme in case when databasename = "chebi"
+                AND n.ChEBI_ID <> databaseid then [1] else [] end |
             MERGE (m {{ChEBI_ID: databaseid}})
             MERGE (n)-[r:SYNONYM_OF]-(m)
             FOREACH(ignoreme in case when size(labels(m)) < 1 then [1] else [] end |
@@ -252,7 +263,8 @@ def get_identifiers(from_sparql=False, **kwargs):
             )
         )
 
-        FOREACH(ignoreme in case when databasename = "kegg.compound" OR databasename = "keggc" AND n.KEGG_ID <> databaseid then [1] else [] end |
+        FOREACH(ignoreme in case when databasename = "kegg.compound"
+                OR databasename = "keggc" AND n.KEGG_ID <> databaseid then [1] else [] end |
             MERGE (m {{KEGG_ID: split(databaseid, "M_")[-1]}})
             MERGE (n)-[r:SYNONYM_OF]-(m)
             FOREACH(ignoreme in case when size(labels(m)) < 1 then [1] else [] end |
@@ -260,7 +272,8 @@ def get_identifiers(from_sparql=False, **kwargs):
             )
         )
 
-        FOREACH(ignoreme in case when databasename = "hmdb" AND n.HMDB_ID <> databaseid then [1] else [] end |
+        FOREACH(ignoreme in case when databasename = "hmdb"
+                AND n.HMDB_ID <> databaseid then [1] else [] end |
             MERGE (m {{HMDB_ID: split(databaseid, "M_")[-1]}})
             MERGE (n)-[r:SYNONYM_OF]-(m)
             FOREACH(ignoreme in case when size(labels(m)) < 1 then [1] else [] end |
@@ -272,11 +285,13 @@ def get_identifiers(from_sparql=False, **kwargs):
             SET n.VMH_ID = databaseid
         )
 
-        FOREACH(ignoreme in case when databasename = "biggm" OR databasename = "bigg.metabolite" then [1] else [] end |
+        FOREACH(ignoreme in case when databasename = "biggm"
+                OR databasename = "bigg.metabolite" then [1] else [] end |
             SET n.BiGG_ID = databaseid
         )
 
-        FOREACH(ignoreme in case when databasename = "sabiork.compound" OR databasename = "sabiorkm" then [1] else [] end |
+        FOREACH(ignoreme in case when databasename = "sabiork.compound"
+                OR databasename = "sabiorkm" then [1] else [] end |
             SET n.SabioRK_ID = databaseid
         )
 
@@ -288,7 +303,8 @@ def get_identifiers(from_sparql=False, **kwargs):
             SET n.ModelSeed_ID = split(databaseid, "M_")[-1]
         )
 
-        FOREACH(ignoreme in case when databasename = "metacyc.compound" OR databasename = "metacycm" then [1] else [] end |
+        FOREACH(ignoreme in case when databasename = "metacyc.compound"
+                OR databasename = "metacycm" then [1] else [] end |
             SET n.MetaCyc_ID = databaseid
         )
 
@@ -296,7 +312,8 @@ def get_identifiers(from_sparql=False, **kwargs):
             SET n.SwissLipids_ID = databaseid
         )
 
-        FOREACH(ignoreme in case when databasename = "envipath" OR databasename = "envipathm" then [1] else [] end |
+        FOREACH(ignoreme in case when databasename = "envipath"
+                OR databasename = "envipathm" then [1] else [] end |
             SET n.EnviPath_ID = databaseid
         )
 
@@ -328,7 +345,7 @@ def write_synonyms_in_metanetx(query, **kwargs):
     elif query == "ChEBI_ID":
       query_text = """?mnx_url  mnx:chemXref  chebi:' +  n.ChEBI_ID + ' . """
     elif query == "HMDB_ID":
-      query_text = """?mnx_url  mnx:chemXref  hmbd:' +  n.HMDB_ID + ' . """
+      query_text = """?mnx_url  mnx:chemXref  hmdb:' +  n.HMDB_ID + ' . """
     elif query == "InChI":
       query_text = """?mnx_url  mnx:inchi  \"' +  n.InChI + '\" . """
     elif query == "InChIKey":
@@ -826,6 +843,7 @@ def find_synonyms_in_cts(fromIdentifier, toIdentifier, searchTerm):
         except request.URLError as E:
             # For timeouts and internal server errors, just asume no result would be given
             # (weird that I'm finding these)
+            print(vars(E))
             if E.code == 500 or E.code == 504:
                 result = ""
                 break

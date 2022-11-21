@@ -49,23 +49,20 @@ def main():
 
         with driver.session() as session:
             session.execute_write(build_database.initial_cancer_discovery)
-            session.execute_write(build_database.remove_duplicate_nodes)
             bar()
 
         for number in range(3):
             with driver.session() as session:
-                misc.repeat_transaction(build_database.find_subclass_of_cancer, 10, driver)
-                misc.repeat_transaction(build_database.remove_duplicate_nodes, 10, driver)
+                misc.repeat_transaction(build_database.find_subclass_of_disease, 10, driver)
                 bar(); bar()
 
         with driver.session() as session:
-            misc.repeat_transaction(build_database.find_instance_of_cancer, 10, driver)
-            misc.repeat_transaction(build_database.remove_duplicate_nodes, 10, driver)
+            misc.repeat_transaction(build_database.find_instance_of_disease, 10, driver)
             bar(); bar()
 
         for number in range(10):
             with driver.session() as session:
-                misc.repeat_transaction(build_database.add_cancer_info, 10, driver, number)
+                misc.repeat_transaction(build_database.add_disease_info, 10, driver, number)
                 bar()
 
         for number in range(10):
@@ -73,11 +70,7 @@ def main():
                 misc.repeat_transaction(build_database.add_drugs, 10, driver, number)
                 misc.repeat_transaction(build_database.add_causes, 10, driver, number)
                 misc.repeat_transaction(build_database.add_genes, 10, driver, number)
-                bar(); bar(); bar()
-
-        with driver.session() as session:
-            session.execute_write(build_database.remove_duplicate_nodes)
-            bar()
+                bar(); bar(); bar();
 
         with driver.session() as session:
             misc.repeat_transaction(build_database.add_drug_external_ids, 10, driver)
@@ -94,8 +87,8 @@ def main():
                 bar()
 
         with driver.session() as session:
-            #NOTE: We purge by merging all products with the same EMA_MA_Number or FDA_Application_Number
-            session.execute_write(misc.remove_duplicate_nodes, "", "n.WikiData_ID as wdt")
+            session.execute_write(misc.purge_database, driver)
+            session.execute_write(misc.merge_duplicate_nodes, "", "n.WikiData_ID as wdt")
             # And, then, we delete duplicate relationships
             #NOTE: We will just do this once to decrease processing time
             session.execute_write(misc.remove_duplicate_relationships)

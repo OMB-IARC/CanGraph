@@ -26,7 +26,7 @@ graphify-smpdb/graph.graphml
 **/Results/
 
 # Ignore confidential sample input
-sample_input.csv
+# sample_input.csv Provide a valid sample input
 sample_input_metabolites.csv
 sample_input_cancers.csv
 
