@@ -169,6 +169,7 @@ def repeat_transaction(tx, driver, num_retries = 10, **kwargs):
             if attempt > 0: print(f"Error solved on attempt #{attempt}")
             break
         except Exception as error:
+            print(error)
             if attempt < (num_retries - 1):
                 print(f"An error with error code: {error.code} was found.")
                 print(f"Retrying... ({attempt + 1}/{num_retries})")

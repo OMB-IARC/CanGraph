@@ -9,16 +9,15 @@ From: debian:11
     # This section is where the Setup script is located. This script will be
     # run before each ``apptainer build``, to prepare the container itself
 
-    # And thus, we first setup the python requirements and the database folders
-    # python3 ../setup.py -i --databases ../DataBases --requirements ../requirements.txt
+    # Since the DataBases do not come bundled, there is not much preparing to do
 
 %files
     # This section is where the files that will conform the container are declared.
     # Since the container is inmutable, only files that will NOT be changed should be here
 
     # NOTE: Neo4j is not included in the container because, as a DB, it is NOT inmutable
+    # NOTE: Since this is the **public** version of the image, no DataBases are included
 
-    ../DataBases/          /home/CanGraph/
     ../GraphifyHMDB/       /home/CanGraph/
     ../GraphifySMPDB/      /home/CanGraph/
     ../GraphifyDrugBank/   /home/CanGraph/
@@ -31,7 +30,7 @@ From: debian:11
     ../setup.py            /home/CanGraph/setup.py
     ../main.py             /home/CanGraph/main.py
 
-    CanGraph-Private.sh    /home/CanGraph/runscript.sh
+    CanGraph-Public.sh    /home/CanGraph/runscript.sh
 
 %post
     # Here, we indicate which actions we want to perform in the just-created container,
@@ -85,18 +84,18 @@ From: debian:11
     This is a Singularity-packaged version of the CanGraph software, the source
     code of which can be found at https://codeberg.org/FlyingFlamingo/CanGraph
 
-    This version of the software may include some confidential databases,
-    as well as copyrighted software such as neo4j. Thus, it shouldn't be used or
-    distributed outside of authorised premises.
+    This version of the software has been intentionally designed to not include any
+    copyrighted information; as such, neo4j, as well as all databases, are downloaded
+    on first use.
 
-    For information on usage, ``apptainer run CanGraph-Private.sif -h``, or check
-    the README ``apptainer exec CanGraph-Private.sif cat /home/CanGraph/README.md``
+    For information on usage, ``apptainer run CanGraph-Public.sif -h``, or check
+    the README ``apptainer exec CanGraph-Public.sif cat /home/CanGraph/README.md``
 
     You MUST provide the command-line program with an ``inputfile``; optionally, a
     ``neo4jadress`` with username and password can be provided; if it is not, a new
     neo4j database will be started using the default user and the ``.neo4jpassword``
     file; if none is found, a new neo4j will be installed. For the "DataBases" folder,
-    you might provide one, or else the pre-packaged one will be used.
+    you might provide one, or else they will be downloaded/searched on ./DataBases
 
     For information on how to compile the project and it technical characteristics,
     please refer to the official documentation at https://omb-iarc.github.io/CanGraph/

@@ -245,7 +245,7 @@ def improve_search_terms(driver, chebi_ids, names, hmdb_ids, inchis, mesh_ids):
     query_dict = deepcopy(query_dict) # Make a deepcopy of the dict so that it doesn't update while on the loop
 
     # And then, proceed to search for synonyms and append the appropriate results if they are not already there
-    with alive_bar( sum( [len(v) for v in query_dict.values() ] ) + 4, title="Finding Synonyms...") as bar:
+    with alive_bar( sum( [ len(v) for v in query_dict.values() if any(v) ] ) + 4, title="Finding Synonyms...") as bar:
         for query_type, query_list in query_dict.items():
             for query in query_list:
                 if not query.isspace() and query:
@@ -253,7 +253,7 @@ def improve_search_terms(driver, chebi_ids, names, hmdb_ids, inchis, mesh_ids):
                     improve_search_terms_with_metanetx(query, query_type, driver,
                                                     chebi_ids, names, hmdb_ids, inchis, mesh_ids))
 
-            bar()
+                bar()
 
         # Once we have all the synonyms that we could find on MeSHandMetaNetX, we remove all duplicates
         chebi_ids = list(filter(None, set(chebi_ids)));   names = list(filter(None, set(names)));
@@ -275,7 +275,6 @@ def improve_search_terms(driver, chebi_ids, names, hmdb_ids, inchis, mesh_ids):
                                             chebi_ids, names, hmdb_ids, inchis, mesh_ids))
 
             bar()
-
 
         # Finally, we remove outdated HMDB IDs
         regex = re.compile(r'^HMDB\d\d\d\d\d$')
