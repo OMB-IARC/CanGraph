@@ -51,7 +51,7 @@ def neo4j_import_path_query(tx):
     :obj:`~CanGraph.miscelaneous.get_import_path` for it to do so.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
 
     Returns:
         str: A one-item list containing the Neo4J Import Path
@@ -149,7 +149,7 @@ def repeat_transaction(tx, driver, num_retries = 10, **kwargs):
     one can discriminate those out, and the function remains helpful to prevent SPARQL Read Time-Outs.
 
     Args:
-        tx (neo4j.work.simple.Session): The session under which the driver is running
+        tx (neo4j.Session): The session under which the driver is running
         driver (neo4j.Driver): Neo4J's Bolt Driver currently in use
         num_retries (int): The number of times that we wish the transaction to be retried
         **kwargs: Any number of arbitrary keyword arguments
@@ -169,7 +169,6 @@ def repeat_transaction(tx, driver, num_retries = 10, **kwargs):
             if attempt > 0: print(f"Error solved on attempt #{attempt}")
             break
         except Exception as error:
-            print(error)
             if attempt < (num_retries - 1):
                 print(f"An error with error code: {error.code} was found.")
                 print(f"Retrying... ({attempt + 1}/{num_retries})")
@@ -187,7 +186,7 @@ def call_db_schema_visualization(tx):
     since it produces no output when called from the driver.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
 
     .. TODO:: Make it download the image
     """
@@ -221,10 +220,10 @@ def create_n10s_graphconfig(tx):
     A CYPHER query that creates a *neosemantics* (n10s) constraint to hold all the RDF we will import.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. seealso:: More information on this approach can be found in `Neosemantics' 101 Guide <https://neo4j.com/labs/neosemantics/>`_
         and in `Neo4J's guide on how to import data from Wikidata <https://neo4j.com/labs/neosemantics/how-to-guide/>`_ ,
@@ -249,10 +248,10 @@ def remove_n10s_graphconfig(tx):
     but not at all useful in our final export
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. deprecated:: 0.9
         Since we are importing based on apoc.load.jsonParams, this is not needed anymore
@@ -267,10 +266,10 @@ def remove_ExternalEquivalent(tx):
     new info, one might consider them not useful.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
 
     Returns:
-        neo4j.work.result.Result:
+        neo4j.Result:
             A Neo4J connexion to the database that
             modifies it according to the CYPHER statement contained in the function.
     """
@@ -284,10 +283,10 @@ def remove_duplicate_relationships(tx):
     Removes duplicated relationships between ANY existing pair of nodes.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
 
     Returns:
-        neo4j.work.result.Result:
+        neo4j.Result:
             A Neo4J connexion to the database that
             modifies it according to the CYPHER statement contained in the function.
 
@@ -309,16 +308,17 @@ def merge_duplicate_nodes(tx, node_types, node_property, optional_condition="", 
     Removes any two nodes of any given ```node_type``` with the same ```condition```.
 
     Args:
-        tx (neo4j.work.simple.Session): The session under which the driver is running
+        tx (neo4j.Session): The session under which the driver is running
         node_types (str): The labels of the nodes that will
-            be selected for merging; i.e. ``n:Fruit OR n:Vegetable`
+            be selected for merging; i.e. ``n:Fruit OR n:Vegetable``
         node_property (str): The node properties used for collecting,
             if not using all properties.
         optional_condition (str): An optional Neo4J Statement, starting
             with "AND", to be added after the ``WHERE`` clause.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that
+        neo4j.Result:
+            A Neo4J connexion to the database that
             modifies it according to the CYPHER statement contained in the function.
 
     .. WARNING:: When using, take good care on how the keys names are written:
@@ -329,6 +329,8 @@ def merge_duplicate_nodes(tx, node_types, node_property, optional_condition="", 
                          f"WHERE x IN m.{node_property}) )")
         more_props = f"HEAD(COLLECT(DISTINCT [n, m])) AS alt_thing"
     else: condition_any = ""
+
+    if node_types == "": node_types="1=1" # Allow all nodes
 
     return tx.run(f"""
         MATCH (n), (m)
@@ -394,6 +396,9 @@ def purge_database(driver, method = ["merge", "delete"]):
             "n:Protein OR n:Metabolite OR n:Drug OR n:OriginalMetabolite", "InChI")
         session.execute_write(merge_duplicate_nodes,
             "n:Protein OR n:Metabolite OR n:Drug OR n:OriginalMetabolite", "InChIKey")
+
+        # WikiData_IDs showuld also be unique:
+        session.execute_write(merge_duplicate_nodes, "", "WikiData_ID")
 
         # We also remove all non-unique Subjects. We do this by passing on all three parameters
         # this nodes may have to apoc.mergeNodes
@@ -503,19 +508,20 @@ def export_graphml(tx, exportname):
     Exports a Neo4J graph to GraphML format. The graph will be exported to Neo4JImportPath
 
     Args:
-        tx  (neo4j.work.simple.Session): The session under which the driver is running
+        tx  (neo4j.Session): The session under which the driver is running
         exportname (str): The name for the exported file, which will be saved under ./Neo4JImportPath/
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that exports the file, using batch optimizations and
+        neo4j.Result: A Neo4J connexion to the database that exports the file, using batch optimizations and
             smaller batch sizes to try to keep the impact on memory use low
 
     .. NOTE:: for this to work, you HAVE TO have APOC availaible on your Neo4J installation
     """
     return tx.run(f"""
-        CALL apoc.export.graphml.all("{exportname}", {{batchSize: 5, useTypes:true, storeNodeIds:false,
-                                                       useOptimizations:
-                                                           {{type: "UNWIND_BATCH", unwindBatchSize: 5}} }})
+        CALL apoc.export.graphml.all("{exportname}",
+                                     {{batchSize: 5, useTypes:true, storeNodeIds:false,
+                                       useOptimizations:
+                                            {{type: "UNWIND_BATCH", unwindBatchSize: 5}} }})
         """)
 
 
@@ -524,19 +530,20 @@ def import_graphml(tx, importname):
     Imports a GraphML file into a Neo4J graph. The file has to be located in Neo4JImportPath
 
     Args:
-        tx  (neo4j.work.simple.Session): The session under which the driver is running
+        tx  (neo4j.Session): The session under which the driver is running
         importname (str): The name for the file to be imported, which must be under ./Neo4JImportPath/
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that imports the file, using batch optimizations and
+        neo4j.Result: A Neo4J connexion to the database that imports the file, using batch optimizations and
             smaller batch sizes to try to keep the impact on memory use low
 
     .. NOTE:: for this to work, you HAVE TO have APOC availaible on your Neo4J installation
     """
     return tx.run(f"""
-        CALL apoc.import.graphml("{importname}", {{batchSize: 5, useTypes:true, storeNodeIds:false,
-                                                   readLabels:True, useOptimizations:
-                                                       {{type: "UNWIND_BATCH", unwindBatchSize: 5}} }})
+        CALL apoc.import.graphml("{importname}",
+                                 {{batchSize: 5, useTypes:true, storeNodeIds:false, readLabels:True,
+                                   useOptimizations:
+                                        {{type: "UNWIND_BATCH", unwindBatchSize: 5}} }})
         """)
 
 def download(url, folder):

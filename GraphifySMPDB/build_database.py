@@ -28,11 +28,11 @@ def add_metabolites(tx, filename):
     Adds "Metabolite" nodes to the database, according to individual CSVs present in the SMPDB website
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. NOTE:: Some of the node's properties might be set to "null" (important in order to work with it)
 
@@ -54,11 +54,11 @@ def add_proteins(tx, filename):
     Adds "Protein" nodes to the database, according to individual CSVs present in the SMPDB website
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. NOTE:: Some of the node's properties might be set to "null" (important in order to work with it)
 
@@ -86,11 +86,11 @@ def add_pathways(tx, filename):
     Since this is done after the creation of said pathways in the last step, this will most likely just annotate them.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. TODO:: This file is really big. It could be divided into smaller ones.
     """
@@ -105,7 +105,7 @@ def add_sequence(tx, seq_id, seq_name, seq_type, seq, seq_format="FASTA"):
     Adds "Pathways" nodes to the database, according to the sequences presented in FASTA files from the SMPDB website
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         seq_id      (str): The UniProt Database Identifier for the sequence that is been imported
         seq_name    (str): The Name (i.e. FASTA header) of the Sequence that is been imported
         seq_type    (bool): The type of the sequence; can be either of ["DNA", "PROT"]
@@ -113,7 +113,7 @@ def add_sequence(tx, seq_id, seq_name, seq_type, seq, seq_format="FASTA"):
         seq_format  (str): The format the sequence is provided under; default is "FASTA", but its optional
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         MERGE (s:Sequence {{ UniProt_ID:"{seq_id}", Name:"{seq_name}", Type:"{seq_type}", Sequence:"{seq}", Format:"{seq_format}" }} )

@@ -18,11 +18,15 @@ liking, but it should at least contain the root `toctree` directive.
 :hidden: true
 :maxdepth: 3
 
+Downloads
+
 Tutorials
 
-ToDoList
+Presentations <https://www.pablomarcos.me/es/posts/master-en-biolog%c3%ada-computacional/tfm/>
 
 CanGraph
+
+ToDoList
 ```
 
 ::::{grid}
@@ -46,7 +50,7 @@ CanGraph
 
 A utility to study and analyse cancer-associated metabolites using knowledge graphs
 
-```{button-ref} CanGraph
+```{button-ref} Downloads
 :ref-type: doc
 :color: warning
 :class: sd-rounded-pill float-left

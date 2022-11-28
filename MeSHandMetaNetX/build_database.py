@@ -96,7 +96,7 @@ def find_metabolites_related_to_mesh(tx, mesh_id):
     A function that finds Metabolites related to a given MeSH ID, on the MeSH DataBase
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         mesh_id (str): The MeSH_ID of the thing for which we want to find related proteins
 
     Returns:
@@ -106,7 +106,7 @@ def find_metabolites_related_to_mesh(tx, mesh_id):
 
     .. NOTE:: Could be turned into a read query by substituting ``mesh_id`` with ``' + n.MeSH_ID + '``
     """
-    graph_response = tx.run(f"""
+    graph_response = tx.run( f"""
         WITH '
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -404,7 +404,7 @@ def read_synonyms_in_metanetx(tx, querytype, query, **kwargs):
     and finding whether the metabolite in question has any known isomers, anootating if so.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         querytype   (str): The type of query that is being searched for. One of ["Name","KEGG_ID","ChEBI_ID","HMDB_ID","InChI","InChIKey"]
         query       (str): The query we are searching for; must be of type ```querytype```
         **kwargs: Any number of arbitrary keyword arguments
@@ -602,11 +602,11 @@ def add_chem_xref(tx, filename):
     A CYPHER query that loads the `chem_xref.tsv` file availaible at the MetaNetX site, using a graph format.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. NOTE:: For performance, it is recommended to split the file in 1 subfile for each row in the DataBase
     """
@@ -628,11 +628,11 @@ def add_chem_prop(tx, filename):
     A CYPHER query that loads the `chem_prop.tsv` file availaible at the MetaNetX site, using a graph format.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. NOTE:: For performance, it is recommended to split the file in 1 subfile for each row in the DataBase
     """
@@ -649,11 +649,11 @@ def add_chem_isom(tx, filename):
     A CYPHER query that loads the `chem_isom.tsv` file availaible at the MetaNetX site, using a graph format.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. NOTE:: For performance, it is recommended to split the file in 1 subfile for each row in the DataBase
     """
@@ -674,11 +674,11 @@ def add_comp_xref(tx, filename):
     A CYPHER query that loads the `comp_xref.tsv` file availaible at the MetaNetX site, using a graph format.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. NOTE:: For performance, it is recommended to split the file in 1 subfile for each row in the DataBase
 
@@ -723,11 +723,11 @@ def add_comp_prop(tx, filename):
     A CYPHER query that loads the `comp_prop.tsv` file availaible at the MetaNetX site, using a graph format.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. NOTE:: For performance, it is recommended to split the file in 1 subfile for each row in the DataBase
     """
@@ -843,16 +843,22 @@ def find_synonyms_in_cts(fromIdentifier, toIdentifier, searchTerm):
         except request.URLError as E:
             # For timeouts and internal server errors, just asume no result would be given
             # (weird that I'm finding these)
-            print(vars(E))
-            if E.code == 500 or E.code == 504:
-                result = ""
-                break
-            else:
-                if x < 4:
-                    print("An error with the URL has been detected. Retrying in 2 seconds...")
-                    time.sleep(2)
+            try:
+                error_code = E.code
+                if E.code == 500 or E.code == 504:
+                    result = ""
+                    break
                 else:
-                    raise Exception(f"An HTTP Error with Code: {E.code} was found. Aborting...")
+                    result = result
+            except:
+                result = ""
+                error_code = "Undefined"
+
+            if x < 4:
+                print("An error with the URL has been detected. Retrying in 2 seconds...")
+                time.sleep(2)
+            else:
+                raise Exception(f"An HTTP Error with Code: {error_code} was found. Aborting...")
 
     return result
 

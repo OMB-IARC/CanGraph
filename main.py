@@ -245,7 +245,7 @@ def improve_search_terms(driver, chebi_ids, names, hmdb_ids, inchis, mesh_ids):
     query_dict = deepcopy(query_dict) # Make a deepcopy of the dict so that it doesn't update while on the loop
 
     # And then, proceed to search for synonyms and append the appropriate results if they are not already there
-    with alive_bar( sum( [ len(v) for v in query_dict.values() if any(v) ] ) + 4, title="Finding Synonyms...") as bar:
+    with alive_bar( sum( [ len(v) for v in query_dict.values() ] ) + 4, title="Finding Synonyms...") as bar:
         for query_type, query_list in query_dict.items():
             for query in query_list:
                 if not query.isspace() and query:
@@ -587,13 +587,13 @@ def link_to_original_data(tx, item_type, item, import_based_on):
     ``ÒriginalMetabolite`` node that is ``(n)-[r:ORIGINALLY_IDENTIFIED_AS]->(a)`` related to the imported data
 
     Args:
-        tx (neo4j.work.simple.Session): The session under which the driver is running
+        tx (neo4j.Session): The session under which the driver is running
         item_type (str): The property to match in the Neo4J DataBase
         item (dict): The value of property ```item_type```
         import_based_on (list): A list of the methods that turned out to be valid for import, such as Name, ChEBI_ID...
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
                     MERGE (n {{ {item_type}:"{item}" }})
@@ -709,6 +709,9 @@ def main():
     Neo4JImportPath = misc.get_import_path(driver)
     logging.info("Connected to Neo4J")
 
+    if not os.path.exists(f"{os.path.abspath(args.dbfolder)}/index.json") and not args.noindex:
+        print("No index file was found. Switching to non-indexed mode..."); agrs.noindex = True
+
     # For each item in our "query" file, we will try to find matches:
     for index, row in raw_database.iterrows():
 
@@ -722,8 +725,8 @@ def main():
         # Then, we fill the empty values so that the program does not crash
         row.fillna("", inplace=True)
 
-        chebi_ids, names, hmdb_ids, inchis, mesh_ids = improve_search_terms(driver, row.ChEBI, row.Name,
-                                                                            row.Identifier, row.InChI, row.MeSH)
+        chebi_ids, names, hmdb_ids, inchis, mesh_ids = improve_search_terms(driver, row.ChEBI_ID, row.Name,
+                                                                            row.HMDB_ID, row.InChI, row.MeSH)
 
         print(f"Annotating Metabolite {index+1}/{len(raw_database)} using Built-In DataBases...")
 
@@ -766,6 +769,7 @@ def main():
 
         shutil.copyfile(f"{Neo4JImportPath}/metabolite_{index+1}.graphml",
                         f"{os.path.abspath(args.results)}/metabolite_{index+1}.graphml")
+        os.remove(f"{Neo4JImportPath}/metabolite_{index+1}.graphml") # Remove original to avoid errors
 
         logging.info(f"Metabolite {index+1}/{len(raw_database)} processed. You can find "
                      f"a copy of the associated knowledge graph at "

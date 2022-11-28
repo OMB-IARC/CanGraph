@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+<key id="Abbreviation" for="node" attr.name="Abbreviation" attr.type="string"/>
+<key id="Issue" for="node" attr.name="Issue" attr.type="string"/>
+<key id="Size" for="node" attr.name="Size" attr.type="string"/>
+<key id="Authors" for="node" attr.name="Authors" attr.type="string"/>
+<key id="Physiological_Charge" for="node" attr.name="Physiological_Charge" attr.type="string"/>
+<key id="Gender" for="node" attr.name="Gender" attr.type="string"/>
+<key id="Exposome_Explorer_ID" for="node" attr.name="Exposome_Explorer_ID" attr.type="string"/>
+<key id="Alternative_Names" for="node" attr.name="Alternative_Names" attr.type="string"/>
+<key id="Acceptor_Count" for="node" attr.name="Acceptor_Count" attr.type="string"/>
+<key id="Female_Proportion" for="node" attr.name="Female_Proportion" attr.type="string"/>
+<key id="Reasons_To_Import" for="node" attr.name="Reasons_To_Import" attr.type="string" attr.list="string"/>
+<key id="Formula" for="node" attr.name="Formula" attr.type="string"/>
+<key id="HomoloGene_ID" for="node" attr.name="HomoloGene_ID" attr.type="string"/>
+<key id="Formal_Charge" for="node" attr.name="Formal_Charge" attr.type="string"/>
+<key id="HMDB_ID" for="node" attr.name="HMDB_ID" attr.type="string" attr.list="string"/>
+<key id="HGNC_ID" for="node" attr.name="HGNC_ID" attr.type="string"/>
+<key id="Repetitions" for="node" attr.name="Repetitions" attr.type="string"/>
+<key id="MDDR_Like_Rule" for="node" attr.name="MDDR_Like_Rule" attr.type="string"/>
+<key id="Donor_Count" for="node" attr.name="Donor_Count" attr.type="string"/>
+<key id="Genomic_Start" for="node" attr.name="Genomic_Start" attr.type="string"/>
+<key id="DOI" for="node" attr.name="DOI" attr.type="string"/>
+<key id="Ghose_Filter" for="node" attr.name="Ghose_Filter" attr.type="string"/>
+<key id="Synonyms" for="node" attr.name="Synonyms" attr.type="string"/>
+<key id="Status" for="node" attr.name="Status" attr.type="string"/>
+<key id="Displayed_Nb_of_proofs" for="node" attr.name="Displayed_Nb_of_proofs" attr.type="string"/>
+<key id="Specimen_Type" for="node" attr.name="Specimen_Type" attr.type="string"/>
+<key id="Publication" for="node" attr.name="Publication" attr.type="string"/>
+<key id="Cytogenetic_Location" for="node" attr.name="Cytogenetic_Location" attr.type="string"/>
+<key id="pKa_Strongest_Acidic" for="node" attr.name="pKa_Strongest_Acidic" attr.type="string"/>
+<key id="Bioavailability" for="node" attr.name="Bioavailability" attr.type="string"/>
+<key id="Public" for="node" attr.name="Public" attr.type="string"/>
+<key id="labels" for="node" attr.name="labels" attr.type="string"/>
+<key id="Pages" for="node" attr.name="Pages" attr.type="string"/>
+<key id="Average_Mass" for="node" attr.name="Average_Mass" attr.type="string"/>
+<key id="InChIKey" for="node" attr.name="InChIKey" attr.type="string"/>
+<key id="Volume" for="node" attr.name="Volume" attr.type="string"/>
+<key id="State" for="node" attr.name="State" attr.type="string"/>
+<key id="MetaNetX_ID" for="node" attr.name="MetaNetX_ID" attr.type="string"/>
+<key id="PubMed_ID" for="node" attr.name="PubMed_ID" attr.type="string"/>
+<key id="Country" for="node" attr.name="Country" attr.type="string"/>
+<key id="Level" for="node" attr.name="Level" attr.type="string"/>
+<key id="logS" for="node" attr.name="logS" attr.type="string"/>
+<key id="Chromosome_Location" for="node" attr.name="Chromosome_Location" attr.type="string"/>
+<key id="Secondary_HMDB_IDs" for="node" attr.name="Secondary_HMDB_IDs" attr.type="string"/>
+<key id="MeSH_ID" for="node" attr.name="MeSH_ID" attr.type="string"/>
+<key id="Group" for="node" attr.name="Group" attr.type="string"/>
+<key id="Metabolomics" for="node" attr.name="Metabolomics" attr.type="string"/>
+<key id="Method_Type" for="node" attr.name="Method_Type" attr.type="string"/>
+<key id="Description" for="node" attr.name="Description" attr.type="string"/>
+<key id="Polarizability" for="node" attr.name="Polarizability" attr.type="string"/>
+<key id="Average_Molecular_Weight" for="node" attr.name="Average_Molecular_Weight" attr.type="string"/>
+<key id="Refractivity" for="node" attr.name="Refractivity" attr.type="string"/>
+<key id="ChemSpider_ID" for="node" attr.name="ChemSpider_ID" attr.type="string"/>
+<key id="InChI" for="node" attr.name="InChI" attr.type="string"/>
+<key id="ChEBI_ID" for="node" attr.name="ChEBI_ID" attr.type="string"/>
+<key id="Time" for="node" attr.name="Time" attr.type="string"/>
+<key id="Full_Annotation" for="node" attr.name="Full_Annotation" attr.type="string"/>
+<key id="METLIN_ID" for="node" attr.name="METLIN_ID" attr.type="string"/>
+<key id="URL" for="node" attr.name="URL" attr.type="string"/>
+<key id="Function" for="node" attr.name="Function" attr.type="string"/>
+<key id="Polar_Surface_Area" for="node" attr.name="Polar_Surface_Area" attr.type="string"/>
+<key id="Health_Condition" for="node" attr.name="Health_Condition" attr.type="string"/>
+<key id="Number_of_Rings" for="node" attr.name="Number_of_Rings" attr.type="string"/>
+<key id="PubChem_ID" for="node" attr.name="PubChem_ID" attr.type="string"/>
+<key id="Ensembl_Gene_ID" for="node" attr.name="Ensembl_Gene_ID" attr.type="string"/>
+<key id="Monisotopic_Molecular_Weight" for="node" attr.name="Monisotopic_Molecular_Weight" attr.type="string"/>
+<key id="Notes" for="node" attr.name="Notes" attr.type="string"/>
+<key id="Genomic_End" for="node" attr.name="Genomic_End" attr.type="string"/>
+<key id="OMIM_ID" for="node" attr.name="OMIM_ID" attr.type="string"/>
+<key id="pKa_Strongest_Basic" for="node" attr.name="pKa_Strongest_Basic" attr.type="string"/>
+<key id="First_Author" for="node" attr.name="First_Author" attr.type="string"/>
+<key id="Entrez_ID" for="node" attr.name="Entrez_ID" attr.type="string"/>
+<key id="Title" for="node" attr.name="Title" attr.type="string"/>
+<key id="SMILES" for="node" attr.name="SMILES" attr.type="string"/>
+<key id="IUPAC" for="node" attr.name="IUPAC" attr.type="string"/>
+<key id="WikiData_ID" for="node" attr.name="WikiData_ID" attr.type="string"/>
+<key id="Date" for="node" attr.name="Date" attr.type="string"/>
+<key id="Type" for="node" attr.name="Type" attr.type="string"/>
+<key id="Verber_Rule" for="node" attr.name="Verber_Rule" attr.type="string"/>
+<key id="Strand_Orientation" for="node" attr.name="Strand_Orientation" attr.type="string"/>
+<key id="Rotatable_Bond_Count" for="node" attr.name="Rotatable_Bond_Count" attr.type="string"/>
+<key id="Ro5" for="node" attr.name="Ro5" attr.type="string"/>
+<key id="Study_Design_Type" for="node" attr.name="Study_Design_Type" attr.type="string"/>
+<key id="CAS_Number" for="node" attr.name="CAS_Number" attr.type="string"/>
+<key id="PubMed_ID" for="edge" attr.name="PubMed_ID" attr.type="string"/>
+<key id="label" for="edge" attr.name="label" attr.type="string"/>
+<graph id="G" edgedefault="directed">
+<node id="n27" labels=":Metabolite:OriginalMetabolite"><data key="labels">:Metabolite:OriginalMetabolite</data><data key="MetaNetX_ID">MNXM480631</data><data key="Average_Mass">245.16271</data><data key="Function">fatty acyl carnitines</data><data key="Displayed_Nb_of_proofs">0</data><data key="WikiData_ID">Q27140243</data><data key="Alternative_Names">2-Methylbutyroylcarnitine</data><data key="Exposome_Explorer_ID">Component_2411</data><data key="Level">Single</data><data key="Rotatable_Bond_Count">8</data><data key="Acceptor_Count">3</data><data key="Formal_Charge">0</data><data key="Verber_Rule">No</data><data key="logS">-4.07</data><data key="MDDR_Like_Rule">No</data><data key="Ghose_Filter">No</data><data key="Refractivity">86.44</data><data key="pKa_Strongest_Basic">-7.1</data><data key="Number_of_Rings">0</data><data key="Physiological_Charge">0</data><data key="Polarizability">26.51</data><data key="Donor_Count">0</data><data key="Polar_Surface_Area">66.43</data><data key="Ro5">Yes</data><data key="pKa_Strongest_Acidic">4.34</data><data key="Synonyms">Methylbutyroyl-carnitine,L-2-Methylbutyrate (3-carboxy-2-hydroxypropyl)trimethyl-hydroxide ammonium inner salt,(2-Methylbutyryl)carnitine,3-[(2-Methylbutanoyl)oxy]-4-(trimethylammonio)butanoic acid,3-[(2-Methylbutanoyl)oxy]-4-(trimethylammonio)butanoate,</data><data key="Secondary_HMDB_IDs">HMDB01963,HMDB00378,HMDB0001963,</data><data key="Description">Belongs to the class of organic compounds known as acyl carnitines. These are organic compounds containing a fatty acid with the carboxylic acid attached to carnitine through an ester bond.</data><data key="Bioavailability">Yes</data><data key="ChemSpider_ID">4932320</data><data key="PubChem_ID">6426901</data><data key="InChIKey">InChIKey=IHCPDBBYTYJYIL-UHFFFAOYSA-N</data><data key="State">Solid</data><data key="METLIN_ID">5367</data><data key="CAS_Number">31023-25-3</data><data key="SMILES">CCC(C)C(=O)OC(CC(=O)[O-])C[N+](C)(C)C</data><data key="InChI">InChI=1S/C12H23NO4/c1-6-9(2)12(16)17-10(7-11(14)15)8-13(3,4)5/h9-10H,6-8H2,1-5H3</data><data key="Average_Molecular_Weight">245.3153</data><data key="Monisotopic_Molecular_Weight">245.162708229</data><data key="Status">detected</data><data key="Formula">C12H23NO4</data><data key="IUPAC">3-[(2-methylbutanoyl)oxy]-4-(trimethylazaniumyl)butanoate</data><data key="Name">["2-Methylbutyroylcarnitine","2-Methylbutyrylcarnitine","2-methylbutyrylcarnitine"]</data><data key="HMDB_ID">["HMDB0000378","HMDB0001963","HMDB00378"]</data><data key="ChEBI_ID">73026</data><data key="Reasons_To_Import">["ChEBI_ID,ChEBI_ID","Name"]</data></node>
+<node id="n30" labels=":Disease"><data key="labels">:Disease</data><data key="Name">Autosomal  dominant polycystic kidney disease</data><data key="WikiData_ID">Q2732398</data></node>
+<node id="n31" labels=":Publication"><data key="labels">:Publication</data><data key="Title">Asymmetric dimethylarginine and lipid peroxidation products in early autosomal dominant polycystic kidney disease</data><data key="Authors">Wang D, Strandgaard S, Borresen ML, Luo Z, Connors SG, Yan Q, Wilcox CS</data><data key="Issue">2</data><data key="Pages"> 10</data><data key="PubMed_ID">18215696</data><data key="Notes"> doi: 10</data><data key="Date"> 2008 Feb</data><data key="Publication">Am J Kidney Dis</data><data key="Volume">51</data></node>
+<node id="n32" labels=":Publication"><data key="labels">:Publication</data><data key="Authors">Gronwald W, Klein MS, Zeltner R, Schulze BD, Reinhold SW, Deutschmann M, Immervoll AK, Boger CA, Banas B, Eckardt KU, Oefner PJ</data><data key="Pages"> 10</data><data key="PubMed_ID">21389975</data><data key="Title">Detection of autosomal dominant polycystic kidney disease by NMR spectroscopic fingerprinting of urine</data><data key="Date"> 2011 Jun</data><data key="Volume">79</data><data key="Issue">11</data><data key="Publication">Kidney Int</data><data key="Notes"> doi: 10</data></node>
+<node id="n40" labels=":Taxonomy"><data key="labels">:Taxonomy</data><data key="Name">Organic compounds</data><data key="Type">Kingdom</data></node>
+<node id="n41" labels=":Taxonomy"><data key="labels">:Taxonomy</data><data key="Name">Lipids and lipid-like molecules</data><data key="Type">Super Class</data></node>
+<node id="n42" labels=":Taxonomy"><data key="labels">:Taxonomy</data><data key="Type">Class</data><data key="Name">Fatty Acyls</data></node>
+<node id="n43" labels=":Taxonomy"><data key="labels">:Taxonomy</data><data key="Name">Fatty acid esters</data><data key="Type">Sub Class</data></node>
+<node id="n44" labels=":Taxonomy"><data key="labels">:Taxonomy</data><data key="Name">Acyl carnitines</data></node>
+<node id="n45" labels=":Taxonomy"><data key="labels">:Taxonomy</data><data key="Name">Amines</data></node>
+<node id="n46" labels=":Taxonomy"><data key="labels">:Taxonomy</data><data key="Name">Branched fatty acids</data></node>
+<node id="n47" labels=":Taxonomy"><data key="labels">:Taxonomy</data><data key="Name">Carbonyl compounds</data></node>
+<node id="n48" labels=":Taxonomy"><data key="labels">:Taxonomy</data><data key="Name">Carboxylic acid esters</data></node>
+<node id="n49" labels=":Taxonomy"><data key="labels">:Taxonomy</data><data key="Name">Carboxylic acid salts</data></node>
+<node id="n50" labels=":Taxonomy"><data key="labels">:Taxonomy</data><data key="Name">Carboxylic acids</data></node>
+<node id="n51" labels=":Taxonomy"><data key="labels">:Taxonomy</data><data key="Name">Dicarboxylic acids and derivatives</data></node>
+<node id="n52" labels=":Taxonomy"><data key="labels">:Taxonomy</data><data key="Name">Hydrocarbon derivatives</data></node>
+<node id="n53" labels=":Taxonomy"><data key="labels">:Taxonomy</data><data key="Name">Organic oxides</data></node>
+<node id="n54" labels=":Taxonomy"><data key="labels">:Taxonomy</data><data key="Name">Organic salts</data></node>
+<node id="n55" labels=":Taxonomy"><data key="labels">:Taxonomy</data><data key="Name">Organopnictogen compounds</data></node>
+<node id="n56" labels=":Taxonomy"><data key="labels">:Taxonomy</data><data key="Name">Tetraalkylammonium salts</data></node>
+<node id="n57" labels=":CelularLocation"><data key="labels">:CelularLocation</data><data key="Name">Extracellular</data></node>
+<node id="n58" labels=":CelularLocation"><data key="labels">:CelularLocation</data><data key="Name">Membrane</data></node>
+<node id="n59" labels=":BioSpecimen"><data key="labels">:BioSpecimen</data><data key="Name">Blood</data></node>
+<node id="n60" labels=":BioSpecimen"><data key="labels">:BioSpecimen</data><data key="Name">Urine</data></node>
+<node id="n61" labels=":Tissue"><data key="labels">:Tissue</data><data key="Name">Placenta</data><data key="WikiData_ID">Q1212935</data></node>
+<node id="n62" labels=":Publication"><data key="labels">:Publication</data><data key="PubMed_ID">3383426</data><data key="Title">Urinary acylcarnitines in a patient with neonatal multiple acyl-CoA dehydrogenation deficiency, quantified by a carboxylic acid analyzer with a reversed-phase column</data><data key="Authors">Kidouchi K, Niwa T, Nohara D, Asai K, Sugiyama N, Morishita H, Kobayashi M, Wada Y</data><data key="Date"> 1988 Apr 29</data><data key="Issue">3</data><data key="Pages">263-72</data><data key="Publication">Clin Chim Acta</data><data key="Notes"></data><data key="Volume">173</data></node>
+<node id="n63" labels=":Publication"><data key="labels">:Publication</data><data key="PubMed_ID">7970932</data><data key="Title">Involvement of erythrocyte calpain in glycine- and carnitine-treated isovaleric acidemia</data><data key="Authors">Salamino F, Di Lisa F, Burlina AB, Menabo R, Barbato R, De Tullio R, Siliprandi N</data><data key="Date"> 1994 Aug</data><data key="Issue">2</data><data key="Pages">182-6</data><data key="Publication">Pediatr Res</data><data key="Notes"></data><data key="Volume">36</data></node>
+<node id="n64" labels=":Publication"><data key="labels">:Publication</data><data key="Authors">Abdenur JE, Chamoles NA, Guinle AE, Schenone AB, Fuertes AN</data><data key="Pages">624-30</data><data key="PubMed_ID">9762597</data><data key="Title">Diagnosis of isovaleric acidaemia by tandem mass spectrometry: false positive result due to pivaloylcarnitine in a newborn screening programme</data><data key="Date"> 1998 Aug</data><data key="Volume">21</data><data key="Issue">6</data><data key="Publication">J Inherit Metab Dis</data><data key="Notes"></data></node>
+<node id="n65" labels=":Publication"><data key="labels">:Publication</data><data key="PubMed_ID">8804338</data><data key="Title">Isovaleric acidemia: response to a leucine load after three weeks of supplementation with glycine, L-carnitine, and combined glycine-carnitine therapy</data><data key="Authors">Fries MH, Rinaldo P, Schmidt-Sommerfeld E, Jurecki E, Packman S</data><data key="Date"> 1996 Sep</data><data key="Issue">3</data><data key="Pages">449-52</data><data key="Publication">J Pediatr</data><data key="Notes"></data><data key="Volume">129</data></node>
+<node id="n66" labels=":Publication"><data key="labels">:Publication</data><data key="PubMed_ID">3794887</data><data key="Title">Endogenous catabolism is the major source of toxic metabolites in isovaleric acidemia</data><data key="Authors">Millington DS, Roe CR, Maltby DA, Inoue F</data><data key="Date"> 1987 Jan</data><data key="Issue">1</data><data key="Pages">56-60</data><data key="Publication">J Pediatr</data><data key="Notes"></data><data key="Volume">110</data></node>
+<node id="n67" labels=":Publication"><data key="labels">:Publication</data><data key="Authors">Minkler PE, Ingalls ST, Hoppel CL</data><data key="PubMed_ID">2344045</data><data key="Title">High-performance liquid chromatographic separation of acylcarnitines following derivatization with 4'-bromophenacyl trifluoromethanesulfonate</data><data key="Date"> 1990 Feb 15</data><data key="Issue">1</data><data key="Pages">29-35</data><data key="Publication">Anal Biochem</data><data key="Notes"></data><data key="Volume">185</data></node>
+<node id="n68" labels=":Publication"><data key="labels">:Publication</data><data key="PubMed_ID">6441143</data><data key="Title">Urinary excretion of l-carnitine and acylcarnitines by patients with disorders of organic acid metabolism: evidence for secondary insufficiency of l-carnitine</data><data key="Authors">Chalmers RA, Roe CR, Stacey TE, Hoppel CL</data><data key="Date"> 1984 Dec</data><data key="Issue">12</data><data key="Pages">1325-8</data><data key="Publication">Pediatr Res</data><data key="Notes"></data><data key="Volume">18</data></node>
+<node id="n69" labels=":Publication"><data key="labels">:Publication</data><data key="PubMed_ID">6549017</data><data key="Title">L-carnitine therapy in isovaleric acidemia</data><data key="Authors">Roe CR, Millington DS, Maltby DA, Kahler SG, Bohan TP</data><data key="Date"> 1984 Dec</data><data key="Issue">6</data><data key="Pages">2290-5</data><data key="Publication">J Clin Invest</data><data key="Notes"></data><data key="Volume">74</data></node>
+<node id="n70" labels=":Publication"><data key="labels">:Publication</data><data key="Authors">Roe CR, Cederbaum SD, Roe DS, Mardach R, Galindo A, Sweetman L</data><data key="Pages">264-71</data><data key="PubMed_ID">9889013</data><data key="Title">Isolated isobutyryl-CoA dehydrogenase deficiency: an unrecognized defect in human valine metabolism</data><data key="Date"> 1998 Dec</data><data key="Volume">65</data><data key="Issue">4</data><data key="Publication">Mol Genet Metab</data><data key="Notes"></data></node>
+<node id="n71" labels=":Publication"><data key="labels">:Publication</data><data key="PubMed_ID">2062823</data><data key="Title">Analysis of acylcarnitines in maternal urine for prenatal diagnosis of glutaric aciduria type 2</data><data key="Authors">Sakuma T, Sugiyama N, Ichiki T, Kobayashi M, Wada Y, Nohara D</data><data key="Date"> 1991 Feb</data><data key="Issue">2</data><data key="Pages">77-82</data><data key="Publication">Prenat Diagn</data><data key="Notes"></data><data key="Volume">11</data></node>
+<node id="n72" labels=":Publication"><data key="labels">:Publication</data><data key="Authors">Matern D, He M, Berry SA, Rinaldo P, Whitley CB, Madsen PP, van Calcar SC, Lussky RC, Andresen BS, Wolff JA, Vockley J</data><data key="Pages">74-8</data><data key="PubMed_ID">12837870</data><data key="Title">Prospective diagnosis of 2-methylbutyryl-CoA dehydrogenase deficiency in the Hmong population by newborn screening using tandem mass spectrometry</data><data key="Date"> 2003 Jul</data><data key="Issue">1 Pt 1</data><data key="Publication">Pediatrics</data><data key="Notes"></data><data key="Volume">112</data></node>
+<node id="n73" labels=":Publication"><data key="labels">:Publication</data><data key="PubMed_ID">2825678</data><data key="Authors">Pontremoli S, Melloni E, Michetti M, Sparatore B, Salamino F, Siliprandi N, Horecker BL</data><data key="Issue">3</data><data key="Pages">1189-95</data><data key="Title">Isovalerylcarnitine is a specific activator of calpain of human neutrophils</data><data key="Notes"></data><data key="Date"> 1987 Nov 13</data><data key="Volume">148</data><data key="Publication">Biochem Biophys Res Commun</data></node>
+<node id="n74" labels=":Publication"><data key="labels">:Publication</data><data key="Authors">Ferrara F, Bertelli A, Falchi M</data><data key="PubMed_ID">16033249</data><data key="Title">Evaluation of carnitine, acetylcarnitine and isovalerylcarnitine on immune function and apoptosis</data><data key="Date"> 2005</data><data key="Volume">31</data><data key="Issue">3</data><data key="Pages">109-14</data><data key="Publication">Drugs Exp Clin Res</data><data key="Notes"></data></node>
+<node id="n75" labels=":Publication"><data key="labels">:Publication</data><data key="Authors">Bene J, Komlosi K, Havasi V, Talian G, Gasztonyi B, Horvath K, Mozsik G, Hunyady B, Melegh B, Figler M</data><data key="Pages">110-3</data><data key="PubMed_ID">16440427</data><data key="Title">Changes of plasma fasting carnitine ester profile in patients with ulcerative colitis</data><data key="Date"> 2006 Jan 7</data><data key="Volume">12</data><data key="Issue">1</data><data key="Publication">World J Gastroenterol</data><data key="Notes"></data></node>
+<node id="n76" labels=":Publication"><data key="labels">:Publication</data><data key="PubMed_ID">8853559</data><data key="Title">Acylcarnitine removal in a patient with acyl-CoA beta-oxidation deficiency disorder: effect of L-carnitine therapy and starvation</data><data key="Authors">Fontaine M, Briand G, Vallee L, Ricart G, Degand P, Divry P, Vianey-Saban C, Vamecq J</data><data key="Date"> 1996 Aug 30</data><data key="Issue">2</data><data key="Pages">109-22</data><data key="Publication">Clin Chim Acta</data><data key="Notes"></data><data key="Volume">252</data></node>
+<node id="n77" labels=":Publication"><data key="labels">:Publication</data><data key="PubMed_ID">1777996</data><data key="Title">Prenatal diagnosis of isovaleric acidemia by fast atom bombardment and tandem mass spectrometry</data><data key="Authors">Shigematsu Y, Kikawa Y, Sudo M, Kanaoka H, Fujioka M, Dan M</data><data key="Date"> 1991 Dec 16</data><data key="Issue">2-3</data><data key="Pages">369-74</data><data key="Publication">Clin Chim Acta</data><data key="Notes"></data><data key="Volume">203</data></node>
+<node id="n78" labels=":Publication"><data key="labels">:Publication</data><data key="Title">Metabolomic prediction of fetal congenital heart defect in the first trimester</data><data key="Authors">Bahado-Singh RO, Ertl R, Mandal R, Bjorndahl TC, Syngelaki A, Han B, Dong E, Liu PB, Alpay-Savasan Z, Wishart DS, Nicolaides KH</data><data key="Issue">3</data><data key="Pages"> 10</data><data key="PubMed_ID">24704061</data><data key="Notes">e1-240</data><data key="Date"> 2014 Sep</data><data key="Publication">Am J Obstet Gynecol</data><data key="Volume">211</data></node>
+<node id="n79" labels=":Publication"><data key="labels">:Publication</data><data key="Authors">Zordoky BN, Sung MM, Ezekowitz J, Mandal R, Han B, Bjorndahl TC, Bouatra S, Anderson T, Oudit GY, Wishart DS, Dyck JR</data><data key="Pages"> 10</data><data key="PubMed_ID">26010610</data><data key="Title">Metabolomic fingerprint of heart failure with preserved ejection fraction</data><data key="Date"> 2015 May 26</data><data key="Volume">10</data><data key="Issue">5</data><data key="Publication">PLoS One</data><data key="Notes"> doi: 10</data></node>
+<node id="n80" labels=":Publication"><data key="labels">:Publication</data><data key="Title">Substrate specificity of human carnitine acetyltransferase: Implications for fatty acid and branched-chain amino acid metabolism</data><data key="Authors">Violante S, Ijlst L, Ruiter J, Koster J, van Lenthe H, Duran M, de Almeida IT, Wanders RJ, Houten SM, Ventura FV</data><data key="Issue">6</data><data key="Pages"> 10</data><data key="PubMed_ID">23485643</data><data key="Notes"> doi: 10</data><data key="Date"> 2013 Jun</data><data key="Publication">Biochim Biophys Acta</data><data key="Volume">1832</data></node>
+<node id="n81" labels=":Publication"><data key="labels">:Publication</data><data key="Title">The Metabolomic Signature of the Placenta in Spontaneous Preterm Birth</data><data key="Authors">Elshenawy S, Pinney SE, Stuart T, Doulias PT, Zura G, Parry S, Elovitz MA, Bennett MJ, Bansal A, Strauss JF 3rd, Ischiropoulos H, Simmons RA</data><data key="Issue">3</data><data key="Pages"> 10</data><data key="PubMed_ID">32033212</data><data key="Notes"> pii: ijms21031043</data><data key="Volume">21</data><data key="Publication">Int J Mol Sci</data><data key="Date"> 2020 Feb 4</data></node>
+<node id="n82" labels=":Publication"><data key="labels">:Publication</data><data key="Authors">FRITZ IB</data><data key="PubMed_ID">13825279</data><data key="Title">Action of carnitine on long chain fatty acid oxidation by liver</data><data key="Date"> 1959 Aug</data><data key="Volume">197:297-304. doi: 10.1152/ajplegacy.1959.197.2.297.</data><data key="Pages"> 10</data><data key="Publication">Am J Physiol</data><data key="Notes"> doi: 10</data></node>
+<node id="n83" labels=":Publication"><data key="labels">:Publication</data><data key="PubMed_ID">31920980</data><data key="Title">Decreases in Circulating Concentrations of Long-Chain Acylcarnitines and Free Fatty Acids During the Glucose Tolerance Test Represent Tissue-Specific Insulin Sensitivity</data><data key="Authors">Makarova E, Makrecka-Kuka M, Vilks K, Volska K, Sevostjanovs E, Grinberga S, Zarkova-Malkova O, Dambrova M, Liepinsh E</data><data key="Volume">10:870. doi: 10.3389/fendo.2019.00870. eCollection 2019.</data><data key="Issue">Lausanne</data><data key="Pages"> 10</data><data key="Notes"> doi: 10</data><data key="Date"> 2019 Dec 17</data><data key="Publication">Front Endocrinol (Lausanne)</data></node>
+<node id="n84" labels=":Publication"><data key="labels">:Publication</data><data key="PubMed_ID">29265114</data><data key="Authors">Zhang X, Li Y, Liang Y, Sun P, Wu X, Song J, Sun X, Hong M, Gao P, Deng D</data><data key="Date"> 2017 Nov-Dec</data><data key="Title">Distinguishing Intracerebral Hemorrhage from Acute Cerebral Infarction through Metabolomics</data><data key="Notes"> doi: 10</data><data key="Issue">6</data><data key="Pages"> 10</data><data key="Publication">Rev Invest Clin</data><data key="Volume">69</data></node>
+<node id="n85" labels=":Publication"><data key="labels">:Publication</data><data key="PubMed_ID">20111019</data><data key="Title">Increased levels of plasma acylcarnitines in obesity and type 2 diabetes and identification of a marker of glucolipotoxicity</data><data key="Authors">Mihalik SJ, Goodpaster BH, Kelley DE, Chace DH, Vockley J, Toledo FG, DeLany JP</data><data key="Volume">18</data><data key="Issue">Silver Spring</data><data key="Pages"> 10</data><data key="Notes"> doi: 10</data><data key="Date"> 2010 Sep</data><data key="Publication">Obesity (Silver Spring)</data></node>
+<node id="n86" labels=":Publication"><data key="labels">:Publication</data><data key="Title">A Plasma Metabolomic Profiling of Exudative Age-Related Macular Degeneration Showing Carnosine and Mitochondrial Deficiencies</data><data key="Authors">Chao de la Barca JM, Rondet-Courbis B, Ferre M, Muller J, Buisset A, Leruez S, Plubeau G, Mace T, Moureauzeau L, Chupin S, Tessier L, Blanchet O, Lenaers G, Procaccio V, Mirebeau-Prunier D, Simard G, Gohier P, Milea D, Reynier P</data><data key="Issue">3</data><data key="Pages"> 10</data><data key="PubMed_ID">32120889</data><data key="Notes"> pii: jcm9030631</data><data key="Volume">9</data><data key="Publication">J Clin Med</data><data key="Date"> 2020 Feb 27</data></node>
+<node id="n87" labels=":Publication"><data key="labels">:Publication</data><data key="Authors">Sun Y, Gao HY, Fan ZY, He Y, Yan YX</data><data key="Title">Metabolomics Signatures in Type 2 Diabetes: A Systematic Review and Integrative Analysis</data><data key="Issue">4</data><data key="Pages"> 10</data><data key="PubMed_ID">31782507</data><data key="Notes"> pii: 5645632</data><data key="Date"> 2020 Apr 1</data><data key="Publication">J Clin Endocrinol Metab</data><data key="Volume">105</data></node>
+<node id="n95" labels=":Measurement"><data key="labels">:Measurement</data><data key="Exposome_Explorer_ID">Measurement_22858</data><data key="Size">9</data></node>
+<node id="n96" labels=":Sample"><data key="labels">:Sample</data><data key="Time">1</data><data key="Exposome_Explorer_ID">Sample_3516</data><data key="Repetitions">1</data></node>
+<node id="n97" labels=":ExperimentalMethod"><data key="labels">:ExperimentalMethod</data><data key="Method_Type">Excretion</data><data key="Alternative_Names">LC-PDA-MS , LC-ICP-MS , HN-APCI-MS , LC-ESI-MRM-MS , RP-HPLC-MS , HPLC-MS , LC-qTOF-MS , HPLC-qTOF-MS , UPLC-qTOF-MS</data><data key="Exposome_Explorer_ID">ExperimentalMethod_28</data><data key="Name">LC-MS</data></node>
+<node id="n98" labels=":Unit"><data key="labels">:Unit</data><data key="Type">Other</data><data key="Group">other</data><data key="Exposome_Explorer_ID">Unit_138</data><data key="Name">not annotated</data></node>
+<node id="n99" labels=":BioSpecimen"><data key="labels">:BioSpecimen</data><data key="Name">Urine, 24-h</data><data key="Exposome_Explorer_ID">Specimen_1</data><data key="Specimen_Type">Excretion</data></node>
+<node id="n100" labels=":Subject"><data key="labels">:Subject</data><data key="Female_Proportion">69.0</data><data key="Description">Meat and fish consumers</data><data key="Country">FR</data><data key="Gender">Female + Male</data><data key="Health_Condition">Healthy</data><data key="Exposome_Explorer_ID">Subject_2295</data><data key="Size">46</data><data key="Name">All</data></node>
+<node id="n101" labels=":Publication"><data key="labels">:Publication</data><data key="Title">A metabolomic study of biomarkers of meat and fish intake</data><data key="Authors">Cheung, W.; Keski-Rahkonen, P.; Assi, N.; Ferrari, P.; Freisling, H.; Rinaldi, S.; Slimani, N.; Zamora-Ros, R.; Rundle, M.; Frost, G.; Gibbons, H.; Carr, E.; Brennan, L.; Cross, A. J.; Pala, V.; Panico, S.; Sacerdote, C.; Palli, D.; Tumino, R.; Kuhn, T.; Kaaks, R.; Boeing, H.; Floegel, A.; Mancini, F.; Boutron-Ruault, M. C.; Baglietto, L.; Trichopoulou, A.; Naska, A.; Orfanos, P.; Scalbert, A.</data><data key="DOI">10.3945/ajcn.116.146639</data><data key="Full_Annotation">true</data><data key="First_Author">Cheung</data><data key="Public">true</data><data key="Metabolomics">true</data><data key="PubMed_ID">28122782</data><data key="Study_Design_Type">Intervention</data><data key="Publication">Am J Clin Nutr</data><data key="Volume">105</data><data key="Issue">3</data><data key="Exposome_Explorer_ID">Publication_1038</data><data key="Date">2017</data></node>
+<node id="n102" labels=":Cohort"><data key="labels">:Cohort</data><data key="URL">http://epic.iarc.fr/</data><data key="Name">EPIC (European Prospective Investigation into Cancer and Nutrition)</data><data key="Abbreviation">EPIC</data><data key="Study_Design_Type">Observation</data><data key="Exposome_Explorer_ID">Cohort_49</data><data key="PubMed_ID">9126529</data></node>
+<node id="n103" labels=":MeSH"><data key="labels">:MeSH</data><data key="Name">Polycystic Kidney, Autosomal Dominant</data><data key="MeSH_ID">D016891</data><data key="Type">Descriptor</data></node>
+<node id="n104" labels=":MeSH"><data key="labels">:MeSH</data><data key="Name">Placenta</data><data key="MeSH_ID">D010920</data><data key="Type">Descriptor</data></node>
+<node id="n105" labels=":Disease"><data key="labels">:Disease</data><data key="Name">feline  polycystic kidney disease</data><data key="WikiData_ID">Q733477</data><data key="URL">http://www.wikidata.org/entity/Q733477</data></node>
+<node id="n106" labels=":Disease"><data key="labels">:Disease</data><data key="Name">feline  polycystic kidney disease</data><data key="WikiData_ID">Q733477</data><data key="URL">http://www.wikidata.org/entity/Q733477</data></node>
+<node id="n107" labels=":Disease"><data key="labels">:Disease</data><data key="Name">feline  polycystic kidney disease</data><data key="WikiData_ID">Q733477</data><data key="URL">http://www.wikidata.org/entity/Q733477</data></node>
+<node id="n108" labels=":Gene"><data key="labels">:Gene</data><data key="Ensembl_Gene_ID">ENSG00000008710</data><data key="Genomic_Start">2138711</data><data key="Genomic_End">2185899</data><data key="Chromosome_Location">human chromosome 16</data><data key="Cytogenetic_Location">16p13.3</data><data key="Strand_Orientation">reverse strand</data><data key="HGNC_ID">9008</data><data key="OMIM_ID">601313</data><data key="HomoloGene_ID">250</data><data key="Entrez_ID">5310</data><data key="WikiData_ID">Q14914567</data><data key="Name">PKD1</data><data key="URL">http://www.wikidata.org/entity/Q14914567</data></node>
+<node id="n111" labels=":Tissue"><data key="labels">:Tissue</data><data key="Name">anterior pituitary</data><data key="WikiData_ID">Q356002</data><data key="URL">http://www.wikidata.org/entity/Q356002</data></node>
+<node id="n112" labels=":Tissue"><data key="labels">:Tissue</data><data key="URL">http://www.wikidata.org/entity/Q383249</data><data key="WikiData_ID">Q383249</data><data key="Name">gastric mucosa</data></node>
+<node id="n113" labels=":Tissue"><data key="labels">:Tissue</data><data key="Name">right coronary artery</data><data key="WikiData_ID">Q429285</data><data key="URL">http://www.wikidata.org/entity/Q429285</data></node>
+<node id="n114" labels=":Tissue"><data key="labels">:Tissue</data><data key="URL">http://www.wikidata.org/entity/Q707468</data><data key="WikiData_ID">Q707468</data><data key="Name">popliteal artery</data></node>
+<node id="n115" labels=":Tissue"><data key="labels">:Tissue</data><data key="Name">left coronary artery</data><data key="WikiData_ID">Q744391</data><data key="URL">http://www.wikidata.org/entity/Q744391</data></node>
+<node id="n116" labels=":Tissue"><data key="labels">:Tissue</data><data key="Name">canal of the cervix</data><data key="WikiData_ID">Q785307</data><data key="URL">http://www.wikidata.org/entity/Q785307</data></node>
+<node id="n117" labels=":Tissue"><data key="labels">:Tissue</data><data key="URL">http://www.wikidata.org/entity/Q1978198</data><data key="WikiData_ID">Q1978198</data><data key="Name">tibial nerve</data></node>
+<node id="n118" labels=":Tissue"><data key="labels">:Tissue</data><data key="URL">http://www.wikidata.org/entity/Q2349469</data><data key="WikiData_ID">Q2349469</data><data key="Name">ascending aorta</data></node>
+<node id="n119" labels=":Tissue"><data key="labels">:Tissue</data><data key="Name">right uterine tube</data><data key="WikiData_ID">Q66509808</data><data key="URL">http://www.wikidata.org/entity/Q66509808</data></node>
+<node id="n120" labels=":Tissue"><data key="labels">:Tissue</data><data key="URL">http://www.wikidata.org/entity/Q66509809</data><data key="WikiData_ID">Q66509809</data><data key="Name">left uterine tube</data></node>
+<node id="n121" labels=":ExternalEquivalent"><data key="labels">:ExternalEquivalent</data><data key="URL">http://identifiers.org/ncbigene/5310</data><data key="WikiData_ID">5310</data></node>
+<node id="n122" labels=":MeSH"><data key="labels">:MeSH</data><data key="Name">Blood</data><data key="MeSH_ID">D001769</data><data key="Type">Descriptor</data></node>
+<node id="n123" labels=":MeSH"><data key="labels">:MeSH</data><data key="Name">Urine</data><data key="MeSH_ID">D014556</data><data key="Type">Descriptor</data></node>
+<node id="n124" labels=":MeSH"><data key="labels">:MeSH</data><data key="Name">Blood</data><data key="MeSH_ID">M0002669</data><data key="Type">Concept</data></node>
+<node id="n125" labels=":MeSH"><data key="labels">:MeSH</data><data key="Name">Urine</data><data key="MeSH_ID">M0022378</data><data key="Type">Concept</data></node>
+<node id="n126" labels=":MeSH"><data key="labels">:MeSH</data><data key="Name">Placentoma, Normal</data><data key="MeSH_ID">M000628726</data><data key="Type">Concept</data></node>
+<node id="n127" labels=":MeSH"><data key="labels">:MeSH</data><data key="Name">Placenta</data><data key="MeSH_ID">M0016933</data><data key="Type">Concept</data></node>
+<edge id="e66" source="n40" target="n41" label="PART_OF_CLADE"><data key="label">PART_OF_CLADE</data></edge>
+<edge id="e67" source="n41" target="n42" label="PART_OF_CLADE"><data key="label">PART_OF_CLADE</data></edge>
+<edge id="e68" source="n43" target="n42" label="PART_OF_CLADE"><data key="label">PART_OF_CLADE</data></edge>
+<edge id="e123" source="n95" target="n96" label="TAKEN_FROM_SAMPLE"><data key="label">TAKEN_FROM_SAMPLE</data></edge>
+<edge id="e124" source="n95" target="n97" label="USING_METHOD"><data key="label">USING_METHOD</data></edge>
+<edge id="e125" source="n95" target="n98" label="MEASURED_IN"><data key="label">MEASURED_IN</data></edge>
+<edge id="e126" source="n96" target="n99" label="FOUND_IN"><data key="label">FOUND_IN</data></edge>
+<edge id="e127" source="n96" target="n100" label="TAKEN_FROM_SUBJECT"><data key="label">TAKEN_FROM_SUBJECT</data></edge>
+<edge id="e128" source="n100" target="n101" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e129" source="n100" target="n102" label="PART_OF_COHORT"><data key="label">PART_OF_COHORT</data></edge>
+<edge id="e130" source="n98" target="n98" label="CONVERTED_INTO"><data key="label">CONVERTED_INTO</data></edge>
+<edge id="e131" source="n30" target="n103" label="RELATED_MESH"><data key="label">RELATED_MESH</data></edge>
+<edge id="e132" source="n61" target="n104" label="RELATED_MESH"><data key="label">RELATED_MESH</data></edge>
+<edge id="e133" source="n105" target="n30" label="SUBCLASS_OF"><data key="label">SUBCLASS_OF</data></edge>
+<edge id="e134" source="n106" target="n30" label="SUBCLASS_OF"><data key="label">SUBCLASS_OF</data></edge>
+<edge id="e135" source="n107" target="n30" label="SUBCLASS_OF"><data key="label">SUBCLASS_OF</data></edge>
+<edge id="e136" source="n108" target="n30" label="ASSOCIATED_DISEASE_GENE"><data key="label">ASSOCIATED_DISEASE_GENE</data></edge>
+<edge id="e139" source="n108" target="n111" label="EXPRESSED_IN"><data key="label">EXPRESSED_IN</data></edge>
+<edge id="e140" source="n108" target="n112" label="EXPRESSED_IN"><data key="label">EXPRESSED_IN</data></edge>
+<edge id="e141" source="n108" target="n113" label="EXPRESSED_IN"><data key="label">EXPRESSED_IN</data></edge>
+<edge id="e142" source="n108" target="n114" label="EXPRESSED_IN"><data key="label">EXPRESSED_IN</data></edge>
+<edge id="e143" source="n108" target="n115" label="EXPRESSED_IN"><data key="label">EXPRESSED_IN</data></edge>
+<edge id="e144" source="n108" target="n116" label="EXPRESSED_IN"><data key="label">EXPRESSED_IN</data></edge>
+<edge id="e145" source="n108" target="n117" label="EXPRESSED_IN"><data key="label">EXPRESSED_IN</data></edge>
+<edge id="e146" source="n108" target="n118" label="EXPRESSED_IN"><data key="label">EXPRESSED_IN</data></edge>
+<edge id="e147" source="n108" target="n119" label="EXPRESSED_IN"><data key="label">EXPRESSED_IN</data></edge>
+<edge id="e148" source="n108" target="n120" label="EXPRESSED_IN"><data key="label">EXPRESSED_IN</data></edge>
+<edge id="e149" source="n108" target="n121" label="EQUALS"><data key="label">EQUALS</data></edge>
+<edge id="e150" source="n59" target="n122" label="RELATED_MESH"><data key="label">RELATED_MESH</data></edge>
+<edge id="e151" source="n60" target="n123" label="RELATED_MESH"><data key="label">RELATED_MESH</data></edge>
+<edge id="e152" source="n59" target="n124" label="RELATED_MESH"><data key="label">RELATED_MESH</data></edge>
+<edge id="e153" source="n60" target="n125" label="RELATED_MESH"><data key="label">RELATED_MESH</data></edge>
+<edge id="e154" source="n61" target="n126" label="RELATED_MESH"><data key="label">RELATED_MESH</data></edge>
+<edge id="e155" source="n61" target="n127" label="RELATED_MESH"><data key="label">RELATED_MESH</data></edge>
+<edge id="e169" source="n27" target="n30" label="ASSOCIATED_DISEASE_METABOLITE"><data key="label">ASSOCIATED_DISEASE_METABOLITE</data></edge>
+<edge id="e170" source="n27" target="n77" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e171" source="n27" target="n31" label="CITED_IN"><data key="label">CITED_IN</data><data key="PubMed_ID">18215696,</data></edge>
+<edge id="e172" source="n27" target="n32" label="CITED_IN"><data key="label">CITED_IN</data><data key="PubMed_ID">21389975,</data></edge>
+<edge id="e173" source="n27" target="n85" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e174" source="n27" target="n87" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e175" source="n27" target="n66" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e176" source="n27" target="n83" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e177" source="n27" target="n71" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e178" source="n27" target="n69" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e179" source="n27" target="n82" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e180" source="n27" target="n75" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e181" source="n27" target="n62" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e182" source="n27" target="n70" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e183" source="n27" target="n73" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e184" source="n27" target="n76" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e185" source="n27" target="n67" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e186" source="n27" target="n86" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e187" source="n27" target="n84" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e188" source="n27" target="n78" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e189" source="n27" target="n72" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e190" source="n27" target="n63" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e191" source="n27" target="n68" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e192" source="n27" target="n65" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e193" source="n27" target="n64" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e194" source="n27" target="n74" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e195" source="n27" target="n79" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e196" source="n27" target="n80" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e197" source="n27" target="n81" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e199" source="n27" target="n95" label="MEASURED_AS"><data key="label">MEASURED_AS</data></edge>
+<edge id="e205" source="n27" target="n54" label="PART_OF_CLADE"><data key="label">PART_OF_CLADE</data></edge>
+<edge id="e206" source="n27" target="n49" label="PART_OF_CLADE"><data key="label">PART_OF_CLADE</data></edge>
+<edge id="e207" source="n27" target="n51" label="PART_OF_CLADE"><data key="label">PART_OF_CLADE</data></edge>
+<edge id="e208" source="n27" target="n45" label="PART_OF_CLADE"><data key="label">PART_OF_CLADE</data></edge>
+<edge id="e209" source="n27" target="n50" label="PART_OF_CLADE"><data key="label">PART_OF_CLADE</data></edge>
+<edge id="e210" source="n27" target="n44" label="PART_OF_CLADE"><data key="label">PART_OF_CLADE</data></edge>
+<edge id="e211" source="n27" target="n48" label="PART_OF_CLADE"><data key="label">PART_OF_CLADE</data></edge>
+<edge id="e212" source="n27" target="n52" label="PART_OF_CLADE"><data key="label">PART_OF_CLADE</data></edge>
+<edge id="e213" source="n27" target="n43" label="PART_OF_CLADE"><data key="label">PART_OF_CLADE</data></edge>
+<edge id="e214" source="n27" target="n47" label="PART_OF_CLADE"><data key="label">PART_OF_CLADE</data></edge>
+<edge id="e215" source="n27" target="n46" label="PART_OF_CLADE"><data key="label">PART_OF_CLADE</data></edge>
+<edge id="e216" source="n27" target="n55" label="PART_OF_CLADE"><data key="label">PART_OF_CLADE</data></edge>
+<edge id="e217" source="n27" target="n53" label="PART_OF_CLADE"><data key="label">PART_OF_CLADE</data></edge>
+<edge id="e218" source="n27" target="n56" label="PART_OF_CLADE"><data key="label">PART_OF_CLADE</data></edge>
+<edge id="e219" source="n27" target="n58" label="LOCATED_INSIDE_CELL"><data key="label">LOCATED_INSIDE_CELL</data></edge>
+<edge id="e220" source="n27" target="n57" label="LOCATED_INSIDE_CELL"><data key="label">LOCATED_INSIDE_CELL</data></edge>
+<edge id="e221" source="n27" target="n59" label="LOCATED_IN_BIOSPECIMEN"><data key="label">LOCATED_IN_BIOSPECIMEN</data></edge>
+<edge id="e222" source="n27" target="n60" label="LOCATED_IN_BIOSPECIMEN"><data key="label">LOCATED_IN_BIOSPECIMEN</data></edge>
+<edge id="e223" source="n27" target="n61" label="LOCATED_IN_TISSUE"><data key="label">LOCATED_IN_TISSUE</data></edge>
+<edge id="e227" source="n27" target="n27" label="SYNONYM_OF"><data key="label">SYNONYM_OF</data></edge>
+</graph>
+</graphml>

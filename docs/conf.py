@@ -40,6 +40,7 @@ extensions = [
    'myst_parser',                 # Enable MarkDown Documentation
    'sphinxarg.ext',               # Auto-generate args for command line projects
    'sphinx.ext.viewcode',         # Add the code itself to the docs
+   'sphinx.ext.autosectionlabel', # Enable links to the documentation
 ]
 
 # Enable correct parsing by myst and remove superflous MD warnings

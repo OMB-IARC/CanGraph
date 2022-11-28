@@ -24,10 +24,10 @@ def initial_cancer_discovery(tx):
     some of them were diagnosed "Cancer" (Q12078), which is too general, so I removed it.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run("""
         WITH 'SELECT DISTINCT ?cause_of_death ?cause_of_death_name
@@ -151,7 +151,8 @@ def add_disease_info(number, **kwargs):
     Returns:
         str: A CYPHER query that modifies the DB according to the CYPHER statement contained in the function.
 
-    .. NOTE:: Here, there is no need to force c.WikiData_ID to not be null or "" because it will already be = ``number```(and, thus, exist)
+    .. NOTE:: Here, there is no need to force c.WikiData_ID to not be null
+        or "" because it will already be = ``number`` (and, thus, exist)
     """
     return f"""
         CALL {{
@@ -209,7 +210,8 @@ def add_drugs(number, **kwargs):
     Returns:
         str: A CYPHER query that modifies the DB according to the CYPHER statement contained in the function.
 
-    .. NOTE:: Here, there is no need to force c.WikiData_ID to not be null or "" because it will already be = ``number```(and, thus, exist)
+    .. NOTE:: Here, there is no need to force c.WikiData_ID to not be null
+        or "" because it will already be = ``number`` (and, thus, exist)
     """
     return f"""
         CALL {{
@@ -261,7 +263,8 @@ def add_causes(number, **kwargs):
     Returns:
         str: A CYPHER query that modifies the DB according to the CYPHER statement contained in the function.
 
-    .. NOTE:: Here, there is no need to force c.WikiData_ID to not be null or "" because it will already be = ``number```(and, thus, exist)
+    .. NOTE:: Here, there is no need to force c.WikiData_ID to not be null
+        or "" because it will already be = ``number`` (and, thus, exist)
     """
     return f"""
         CALL {{
@@ -306,7 +309,8 @@ def add_genes(number, **kwargs):
     Returns:
         str: A CYPHER query that modifies the DB according to the CYPHER statement contained in the function.
 
-    .. NOTE:: Here, there is no need to force c.WikiData_ID to not be null or "" because it will already be = ``number```(and, thus, exist)
+    .. NOTE:: Here, there is no need to force c.WikiData_ID to not be null
+        or "" because it will already be = ``number`` (and, thus, exist)
     """
     return f"""
         CALL {{
@@ -351,7 +355,7 @@ def add_drug_external_ids(query = "Wikidata_ID", **kwargs):
         **kwargs: Any number of arbitrary keyword arguments
 
     Returns:
-        neo4j.work.result.Result:
+        neo4j.Result:
             A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. NOTE:: We are forcing c.WikiData_ID to not be null or "". This is not necessary if we are just building the wikidata database,
@@ -895,10 +899,10 @@ def add_wikidata_and_mesh_by_name():
     to existing nodes, based on their Wikipedia Article Title.
 
     Args:
-        tx (neo4j.work.simple.Session): The session under which the driver is running
+        tx (neo4j.Session): The session under which the driver is running
 
     Returns:
-        neo4j.work.result.Result:
+        neo4j.Result:
             A Neo4J connexion to the database that modifies it according
             to the CYPHER statement contained in the function.
     """

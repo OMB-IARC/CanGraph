@@ -33,11 +33,11 @@ def add_drugs(tx, filename):
         `William Lyon's Blog <https://lyonwj.com/blog/grandstack-podcast-app-parsing-xml-neo4j-rss-episodes-playlists>`_
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the XML file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. NOTE:: Since Publications dont have any standard identificator, they are created using the "Title"
     """
@@ -161,11 +161,11 @@ def add_general_references(tx, filename):
     Creates "Publication" nodes based on XML files obtained from the DrugBank website.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the XML file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. NOTE:: Since not all nodes present a "PubMed_ID" field (which would be ideal to uniquely-identify
         Publications, as the "Text" field is way more prone to typos/errors), nodes will be created using
@@ -223,11 +223,11 @@ def add_taxonomy(tx, filename):
     These represent the "kind" of Drug we are dealing with (Family, etc)
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the XML file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. NOTE:: It only creates relationships in the Kingdom -> Super Class -> Class -> Subclass
         direction, and from any node -> Drug. This means that, if any member of the
@@ -344,11 +344,11 @@ def add_products(tx, filename):
     These are the individal medicaments that have been approved (or not) by the FDA
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the XML file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. WARNING:: Using CREATE means that duplicates will appear; unfortunately, I couldnt any unique_id
         field to use as ID when MERGEing the nodes. This should be accounted for.
@@ -408,11 +408,11 @@ def add_mixtures(tx, filename):
     These are the mixtures of existing Drugs, which may or may not be on the market.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the XML file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. NOTE:: This doesn't seem of much use, but has been added nonetheless just in case.
     """
@@ -447,11 +447,11 @@ def add_categories(tx, filename):
     These represent the different MeSH IDs a Drug can be related with
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the XML file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. NOTE:: Each category seems to have an associated MeSH ID. Maybe could rename nodes as MeSH?
     """
@@ -493,11 +493,11 @@ def add_manufacturers(tx, filename):
     These represent the different Companies that manufacture a Drug's compound (not just package it)
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the XML file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         CALL apoc.load.xml("{filename}")
@@ -533,11 +533,11 @@ def add_packagers(tx, filename):
     These represent the different Companies that package a Drug's compounds (not the ones that manufacture them)
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the XML file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         CALL apoc.load.xml("{filename}")
@@ -574,11 +574,11 @@ def add_dosages(tx, filename):
     These represent the different Dosages that a Drug should be administered at.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the XML file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. WARNING:: Using CREATE might generate duplicate nodes, but there was no
         unique characteristic to MERGE nodes into.
@@ -616,11 +616,11 @@ def add_atc_codes(tx, filename):
     These represent the different ATC codes a Drug can be related with (including an small taxonomy)
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the XML file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         CALL apoc.load.xml("{filename}")
@@ -661,11 +661,11 @@ def add_drug_interactions(tx, filename):
     before or not. These are intentionally non-directional, as they should be related with each other.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the XML file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         CALL apoc.load.xml("{filename}")
@@ -699,11 +699,11 @@ def add_sequences(tx, filename):
     These represent the AminoAcid sequence of Drugs that are of a peptidic nature.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the XML file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. TODO:: In some other parts of the script, sequences are being added as
           properties on Protein nodes. A common format should be set.
@@ -740,11 +740,11 @@ def add_experimental_properties(tx, filename):
     Adds some experimental properties to existing "Drug" nodes based on XML files obtained from the DrugBank website.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the XML file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         CALL apoc.load.xml("{filename}")
@@ -769,7 +769,7 @@ def add_experimental_properties(tx, filename):
             d
 
         WITH apoc.map.fromLists(collect(kind), collect(value)) AS dict, d
-        SET d.Average_Molecular_Weight = dict["Molecular Weight"], d.Isoelectric_Point = dict["Isoelectric Point"],
+        SET d.Average_Mass = dict["Molecular Weight"], d.Isoelectric_Point = dict["Isoelectric Point"],
             d.Water_Solubility = dict["Water Solubility"], d.pKa = dict["pKa"],
             d.Hydrophobicity = dict.Hydrophobicity, d.Formula = dict["Molecular Formula"],
             d.Melting_Point = dict["Melting Point"], d.logP = dict["logP"]
@@ -780,11 +780,11 @@ def add_external_identifiers(tx, filename):
     Adds some external identifiers to existing "Drug" nodes based on XML files obtained from the DrugBank website.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the XML file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. NOTE:: These also adds a "Protein" label to any "Drug"-labeled nodes which have a "UniProtKB"-ID
         among their properties. NOTE that this can look confusing in the DB Schema!!!
@@ -828,11 +828,11 @@ def add_external_equivalents(tx, filename):
     This should be "exact matches" of the Drug in other databases.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the XML file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. NOTE:: The main reason to add them as "External-Equivalents" is because I felt these IDs where of not much use (and
         are thus easier to eliminate due to their common label)
@@ -871,11 +871,11 @@ def add_pathways_and_relations(tx, filename):
     In general, a Pathway involves a collection of Enzymes, Drugs and Proteins, with a SMPDB_ID (cool for interconnexion!)
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the XML file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. WARNING:: This function uses a "double UNWIND" clause, which means that we are only representing <pathways> tags
         with <enzymes> tags inside. Fortunately, this seems to seldom not happen, so it should represent no problem.
@@ -933,13 +933,13 @@ def add_targets_enzymes_carriers_and_transporters(tx, filename, tag_name):
     It also adds a bunch of additional info, such as Publications, Targets, Actions, GO_IDs, PFAMs and/or some External IDs
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the XML file that is being imported
         tag_name    (str): The type of Protein node you want to import; it must be one of ["enzymes", "carriers", "transporters"]
                     It is recommended that you run this function thrice, once for each type of protein
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. WARNING:: We are using a bunch of concatenated UNWINDs, which force the existance of all elements in the UNWIND chain. This might remove some
         elements, but this is a HUUUUUGE database, and, to be honest, most things seem to almost always be present. An example is References and Polypeptides;
@@ -1045,7 +1045,7 @@ def add_targets_enzymes_carriers_and_transporters(tx, filename, tag_name):
         MERGE (p:Protein {{ UniProt_ID:UniProt_ID }})
         SET p.Name = polypeptide_name, p.Function = general_function, p.Specific_Function = specific_function,
             p.Gene_Name = gene_name, p.Locus = locus, p.Transmembrane_Regions = transmembrane_regions,
-            p.Signal_Regions = signal_regions, p.Theoretical_PI = theoretical_pi, p.Average_Molecular_Weight = molecular_weight,
+            p.Signal_Regions = signal_regions, p.Theoretical_PI = theoretical_pi, p.Average_Mass = molecular_weight,
             p.Organism = polypeptide_organism,
             p.Target_Position = position, p.Source = polypeptide_source, p.Target_ID = target_id,
             p.Taget_Name = name, p.Known_Action = known_action, p.Target_Organism = target_organism

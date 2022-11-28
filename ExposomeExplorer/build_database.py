@@ -22,12 +22,12 @@ def import_csv(tx, filename, label):
     Imports a given CSV into Neo4J. This CSV **must** be present in Neo4J's Import Path
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported
         label       (str): The label of the Neo4J nodes that will be imported, with the columns of the CSV being its properties.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
+        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
 
     .. NOTE:: For this to work, you HAVE TO have APOC availaible on your Neo4J installation
     """
@@ -41,11 +41,11 @@ def add_components(tx, filename):
     This is because this components are, in fact, metabolites, either from food or from human metabolism
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
+        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
@@ -57,7 +57,7 @@ def add_components(tx, filename):
                 c.FooDB_Food_ID = line.foodb_food_id,
                 c.SMILES = line.moldb_smiles, c.Formula = line.moldb_formula,
                 c.InChI = line.moldb_inchi, c.InChIKey = line.moldb_inchikey,
-                c.Average_Molecular_Weight = line.moldb_average_mass,
+                c.Average_Mass = line.moldb_average_mass,
                 c.Monisotopic_Molecular_Weight = line.moldb_mono_mass,
                 c.Displayed_Excretion_Concentration_Count = line.displayed_excretion_concentration_count,
                 c.Displayed_Correlated_Biomarker_Count = line.displayed_correlated_biomarker_count,
@@ -91,11 +91,11 @@ def add_measurements_stuff(tx, filename):
     - experimental_methods: The method used to take a measurement
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
+        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
@@ -118,11 +118,11 @@ def add_reproducibilities(tx, filename):
     using "initial_id", an old identifier, for the linkage
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
+        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
@@ -139,11 +139,11 @@ def add_samples(tx, filename):
     subject and a given tissue (that is, a specimen, which will be blood, urine, etc)
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
+        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
@@ -162,11 +162,11 @@ def add_subjects(tx, filename):
     in a given publication, and will be part of a cohort (i.e. a grop of subjects)
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
+        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
@@ -188,11 +188,11 @@ def add_microbial_metabolite_identifications(tx, filename):
     the microbiome. This can have a given reference and a tissue (BioSpecimen) in which it occurs.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
+        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
@@ -215,11 +215,11 @@ def add_cancer_associations(tx, filename):
     Imports the 'cancer_associations' database as a relation between a given Cancer and a Measurement
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
+        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
@@ -240,11 +240,11 @@ def add_metabolomic_associations(tx, filename):
     seeking to identify putative dietary biomarkers.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
+        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
@@ -271,11 +271,11 @@ def add_correlations(tx, filename):
     where dietary questionnaires are administered, and biomarkers are measured in specimens
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
+        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
@@ -301,11 +301,11 @@ def annotate_measurements(tx, filename):
     Adds "Measurement" nodes from Exposome-Explorer's measurements.csv
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
+        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
@@ -346,11 +346,11 @@ def annotate_samples(tx, filename):
     From a Sample, one can take a series of measurements
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
+        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
@@ -367,11 +367,11 @@ def annotate_experimental_methods(tx, filename):
     Adds "ExperimentalMethod" nodes from Exposome-Explorer's experimental_methods.csv
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
+        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
@@ -392,11 +392,11 @@ def annotate_units(tx, filename):
     A unit can be converted into other (for example, for normalization)
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
+        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
@@ -410,11 +410,11 @@ def annotate_auto_units(tx, filename):
     which standarizes units of measurement for our data
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
+        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
@@ -429,11 +429,11 @@ def annotate_cancers(tx, filename):
     Adds "Cancer" nodes from Exposome-Explorer's cancers.csv
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
+        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
@@ -450,11 +450,11 @@ def annotate_cohorts(tx, filename):
     Adds "Cohort" nodes from Exposome-Explorer's cohorts.csv
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
+        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
@@ -478,11 +478,11 @@ def annotate_microbial_metabolite_info(tx, filename):
     These represent all metabolites that have been re-identified as present, for instance, in the microbiome.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
+        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
@@ -497,11 +497,11 @@ def annotate_publications(tx, filename):
     Adds "Publication" nodes from Exposome-Explorer's publications.csv
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
+        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
@@ -527,11 +527,11 @@ def annotate_reproducibilities(tx, filename):
     These represent the conditions under which a given study/measurement was carried
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
+        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
@@ -549,11 +549,11 @@ def annotate_specimens(tx, filename):
     A biospecimen is a type of tissue where a measurement can originate, such as orine, csf fluid, etc
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
+        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
@@ -573,11 +573,11 @@ def annotate_subjects(tx, filename):
     Annotates "Subject" nodes from Exposome-Explorer's subjects.csv whose ID is already present on the DB
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported.
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
+        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         LOAD CSV WITH HEADERS FROM ('file:///subjects.csv') AS line
@@ -626,10 +626,10 @@ def remove_cross_properties(tx):
     the different tables in the Relational Database EE comes from, and that, in a Graph Database, are no longer necessary.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it accordingly.
+        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
     return tx.run(f"""
         MATCH (n)

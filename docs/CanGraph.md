@@ -24,6 +24,7 @@ SPDX-License-Identifier: MIT
    CanGraph.GraphifySMPDB
    CanGraph.MeSHandMetaNetX
    CanGraph.QueryWikidata
+   Install Apptainer
 ```
 
 ## CanGraph.deploy module

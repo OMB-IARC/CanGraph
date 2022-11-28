@@ -33,11 +33,11 @@ def add_metabolites(tx, filename):
         `William Lyon's Blog <https://lyonwj.com/blog/grandstack-podcast-app-parsing-xml-neo4j-rss-episodes-playlists>`_
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the XML file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         CALL apoc.load.xml("file:///{filename}")
@@ -78,7 +78,7 @@ def add_metabolites(tx, filename):
 
         MERGE (m:Metabolite {{ HMDB_ID:accession }} )
         SET m.Status = status, m.Name = name, m.Formula = chemical_formula,
-            m.Average_Molecular_Weight = average_molecular_weight, m.Monisotopic_Molecular_Weight = monisotopic_molecular_weight,
+            m.Average_Mass = average_molecular_weight, m.Monisotopic_Molecular_Weight = monisotopic_molecular_weight,
             m.IUPAC = iupac_name, m.CAS_Number = cas_registry_number, m.SMILES = smiles,
             m.InChI = inchi, m.InChIKey = inchikey, m.State = state, m.ChemSpider_ID = chemspider_id, m.DrugBank_ID = drugbank_id,
             m.FooDB_Compound_ID = foodb_id, m.PubChem_ID = pubchem_compound_id, m.PDB_ID = pdb_id, m.ChEBI_ID = chebi_id,
@@ -124,11 +124,11 @@ def add_diseases(tx, filename):
     Creates "Publication" nodes based on XML files obtained from the HMDB website.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the XML file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. NOTE:: Here, an UNWIND clause is used instead of a FOREACH clause. This provides
         better performance, since, unlike FOREACH, UNWIND does not process rows with empty values
@@ -211,11 +211,11 @@ def add_concentrations_normal(tx, filename):
     In this function, only metabolites that are labeled as "normal_concentration" are added.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the XML file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. NOTE:: Here, an UNWIND clause is used instead of a FOREACH clause. This provides
         better performance, since, unlike FOREACH, UNWIND does not process rows with empty values
@@ -312,11 +312,11 @@ def add_concentrations_abnormal(tx, filename):
     In this function, only metabolites that are labeled as "abnormal_concentration" are added.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the XML file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. NOTE:: Here, an UNWIND clause is used instead of a FOREACH clause. This provides
         better performance, since, unlike FOREACH, UNWIND does not process rows with empty values
@@ -410,11 +410,11 @@ def add_taxonomy(tx, filename):
     These represent the "kind" of metabolite we are dealing with (Family, etc)
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the XML file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. NOTE:: It only creates relationships in the Kingdom -> Super Class -> Class -> Subclass
         direction, and from any node -> Metabolite. This means that, if any member of the
@@ -532,11 +532,11 @@ def add_experimental_properties(tx, filename):
     In this case, only properties labeled as <experimental_properties> are added.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the XML file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. NOTE:: Another option would have been to auto-add all the properties, and name them using
         RETURN "Experimental " + apoc.text.capitalizeAll(replace(kind, "_", " ")), value; however, this
@@ -575,11 +575,11 @@ def add_predicted_properties(tx, filename):
     In this case, only properties labeled as <predicted_properties> are added.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the XML file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. NOTE:: Another option would have been to auto-add all the properties, and name them using
         RETURN "Predicted " + apoc.text.capitalizeAll(replace(kind, "_", " ")), value; however, this
@@ -625,11 +625,11 @@ def add_biological_properties(tx, filename):
     In this case, only properties labeled as <predicted_properties> are added.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the XML file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. NOTE:: Another option would have been to auto-add all the properties, and name them using
         RETURN "Predicted " + apoc.text.capitalizeAll(replace(kind, "_", " ")), value; however, this
@@ -691,11 +691,11 @@ def add_proteins(tx, filename):
     Creates "Protein" nodes based on XML files obtained from the HMDB website.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the XML file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. NOTE:: We are not creating "Gene" nodes (even though each protein comes from a given gene)
         because we believe not enough information is being given about them.
@@ -765,11 +765,11 @@ def add_go_classifications(tx, filename):
     This relates each protein to some GO-Terms
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the XML file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
     return tx.run(f"""
         CALL apoc.load.xml("file:///{filename}")
@@ -805,11 +805,11 @@ def add_gene_properties(tx, filename):
     In this case, properties will mostly relate to the gene from which the protein originates.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the XML file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. NOTE:: We are not creating "Gene" nodes (even though each protein comes from a given gene)
         because we believe not enough information is being given about them.
@@ -852,11 +852,11 @@ def add_protein_properties(tx, filename):
     In this case, properties will mostly relate to the protein itself.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the XML file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. NOTE:: The "signal_regions" and the "transmembrane_regions" properties were left out
         because, after a preliminary search, they were mostly empty
@@ -915,11 +915,11 @@ def add_general_references(tx, filename, type_of):
     Creates "Publication" nodes based on XML files obtained from the HMDB website.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the XML file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. NOTE:: Since not all nodes present a "PubMed_ID" field (which would be ideal to uniquely-identify
         Publications, as the "Text" field is way more prone to typos/errors), nodes will be created using
@@ -973,11 +973,11 @@ def add_protein_associations(tx, filename):
     Creates "Protein" nodes based on XML files obtained from the HMDB website.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the XML file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. NOTE:: Unlike the "add_protein" function, this creates Proteins based on info on the
         "Metabolite" files, not on the "Protein" files themselves. This could mean node duplication, but,
@@ -1019,11 +1019,11 @@ def add_metabolite_associations(tx, filename):
     Adds associations contained in the "protein" file, between proteins and metabolites.
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the XML file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. NOTE:: Like he "add_metabolite_associations" function, this creates non-directional
         relationships (m)-[r:ASSOCIATED_WITH]-(p) ; this helps duplicates be detected.
@@ -1062,11 +1062,11 @@ def add_metabolite_references(tx, filename):
     Creates references for relations betweens Protein nodes and Metabolite nodes
 
     Args:
-        tx          (neo4j.work.simple.Session): The session under which the driver is running
+        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the XML file that is being imported
 
     Returns:
-        neo4j.work.result.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
+        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
 
     .. WARNING:: Unfortunately, Neo4J makes it really, really, really difficult to work with XML,
         and so, this time, a r.PubMed_ID list with the references could not be created. Nonetheless,

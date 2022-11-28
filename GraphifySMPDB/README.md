@@ -25,7 +25,7 @@ NOTE: The files will be downloaded to ./csvfolder, so please run the script some
 
 An archived version of this repository that takes into account the gitignored files can be created using: `git archive HEAD -o ${PWD##*/}.zip`
 
-## Important Notices
+## Important Notices on SMPDB
 
 * Please ensure you have internet access, enough espace in your hard drive (around 5 GB) and read-write access in ```./csvfolder```. The files needed to build the database will be stored there.
 

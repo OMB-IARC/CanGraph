@@ -27,7 +27,7 @@ An archived version of this repository that takes into account the gitignored fi
 
 Finally, please node that the general philosophy and approach of the queries have been taken from [Towards Data Science](https://towardsdatascience.com/lord-of-the-wiki-ring-importing-wikidata-into-neo4j-and-analyzing-family-trees-da27f64d675e), a genuinely useful web site.
 
-## Important Notices
+## Important Notices on WikiData
 
 * Please ensure you have internet access, which will be used to connect to Wikidata's SPAQL endpoint and gather the necessary info.
 
