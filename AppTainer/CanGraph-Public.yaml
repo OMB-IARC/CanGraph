@@ -9,7 +9,8 @@ From: debian:11
     # This section is where the Setup script is located. This script will be
     # run before each ``apptainer build``, to prepare the container itself
 
-    # Since the DataBases do not come bundled, there is not much preparing to do
+    # And thus, we first setup the python requirements and the database folders
+    python3 ../setup.py --requirements ../requirements.txt
 
 %files
     # This section is where the files that will conform the container are declared.
@@ -95,7 +96,7 @@ From: debian:11
     ``neo4jadress`` with username and password can be provided; if it is not, a new
     neo4j database will be started using the default user and the ``.neo4jpassword``
     file; if none is found, a new neo4j will be installed. For the "DataBases" folder,
-    you might provide one, or else they will be downloaded/searched on ./DataBases
+    you might provide one, or else they will be downloaded/searched on ./DataBases.
 
     For information on how to compile the project and it technical characteristics,
     please refer to the official documentation at https://omb-iarc.github.io/CanGraph/

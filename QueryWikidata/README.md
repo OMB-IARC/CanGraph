@@ -37,6 +37,6 @@ Finally, please node that the general philosophy and approach of the queries hav
 
 * The Neo4J server presents a somewhat unstable connection that is sometimes difficult to keep alive, as it tends to be killed by the system when you so much as look at it wrong. To prevent this from happening, you are encouraged to assign a high-priority to the server's process by using the ```nice``` or ```renice``` commands in Linux (note that the process will be called "Java", not "Neo4J")
 
-* Another measure taken to prevent Neo4J's unreliability from stopping the script is the ```misc.repeat_transaction``` function, which insists a given number of times until either the problem is fixed or the error persists. This is because Neo4J tends to: random disconnects, run out of java heap space, explode... and WikiData tends to give server errors, have downtimes during the **14+ hours** the script takes to run, etc.
+* Another measure taken to prevent Neo4J's unreliability from stopping the script is the ```misc.manage_transaction``` function, which insists a given number of times until either the problem is fixed or the error persists. This is because Neo4J tends to: random disconnects, run out of java heap space, explode... and WikiData tends to give server errors, have downtimes during the **14+ hours** the script takes to run, etc.
 
 * The data present in the "graph.graphml" file comes from WikiData, and was provided by this service free of charge and of royalties under the permissive CC-0 license.

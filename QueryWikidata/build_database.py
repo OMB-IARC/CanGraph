@@ -12,11 +12,11 @@ to annotate existing metabolites (as showcased in :obj:`CanGraph.main`).
 
 .. NOTE:: You may notice some functions here present the ``**kwargs`` arguments option.
     This is in order to make the functions compatible with the
-    :obj:`CanGraph.miscelaneous.repeat_transaction` function, which might send back a variable
+    :obj:`CanGraph.miscelaneous.manage_transaction` function, which might send back a variable
     number of arguments (although technically it could work without the ``**kwargs`` option)
 """
 
-def initial_cancer_discovery(tx):
+def initial_cancer_discovery():
     """
     A Neo4J Cypher Statment that queries wikidata for Human Cancers. Since using the "afflicts:human"
     tag didnt have much use here, I used a simple workaround: Query wikidata for all humans, and, among them,
@@ -29,7 +29,7 @@ def initial_cancer_discovery(tx):
     Returns:
         neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
-    return tx.run("""
+    return ("""
         WITH 'SELECT DISTINCT ?cause_of_death ?cause_of_death_name
         WHERE {
                 ?human wdt:P31 wd:Q5;

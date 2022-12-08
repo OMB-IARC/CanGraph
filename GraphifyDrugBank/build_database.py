@@ -12,7 +12,6 @@ to annotate existing metabolites (as showcased in :obj:`CanGraph.main`).
 """
 
 # Import external modules necessary for the script
-from neo4j import GraphDatabase      # The Neo4J python driver
 from alive_progress import alive_bar # A cute progress bar that shows the script is still running
 import os, sys, shutil               # Vital modules to interact with the filesystem
 from time import sleep               # A hack to avoid starving the system resources
@@ -24,7 +23,7 @@ sys.path.append("../")
 # This is not the most elegant, but simplifies code maintenance, and this script shouldnt be used much so...
 import miscelaneous as misc
 
-def add_drugs(tx, filename):
+def add_drugs(filename):
     """
     Creates "Drug" nodes based on XML files obtained from the DrugBank website,
     adding some essential identifiers and external properties.
@@ -41,7 +40,7 @@ def add_drugs(tx, filename):
 
     .. NOTE:: Since Publications dont have any standard identificator, they are created using the "Title"
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.load.xml("{filename}")
         YIELD value
         WITH [x in value._children WHERE x._type = "drug"] AS drugs
@@ -156,7 +155,7 @@ def add_drugs(tx, filename):
         SET d.Affected_Organisms = substring(d.Affected_Organisms, 0, size(d.Affected_Organisms) -1 )
         """)
 
-def add_general_references(tx, filename):
+def add_general_references(filename):
     """
     Creates "Publication" nodes based on XML files obtained from the DrugBank website.
 
@@ -172,7 +171,7 @@ def add_general_references(tx, filename):
         the "Authors" field. This means some duplicates might exist, which should be accounted for.
 
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.load.xml("{filename}")
         YIELD value
         WITH [x in value._children WHERE x._type = "drug"] AS drugs
@@ -217,7 +216,7 @@ def add_general_references(tx, filename):
 
         """)
 
-def add_taxonomy(tx, filename):
+def add_taxonomy(filename):
     """
     Creates "Taxonomy" nodes based on XML files obtained from the DrugBank website.
     These represent the "kind" of Drug we are dealing with (Family, etc)
@@ -238,7 +237,7 @@ def add_taxonomy(tx, filename):
         This has to be accounted for later on in the process
 
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.load.xml("{filename}")
         YIELD value
         WITH [x in value._children WHERE x._type = "drug"] AS drugs
@@ -338,7 +337,7 @@ def add_taxonomy(tx, filename):
         MERGE (m)-[:PART_OF_CLADE]->(tt)
         """)
 
-def add_products(tx, filename):
+def add_products(filename):
     """
     Creates "Product" nodes based on XML files obtained from the DrugBank website.
     These are the individal medicaments that have been approved (or not) by the FDA
@@ -353,7 +352,7 @@ def add_products(tx, filename):
     .. WARNING:: Using CREATE means that duplicates will appear; unfortunately, I couldnt any unique_id
         field to use as ID when MERGEing the nodes. This should be accounted for.
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.load.xml("{filename}")
         YIELD value
         WITH [x in value._children WHERE x._type = "drug"] AS drugs
@@ -402,7 +401,7 @@ def add_products(tx, filename):
         MERGE (d)-[r:PART_OF_PRODUCT]->(p)
         """)
 
-def add_mixtures(tx, filename):
+def add_mixtures(filename):
     """
     Creates "Mixture" nodes based on XML files obtained from the DrugBank website.
     These are the mixtures of existing Drugs, which may or may not be on the market.
@@ -416,7 +415,7 @@ def add_mixtures(tx, filename):
 
     .. NOTE:: This doesn't seem of much use, but has been added nonetheless just in case.
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.load.xml("{filename}")
         YIELD value
         WITH [x in value._children WHERE x._type = "drug"] AS drugs
@@ -441,7 +440,7 @@ def add_mixtures(tx, filename):
         MERGE (d)-[r:PART_OF_PRODUCT]->(m)
         """)
 
-def add_categories(tx, filename):
+def add_categories(filename):
     """
     Creates "Category" nodes based on XML files obtained from the DrugBank website.
     These represent the different MeSH IDs a Drug can be related with
@@ -455,7 +454,7 @@ def add_categories(tx, filename):
 
     .. NOTE:: Each category seems to have an associated MeSH ID. Maybe could rename nodes as MeSH?
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.load.xml("{filename}")
         YIELD value
         WITH [x in value._children WHERE x._type = "drug"] AS drugs
@@ -487,7 +486,7 @@ def add_categories(tx, filename):
         MERGE (d)-[r:RELATED_MESH]->(c)
         """)
 
-def add_manufacturers(tx, filename):
+def add_manufacturers(filename):
     """
     Creates "Company" nodes based on XML files obtained from the DrugBank website.
     These represent the different Companies that manufacture a Drug's compound (not just package it)
@@ -499,7 +498,7 @@ def add_manufacturers(tx, filename):
     Returns:
         neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.load.xml("{filename}")
         YIELD value
         WITH [x in value._children WHERE x._type = "drug"] AS drugs
@@ -527,7 +526,7 @@ def add_manufacturers(tx, filename):
         MERGE (d)-[r:MANUFACTURED_BY]->(c)
         """)
 
-def add_packagers(tx, filename):
+def add_packagers(filename):
     """
     Creates "Company" nodes based on XML files obtained from the DrugBank website.
     These represent the different Companies that package a Drug's compounds (not the ones that manufacture them)
@@ -539,7 +538,7 @@ def add_packagers(tx, filename):
     Returns:
         neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.load.xml("{filename}")
         YIELD value
         WITH [x in value._children WHERE x._type = "drug"] AS drugs
@@ -568,7 +567,7 @@ def add_packagers(tx, filename):
         MERGE (d)-[r:MANUFACTURED_BY]->(c)
         """)
 
-def add_dosages(tx, filename):
+def add_dosages(filename):
     """
     Creates "Dosage" nodes based on XML files obtained from the DrugBank website.
     These represent the different Dosages that a Drug should be administered at.
@@ -583,7 +582,7 @@ def add_dosages(tx, filename):
     .. WARNING:: Using CREATE might generate duplicate nodes, but there was no
         unique characteristic to MERGE nodes into.
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.load.xml("{filename}")
         YIELD value
         WITH [x in value._children WHERE x._type = "drug"] AS drugs
@@ -610,7 +609,7 @@ def add_dosages(tx, filename):
         MERGE (d)-[r:DOSED_AS]->(do)
         """)
 
-def add_atc_codes(tx, filename):
+def add_atc_codes(filename):
     """
     Creates "ATC" nodes based on XML files obtained from the DrugBank website.
     These represent the different ATC codes a Drug can be related with (including an small taxonomy)
@@ -622,7 +621,7 @@ def add_atc_codes(tx, filename):
     Returns:
         neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.load.xml("{filename}")
         YIELD value
         WITH [x in value._children WHERE x._type = "drug"] AS drugs
@@ -655,7 +654,7 @@ def add_atc_codes(tx, filename):
         MERGE (pri)-[r2:RELATED_ATC]->(sec)
         """)
 
-def add_drug_interactions(tx, filename):
+def add_drug_interactions(filename):
     """
     Creates ```(d)-[r:RELATED_WITH_DRUG]-(dd)``` interactions between "Drug" nodes, whether they existed
     before or not. These are intentionally non-directional, as they should be related with each other.
@@ -667,7 +666,7 @@ def add_drug_interactions(tx, filename):
     Returns:
         neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.load.xml("{filename}")
         YIELD value
         WITH [x in value._children WHERE x._type = "drug"] AS metabolites
@@ -693,7 +692,7 @@ def add_drug_interactions(tx, filename):
         SET r.Description = description
         """)
 
-def add_sequences(tx, filename):
+def add_sequences(filename):
     """
     Creates "Sequence" nodes based on XML files obtained from the DrugBank website.
     These represent the AminoAcid sequence of Drugs that are of a peptidic nature.
@@ -708,7 +707,7 @@ def add_sequences(tx, filename):
     .. TODO:: In some other parts of the script, sequences are being added as
           properties on Protein nodes. A common format should be set.
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.load.xml("{filename}")
         YIELD value
         WITH [x in value._children WHERE x._type = "drug"] AS metabolites
@@ -735,7 +734,7 @@ def add_sequences(tx, filename):
 
         """)
 
-def add_experimental_properties(tx, filename):
+def add_experimental_properties(filename):
     """
     Adds some experimental properties to existing "Drug" nodes based on XML files obtained from the DrugBank website.
 
@@ -746,7 +745,7 @@ def add_experimental_properties(tx, filename):
     Returns:
         neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.load.xml("{filename}")
         YIELD value
         WITH [x in value._children WHERE x._type = "drug"] AS metabolites
@@ -775,7 +774,7 @@ def add_experimental_properties(tx, filename):
             d.Melting_Point = dict["Melting Point"], d.logP = dict["logP"]
         """)
 
-def add_external_identifiers(tx, filename):
+def add_external_identifiers(filename):
     """
     Adds some external identifiers to existing "Drug" nodes based on XML files obtained from the DrugBank website.
 
@@ -789,7 +788,7 @@ def add_external_identifiers(tx, filename):
     .. NOTE:: These also adds a "Protein" label to any "Drug"-labeled nodes which have a "UniProtKB"-ID
         among their properties. NOTE that this can look confusing in the DB Schema!!!
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.load.xml("{filename}")
         YIELD value
         WITH [x in value._children WHERE x._type = "drug"] AS metabolites
@@ -822,7 +821,7 @@ def add_external_identifiers(tx, filename):
         )
         """)
 
-def add_external_equivalents(tx, filename):
+def add_external_equivalents(filename):
     """
     Adds some external equivalents to existing "Drug" nodes based on XML files obtained from the DrugBank website.
     This should be "exact matches" of the Drug in other databases.
@@ -837,7 +836,7 @@ def add_external_equivalents(tx, filename):
     .. NOTE:: The main reason to add them as "External-Equivalents" is because I felt these IDs where of not much use (and
         are thus easier to eliminate due to their common label)
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.load.xml("{filename}")
         YIELD value
         WITH [x in value._children WHERE x._type = "drug"] AS metabolites
@@ -863,7 +862,7 @@ def add_external_equivalents(tx, filename):
         MERGE (d)-[r:EQUALS]-(ee)
         """)
 
-def add_pathways_and_relations(tx, filename):
+def add_pathways_and_relations(filename):
     """
     Adds "Pathway" nodes based on XML files obtained from the DrugBank website.
     It also adds some relations between Drugs and Proteins (which, remember, could even be the same kind of node)
@@ -880,7 +879,7 @@ def add_pathways_and_relations(tx, filename):
     .. WARNING:: This function uses a "double UNWIND" clause, which means that we are only representing <pathways> tags
         with <enzymes> tags inside. Fortunately, this seems to seldom not happen, so it should represent no problem.
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.load.xml("{filename}")
         YIELD value
         WITH [x in value._children WHERE x._type = "drug"] AS metabolites
@@ -927,7 +926,7 @@ def add_pathways_and_relations(tx, filename):
         MERGE (d)-[r5:INTERACTS_WITH]-(p)
         """)
 
-def add_targets_enzymes_carriers_and_transporters(tx, filename, tag_name):
+def add_targets_enzymes_carriers_and_transporters(filename, tag_name):
     """
     A *REALLY HUGE* function. It takes a filename and a tag_name, and gets info and creates "Protein" nodes with tag_name set as their role.
     It also adds a bunch of additional info, such as Publications, Targets, Actions, GO_IDs, PFAMs and/or some External IDs
@@ -955,7 +954,7 @@ def add_targets_enzymes_carriers_and_transporters(tx, filename, tag_name):
     .. TODO:: Investigate https://stackoverflow.com/questions/14026217/using-neo4j-distinct-and-order-by-on-different-properties
 
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.load.xml("{filename}")
         YIELD value
         WITH [x in value._children WHERE x._type = "drug"] AS metabolites
@@ -1140,32 +1139,21 @@ def build_from_file(newfile, driver):
     Returns:
         This function modifies the Neo4J Database as desired, but does not produce any particular return.
     """
-    with driver.session() as session:
-        session.execute_write(add_drugs, newfile)
-    with driver.session() as session:
-        session.execute_write(add_general_references, newfile)
-    with driver.session() as session:
-        session.execute_write(add_taxonomy, newfile)
-    with driver.session() as session:
-        session.execute_write(add_products, newfile)
-    with driver.session() as session:
-        session.execute_write(add_mixtures, newfile)
-    with driver.session() as session:
-        session.execute_write(add_categories, newfile)
-    with driver.session() as session:
-        session.execute_write(add_manufacturers, newfile)
-        session.execute_write(add_packagers, newfile)
-        session.execute_write(add_dosages, newfile)
-    with driver.session() as session:
-        session.execute_write(add_atc_codes, newfile)
-        session.execute_write(add_drug_interactions, newfile)
-        session.execute_write(add_sequences, newfile)
-    with driver.session() as session:
-        session.execute_write(add_experimental_properties, newfile)
-        session.execute_write(add_external_identifiers, newfile)
-        session.execute_write(add_external_equivalents, newfile)
-    with driver.session() as session:
-        session.execute_write(add_pathways_and_relations, newfile)
-    with driver.session() as session:
-        for element in ["enzymes", "carriers", "transporters"]:
-            session.execute_write(add_targets_enzymes_carriers_and_transporters, newfile, element)
+    misc.manage_transaction(add_drugs(newfile), driver)
+    misc.manage_transaction(add_general_references(newfile), driver)
+    misc.manage_transaction(add_taxonomy(newfile), driver)
+    misc.manage_transaction(add_products(newfile), driver)
+    misc.manage_transaction(add_mixtures(newfile), driver)
+    misc.manage_transaction(add_categories(newfile), driver)
+    misc.manage_transaction(add_manufacturers(newfile), driver)
+    misc.manage_transaction(add_packagers(newfile), driver)
+    misc.manage_transaction(add_dosages(newfile), driver)
+    misc.manage_transaction(add_atc_codes(newfile), driver)
+    misc.manage_transaction(add_drug_interactions(newfile), driver)
+    misc.manage_transaction(add_sequences(newfile), driver)
+    misc.manage_transaction(add_experimental_properties(newfile), driver)
+    misc.manage_transaction(add_external_identifiers(newfile), driver)
+    misc.manage_transaction(add_external_equivalents(newfile), driver)
+    misc.manage_transaction(add_pathways_and_relations(newfile), driver)
+    for element in ["enzymes", "carriers", "transporters"]:
+        misc.manage_transaction(add_targets_enzymes_carriers_and_transporters(newfile, element), driver)

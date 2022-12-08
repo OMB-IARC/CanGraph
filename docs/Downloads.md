@@ -6,7 +6,7 @@ SPDX-License-Identifier: MIT
 
 # Downloads
 
-There are lots of different ways you can install and use the CanGraph software
+There are lots of different ways you can install and use the CanGraph software:
 
 #### Using a pre-built Apptainer Image
 
@@ -40,6 +40,11 @@ For the General Public: Download a public version of CanGraph, which anyone can 
 
 ::::
 ```
+
+````{eval-rst}
+.. note:: * To maintain confidentiality, the Public version only includes the HMDB, SMPDB and Web DataBases. You can generate the Private version yourself if you want to include more.
+    * It is recommended to read the :ref:`Known Issues` Section before installing
+````
 
 #### Installing the Command Line Version
 

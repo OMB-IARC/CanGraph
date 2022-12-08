@@ -5,6 +5,9 @@
 # Ignore the __pycache__ folder (unnecessary) in any subfolder or the main folder
 **/__pycache__/
 __pycache__/
+# Same for Jupyter Notebook Checkpoints
+.ipynb_checkpoints/
+**/.ipynb_checkpoints/
 
 # Ignore the confidential folder with the Full Database Tables
 **/xmlfolder/
@@ -39,3 +42,5 @@ docs/_build
 
 # Ignore the private version of the CanGraph-Singularity packaged file
 **/CanGraph-Private.sif
+# And the public one, to keep the repo lightweight
+**/CanGraph-Public.sif

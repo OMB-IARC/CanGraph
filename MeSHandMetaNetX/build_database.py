@@ -13,7 +13,7 @@ to annotate existing metabolites (as showcased in :obj:`CanGraph.main`).
 
 .. NOTE:: You may notice some functions here present the ``**kwargs`` arguments option.
     This is in order to make the functions compatible with the
-    :obj:`CanGraph.miscelaneous.repeat_transaction` function, which might send back a variable
+    :obj:`CanGraph.miscelaneous.manage_transaction` function, which might send back a variable
     number of arguments (although technically it could work without the ``**kwargs`` option)
 """
 
@@ -22,6 +22,14 @@ import urllib.request as request     # Extensible library for opening URLs
 import urllib.parse                  # Parse URLs in Python
 import re                            # Regular expression search
 import time                          # Manage the time, and wait times, in python
+import os, sys, shutil               # Vital modules to interact with the filesystem
+
+# Import subscripts for the program
+# This hack that allows us to de-duplicate the miscleaneous script in this less-used script
+sys.path.append("../")
+# .. NOTE::: Please beware that, if using this module by itself, you might need to copy "miscelaneous.py" into your path
+# This is not the most elegant, but simplifies code maintenance, and this script shouldnt be used much so...
+import miscelaneous as misc
 
 # ********* SPARQL queries to annotate existing nodes using MeSH ********* #
 
@@ -91,22 +99,21 @@ def add_mesh_by_name():
         } IN TRANSACTIONS OF 10 rows
         """
 
-def find_metabolites_related_to_mesh(tx, mesh_id):
+def find_metabolites_related_to_mesh(mesh_id):
     """
     A function that finds Metabolites related to a given MeSH ID, on the MeSH DataBase
 
     Args:
-        tx          (neo4j.Session): The session under which the driver is running
         mesh_id (str): The MeSH_ID of the thing for which we want to find related proteins
 
     Returns:
-        list: The result of the query: a list of dictionaries with ``Metabolite``, ``Name`` and ``Species`` keys
+        str: A text chain that represents the CYPHER query with the desired output. This can be run using: :obj:`neo4j.Session.run`
 
     .. NOTE:: This is intended to be run as a execute_read, only returning synonyms present in the DB. No modifications will be applied.
 
     .. NOTE:: Could be turned into a read query by substituting ``mesh_id`` with ``' + n.MeSH_ID + '``
     """
-    graph_response = tx.run( f"""
+    return f"""
         WITH '
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -141,9 +148,7 @@ def find_metabolites_related_to_mesh(tx, mesh_id):
             split(row["MetaboliteName"]["value"], ",")[1] as Species
 
         RETURN MeSH_ID, Name, Species
-        """)
-
-    return [record.data() for record in graph_response]
+        """
 
 # ********* SPARQL queries to annotate existing nodes using MetaNetX ********* #
 
@@ -336,7 +341,7 @@ def write_synonyms_in_metanetx(query, **kwargs):
     Raises:
         ValueError: If the query type is not one of those accepted by the function
 
-    .. NOTE:: This is intended to be run as a execute_write, modifying the existing database.
+    .. NOTE:: This is intended to be run as a manage_transaction, modifying the existing database.
     """
     if query == "Name":
       query_text = """?mnx_url  rdfs:comment  \"' +  n.Name + '\" . """
@@ -397,40 +402,38 @@ def write_synonyms_in_metanetx(query, **kwargs):
         }} IN TRANSACTIONS OF 10 rows
         """
 
-def read_synonyms_in_metanetx(tx, querytype, query, **kwargs):
+def read_synonyms_in_metanetx(query_type, query, **kwargs):
     """
     A SPARQL function that finds synonyms for metabolites, proteins or drugs based on a given `query`, using MetaNetX.
     At the same time, it is able to annotate them a bit, adding Name, InChI, InChIKey, SMILES, Formula, Mass, some External IDs,
     and finding whether the metabolite in question has any known isomers, anootating if so.
 
     Args:
-        tx          (neo4j.Session): The session under which the driver is running
-        querytype   (str): The type of query that is being searched for. One of ["Name","KEGG_ID","ChEBI_ID","HMDB_ID","InChI","InChIKey"]
-        query       (str): The query we are searching for; must be of type ```querytype```
+        query_type   (str): The type of query that is being searched for. One of ["Name","KEGG_ID","ChEBI_ID","HMDB_ID","InChI","InChIKey"]
+        query       (str): The query we are searching for; must be of type ```query_type```
         **kwargs: Any number of arbitrary keyword arguments
 
     Returns:
-        list: The result of the query: a list of dictionaries with ``databasename`` and ``databaseid`` keys
 
     Raises:
         ValueError: If the query type is not one of those accepted by the function
 
     .. NOTE:: This is intended to be run as a execute_read, only returning synonyms present in the DB. No modifications will be applied.
     """
-    if querytype == "Name":
+    if query_type == "Name":
       query_text = f"""?mnx_url  rdfs:comment  \"{ query }\" . """
-    elif querytype == "ChEBI_ID":
+    elif query_type == "ChEBI_ID":
       query_text = f"""?mnx_url  mnx:chemXref  chebi:{ query } . """
-    elif querytype == "HMDB_ID":
+    elif query_type == "HMDB_ID":
       query_text = f"""?mnx_url  mnx:chemXref  hmdb:{ query } . """
-    elif querytype == "InChI":
+    elif query_type == "InChI":
       query_text = f"""?mnx_url  mnx:inchi  \"{ query }\" . """
-    elif querytype == "InChIKey":
+    elif query_type == "InChIKey":
       query_text = f"""?mnx_url  mnx:inchikey  \"InChIKey={ query }\" . """
     else:
-      raise ValueError(f"Error: {querytype} is not a valid query type")
+      raise ValueError(f"Error: {query_type} is not a valid query type")
 
-    graph_response = tx.run(f"""
+    return f"""
         WITH '
 
         { add_prefixes() }
@@ -468,9 +471,7 @@ def read_synonyms_in_metanetx(tx, querytype, query, **kwargs):
             row["Name"]["value"] as Name
 
         RETURN databasename, databaseid, InChI, InChIKey, Name
-        """)
-
-    return [record.data() for record in graph_response]
+        """
 
 
 def find_protein_interactions_in_metanetx():
@@ -597,12 +598,11 @@ def find_protein_data_in_metanetx():
 # ********* Build the entire MetaNetX DB as a graph under our format ********* #
 
 
-def add_chem_xref(tx, filename):
+def add_chem_xref(filename):
     """
     A CYPHER query that loads the `chem_xref.tsv` file availaible at the MetaNetX site, using a graph format.
 
     Args:
-        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported
 
     Returns:
@@ -610,7 +610,7 @@ def add_chem_xref(tx, filename):
 
     .. NOTE:: For performance, it is recommended to split the file in 1 subfile for each row in the DataBase
     """
-    return tx.run(f"""
+    return f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line FIELDTERMINATOR '\t'
 
         MERGE (n:Metabolite {{ MetaNetX_ID:line.ID }})
@@ -621,14 +621,13 @@ def add_chem_xref(tx, filename):
         n
 
         { get_identifiers(from_sparql = False) }
-        """)
+        """
 
-def add_chem_prop(tx, filename):
+def add_chem_prop(filename):
     """
     A CYPHER query that loads the `chem_prop.tsv` file availaible at the MetaNetX site, using a graph format.
 
     Args:
-        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported
 
     Returns:
@@ -636,20 +635,19 @@ def add_chem_prop(tx, filename):
 
     .. NOTE:: For performance, it is recommended to split the file in 1 subfile for each row in the DataBase
     """
-    return tx.run(f"""
+    return f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line FIELDTERMINATOR '\t'
 
         MERGE (n:Metabolite {{ MetaNetX_ID:line["#ID"] }})
         SET n.Name = line.name, n.Formula = line.Formula, n.Charge = line.charge, n.Average_Mass = line.mass,
             n.InChI = line.InChI, n.InChIKey = line.InChIKey, n.SMILES = line.SMILES
-        """)
+        """
 
-def add_chem_isom(tx, filename):
+def add_chem_isom(filename):
     """
     A CYPHER query that loads the `chem_isom.tsv` file availaible at the MetaNetX site, using a graph format.
 
     Args:
-        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported
 
     Returns:
@@ -657,7 +655,7 @@ def add_chem_isom(tx, filename):
 
     .. NOTE:: For performance, it is recommended to split the file in 1 subfile for each row in the DataBase
     """
-    return tx.run(f"""
+    return f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line FIELDTERMINATOR '\t'
 
         MERGE (n:Metabolite {{ MetaNetX_ID:line["#parent"] }})
@@ -667,14 +665,13 @@ def add_chem_isom(tx, filename):
 
         SET n.Alternative_names = split(line.description," -> ")[0] + "," + n.Alternative_names
         SET m.Alternative_names = split(line.description," -> ")[1] + "," + m.Alternative_names
-        """)
+        """
 
-def add_comp_xref(tx, filename):
+def add_comp_xref(filename):
     """
     A CYPHER query that loads the `comp_xref.tsv` file availaible at the MetaNetX site, using a graph format.
 
     Args:
-        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported
 
     Returns:
@@ -688,7 +685,7 @@ def add_comp_xref(tx, filename):
     .. NOTE:: The "description" field in the DataBase is ignored, since it seems to be quite similar, but less useful,
           than the "name" field from comp_prop, which is more coherent with our pre-existing schema
     """
-    return tx.run(f"""
+    return f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line FIELDTERMINATOR '\t'
 
         MERGE (n:CelularLocation {{ MetaNetX_ID:line.ID }})
@@ -716,14 +713,13 @@ def add_comp_xref(tx, filename):
         FOREACH(ignoreme in case when databasename = "cco" then [1] else [] end |
             SET n.Cell_Component_Ontology_ID = databaseid
         )
-        """)
+        """
 
-def add_comp_prop(tx, filename):
+def add_comp_prop(filename):
     """
     A CYPHER query that loads the `comp_prop.tsv` file availaible at the MetaNetX site, using a graph format.
 
     Args:
-        tx          (neo4j.Session): The session under which the driver is running
         filename    (str): The name of the CSV file that is being imported
 
     Returns:
@@ -731,12 +727,12 @@ def add_comp_prop(tx, filename):
 
     .. NOTE:: For performance, it is recommended to split the file in 1 subfile for each row in the DataBase
     """
-    return tx.run(f"""
+    return f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line FIELDTERMINATOR '\t'
 
         MERGE (n:CelularLocation {{ MetaNetX_ID:line["#ID"] }})
         SET n.Name = line.name
-        """)
+        """
 
 def add_pept():
     """
@@ -879,17 +875,12 @@ def build_from_file(filename, driver):
         This function modifies the Neo4J Database as desired, but does not produce any particular return.
     """
     if "chem_xref" in filename:
-        with driver.session() as session:
-            session.execute_write(add_chem_xref, filename)
+        misc.manage_transaction(add_chem_xref(filename), driver)
     elif "chem_prop" in filename:
-        with driver.session() as session:
-            session.execute_write(add_chem_prop, filename)
+        misc.manage_transaction(add_chem_prop(filename), driver)
     elif "chem_isom" in filename:
-        with driver.session() as session:
-            session.execute_write(add_chem_isom, filename)
+        misc.manage_transaction(add_chem_isom(filename), driver)
     elif "comp_xref" in filename:
-        with driver.session() as session:
-            session.execute_write(add_comp_xref, filename)
+       misc.manage_transaction(add_comp_xref(filename), driver)
     elif "comp_prop" in filename:
-        with driver.session() as session:
-            session.execute_write(add_comp_prop, filename)
+        misc.manage_transaction(add_comp_prop(filename), driver)

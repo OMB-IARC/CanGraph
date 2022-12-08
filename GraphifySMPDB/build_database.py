@@ -23,7 +23,7 @@ sys.path.append("../")
 # This is not the most elegant, but simplifies code maintenance, and this script shouldnt be used much so...
 import miscelaneous as misc
 
-def add_metabolites(tx, filename):
+def add_metabolites(filename):
     """
     Adds "Metabolite" nodes to the database, according to individual CSVs present in the SMPDB website
 
@@ -38,7 +38,7 @@ def add_metabolites(tx, filename):
 
     .. NOTE:: This database clearly differentiates Metabolites and Proteins, so no overlap is accounted for
     """
-    return tx.run(f"""
+    return (f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
         MERGE (m:Metabolite {{ Metabolite_ID:line["Metabolite ID"] }})
         SET m.Name = line["Metabolite Name"], m.HMDB_ID = line["HMDB ID"], m.KEGG_ID = line["KEGG ID"], m.ChEBI_ID = line["ChEBI ID"],
@@ -49,7 +49,7 @@ def add_metabolites(tx, filename):
         MERGE (m)-[r:PART_OF_PATHWAY]->(pa)
         """)
 
-def add_proteins(tx, filename):
+def add_proteins(filename):
     """
     Adds "Protein" nodes to the database, according to individual CSVs present in the SMPDB website
 
@@ -69,7 +69,7 @@ def add_proteins(tx, filename):
     .. WARNING:: Since no unique identifier was found, CREATE had to be used (instead of merge). This might create
              duplicates. which should be accounted for.
     """
-    return tx.run(f"""
+    return (f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
         CREATE (p:Protein )
         SET p.Name = line["Protein Name"], p.HMDB_ID = line["HMDBP ID"], p.DrugBank_ID = line["DrugBank ID"],
@@ -80,7 +80,7 @@ def add_proteins(tx, filename):
         MERGE (p)-[r:PART_OF_PATHWAY]->(pa)
         """)
 
-def add_pathways(tx, filename):
+def add_pathways(filename):
     """
     Adds "Pathways" nodes to the database, according to individual CSVs present in the SMPDB website
     Since this is done after the creation of said pathways in the last step, this will most likely just annotate them.
@@ -94,13 +94,13 @@ def add_pathways(tx, filename):
 
     .. TODO:: This file is really big. It could be divided into smaller ones.
     """
-    return tx.run(f"""
+    return (f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
         MERGE (pa:Pathway {{ SMPDB_ID:line["SMPDB ID"] }} )
         SET pa.Name = line["Name"], pa.Category = line["Subject"], pa.PW_ID = line["PW ID"], pa.Description = line["Description"]
         """)
 
-def add_sequence(tx, seq_id, seq_name, seq_type, seq, seq_format="FASTA"):
+def add_sequence(seq_id, seq_name, seq_type, seq, seq_format="FASTA"):
     """
     Adds "Pathways" nodes to the database, according to the sequences presented in FASTA files from the SMPDB website
 
@@ -115,7 +115,7 @@ def add_sequence(tx, seq_id, seq_name, seq_type, seq, seq_format="FASTA"):
     Returns:
         neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
-    return tx.run(f"""
+    return (f"""
         MERGE (s:Sequence {{ UniProt_ID:"{seq_id}", Name:"{seq_name}", Type:"{seq_type}", Sequence:"{seq}", Format:"{seq_format}" }} )
         MERGE (p:Protein {{ UniProt_ID:"{seq_id}" }} )
         MERGE (p)-[r:SEQUENCED_AS]->(s)
@@ -149,14 +149,14 @@ def build_from_file(filepath, Neo4JImportPath, driver, filetype):
 
     if filetype == "Metabolite":
         with driver.session() as session:
-            session.execute_write(add_metabolites, f"{os.path.basename(filepath)}")
+            misc.manage_transaction(add_metabolites(f"{os.path.basename(filepath)}"), driver)
             shutil.copyfile(f"{os.path.abspath(databasepath)}/SMPDB/smpdb_proteins/{pathway_id}_proteins.csv", f"{Neo4JImportPath}/corresponding.csv")
-            session.execute_write(add_proteins, "corresponding.csv")
+            misc.manage_transaction(add_proteins("corresponding.csv"), driver)
     elif filetype == "Protein":
         with driver.session() as session:
-            session.execute_write(add_proteins, f"{os.path.basename(filepath)}")
+            misc.manage_transaction(add_proteins(f"{os.path.basename(filepath)}"), driver)
             shutil.copyfile(f"{os.path.abspath(databasepath)}/SMPDB/smpdb_metabolites/{pathway_id}_metabolites.csv", f"{Neo4JImportPath}/corresponding.csv")
-            session.execute_write(add_metabolites, "corresponding.csv")
+            misc.manage_transaction(add_metabolites("corresponding.csv"), driver)
 
     # We then import pathway info
     all_pathways = pd.read_csv(f"{os.path.abspath(databasepath)}/SMPDB/smpdb_pathways.csv", delimiter=',', header=0)
@@ -173,7 +173,7 @@ def build_from_file(filepath, Neo4JImportPath, driver, filetype):
             Name =  " ".join(fasta.description.split(" ")[1:]).replace("("+UniProt_ID+")", "")
             Sequence = str(fasta.description) + "\n" + str(fasta.seq); Format = "FASTA"; Type = "DNA"
             with driver.session() as session:
-                session.execute_write(add_sequence, UniProt_ID, Name, Type, Sequence, Format)
+                misc.manage_transaction(add_sequence(UniProt_ID, Name, Type, Sequence, Format), driver)
 
     proteic_sequences = SeqIO.parse(open(f"{os.path.abspath(databasepath)}/SMPDB/smpdb_protein.fasta"),'fasta')
     for fasta in proteic_sequences:
@@ -182,5 +182,5 @@ def build_from_file(filepath, Neo4JImportPath, driver, filetype):
             Name =  " ".join(fasta.description.split(" ")[1:]).replace("("+UniProt_ID+")", "")
             Sequence = str(fasta.description) + "\n" + str(fasta.seq); Format = "FASTA"; Type = "PROT"
             with driver.session() as session:
-                session.execute_write(add_sequence, UniProt_ID, Name, Type, Sequence, Format)
+                misc.manage_transaction(add_sequence(UniProt_ID, Name, Type, Sequence, Format), driver)
     os.remove(f"{Neo4JImportPath}/just_this_pathway.csv"); os.remove(f"{Neo4JImportPath}/corresponding.csv"); os.remove(f"{Neo4JImportPath}/{os.path.basename(filepath)}")

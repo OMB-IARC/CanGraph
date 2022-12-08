@@ -16,7 +16,8 @@
 # https://github.com/apptainer/apptainer/blob/main/INSTALL.md
 
 # Another option is to use a custom repo; see:
-# https://docs.sylabs.io/guides/3.0/user-guide/installation.html#install-the-debian-ubuntu-package-using-apt
+# https://docs.sylabs.io/guides/3.0/user-guide/installation.html
+    #install-the-debian-ubuntu-package-using-apt
 
 # *********************** #
 
@@ -29,7 +30,8 @@ sudo apt-get install -y build-essential libseccomp-dev pkg-config \
 # Then, we void the Go Folder and re-install the desired Go version
 sudo rm -r /usr/local/go
 export VERSION=1.19 OS=linux ARCH=amd64
-wget -O /tmp/go${VERSION}.${OS}-${ARCH}.tar.gz https://dl.google.com/go/go${VERSION}.${OS}-${ARCH}.tar.gz && \
+wget -O /tmp/go${VERSION}.${OS}-${ARCH}.tar.gz \
+     https://dl.google.com/go/go${VERSION}.${OS}-${ARCH}.tar.gz && \
 sudo tar -C /usr/local -xzf /tmp/go${VERSION}.${OS}-${ARCH}.tar.gz
 
 # We appropriate the env vars accordingly using source and bashrc

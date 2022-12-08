@@ -43,9 +43,10 @@ function remap_args {
   }
 
   if [[ "$original_args" == *"$arg_query"* ]]; then
-    split_args_by_query=(${original_args//$arg_query/ })
-    split_args_by_space=(${split_args_by_query// / })
-    arg_value=${split_args_by_space[0]}
+    export arg_query=$1
+    export original_args="${@:3}"
+    arg_value=$(python3 -c 'import os; \
+    print(os.environ["original_args"].split(os.environ["arg_query"])[1].split(" ")[1])')
 
     echo $(return_default_if_no_args $default $arg_value)
   else
@@ -92,7 +93,9 @@ function add_default_args {
 # to refactor the logic here for the CanGraph image to work properly
 
 # Set things up: prepare the arguments to reach their correct format
-databasefolder=$(remap_args "--dbfolder" "$CANGRAPH_HOME/DataBases" $@)
+databasefolder=$(remap_args "--dbfolder" "DataBases" $@)
+mkdir -p $databasefolder # Create it if it doesn't exist, for main.py to work
+
 # If any of [neo4j_username, neo4j_password] is missing, we should use the default or the old ones
 neo4j_username=$(remap_args "--username" "neo4j" $@)
 if  test -f ".neo4jpassword";
@@ -121,8 +124,7 @@ fi
 
 # Then, we run the Neo4J setup script to check for already installed versions or install it
 python3 $CANGRAPH_HOME/setup.py --neo4j $neo4j_home --neo4j_username $neo4j_username \
-                                --neo4j_password $neo4j_password --DataBases $databasefolder
-
+                                --neo4j_password $neo4j_password --dbfolder $databasefolder
 # Please NOTE how this will also restart any neo4j sessions in existance; thus, the bolt port will be the default
 neo4j_adress="bolt://localhost:7687"
 

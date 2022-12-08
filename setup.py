@@ -45,6 +45,7 @@ from texttable import Texttable      # Draw cute tables in python
 import pandas as pd                  # Analysis of tabular data
 import json                          # Read JSON files from Python
 from alive_progress import alive_bar # A cute progress bar that shows the script is still running
+import ijson                         # Read JSON files from Python in an iterative way
 
 import miscelaneous as misc          # A collection of useful functions
 
@@ -81,7 +82,7 @@ def args_parser():
                         help=("runs all the options below at once; equivalent to -dgnr; "
                               "it DOES NOT activate the interactive mode"))
 
-    parser.add_argument("--databases", nargs='?', const="DataBases", type=misc.check_file,
+    parser.add_argument("--dbfolder", nargs='?', const="DataBases", type=misc.check_file,
                         help="set up the databases from which the program will pull its info using the provided folder")
     parser.add_argument("--git", nargs='?', const=".git", type=misc.check_file,
                         help="prepare the git environment for the deploy script using the provided git folder")
@@ -167,7 +168,10 @@ def install_packages(requirements_file = None, package_name = None, interactive 
     else:
         raise ValueError("You must give at least one requirement to install")
 
-    sp.check_returncode() # Raise error if error is found
+    try:
+        sp.check_returncode() # Raise error if error is found
+    except subprocess.CalledProcessError as Error:
+        raise RuntimeError(f"Command {Error.cmd} exited with Error: {Error.output}")
 
     print("Installed Requirements")
 
@@ -237,10 +241,16 @@ def find_neo4j_installation_status(neo4j_home = "neo4j", neo4j_username = "neo4j
         # If no exceptions are thrown, then it exists! Lets try to start it then
         neo4j_exists = True; misc.sleep_with_counter(8, message = "Waiting for neo4j to start...")
 
-        driver = misc.connect_to_neo4j(port = "bolt://localhost:7687", username = neo4j_username, password = neo4j_password)
+        driver = misc.connect_to_neo4j(port = "bolt://localhost:7687",
+                                       username = neo4j_username, password = neo4j_password)
 
         # We will try to get the Import Path just as a test to see if the default auths are present
-        Neo4JImportPath = misc.get_import_path(driver)
+        def allow_test_to_fail(tx):
+            result =  tx.run(""" Call dbms.listConfig() YIELD name, value
+            WHERE name='dbms.directories.import' RETURN value """)
+            return [record["value"] for record in result]
+        with driver.session() as session:
+            Neo4JImportPath = session.execute_read(allow_test_to_fail)[0]
 
         # If there are no exceptions, obviously, then the credentials you supplied us with are working!
         logging.info("Installation with known credentials found! I'll work with that :p")
@@ -252,7 +262,7 @@ def find_neo4j_installation_status(neo4j_home = "neo4j", neo4j_username = "neo4j
         logging.info("Let me stop neo4j first...")
         default_credentials = False
 
-    # If they the default (neo4j/neo4j), it throws a ``ClientError``, because it requires a password change first
+    # If they the default (neo4j/neo4j), it throws a ``ClientError``, because it requires a password change
     except neo4j.exceptions.ClientError as error:
         logging.info("Installation with known credentials found! I'll work with that :p")
         default_credentials = True
@@ -364,7 +374,11 @@ def configure_neo4j(neo4j_home = "neo4j"):
     logging.info("based on sugestions provided by neo4j-admin's memrec feature")
 
     sp = subprocess.run([f"{neo4j_home}/bin/neo4j-admin", "memrec"], stdout=subprocess.PIPE)
-    sp.check_returncode() # Raise error if error is found
+    try:
+        sp.check_returncode() # Raise error if error is found
+    except subprocess.CalledProcessError as Error:
+        raise RuntimeError(f"Command {Error.cmd} exited with Error: {Error.output}")
+
 
     for line in str(sp.stdout).split("\\n"):
         if line.startswith("dbms."):
@@ -394,6 +408,9 @@ def change_neo4j_password(new_password, old_password = "neo4j", user = "neo4j", 
         user (str): the user for which the password is being changed.
         database (str): the name of the database for which we want to modify the password.
             By default, it is ``system``, since Neo4J's community edition  only allows for one database
+
+    .. WARNING:: DO NOT REMOVE THE TRY-EXCEPT BLOCK THAT ATTEMPTS TO CONNECT TO NEO4J:
+        It somehow magically maked the passsword change work. IT WILL NOT WORK IF THAT LINES ARE NOT PRESENT
     """
 
     neo4j_home = os.path.abspath(neo4j_home) # Make the path absolute, to standardize
@@ -404,7 +421,12 @@ def change_neo4j_password(new_password, old_password = "neo4j", user = "neo4j", 
 
     try:
         driver = misc.connect_to_neo4j(port = "bolt://localhost:7687", username = "neo4j", password = "neo4j")
-        Neo4JImportPath = misc.get_import_path(driver)
+        def allow_test_to_fail(tx):
+            result =  tx.run(""" Call dbms.listConfig() YIELD name, value
+            WHERE name='dbms.directories.import' RETURN value """)
+            return [record["value"] for record in result]
+        with driver.session() as session:
+            Neo4JImportPath = session.execute_read(allow_test_to_fail)[0]
     except:
         pass
 
@@ -415,7 +437,10 @@ def change_neo4j_password(new_password, old_password = "neo4j", user = "neo4j", 
                         "-p", f"{old_password}",
                         f"ALTER CURRENT USER SET PASSWORD FROM '{old_password}' TO '{new_password}'"],
                         stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
-    sp.check_returncode() # Raise error if error is found
+    try:
+        sp.check_returncode() # Raise error if error is found
+    except subprocess.CalledProcessError as Error:
+        raise RuntimeError(f"Command {Error.cmd} exited with Error: {Error.output}")
 
     misc.kill_neo4j(neo4j_home) # Kill the Neo4J process
 
@@ -538,29 +563,55 @@ def check_exposome_files(databasefolder = "./DataBases"):
         databasefolder (str): The main folder where all the databases we will be using are to be found
 
     Returns:
-        bool:
-            True if everything went okay; False otherwise. If False,
-            Exposome-Explorer should not be used as a data source
+        str:
+            One of ["Splitted, "UnSplitted", "Error"]. If "Error",
+            Exposome-Explorer should not be used as a data source;
+            if "UnSplitted", please split the "components" file.
     """
 
     # Set the databasefolder to be an absolute path
     databasefolder = os.path.abspath(databasefolder)
 
-    # Check for the presence of all files; if :obj:`CanGraph.miscelaneous.check_file` throws an error, set exposome_explorer_ok to ``False``
+    # Check for the presence of all files; if :obj:`CanGraph.miscelaneous.check_file`
+    # throws an error, set exposome_explorer_ok to ``False``
     try:
-        misc.check_file(f"{databasefolder}/ExposomeExplorer/units.csv");                misc.check_file(f"{databasefolder}/ExposomeExplorer/subjects.csv")
-        misc.check_file(f"{databasefolder}/ExposomeExplorer/specimens.csv");            misc.check_file(f"{databasefolder}/ExposomeExplorer/samples.csv")
-        misc.check_file(f"{databasefolder}/ExposomeExplorer/reproducibilities.csv");    misc.check_file(f"{databasefolder}/ExposomeExplorer/publications.csv")
+        # First, we try with all the non-splittable files
+        misc.check_file(f"{databasefolder}/ExposomeExplorer/units.csv")
+        misc.check_file(f"{databasefolder}/ExposomeExplorer/subjects.csv")
+        misc.check_file(f"{databasefolder}/ExposomeExplorer/specimens.csv")
+        misc.check_file(f"{databasefolder}/ExposomeExplorer/samples.csv")
+        misc.check_file(f"{databasefolder}/ExposomeExplorer/reproducibilities.csv")
+        misc.check_file(f"{databasefolder}/ExposomeExplorer/publications.csv")
         misc.check_file(f"{databasefolder}/ExposomeExplorer/microbial_metabolite_identifications.csv")
-        misc.check_file(f"{databasefolder}/ExposomeExplorer/metabolomic_associations.csv"); misc.check_file(f"{databasefolder}/ExposomeExplorer/cancer_associations.csv")
-        misc.check_file(f"{databasefolder}/ExposomeExplorer/measurements.csv");         misc.check_file(f"{databasefolder}/ExposomeExplorer/experimental_methods.csv")
-        misc.check_file(f"{databasefolder}/ExposomeExplorer/correlations.csv");          misc.check_file(f"{databasefolder}/ExposomeExplorer/components.csv")
-        misc.check_file(f"{databasefolder}/ExposomeExplorer/cohorts.csv");              misc.check_file(f"{databasefolder}/ExposomeExplorer/cancers.csv")
-        exposome_explorer_ok = True
-    except:
-        exposome_explorer_ok = False
+        misc.check_file(f"{databasefolder}/ExposomeExplorer/metabolomic_associations.csv")
+        misc.check_file(f"{databasefolder}/ExposomeExplorer/cancer_associations.csv")
+        misc.check_file(f"{databasefolder}/ExposomeExplorer/measurements.csv")
+        misc.check_file(f"{databasefolder}/ExposomeExplorer/experimental_methods.csv")
+        misc.check_file(f"{databasefolder}/ExposomeExplorer/correlations.csv")
+        misc.check_file(f"{databasefolder}/ExposomeExplorer/cohorts.csv")
+        misc.check_file(f"{databasefolder}/ExposomeExplorer/cancers.csv")
 
-    return exposome_explorer_ok
+        # Then, for exposome: either the unexplitted file is present
+        try:
+            misc.check_file(f"{databasefolder}/ExposomeExplorer/components.csv")
+            exposome_explorer_status = "UnSplitted"
+
+        # Or the UnSplitted files are present; to check for this, we take a random sample of 5 files
+        except:
+            try:
+                five_nbs = random.sample(list(range(0,1515)), 5)
+                misc.check_file(f"{databasefolder}/ExposomeExplorer/components_{five_nbs[0]}.csv")
+                misc.check_file(f"{databasefolder}/ExposomeExplorer/components_{five_nbs[1]}.csv")
+                misc.check_file(f"{databasefolder}/ExposomeExplorer/components_{five_nbs[2]}.csv")
+                misc.check_file(f"{databasefolder}/ExposomeExplorer/components_{five_nbs[3]}.csv")
+                misc.check_file(f"{databasefolder}/ExposomeExplorer/components_{five_nbs[4]}.csv")
+                exposome_explorer_status = "Splitted"
+            except:
+                exposome_explorer_status = "Error"
+    except:
+        exposome_explorer_status = "Error"
+
+    return exposome_explorer_status
 
 def setup_exposome(databasefolder = "./DataBases", interactive=False):
     """
@@ -580,19 +631,22 @@ def setup_exposome(databasefolder = "./DataBases", interactive=False):
         bool:
             True if everything went okay; False otherwise. If False,
             Exposome-Explorer should not be used as a data source
-    """
 
+    .. WARNING:: When updating the Exposome Explorer DataBase Version, please
+        edit :obj:`~CanGraph.setup.check_exposome_files` to reflect the correct number of files
+    """
     # Set the databasefolder to be an absolute path
     databasefolder = os.path.abspath(databasefolder)
     reldatabasedir = os.path.relpath(databasefolder)
 
     # If interactive, ask the user to add the E-E CSVs and whether they approve of file split.
     # If not, just check for the presence of the files and split components without problem
-    exposome_explorer_ok = check_exposome_files()
+    exposome_explorer_status = check_exposome_files(databasefolder)
 
     print("Setting up the Exposome Explorer database...")
 
-    if interactive == True and exposome_explorer_ok == False:
+    if interactive == True and exposome_explorer_status == "Error":
+
         logging.info("First, please put the appropriate CSVs "
                      f"on the {reldatabasedir}/ExposomeExplorer path")
         time.sleep(1)
@@ -600,12 +654,13 @@ def setup_exposome(databasefolder = "./DataBases", interactive=False):
                      "Please ask IARC for the files in case you need them.")
         time.sleep(1)
         if not os.path.exists(f"{databasefolder}/ExposomeExplorer"):
-            logging.info("Let me create said folder for you..."); os.mkdir(f"{databasefolder}/ExposomeExplorer")
+            logging.info("Let me create said folder for you...")
+            os.mkdir(f"{databasefolder}/ExposomeExplorer")
         print("Once you are ready, press [ENTER]", end=""); response = input()
 
         # If the user didn't add all the necessary files, exit
-        exposome_explorer_ok = check_exposome_files()
-        if exposome_explorer_ok == False:
+        exposome_explorer_status = check_exposome_files()
+        if exposome_explorer_status == "Error":
             raise ValueError(f"Some files where not found in the {reldatabasedir}/ExposomeExplorer "
                              f"folder. Please, revise that it is correctly setup")
         else: logging.info("All checks OK")
@@ -616,17 +671,19 @@ def setup_exposome(databasefolder = "./DataBases", interactive=False):
         response = input()
         if response == "n" or response == "N" or response == "No" or response == "no" or response == "NO":
             print("You need to approve splitting for the setup to work. Exiting..."); time.sleep(1); exit(1)
-    elif interactive == True and exposome_explorer_ok == True:
+    elif exposome_explorer_status == "Splitted":
         logging.info(f"All files found on the {reldatabasedir}/ExposomeExplorer path. Moving on...")
+    elif interactive == False and exposome_explorer_status == "Error":
+        logging.info("Cannot fix the Exposome-Explorer DataBase in un-interactive mode. Skipping...")
 
     # Split the "components" files
-    if exposome_explorer_ok:
+    if exposome_explorer_status == "UnSplitted":
         for filename in os.listdir(f"{databasefolder}/ExposomeExplorer/"):
             if "components" in filename:
                 misc.split_csv(filename.split("/")[-1], f"{databasefolder}/ExposomeExplorer/")
         logging.info("Done!")
 
-    return exposome_explorer_ok
+    return False if exposome_explorer_status == "Error" else True
 
 def setup_hmdb(databasefolder = "./DataBases"):
     """
@@ -640,6 +697,9 @@ def setup_hmdb(databasefolder = "./DataBases"):
         bool:
             True if everything went okay; False otherwise. If False,
             DrugBank should not be used as a data source
+
+    .. WARNING:: When updating the Exposome Explorer DataBase Version, please
+        edit :obj:`~CanGraph.setup.check_exposome_files` to reflect the correct number of files
     """
 
     # Set the databasefolder to be an absolute path
@@ -660,21 +720,51 @@ def setup_hmdb(databasefolder = "./DataBases"):
                 "https://hmdb.ca/system/downloads/current/sweat_metabolites.zip"
                 ]
 
-    # For each file in the list, download and unzip them
+    # For each file in the list, check:
     for url in hmdb_urls:
         filename = f"{url.split('/')[-1].split('.')[0]}.xml"
         splittag = "protein" if filename == "hmdb_proteins.xml" else "metabolite"
 
+        # If it exists on full form
         try:
-            misc.check_file(f"{databasefolder}/HMDB/{filename}")
+            misc.check_file(f"{databasefolder}/HMDB/{filename}"); file_status = "UnSplitted"
             logging.info(f"File: {filename} was found on {databasefolder} and will not be re-downloaded")
         except:
-            logging.info(f"Downloading file: {filename}...")
-            misc.download_and_unzip(url, f"{databasefolder}/HMDB")
+            # If it exists on splitted form
+            try:
+                basename = filename.split(".xml")[0]
+                if basename == "hmdb_proteins":
+                    five_nbs = random.sample(list(range(0,8000)), 5)
+                if basename == "urine_metabolites":
+                    five_nbs = random.sample(list(range(0,3750)), 5)
+                if basename == "serum_metabolites":
+                    five_nbs = random.sample(list(range(0,38000)), 5)
+                if basename == "csf_metabolites":
+                    five_nbs = random.sample(list(range(0,350)), 5)
+                if basename == "saliva_metabolites":
+                    five_nbs = random.sample(list(range(0,1000)), 5)
+                if basename == "feces_metabolites":
+                    five_nbs = random.sample(list(range(0,6500)), 5)
+                if basename == "sweat_metabolites":
+                    five_nbs = random.sample(list(range(0,80)), 5)
 
-        logging.info(f"Unzipping file: {filename}...")
-        misc.split_xml(os.path.abspath(f"{databasefolder}/HMDB/{filename}"), splittag, "hmdb")
-        time.sleep(1) # Some waiting time to avoid overheating
+                misc.check_file(f"{databasefolder}/HMDB/{basename}_{five_nbs[0]}.xml")
+                misc.check_file(f"{databasefolder}/HMDB/{basename}_{five_nbs[1]}.xml")
+                misc.check_file(f"{databasefolder}/HMDB/{basename}_{five_nbs[2]}.xml")
+                misc.check_file(f"{databasefolder}/HMDB/{basename}_{five_nbs[3]}.xml")
+                misc.check_file(f"{databasefolder}/HMDB/{basename}_{five_nbs[4]}.xml")
+                file_status = "Splitted"
+
+            # And if none, download the file
+            except:
+                logging.info(f"Downloading file: {filename}...")
+                misc.download_and_unzip(url, f"{databasefolder}/HMDB")
+                file_status = "UnSplitted"
+
+        if file_status == "UnSplitted":
+            logging.info(f"Unzipping file: {filename}...")
+            misc.split_xml(os.path.abspath(f"{databasefolder}/HMDB/{filename}"), splittag, "hmdb")
+            time.sleep(1) # Some waiting time to avoid overheating
 
     logging.info("Everything OK")
 
@@ -742,66 +832,79 @@ def setup_drugbank(databasefolder = "./DataBases", interactive = False):
         bool:
             True if everything went okay; False otherwise. If False,
             DrugBank should not be used as a data source
+
+    .. WARNING:: When updating the DrugBank DataBase Version, please
+        edit this function to reflect the correct number of files
     """
 
     # Set the databasefolder to be an absolute path
     databasefolder = os.path.abspath(databasefolder)
 
-    drugbank_ok = False # Initialize some databases
-
     print("Setting up the DrugBank database...")
 
-    # Create the databasefolder. If created, just ignore its contents and use it (no problem as
-    #overwrite is not likely, and, if it happens, we dont care much)
-    if not os.path.exists(f"{databasefolder}/DrugBank"): os.mkdir(f"{databasefolder}/DrugBank")
-
     # If interactive, ask for DrugBank data to help the user download the data.
-    # else, just check that the full_database file exists
+    # else, just check that the full_database file exists or that the splitted files exist
     try:
-        misc.check_file(f"{databasefolder}/DrugBank/full database.xml"); drugbank_ok = True
+        misc.check_file(f"{databasefolder}/DrugBank/full database.xml"); drugbank_status = "UnSplitted"
         logging.info(f"File: full database.xml was found on {databasefolder} and will not be re-downloaded")
     except:
-        if interactive == True:
-            logging.info("If you have a DrugBank account, I can help you automate the process!")
-            print("Do you have an account [Y/n]", end=""); response = input()
-            if response == "n" or response == "N" or response == "No" or response == "no" or response == "NO":
-                logging.error("Please, ask for a DrugBank account and run the script back. "
-                            "The process must be approved by the DrugBank team, and may take a week or more.")
-                exit(1)
+        try:
+            five_nbs = random.sample(list(range(0,12000)), 5)
+            misc.check_file(f"{databasefolder}/DrugBank/full database_{five_nbs[0]}.xml")
+            misc.check_file(f"{databasefolder}/DrugBank/full database_{five_nbs[1]}.xml")
+            misc.check_file(f"{databasefolder}/DrugBank/full database_{five_nbs[2]}.xml")
+            misc.check_file(f"{databasefolder}/DrugBank/full database_{five_nbs[3]}.xml")
+            misc.check_file(f"{databasefolder}/DrugBank/full database_{five_nbs[4]}.xml")
+            logging.info(f"Splitted database was found on {databasefolder} and will not be re-processed")
+            drugbank_status = "Splitted"
+        except:
+            drugbank_status = "Error"
 
-            print("Please introduce your DrugBank username: ", end=""); username = input()
-            print("Please introduce your DrugBank password: ", end=""); password = input()
-            sys.stdout.write("\033[F"); print("Please introduce your DrugBank password: ********** HIDDEN **********")
+    if interactive == True and drugbank_status == "Error":
+        # Create the databasefolder. If created, just ignore its contents and use it (no problem as
+        #overwrite is not likely, and, if it happens, we dont care much)
+        if not os.path.exists(f"{databasefolder}/DrugBank"): os.mkdir(f"{databasefolder}/DrugBank")
 
-            logging.info("Downloading the full database using curl. ")
-            logging.info("Since its 1.4 GB, this may take some time...")
-            if os.path.exists(f"{databasefolder}/DrugBank/full database.zip"):
-                    os.remove(f"{databasefolder}/DrugBank/full database.zip")
-            if os.path.exists(f"{databasefolder}/DrugBank/full database.xml"):
-                    os.remove(f"{databasefolder}/DrugBank/full database.xml")
-            try:
-                os.system(f"curl -Lf --progress-bar -o \"{databasefolder}/DrugBank/full database.zip\" "
-                          f"-u {username}:{password} https://go.drugbank.com/releases/5-1-9/downloads/all-full-database")
-            except Exception as error:
-                logging.error(f"cURL exited with error: {error}. "
-                              f"Was your username/password OK?"); exit(1)
+        logging.info("If you have a DrugBank account, I can help you automate the process!")
+        print("Do you have an account [Y/n]", end=""); response = input()
+        if response == "n" or response == "N" or response == "No" or response == "no" or response == "NO":
+            logging.error("Please, ask for a DrugBank account and run the script back. "
+                        "The process must be approved by the DrugBank team, and may take a week or more.")
+            exit(1)
 
-            logging.info("Extracting files from the full zip...")
+        print("Please introduce your DrugBank username: ", end=""); username = input()
+        print("Please introduce your DrugBank password: ", end=""); password = input()
+        sys.stdout.write("\033[F"); print("Please introduce your DrugBank password: ********** HIDDEN **********")
 
-            misc.unzip(f"{databasefolder}/DrugBank/full database.zip", f"{databasefolder}/DrugBank")
-            os.remove (f"{databasefolder}/DrugBank/full database.zip")
-            misc.check_file(f"{databasefolder}/DrugBank/full database.xml"); drugbank_ok = True
+        logging.info("Downloading the full database using curl. ")
+        logging.info("Since its 1.4 GB, this may take some time...")
+        if os.path.exists(f"{databasefolder}/DrugBank/full database.zip"):
+                os.remove(f"{databasefolder}/DrugBank/full database.zip")
+        if os.path.exists(f"{databasefolder}/DrugBank/full database.xml"):
+                os.remove(f"{databasefolder}/DrugBank/full database.xml")
+        try:
+            os.system(f"curl -Lf --progress-bar -o \"{databasefolder}/DrugBank/full database.zip\" "
+                        f"-u {username}:{password} https://go.drugbank.com/releases/5-1-9/downloads/all-full-database")
+        except Exception as error:
+            logging.error(f"cURL exited with error: {error}. "
+                            f"Was your username/password OK?"); exit(1)
 
-        else:
-            drugbank_ok = False
+        logging.info("Extracting files from the full zip...")
+
+        misc.unzip(f"{databasefolder}/DrugBank/full database.zip", f"{databasefolder}/DrugBank")
+        os.remove (f"{databasefolder}/DrugBank/full database.zip")
+        misc.check_file(f"{databasefolder}/DrugBank/full database.xml"); drugbank_status = "UnSplitted"
+
+    elif interactive == False and drugbank_status == "Error":
+        logging.info("Cannot fix the DrugBank DataBase in un-interactive mode. Skipping...")
 
     # If everything went OK, split the ``full_database`` file into its components ( 1 record per line )
-    if drugbank_ok:
+    if drugbank_status == "UnSplitted":
         logging.info("Splitting the contents of the full zip......")
         misc.split_xml(os.path.abspath(f"{databasefolder}/DrugBank/full database.xml"), "drug", "drugbank")
         logging.info("Everything OK")
 
-    return drugbank_ok
+    return False if drugbank_status == "Error" else True
 
 def setup_database_index(databasefolder = "./DataBases"):
     """
@@ -816,8 +919,6 @@ def setup_database_index(databasefolder = "./DataBases"):
             A dictionary containing the index for all the databases in ``databasefolder``.
             This index will be written as JSON in ``databasefolder``/index.json
     """
-    print(f"Generating search index for all the files in {databasefolder}...")
-
     # Set the databasefolder to be an absolute path
     databasefolder = os.path.abspath(databasefolder)
 
@@ -921,9 +1022,9 @@ def setup_databases(databasefolder = "./DataBases", interactive = False):
     """
     setup_folders(databasefolder, interactive)
     exposome_explorer_ok = setup_exposome(databasefolder, interactive)
+    drugbank_ok = setup_drugbank(databasefolder, interactive)
     hmdb_ok = setup_hmdb(databasefolder)
     smpdb_ok = setup_smpdb(databasefolder)
-    drugbank_ok = setup_drugbank(databasefolder, interactive)
 
     print(f"The following databases have been set up in the {databasefolder} folder:")
     t = Texttable()
@@ -936,17 +1037,21 @@ def setup_databases(databasefolder = "./DataBases", interactive = False):
     logging.info("This is all! Since the WikiData and MetaNetX databases are auto-consulted ")
     logging.info("using RDF, the only thing we have left is generating the search index!")
 
-    index_dict = setup_database_index(databasefolder, interactive)
-
-    logging.info(f"The following number of identifiers have been indexed:")
-    t = Texttable()
-    t.add_rows([
-                ['ChEBI_ID', 'HMDB_ID', 'InChI', 'MeSH_ID', "Name"],
-                [ len(index_dict["ChEBI_ID"]), len(index_dict["HMDB_ID"]),
-                  len(index_dict["InChI"]), len(index_dict["MeSH_ID"]),
-                  len(index_dict["Name"])]
-                ])
-    logging.info(t.draw())
+    print(f"Setting up search index for all the files in {os.path.relpath(databasefolder)}")
+    try:
+         misc.check_file(f"{databasefolder}/index.json")
+         logging.info(f"Index file was found at {databasefolder}/index.json and will not be re-generated")
+    except:
+        index_dict = setup_database_index(databasefolder)
+        logging.info(f"The following number of identifiers have been indexed:")
+        t = Texttable()
+        t.add_rows([
+                    ['ChEBI_ID', 'HMDB_ID', 'InChI', 'MeSH_ID', "Name"],
+                    [ len(index_dict["ChEBI_ID"]), len(index_dict["HMDB_ID"]),
+                    len(index_dict["InChI"]), len(index_dict["MeSH_ID"]),
+                    len(index_dict["Name"])]
+                    ])
+        logging.info(t.draw())
 
 # ********* And, finally, the main function ********* #
 
@@ -960,7 +1065,7 @@ def main():
     parser = args_parser(); args = parser.parse_args()
 
     # Enable the --all argument
-    if args.all: args.requirements = args.git = args.neo4j = args.databases = True
+    if args.all: args.requirements = args.git = args.neo4j = args.dbfolder = True
 
     # If the session is set to be interactive, display the logging messages
     logging.basicConfig(format='%(message)s')
@@ -981,13 +1086,13 @@ def main():
     if args.git:
         setup_git(args.git)
 
+    if args.dbfolder:
+        setup_databases(args.dbfolder, args.interactive)
+
     if args.neo4j:
         password = setup_neo4j(args.neo4j, args.neo4j_username, args.neo4j_password)
     else:
         password = ""
-
-    if args.databases:
-        setup_databases(args.databases, args.interactive)
 
     if args.interactive:
         final_message()

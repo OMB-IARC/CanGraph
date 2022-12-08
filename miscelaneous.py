@@ -11,7 +11,7 @@ scripts present in the CanGraph package, with various, useful functionalities
 """
 
 # Import external modules necessary for the script
-from neo4j import GraphDatabase      # The Neo4J python driver
+import neo4j                         # The Neo4J python driver
 import urllib.request as request     # Extensible library for opening URLs
 from zipfile import ZipFile          # Work with ZIP files
 import tarfile                       # Work with tar.gz files
@@ -43,23 +43,7 @@ def restart_neo4j(neo4j_home = "neo4j"):
                              stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     neo4j_message = print(result.stdout.decode("utf-8"), type(result.stdout.decode("utf-8")))
 
-
-def neo4j_import_path_query(tx):
-    """
-    A CYPHER query able to find Neo4J's Import Path. When used in :obj:`~CanGraph.miscelaneous.get_import_path`,
-    it returns a one-item list with the import path itself, but it **needs** to be executed in
-    :obj:`~CanGraph.miscelaneous.get_import_path` for it to do so.
-
-    Args:
-        tx          (neo4j.Session): The session under which the driver is running
-
-    Returns:
-        str: A one-item list containing the Neo4J Import Path
-    """
-    result = tx.run("Call dbms.listConfig() YIELD name, value WHERE name='dbms.directories.import' RETURN value")
-    return [record["value"] for record in result]
-
-def get_import_path(current_driver):
+def get_import_path(driver):
     """
     A function that runs :obj:`~CanGraph.miscelaneous.neo4j_import_path_query` to get Neo4J's Import Path
 
@@ -68,14 +52,22 @@ def get_import_path(current_driver):
         and repeated in case it fails.
 
     Args:
-        current_driver (neo4j.Driver): Neo4J's Bolt Driver currently in use
+        driver (neo4j.Driver): Neo4J's Bolt Driver currently in use
 
     Returns:
         str: Neo4J's Import Path, i.e., where Neo4J will pick up files to be imported using the ```file:///``` schema
     """
-    with current_driver.session() as session:
-        Neo4JImportPath = session.execute_read(neo4j_import_path_query)[0]
-    return Neo4JImportPath
+    result = manage_transaction(
+        """ Call dbms.listConfig()
+            YIELD name, value
+            WHERE name='dbms.directories.import'
+            RETURN value
+        """, driver)
+
+    try:
+        return result[0]["value"]
+    except:
+        raise RuntimeError("Couldn't connect to Neo4j. Please, check the auths")
 
 def connect_to_neo4j(port = "bolt://localhost:7687", username = "neo4j", password="neo4j"):
     """
@@ -96,7 +88,7 @@ def connect_to_neo4j(port = "bolt://localhost:7687", username = "neo4j", passwor
     instance = port; user = username; passwd = password
 
     try:
-        driver = GraphDatabase.driver(instance, auth=(user, passwd))
+        driver = neo4j.GraphDatabase.driver(instance, auth=(user, passwd))
         return driver
     except Exception as E:
         exit(f"Could not connect to Neo4J due to error: {E}")
@@ -142,16 +134,19 @@ def kill_neo4j(neo4j_home = "neo4j"):
     if neo4j_dead == True: sleep_with_counter(5, message = "Killing existing Neo4j sessions...")
 
 
-def repeat_transaction(tx, driver, num_retries = 10, **kwargs):
+def manage_transaction(tx, driver, num_retries = 10, neo4j_home = "neo4j", **kwargs):
     """
     A function that repeats transactions whenever an error is found.
     This may make an incorrect script unnecessarily repeat; however, since the error is printed,
     one can discriminate those out, and the function remains helpful to prevent SPARQL Read Time-Outs.
 
+    It will also re-start neo4j in case it randomly dies while executing a query.
+
     Args:
-        tx (neo4j.Session): The session under which the driver is running
+        tx (str): The transaction that we desire to run, specified as a CYPHER query
         driver (neo4j.Driver): Neo4J's Bolt Driver currently in use
         num_retries (int): The number of times that we wish the transaction to be retried
+        neo4j_home (str): the installation directory for the ``neo4j`` program; by default, ``neo4j``
         **kwargs: Any number of arbitrary keyword arguments
 
     Raises:
@@ -159,28 +154,60 @@ def repeat_transaction(tx, driver, num_retries = 10, **kwargs):
             An exception telling the user that the maximum number of retries
             has been exceded, if such a thing happens
 
+    Returns:
+        list: The response from the Neo4J Database
+
     .. NOTE:: This function does not accept args, but only kwargs (named keyword arguments).
         Thus, if you wish to add a parameter (say, ``number``, you should add it as: ``number=33``
     """
+    # For as many times as has been specified
     for attempt in range(num_retries):
         try:
-            with driver.session() as session:
-                session.run(tx, **kwargs)
+            # We try to open a session and obtain a graph response
+            session = driver.session()
+            graph_response = session.run(tx, **kwargs)
+            graph_response_list =  [record for record in list(graph_response) ]
+
             if attempt > 0: print(f"Error solved on attempt #{attempt}")
-            break
+
+            if any(graph_response_list):
+                if hasattr(graph_response_list[0], "data"):
+                    return [record.data() for record in graph_response_list]
+                else: return []
+            else: return []
+
+            # If we get to the graph response, we break and close
+            break; session.close()
+
+        # Else if Neo4J decides to DIE
+        except (OSError, neo4j.exceptions.ServiceUnavailable) as error:
+            subprocess.run([f"{os.path.abspath(neo4j_home)}/bin/neo4j", "start"],
+                        stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+
+            print(f"Neo4J has died. Restarting Neo4J & Retrying... ({attempt + 1}/{num_retries})")
+            time.sleep(20)
+
+        # Else if there is another kind of error
         except Exception as error:
+            graph_response = []
+
+            error_code = error.code if "code" in vars(error).keys() else "Unknown"
             if attempt < (num_retries - 1):
-                print(f"An error with error code: {error.code} was found.")
+                print(f"An error with error code: {error_code} was found.")
                 print(f"Retrying... ({attempt + 1}/{num_retries})")
-            elif error.code == "Neo.ClientError.Procedure.ProcedureCallFailed":
+
+            # If the error is a ProcedureCallFailed error and we tried num_retries, skip
+            elif error_code == "Neo.ClientError.Procedure.ProcedureCallFailed":
                 print("Falied to invoke a procedure, most likely due to a read time out")
-                print("Skipping this function...")
+                print("Skipping this function..."); return []
+
+            # If its any other error, exit, as it seems it could he a really bad error
             else:
                 raise Exception(f"{num_retries} consecutive attempts were made on a function. Aborting...")
 
 # ********* Interact with the Neo4J Database ********* #
 
-def call_db_schema_visualization(tx):
+def call_db_schema_visualization():
     """
     Shows the DB Schema. This function is intended to be run only in Neo4J's console,
     since it produces no output when called from the driver.
@@ -190,7 +217,7 @@ def call_db_schema_visualization(tx):
 
     .. TODO:: Make it download the image
     """
-    return tx.run("""
+    return ("""
         CALL db.schema.visualization()
         """)
 
@@ -215,7 +242,7 @@ def clean_database():
         } IN TRANSACTIONS OF 100 ROWS
         """
 
-def create_n10s_graphconfig(tx):
+def create_n10s_graphconfig():
     """
     A CYPHER query that creates a *neosemantics* (n10s) constraint to hold all the RDF we will import.
 
@@ -232,7 +259,7 @@ def create_n10s_graphconfig(tx):
     .. deprecated:: 0.9
         Since we are importing based on apoc.load.jsonParams, this is not needed anymore
     """
-    return tx.run("""
+    return ("""
         CALL n10s.graphconfig.init({
             handleVocabUris: 'MAP',
             handleMultival: 'ARRAY',
@@ -242,7 +269,7 @@ def create_n10s_graphconfig(tx):
         })
         """)
 
-def remove_n10s_graphconfig(tx):
+def remove_n10s_graphconfig():
     """
     Removes the "_GraphConfig" node, which is necessary for querying SPARQL endpoints
     but not at all useful in our final export
@@ -256,11 +283,11 @@ def remove_n10s_graphconfig(tx):
     .. deprecated:: 0.9
         Since we are importing based on apoc.load.jsonParams, this is not needed anymore
     """
-    return tx.run("""
+    return ("""
         MATCH (n:`_GraphConfig`) DETACH DELETE n
         """)
 
-def remove_ExternalEquivalent(tx):
+def remove_ExternalEquivalent():
     """
     Removes all nodes of type: ExternalEquivalent from he DataBase; since this do not add
     new info, one might consider them not useful.
@@ -273,12 +300,12 @@ def remove_ExternalEquivalent(tx):
             A Neo4J connexion to the database that
             modifies it according to the CYPHER statement contained in the function.
     """
-    return tx.run("""
+    return ("""
         MATCH (e:ExternalEquivalent)
         DETACH DELETE e
         """)
 
-def remove_duplicate_relationships(tx):
+def remove_duplicate_relationships():
     """
     Removes duplicated relationships between ANY existing pair of nodes.
 
@@ -295,7 +322,7 @@ def remove_duplicate_relationships(tx):
     .. seealso:: This way of working has been taken from
         `StackOverflow #18724939 <https://stackoverflow.com/questions/18724939/neo4j-cypher-merge-duplicate-relationships>`_
     """
-    return tx.run("""
+    return ("""
             MATCH (s)-[r]->(e)
             WITH s, e, type(r) as typ, collect(r) as rels
             CALL apoc.refactor.mergeRelationships(rels, {properties:"combine"})
@@ -303,12 +330,11 @@ def remove_duplicate_relationships(tx):
             RETURN rel
         """)
 
-def merge_duplicate_nodes(tx, node_types, node_property, optional_condition="", more_props=""):
+def merge_duplicate_nodes(node_types, node_property, optional_condition="", more_props=""):
     """
     Removes any two nodes of any given ```node_type``` with the same ```condition```.
 
     Args:
-        tx (neo4j.Session): The session under which the driver is running
         node_types (str): The labels of the nodes that will
             be selected for merging; i.e. ``n:Fruit OR n:Vegetable``
         node_property (str): The node properties used for collecting,
@@ -332,7 +358,7 @@ def merge_duplicate_nodes(tx, node_types, node_property, optional_condition="", 
 
     if node_types == "": node_types="1=1" # Allow all nodes
 
-    return tx.run(f"""
+    return (f"""
         MATCH (n), (m)
         WHERE
             ({node_types})
@@ -378,51 +404,51 @@ def purge_database(driver, method = ["merge", "delete"]):
 
     if "merge" in method:
         # Fist, we purge Publications by PubMed_ID, using the abstract to merge those that have no PubMed_ID
-        session.execute_write(merge_duplicate_nodes, "n:Publication", "Pubmed_ID")
-        session.execute_write(merge_duplicate_nodes, "n:Publication", "Abstract", "AND (n.Pubmed_ID IS null)")
+        manage_transaction(merge_duplicate_nodes("n:Publication", "Pubmed_ID"), driver)
+        manage_transaction(merge_duplicate_nodes("n:Publication", "Abstract", "AND (n.Pubmed_ID IS null)"), driver)
 
         # Now, we work on Proteins/Metabolites/Drugs:
         # We merge Proteins by UniProt_ID, and, when there is none, by Name:
-        session.execute_write(merge_duplicate_nodes, "n:Protein", "UniProt_ID")
-        session.execute_write(merge_duplicate_nodes, "n:Protein", "Name", "AND (n.UniProt_ID IS null)")
+        manage_transaction(merge_duplicate_nodes("n:Protein", "UniProt_ID"), driver)
+        manage_transaction(merge_duplicate_nodes("n:Protein", "Name", "AND (n.UniProt_ID IS null)"), driver)
         # We merge by HMDB_ID, ChEBI_ID, Name, InChI and InChIKey (normally, they should be unique):
-        session.execute_write(merge_duplicate_nodes,
-            "n:Protein OR n:Metabolite OR n:Drug OR n:OriginalMetabolite", "HMDB_ID")
-        session.execute_write(merge_duplicate_nodes,
-            "n:Protein OR n:Metabolite OR n:Drug OR n:OriginalMetabolite", "ChEBI_ID")
-        session.execute_write(merge_duplicate_nodes,
-            "n:Protein OR n:Metabolite OR n:Drug OR n:OriginalMetabolite", "Name")
-        session.execute_write(merge_duplicate_nodes,
-            "n:Protein OR n:Metabolite OR n:Drug OR n:OriginalMetabolite", "InChI")
-        session.execute_write(merge_duplicate_nodes,
-            "n:Protein OR n:Metabolite OR n:Drug OR n:OriginalMetabolite", "InChIKey")
+        manage_transaction(merge_duplicate_nodes(
+            "n:Protein OR n:Metabolite OR n:Drug OR n:OriginalMetabolite", "HMDB_ID"), driver)
+        manage_transaction(merge_duplicate_nodes(
+            "n:Protein OR n:Metabolite OR n:Drug OR n:OriginalMetabolite", "ChEBI_ID"), driver)
+        manage_transaction(merge_duplicate_nodes(
+            "n:Protein OR n:Metabolite OR n:Drug OR n:OriginalMetabolite", "Name"), driver)
+        manage_transaction(merge_duplicate_nodes(
+            "n:Protein OR n:Metabolite OR n:Drug OR n:OriginalMetabolite", "InChI"), driver)
+        manage_transaction(merge_duplicate_nodes(
+            "n:Protein OR n:Metabolite OR n:Drug OR n:OriginalMetabolite", "InChIKey"), driver)
 
         # WikiData_IDs showuld also be unique:
-        session.execute_write(merge_duplicate_nodes, "", "WikiData_ID")
+        manage_transaction(merge_duplicate_nodes("", "WikiData_ID"), driver)
 
         # We also remove all non-unique Subjects. We do this by passing on all three parameters
         # this nodes may have to apoc.mergeNodes
         # .. NOTE:: This concerns only those nodes that DO NOT COME from Exposome_Explorer
-        session.execute_write(merge_duplicate_nodes, "n:Subject", "Age_Mean",
+        manage_transaction(merge_duplicate_nodes("n:Subject", "Age_Mean",
                             more_props="n.Gender as gender, n.Information as inf",
-                            optional_condition="AND (n.Exposome_Explorer_ID IS null)")
+                            optional_condition="AND (n.Exposome_Explorer_ID IS null)"), driver)
 
         # We can do the same for the different Dosages; this has to be done manually
         # because otherwise the database somehow crases (no idea why)
-        repeat_transaction("""MATCH (n:Dosage)
+        manage_transaction("""MATCH (n:Dosage)
                 WITH n.Form as frm, n.Stength as str, n.Route as rt, COLLECT(n) AS ns
                 WHERE size(ns) > 1
                     CALL apoc.refactor.mergeNodes(ns, {properties:"combine", mergeRels:True})
-                YIELD node RETURN node""", driver, 10)
+                YIELD node RETURN node""", driver)
 
         # For products, we merge all those with the same EMA_MA_Number or FDA_Application_Number to
         # try to minimize duplicates, although this is not the best approach
-        session.execute_write(merge_duplicate_nodes, "n:Product", "EMA_MA_Number")
-        session.execute_write(merge_duplicate_nodes, "n:Product", "FDA_Application_Number")
+        manage_transaction(merge_duplicate_nodes("n:Product", "EMA_MA_Number"), driver)
+        manage_transaction(merge_duplicate_nodes("n:Product", "FDA_Application_Number"), driver)
 
         # For CelularLocations and BioSpecimens, we merge those with the same Name:
-        session.execute_write(merge_duplicate_nodes, "n:CelularLocation", "Name")
-        session.execute_write(merge_duplicate_nodes, "n:BioSpecimen", "Name")
+        manage_transaction(merge_duplicate_nodes("n:CelularLocation", "Name"), driver)
+        manage_transaction(merge_duplicate_nodes("n:BioSpecimen", "Name"), driver)
 
     if "delete" in method:
 
@@ -430,25 +456,25 @@ def purge_database(driver, method = ["merge", "delete"]):
         # but, in case anyone escapes, this makes the DB cleaner.
         # .. NOTE:: In the case of Taxonomies, these "empty nodes" are
         #       actually created on purpose. Here, they are removed.
-        repeat_transaction("MATCH (n) WHERE size(keys(properties(n))) < 1 CALL "
-                            "{ WITH n DETACH DELETE n } IN TRANSACTIONS OF 1000 ROWS", driver, 10)
+        manage_transaction("MATCH (n) WHERE size(keys(properties(n))) < 1 CALL "
+                            "{ WITH n DETACH DELETE n } IN TRANSACTIONS OF 1000 ROWS", driver)
         # For Measurements and Sequences, 2 properties are the minimum, since they are always booleans
-        repeat_transaction("MATCH (m:Measurement) "
-                           "WHERE size(keys(properties(m))) < 2 DETACH DELETE m", driver, 10)
-        repeat_transaction("MATCH (s:Sequence) "
-                           "WHERE size(keys(properties(s))) < 2 DETACH DELETE s", driver, 10)
+        manage_transaction("MATCH (m:Measurement) "
+                           "WHERE size(keys(properties(m))) < 2 DETACH DELETE m", driver)
+        manage_transaction("MATCH (s:Sequence) "
+                           "WHERE size(keys(properties(s))) < 2 DETACH DELETE s", driver)
 
         # And those that do not match our Schema - Be careful with the \" character
-        repeat_transaction(""" MATCH (n:Metabolite)
+        manage_transaction(""" MATCH (n:Metabolite)
                         WHERE (n.ChEBI_ID IS NULL OR n.ChEBI_ID = ""
                              OR n.CAS_Number IS NULL OR n.CAS_Number = "")
-                        DETACH DELETE n""", driver, 10)
+                        DETACH DELETE n""", driver)
 
         # We will also remove all disconnected nodes (they give no useful information)
-        repeat_transaction("MATCH (n) WHERE NOT (n)--() DETACH DELETE n", driver, 10)
+        manage_transaction("MATCH (n) WHERE NOT (n)--() DETACH DELETE n", driver)
 
     #At last, we may remove any duplicate relationships, which, since we have merged nodes, will surely be there:
-    session.execute_write(remove_duplicate_relationships)
+    manage_transaction(remove_duplicate_relationships(), driver)
 
     session.close()
 
@@ -503,12 +529,11 @@ def check_neo4j_protocol(string):
 
     return string # Return the same string for argparse to work
 
-def export_graphml(tx, exportname):
+def export_graphml(exportname):
     """
     Exports a Neo4J graph to GraphML format. The graph will be exported to Neo4JImportPath
 
     Args:
-        tx  (neo4j.Session): The session under which the driver is running
         exportname (str): The name for the exported file, which will be saved under ./Neo4JImportPath/
 
     Returns:
@@ -517,7 +542,7 @@ def export_graphml(tx, exportname):
 
     .. NOTE:: for this to work, you HAVE TO have APOC availaible on your Neo4J installation
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.export.graphml.all("{exportname}",
                                      {{batchSize: 5, useTypes:true, storeNodeIds:false,
                                        useOptimizations:
@@ -525,12 +550,11 @@ def export_graphml(tx, exportname):
         """)
 
 
-def import_graphml(tx, importname):
+def import_graphml(importname):
     """
     Imports a GraphML file into a Neo4J graph. The file has to be located in Neo4JImportPath
 
     Args:
-        tx  (neo4j.Session): The session under which the driver is running
         importname (str): The name for the file to be imported, which must be under ./Neo4JImportPath/
 
     Returns:
@@ -539,7 +563,7 @@ def import_graphml(tx, importname):
 
     .. NOTE:: for this to work, you HAVE TO have APOC availaible on your Neo4J installation
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.import.graphml("{importname}",
                                  {{batchSize: 5, useTypes:true, storeNodeIds:false, readLabels:True,
                                    useOptimizations:
@@ -813,18 +837,28 @@ def sleep_with_counter(seconds, step = 20, message = "Waiting..."):
         for i in range(seconds*step):
             time.sleep(1/step); bar()
 
-    # OLD VERSION BELOW:
-    # animation = "|/-\\"; # The animation vector
-    #
-    # index = 0 # Initialize the index
-    # total_steps = seconds*step # Calculate the number of steps
-    #
-    # while index < total_steps:
-    #
-    #     # Calculate the current step on base 100
-    #     current_step_100 = round(index*100/total_steps)
-    #     print(f"{message}  {animation[index % len(animation)]}\t{current_step_100}/100", end="\r")
-    #
-    #     index += 1; time.sleep(1/step)
-    #
-    # print(f"{message}  ✱\t100/100 [COMPLETED]")
+def old_sleep_with_counter(seconds, step = 20, message = "Waiting..."):
+    """
+    A function that waits while showing a cute animation, but **without using the ``alive_progress` module**
+
+    .. NOTE:: This function interacts weirdly with slurn; I'd recommend to not use it on the HPC
+
+    Args:
+        seconds (int): The number of seconds that we would like the program to wait for
+        step (int): The number times the counter wheel will turn in a second; by default, 20
+        message (str): An optional, text message to add to the waiting period
+    """
+    animation = "|/-\\"; # The animation vector
+
+    index = 0 # Initialize the index
+    total_steps = seconds*step # Calculate the number of steps
+
+    while index < total_steps:
+
+        # Calculate the current step on base 100
+        current_step_100 = round(index*100/total_steps)
+        print(f"{message}  {animation[index % len(animation)]}\t{current_step_100}/100", end="\r")
+
+        index += 1; time.sleep(1/step)
+
+    print(f"{message}  ✱\t100/100 [COMPLETED]")

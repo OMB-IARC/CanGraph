@@ -33,7 +33,6 @@ This module is comprised of:
 """
 
 # Import external modules necessary for the script
-from neo4j import GraphDatabase      # The Neo4J python driver
 from alive_progress import alive_bar # A cute progress bar that shows the script is still running
 import rdkit                         # Cheminformatics and ML package
 import pandas as pd                  # Analysis of tabular data
@@ -142,11 +141,11 @@ def improve_search_terms_with_metanetx(query, query_type,
         # For MeSH, we cannot search for synonyms in MetaNetX (it doesn't index them), so we instead
         # look for related metabolites in MeSH itself, so that the import makes more sense
         if query_type == "MeSH_ID":
-            graph_response = session.execute_read(
-                MeSHandMetaNetXDataBases.find_metabolites_related_to_mesh, query)
+            graph_response = misc.manage_transaction(
+                MeSHandMetaNetXDataBases.find_metabolites_related_to_mesh(query), driver )
         else:
-            graph_response = session.execute_read(
-                MeSHandMetaNetXDataBases.read_synonyms_in_metanetx, query_type, query)
+            graph_response = misc.manage_transaction(
+                MeSHandMetaNetXDataBases.read_synonyms_in_metanetx(query_type, query), driver )
 
     for element in graph_response:
         element = {key: element[key] for key in element if element[key] != None }
@@ -457,7 +456,7 @@ def build_from_file(filepath, Neo4JImportPath, driver):
                                                 if not x.endswith('_count')]]
             original_file.to_csv(f"{Neo4JImportPath}/{os.path.basename(filepath)}", index=False)
             with driver.session() as session:
-                    session.execute_write(ExposomeExplorerDataBase.add_components, os.path.basename(filepath))
+                    misc.manage_transaction(ExposomeExplorerDataBase.add_components(os.path.basename(filepath)), driver)
             os.remove(f"{Neo4JImportPath}/{os.path.basename(filepath)}")
 
             ExposomeExplorerDataBase.build_from_file( os.path.dirname(filepath),
@@ -498,7 +497,7 @@ def import_based_on_all_files(all_files, Neo4JImportPath, driver, similarity, ch
                         # We add the OriginalMetabolite label here; this will necessarily create duplicates,
                         # but this will be handled later on when the DB gets purged
                         with driver.session() as session:
-                            session.execute_write(link_to_original_data, item_type, item, import_based_on)
+                            misc.manage_transaction(link_to_original_data(item_type, item, import_based_on), driver)
 
             if i % 15000 == 0 and i > 1: logging.info(f"Scanned file: {i} / {len(all_files)}")
             i += 1; bar() # And advance, of course
@@ -557,7 +556,7 @@ def import_based_on_index(databasefolder, Neo4JImportPath, driver, similarity, c
                     # We add the OriginalMetabolite label here; this will necessarily create duplicates,
                     # but this will be handled later on when the DB gets purged
                     with driver.session() as session:
-                        session.execute_write(link_to_original_data, item_type, item, import_based_on)
+                        misc.manage_transaction(link_to_original_data(item_type, item, import_based_on), driver)
 
         index_file.close()
         return previous_files
@@ -581,7 +580,7 @@ def import_based_on_index(databasefolder, Neo4JImportPath, driver, similarity, c
                 if i % 150 == 0 and i > 1: logging.info(f"Importing file: {i} / {len(all_files)}")
             i += 1; bar() # And advance, of course
 
-def link_to_original_data(tx, item_type, item, import_based_on):
+def link_to_original_data(item_type, item, import_based_on):
     """
     Links a recently-imported metabolite to the original data (that which caused it to be imported) by creating an
     ``ÒriginalMetabolite`` node that is ``(n)-[r:ORIGINALLY_IDENTIFIED_AS]->(a)`` related to the imported data
@@ -595,7 +594,7 @@ def link_to_original_data(tx, item_type, item, import_based_on):
     Returns:
         neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
-    return tx.run(f"""
+    return (f"""
                     MERGE (n {{ {item_type}:"{item}" }})
                         SET n:OriginalMetabolite
                         SET n.Reasons_To_Import =  "{",".join(import_based_on)}"
@@ -614,29 +613,29 @@ def annotate_using_wikidata(driver):
     .. TODO:: When fixing queries, fix the main subscript also
     """
     with driver.session() as session, alive_bar( 53, title="Querying WikiData...") as bar:
-        misc.repeat_transaction(WikiDataBase.add_wikidata_and_mesh_by_name(), driver); bar()
+        misc.manage_transaction(WikiDataBase.add_wikidata_and_mesh_by_name(), driver); bar()
         # The ``query`` param is, remember, so as to remove the wikidata_id search which is by default
-        misc.repeat_transaction(WikiDataBase.add_metabolite_info(query = "ChEBI_ID"), driver); bar()
-        misc.repeat_transaction(WikiDataBase.add_drug_external_ids(query = "DrugBank_ID"), driver); bar()
-        misc.repeat_transaction(WikiDataBase.add_more_drug_info(query = "DrugBank_ID"), driver); bar()
+        misc.manage_transaction(WikiDataBase.add_metabolite_info(query = "ChEBI_ID"), driver); bar()
+        misc.manage_transaction(WikiDataBase.add_drug_external_ids(query = "DrugBank_ID"), driver); bar()
+        misc.manage_transaction(WikiDataBase.add_more_drug_info(query = "DrugBank_ID"), driver); bar()
 
-        misc.repeat_transaction(WikiDataBase.find_subclass_of_disease(), driver); bar()
-        misc.repeat_transaction(WikiDataBase.find_subclass_of_disease(), driver); bar()
-        misc.repeat_transaction(WikiDataBase.find_subclass_of_disease(), driver); bar()
-        misc.repeat_transaction(WikiDataBase.find_instance_of_disease(), driver); bar()
+        misc.manage_transaction(WikiDataBase.find_subclass_of_disease(), driver); bar()
+        misc.manage_transaction(WikiDataBase.find_subclass_of_disease(), driver); bar()
+        misc.manage_transaction(WikiDataBase.find_subclass_of_disease(), driver); bar()
+        misc.manage_transaction(WikiDataBase.find_instance_of_disease(), driver); bar()
 
         # For each of the 10 numbers a wikidata_id may have as ending
         for number in range(10):
-            misc.repeat_transaction(WikiDataBase.add_disease_info(number=number), driver); bar()
-            misc.repeat_transaction(WikiDataBase.add_drugs(number=number), driver); bar()
-            misc.repeat_transaction(WikiDataBase.add_causes(number=number), driver); bar()
-            misc.repeat_transaction(WikiDataBase.add_genes(number=number), driver); bar()
+            misc.manage_transaction(WikiDataBase.add_disease_info(number=number), driver); bar()
+            misc.manage_transaction(WikiDataBase.add_drugs(number=number), driver); bar()
+            misc.manage_transaction(WikiDataBase.add_causes(number=number), driver); bar()
+            misc.manage_transaction(WikiDataBase.add_genes(number=number), driver); bar()
 
-        misc.repeat_transaction(WikiDataBase.add_drug_external_ids(), driver); bar()
-        misc.repeat_transaction(WikiDataBase.add_more_drug_info(), driver); bar()
-        misc.repeat_transaction(WikiDataBase.add_yet_more_drug_info(), driver); bar()
-        misc.repeat_transaction(WikiDataBase.add_gene_info(), driver); bar()
-        misc.repeat_transaction(WikiDataBase.add_metabolite_info(), driver); bar()
+        misc.manage_transaction(WikiDataBase.add_drug_external_ids(), driver); bar()
+        misc.manage_transaction(WikiDataBase.add_more_drug_info(), driver); bar()
+        misc.manage_transaction(WikiDataBase.add_yet_more_drug_info(), driver); bar()
+        misc.manage_transaction(WikiDataBase.add_gene_info(), driver); bar()
+        misc.manage_transaction(WikiDataBase.add_metabolite_info(), driver); bar()
 
 def add_mesh_and_metanetx(driver):
     """
@@ -651,19 +650,19 @@ def add_mesh_and_metanetx(driver):
     """
     with driver.session() as session, alive_bar( 10, title="Querying MeSH and MetaNetX...") as bar:
     # We will also add MeSH terms to all nodes:
-        misc.repeat_transaction(MeSHandMetaNetXDataBases.add_mesh_by_name(), driver); bar()
+        misc.manage_transaction(MeSHandMetaNetXDataBases.add_mesh_by_name(), driver); bar()
     # We also add synonyms:
-        misc.repeat_transaction(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx("Name"), driver); bar()
-        misc.repeat_transaction(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx("KEGG_ID"), driver); bar()
-        misc.repeat_transaction(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx("ChEBI_ID"), driver); bar()
-        misc.repeat_transaction(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx("HMDB_ID"), driver); bar()
-        misc.repeat_transaction(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx("InChI"), driver); bar()
-        misc.repeat_transaction(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx("InChIKey"), driver); bar()
+        misc.manage_transaction(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx("Name"), driver); bar()
+        misc.manage_transaction(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx("KEGG_ID"), driver); bar()
+        misc.manage_transaction(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx("ChEBI_ID"), driver); bar()
+        misc.manage_transaction(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx("HMDB_ID"), driver); bar()
+        misc.manage_transaction(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx("InChI"), driver); bar()
+        misc.manage_transaction(MeSHandMetaNetXDataBases.write_synonyms_in_metanetx("InChIKey"), driver); bar()
 
     # And some protein interactions, together with their pathways, too:
-        misc.repeat_transaction(MeSHandMetaNetXDataBases.find_protein_data_in_metanetx(), driver); bar()
-        misc.repeat_transaction(MeSHandMetaNetXDataBases.find_protein_interactions_in_metanetx(), driver); bar()
-        misc.repeat_transaction(MeSHandMetaNetXDataBases.get_kegg_pathways_for_metabolites(), driver); bar()
+        misc.manage_transaction(MeSHandMetaNetXDataBases.find_protein_data_in_metanetx(), driver); bar()
+        misc.manage_transaction(MeSHandMetaNetXDataBases.find_protein_interactions_in_metanetx(), driver); bar()
+        misc.manage_transaction(MeSHandMetaNetXDataBases.get_kegg_pathways_for_metabolites(), driver); bar()
 
 def main():
     """
@@ -710,14 +709,14 @@ def main():
     logging.info("Connected to Neo4J")
 
     if not os.path.exists(f"{os.path.abspath(args.dbfolder)}/index.json") and not args.noindex:
-        print("No index file was found. Switching to non-indexed mode..."); agrs.noindex = True
+        print("No index file was found. Switching to non-indexed mode..."); args.noindex = True
 
     # For each item in our "query" file, we will try to find matches:
     for index, row in raw_database.iterrows():
 
         # We start by cleaning the database (important if this is not the first run)
         with driver.session() as session:
-            misc.repeat_transaction( misc.clean_database(), driver)
+            misc.manage_transaction( misc.clean_database(), driver)
             logging.info("Cleaned DataBase")
 
         print(f"Searching Synonyms for Metabolite {index+1}/{len(raw_database)} ...")
@@ -725,8 +724,15 @@ def main():
         # Then, we fill the empty values so that the program does not crash
         row.fillna("", inplace=True)
 
-        chebi_ids, names, hmdb_ids, inchis, mesh_ids = improve_search_terms(driver, row.ChEBI_ID, row.Name,
-                                                                            row.HMDB_ID, row.InChI, row.MeSH)
+        # And prevent non-specified columns from crashing the program
+        chebi_ids = row.ChEBI_ID if "ChEBI_ID" in raw_database.columns else ""
+        names =     row.Name if "Name" in raw_database.columns else ""
+        hmdb_ids =  row.HMDB_ID if "HMDB_ID" in raw_database.columns else ""
+        inchis =    row.InChI if "InChI" in raw_database.columns else ""
+        mesh_ids =  row.MeSH_ID if "MeSH_ID" in raw_database.columns else ""
+
+        chebi_ids, names, hmdb_ids, inchis, mesh_ids = improve_search_terms(driver, chebi_ids, names,
+                                                                            hmdb_ids, inchis, mesh_ids)
 
         print(f"Annotating Metabolite {index+1}/{len(raw_database)} using Built-In DataBases...")
 
@@ -743,8 +749,6 @@ def main():
             import_based_on_index(args.dbfolder, Neo4JImportPath, driver, args.similarity,
                                   chebi_ids, names, hmdb_ids, inchis, mesh_ids)
 
-        print(f"Annotating Metabolite {index+1}/{len(raw_database)} using Web DataBases...")
-
         # We first purge the database by deleting useless noded that might overcharge the web queries
         misc.purge_database(driver, method = "delete")
 
@@ -752,18 +756,30 @@ def main():
         # are so resource intensive that its better to just use once:
 
         if args.webdbs:
-            # # We annotate the existing nodes using WikiData
-            annotate_using_wikidata(driver)
-            # Add their MeSH and MetaNetX IDs and synonyms
-            add_mesh_and_metanetx(driver)
+            # First, check if there are more than 10.000 nodes.
+            result = misc.manage_transaction("MATCH (n) RETURN COUNT( "
+                                             "DISTINCT n ) AS nodes", driver)
+            number_of_nodes = result[0]["nodes"]
+
+            # If there are less than that, run the webdbs; else, skip
+            # This is because, with lots of nodes, neo4j is unable to call the webdbs
+            if number_of_nodes < 10000:
+                print(f"Annotating Metabolite {index+1}/{len(raw_database)} using Web DataBases...")
+                # We annotate the existing nodes using WikiData
+                annotate_using_wikidata(driver)
+                # Add their MeSH and MetaNetX IDs and synonyms
+                add_mesh_and_metanetx(driver)
+            else:
+                print(f"{number_of_nodes} nodes found on the database, which is too much to call the Web DBs")
+                print(f"without risk of failure. Skipping Web DBs for this metabolite...")
 
         # And purge any duplicates once again
         misc.purge_database(driver)
 
         # And save it in GraphML format
         with driver.session() as session:
-            session.execute_write(misc.export_graphml,
-                                  f"metabolite_{index+1}.graphml")
+            misc.manage_transaction(misc.export_graphml(
+                                  f"metabolite_{index+1}.graphml"), driver)
 
         if not os.path.exists(args.results): os.makedirs(os.path.abspath(args.results))
 

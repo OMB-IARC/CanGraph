@@ -49,7 +49,7 @@ def import_metabolites(filename, Neo4JImportPath):
             filepath = os.path.abspath(f"./csvfolder/smpdb_metabolites/{filename}")
             shutil.copyfile(filepath, f"{Neo4JImportPath}/{filename}")
             with driver.session() as session:
-                session.execute_write(build_database.add_metabolites, filename)
+                misc.manage_transaction(build_database.add_metabolites, filename)
                 bar()
             os.remove(f"{Neo4JImportPath}/{filename}")
 
@@ -70,7 +70,7 @@ def import_proteins(filename, Neo4JImportPath):
             filepath = os.path.abspath(f"./csvfolder/smpdb_proteins/{filename}")
             shutil.copyfile(filepath, f"{Neo4JImportPath}/{filename}")
             with driver.session() as session:
-                session.execute_write(build_database.add_proteins, filename)
+                misc.manage_transaction(build_database.add_proteins, filename)
                 bar()
             os.remove(f"{Neo4JImportPath}/{filename}")
 
@@ -89,7 +89,7 @@ def import_pathways(Neo4JImportPath):
     with driver.session() as session:
         filepath = os.path.abspath(f"./csvfolder/smpdb_pathways.csv")
         shutil.copyfile(filepath, f"{Neo4JImportPath}/smpdb_pathways.csv")
-        session.execute_write(build_database.add_pathways, "smpdb_pathways.csv")
+        misc.manage_transaction(build_database.add_pathways, "smpdb_pathways.csv")
         bar()
         os.remove(f"{Neo4JImportPath}/smpdb_pathways.csv")
 
@@ -113,7 +113,7 @@ def import_genomic_seqs():
             Name =  " ".join(fasta.description.split(" ")[1:]).replace("("+UniProt_ID+")", "")
             #NOTE: Could type also be: NUC?
             Sequence = str(fasta.description) + "\n" + str(fasta.seq); Format = "FASTA"; Type = "DNA"
-            session.execute_write(build_database.add_sequence, UniProt_ID, Name, Type, Sequence, Format)
+            misc.manage_transaction(build_database.add_sequence, UniProt_ID, Name, Type, Sequence, Format)
             bar()
 
 def import_proteic_seqs():
@@ -136,7 +136,7 @@ def import_proteic_seqs():
             Name =  " ".join(fasta.description.split(" ")[1:]).replace("("+UniProt_ID+")", "")
             #NOTE: Could type also be: NUC?
             Sequence = str(fasta.description) + "\n" + str(fasta.seq); Format = "FASTA"; Type = "PROT"
-            session.execute_write(build_database.add_sequence, UniProt_ID, Name, Type, Sequence, Format)
+            misc.manage_transaction(build_database.add_sequence, UniProt_ID, Name, Type, Sequence, Format)
             bar();
 
 def main():
@@ -192,7 +192,7 @@ def main():
 
     # And export it:
     with driver.session() as session:
-        session.execute_write(misc.export_graphml, "graph.graphml")
+        misc.manage_transaction(misc.export_graphml, "graph.graphml")
         bar()
 
     print(f"You can find the exported graph at {Neo4JImportPath}/graph.graphml")

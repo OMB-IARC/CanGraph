@@ -12,12 +12,18 @@ to annotate existing metabolites (as showcased in :obj:`CanGraph.main`).
 """
 
 # Import external modules necessary for the script
-from neo4j import GraphDatabase      # The Neo4J python driver
 import os, sys, shutil               # Vital modules to interact with the filesystem
+
+# Import subscripts for the program
+# This hack that allows us to de-duplicate the miscleaneous script in this less-used script
+sys.path.append("../")
+# .. NOTE::: Please beware that, if using this module by itself, you might need to copy "miscelaneous.py" into your path
+# This is not the most elegant, but simplifies code maintenance, and this script shouldnt be used much so...
+import miscelaneous as misc
 
 # ********* First, we add some general functions to start the discovery or do it automatically ********* #
 
-def import_csv(tx, filename, label):
+def import_csv(filename, label):
     """
     Imports a given CSV into Neo4J. This CSV **must** be present in Neo4J's Import Path
 
@@ -31,11 +37,11 @@ def import_csv(tx, filename, label):
 
     .. NOTE:: For this to work, you HAVE TO have APOC availaible on your Neo4J installation
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.import.csv([{{fileName: 'file:/{filename}', labels: [apoc.text.capitalize('{label}')]}}], [], {{}})
         """)
 
-def add_components(tx, filename):
+def add_components(filename):
     """
     Adds "Metabolite" nodes from Exposome-Explorer's components.csv
     This is because this components are, in fact, metabolites, either from food or from human metabolism
@@ -47,7 +53,7 @@ def add_components(tx, filename):
     Returns:
         neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
-    return tx.run(f"""
+    return (f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
             MERGE (c:Metabolite {{ Exposome_Explorer_ID:"Component_"+line["id"] }})
             SET c.Name = line.name, c.Description = line.description,
@@ -80,7 +86,7 @@ def add_components(tx, filename):
 
 # ********* Now, we build the "scaffolding" - the raw nodes which we will then annotate ********* #
 
-def add_measurements_stuff(tx, filename):
+def add_measurements_stuff(filename):
     """
     A massive and slow-running function that creates ALL the relations between the 'measurements' table
     and all other related tables:
@@ -97,7 +103,7 @@ def add_measurements_stuff(tx, filename):
     Returns:
         neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
-    return tx.run(f"""
+    return (f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
             MATCH (c:Metabolite {{ Exposome_Explorer_ID: "Component_"+line.component_id }})
 
@@ -112,7 +118,7 @@ def add_measurements_stuff(tx, filename):
             MERGE (m)-[r4:MEASURED_IN]->(u)
         """)
 
-def add_reproducibilities(tx, filename):
+def add_reproducibilities(filename):
     """
     Creates relations between the "reproducibilities" and the "measurements" table,
     using "initial_id", an old identifier, for the linkage
@@ -124,7 +130,7 @@ def add_reproducibilities(tx, filename):
     Returns:
         neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
-    return tx.run(f"""
+    return (f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
             MATCH (m:Measurement {{ Exposome_Explorer_ID: "Measurement_"+line.id }})
 
@@ -133,7 +139,7 @@ def add_reproducibilities(tx, filename):
             MERGE (m)-[r:REPODUCIBILE_WITH_CONDITIONS]->(re)
         """)
 
-def add_samples(tx, filename):
+def add_samples(filename):
     """
     Imports the relations pertaining to the "samples" table. A sample will be taken from a given
     subject and a given tissue (that is, a specimen, which will be blood, urine, etc)
@@ -145,7 +151,7 @@ def add_samples(tx, filename):
     Returns:
         neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
-    return tx.run(f"""
+    return (f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
             MATCH (s:Sample {{ Exposome_Explorer_ID: "Sample_"+line.id }})
 
@@ -156,7 +162,7 @@ def add_samples(tx, filename):
             MERGE (s)-[r2:TAKEN_FROM_SUBJECT]->(sb)
         """)
 
-def add_subjects(tx, filename):
+def add_subjects(filename):
     """
     Imports the relations pertaining to the "subjects" table. Basically, a subject can appear
     in a given publication, and will be part of a cohort (i.e. a grop of subjects)
@@ -168,7 +174,7 @@ def add_subjects(tx, filename):
     Returns:
         neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
-    return tx.run(f"""
+    return (f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
             MATCH (s:Subject {{ Exposome_Explorer_ID: "Subject_"+line.id }})
 
@@ -181,7 +187,7 @@ def add_subjects(tx, filename):
             )
         """)
 
-def add_microbial_metabolite_identifications(tx, filename):
+def add_microbial_metabolite_identifications(filename):
     """
     Imports the relations pertaining to the "microbial_metabolite_identifications" table. A component
     (i.e. a metabolite) can be identified as a Microbial Metabolite, which means it has an equivalent in
@@ -194,7 +200,7 @@ def add_microbial_metabolite_identifications(tx, filename):
     Returns:
         neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
-    return tx.run(f"""
+    return (f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
             MATCH (m:Metabolite {{ Exposome_Explorer_ID: "Component_"+line.component_id }})
 
@@ -210,7 +216,7 @@ def add_microbial_metabolite_identifications(tx, filename):
 
         """)
 
-def add_cancer_associations(tx, filename):
+def add_cancer_associations(filename):
     """
     Imports the 'cancer_associations' database as a relation between a given Cancer and a Measurement
 
@@ -221,7 +227,7 @@ def add_cancer_associations(tx, filename):
     Returns:
         neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
-    return tx.run(f"""
+    return (f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
             MATCH (m:Measurement {{ Exposome_Explorer_ID: "Measurement_"+line.`excretion_id` }})
 
@@ -231,7 +237,7 @@ def add_cancer_associations(tx, filename):
             SET r.Exposome_Explorer_ID = "CancerAssociation_"+line.id
         """)
 
-def add_metabolomic_associations(tx, filename):
+def add_metabolomic_associations(filename):
     """
     Imports the 'metabolomic_associations' database as a relation between to measurements:
     the intake_id, a food taken by the organism and registered using dietary questionnaires
@@ -246,7 +252,7 @@ def add_metabolomic_associations(tx, filename):
     Returns:
         neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
-    return tx.run(f"""
+    return (f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
             MATCH (m:Measurement {{ Exposome_Explorer_ID: "Measurement_"+line.`intake_id` }})
             MATCH (n:Measurement {{ Exposome_Explorer_ID: "Measurement_"+line.`excretion_id` }})
@@ -262,7 +268,7 @@ def add_metabolomic_associations(tx, filename):
             r.Beta_Coefficient_p_value = line.beta_coefficient_p_value, r.anova_p_value = line.anova_p_value
         """)
 
-def add_correlations(tx, filename):
+def add_correlations(filename):
     """
     Imports the 'correlations' database as a relation between two measurements:
     the intake_id, a food taken by the organism and registered using dietary questionnaires
@@ -277,7 +283,7 @@ def add_correlations(tx, filename):
     Returns:
         neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
-    return tx.run(f"""
+    return (f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
             MATCH (m:Measurement {{ Exposome_Explorer_ID: "Measurement_"+line.`intake_id` }})
             MATCH (n:Measurement {{ Exposome_Explorer_ID: "Measurement_"+line.`excretion_id` }})
@@ -296,7 +302,7 @@ def add_correlations(tx, filename):
 
 # ********* Finally, we can annotate the nodes created ********* #
 
-def annotate_measurements(tx, filename):
+def annotate_measurements(filename):
     """
     Adds "Measurement" nodes from Exposome-Explorer's measurements.csv
 
@@ -307,7 +313,7 @@ def annotate_measurements(tx, filename):
     Returns:
         neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
-    return tx.run(f"""
+    return (f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
             MATCH (m:Measurement {{ Exposome_Explorer_ID:"Measurement_"+line["id"] }})
             SET m.Concentration_Mean = line.concentration_mean,
@@ -340,7 +346,7 @@ def annotate_measurements(tx, filename):
                 m.Confidence_Interval_95_Geo_Upper = line.confidence_interval_95_geo_upper
         """)
 
-def annotate_samples(tx, filename):
+def annotate_samples(filename):
     """
     Adds "Sample" nodes from Exposome-Explorer's samples.csv
     From a Sample, one can take a series of measurements
@@ -352,7 +358,7 @@ def annotate_samples(tx, filename):
     Returns:
         neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
-    return tx.run(f"""
+    return (f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
             MATCH (s:Sample {{ Exposome_Explorer_ID:"Sample_"+line["id"] }})
             SET s.Subject_ID = line.subject_id, s.Ancestry = line.ancestry,
@@ -362,7 +368,7 @@ def annotate_samples(tx, filename):
                 s.Intake_Time_Coverage = line.intake_time_coverage, s.Intervention_Dose = line.intervention_dose
         """)
 
-def annotate_experimental_methods(tx, filename):
+def annotate_experimental_methods(filename):
     """
     Adds "ExperimentalMethod" nodes from Exposome-Explorer's experimental_methods.csv
 
@@ -373,7 +379,7 @@ def annotate_experimental_methods(tx, filename):
     Returns:
         neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
-    return tx.run(f"""
+    return (f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
             MATCH (em:ExperimentalMethod {{ Exposome_Explorer_ID:"ExperimentalMethod_"+line["id"] }})
             SET em.Name = line.name, em.Method_Type = line.method_type,
@@ -386,7 +392,7 @@ def annotate_experimental_methods(tx, filename):
                 em.Displayed_Cancer_Association_Count = line.displayed_cancer_association_count
         """)
 
-def annotate_units(tx, filename):
+def annotate_units(filename):
     """
     Adds "Unit" nodes from Exposome-Explorer's units.csv
     A unit can be converted into other (for example, for normalization)
@@ -398,13 +404,13 @@ def annotate_units(tx, filename):
     Returns:
         neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
-    return tx.run(f"""
+    return (f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
             MATCH (u:Unit {{ Exposome_Explorer_ID:"Unit_"+line["id"] }})
             SET u.Name = line.name, u.Type = line.unit_type, u.Group = line.unit_group, u.Converted_to_ID = line.converted_to_id
         """)
 
-def annotate_auto_units(tx, filename):
+def annotate_auto_units(filename):
     """
     Shows the correlations between two units, converted using the rubygem 'https://github.com/masa16/phys-units'
     which standarizes units of measurement for our data
@@ -416,7 +422,7 @@ def annotate_auto_units(tx, filename):
     Returns:
         neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
-    return tx.run(f"""
+    return (f"""
         LOAD CSV WITH HEADERS FROM 'file:///{filename}' AS line
             MATCH
                 (u1:Unit {{ Exposome_Explorer_ID: "Unit_"+line.id }}),
@@ -424,7 +430,7 @@ def annotate_auto_units(tx, filename):
             MERGE (u1)-[r:CONVERTED_INTO]->(u2)
         """)
 
-def annotate_cancers(tx, filename):
+def annotate_cancers(filename):
     """
     Adds "Cancer" nodes from Exposome-Explorer's cancers.csv
 
@@ -435,7 +441,7 @@ def annotate_cancers(tx, filename):
     Returns:
         neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
-    return tx.run(f"""
+    return (f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
             MATCH (c:Disease {{ Exposome_Explorer_ID:"Cancer_"+line["id"] }})
             SET c.Name = line.name, c.Alternative_Names = replace(line.alternative_names, ";", ","),
@@ -445,7 +451,7 @@ def annotate_cancers(tx, filename):
 
         """)
 
-def annotate_cohorts(tx, filename):
+def annotate_cohorts(filename):
     """
     Adds "Cohort" nodes from Exposome-Explorer's cohorts.csv
 
@@ -456,7 +462,7 @@ def annotate_cohorts(tx, filename):
     Returns:
         neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
-    return tx.run(f"""
+    return (f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
             MATCH (c:Cohort {{ Exposome_Explorer_ID:"Cohort_"+line["id"] }})
             SET c.Name = line.name, c.Abbreviation = line.abbreviation,
@@ -472,7 +478,7 @@ def annotate_cohorts(tx, filename):
                 c.Displayed_Cancer_Association_Count = line.displayed_cancer_association_count
         """)
 
-def annotate_microbial_metabolite_info(tx, filename):
+def annotate_microbial_metabolite_info(filename):
     """
     Adds "Metabolite" nodes from Exposome-Explorer's microbial_metabolite_identifications.csv
     These represent all metabolites that have been re-identified as present, for instance, in the microbiome.
@@ -484,7 +490,7 @@ def annotate_microbial_metabolite_info(tx, filename):
     Returns:
         neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
-    return tx.run(f"""
+    return (f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
             MATCH (mm:Metabolite {{ Exposome_Explorer_ID:"Component_"+line["component_id"] }})
             SET mm.Publication_ID = line.publication_id, mm.Component_ID = line.component_id, mm.Antibiotic = line.antibiotic,
@@ -492,7 +498,7 @@ def annotate_microbial_metabolite_info(tx, filename):
                 mm.Bacterial_Source = line.bacterial_source, mm.Substrate = line.substrate, mm.Organism = line.organism
         """)
 
-def annotate_publications(tx, filename):
+def annotate_publications(filename):
     """
     Adds "Publication" nodes from Exposome-Explorer's publications.csv
 
@@ -503,7 +509,7 @@ def annotate_publications(tx, filename):
     Returns:
         neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
-    return tx.run(f"""
+    return (f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
             MATCH (p:Publication {{ Exposome_Explorer_ID:"Publication_"+line["id"] }})
             SET p.Title = line.title, p.First_Author = line.author_first, p.Date = line.year,
@@ -521,7 +527,7 @@ def annotate_publications(tx, filename):
                 p.Microbial_Metabolite_Identification_Count = line.microbial_metabolite_identification_count
         """)
 
-def annotate_reproducibilities(tx, filename):
+def annotate_reproducibilities(filename):
     """
     Adds "Reproducibility" nodes from Exposome-Explorer's reproducibilities.csv
     These represent the conditions under which a given study/measurement was carried
@@ -533,7 +539,7 @@ def annotate_reproducibilities(tx, filename):
     Returns:
         neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
-    return tx.run(f"""
+    return (f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
             MATCH (r:Reproducibility {{ Exposome_Explorer_ID:"Reproducibility_"+line["id"] }})
             SET r.Initial_ID = line.initial_id, r.ICC = line.icc,
@@ -543,7 +549,7 @@ def annotate_reproducibilities(tx, filename):
                 r.Variance_Within = line.variance_within, r.Size = line.size
         """)
 
-def annotate_specimens(tx, filename):
+def annotate_specimens(filename):
     """
     Annotates "BioSpecimen" nodes from Exposome-Explorer's specimens.csv whose ID is already present on the DB
     A biospecimen is a type of tissue where a measurement can originate, such as orine, csf fluid, etc
@@ -555,7 +561,7 @@ def annotate_specimens(tx, filename):
     Returns:
         neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
-    return tx.run(f"""
+    return (f"""
         LOAD CSV WITH HEADERS FROM ('file:///{filename}') AS line
             MATCH (s:BioSpecimen {{ Exposome_Explorer_ID:"Specimen_"+line["id"] }})
             SET s.Name = line.name, s.Specimen_Type = line.specimen_type,
@@ -568,7 +574,7 @@ def annotate_specimens(tx, filename):
                 s.Displayed_Cancer_Association_Count = line.displayed_cancer_association_count
         """)
 
-def annotate_subjects(tx, filename):
+def annotate_subjects(filename):
     """
     Annotates "Subject" nodes from Exposome-Explorer's subjects.csv whose ID is already present on the DB
 
@@ -579,7 +585,7 @@ def annotate_subjects(tx, filename):
     Returns:
         neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
-    return tx.run(f"""
+    return (f"""
         LOAD CSV WITH HEADERS FROM ('file:///subjects.csv') AS line
             MATCH (su:Subject {{ Exposome_Explorer_ID:"Subject_"+line["id"] }})
             SET su.Name = line.name, su.Description = line.description, su.Health_Condition = line.health_condition,
@@ -620,7 +626,7 @@ def remove_counts_and_displayeds(inputfile, outputfile):
     with open(outputfile, 'w') as f:
         f.write(data)
 
-def remove_cross_properties(tx):
+def remove_cross_properties():
     """
     Removes some properties that were added by the other functions present in this script, that are used to cross-reference
     the different tables in the Relational Database EE comes from, and that, in a Graph Database, are no longer necessary.
@@ -631,7 +637,7 @@ def remove_cross_properties(tx):
     Returns:
         neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.
     """
-    return tx.run(f"""
+    return (f"""
         MATCH (n)
         REMOVE n.Component_ID, n.Sample_ID, n.Experimental_Method_ID, n.Unit_ID, n.Subject_ID,
                n.Converted_to_ID, n.Publication_ID, n.Component_ID, n.Specimen_ID, n.Initial_ID, n.Cohort_ID
@@ -729,59 +735,56 @@ def build_from_file(databasepath, Neo4JImportPath, driver, bar = None,
                         f"{Neo4JImportPath}/subjects.csv")
 
     # Fist, we build the "scaffolding" - the nodes we will annotate later on
-    with driver.session() as session:
-        session.execute_write(add_measurements_stuff, "measurements.csv")
-        if do_all: bar()
-        session.execute_write(add_reproducibilities, "reproducibilities.csv")
-        if do_all: bar()
-        session.execute_write(add_samples, "samples.csv")
-        if do_all: bar()
-        session.execute_write(add_subjects, "subjects.csv")
-        if do_all: bar()
-        session.execute_write(add_microbial_metabolite_identifications,
-                              "microbial_metabolites.csv")
-        if do_all: bar()
-        session.execute_write(add_cancer_associations, "cancer_associations.csv")
-        if do_all: bar()
-        session.execute_write(add_metabolomic_associations,
-                              "metabolomic_associations.csv")
-        if do_all: bar()
-        session.execute_write(add_correlations, "correlations.csv")
-        if do_all: bar()
+    misc.manage_transaction(add_measurements_stuff("measurements.csv"), driver)
+    if do_all: bar()
+    misc.manage_transaction(add_reproducibilities("reproducibilities.csv"), driver)
+    if do_all: bar()
+    misc.manage_transaction(add_samples("samples.csv"), driver)
+    if do_all: bar()
+    misc.manage_transaction(add_subjects("subjects.csv"), driver)
+    if do_all: bar()
+    misc.manage_transaction(add_microbial_metabolite_identifications(
+                            "microbial_metabolites.csv"), driver)
+    if do_all: bar()
+    misc.manage_transaction(add_cancer_associations("cancer_associations.csv"), driver)
+    if do_all: bar()
+    misc.manage_transaction(add_metabolomic_associations(
+                            "metabolomic_associations.csv"), driver)
+    if do_all: bar()
+    misc.manage_transaction(add_correlations("correlations.csv"), driver)
+    if do_all: bar()
 
     # Now, we annotate those metabolites
-    with driver.session() as session:
-        session.execute_write(annotate_measurements, "measurements.csv")
-        if do_all: bar()
-        session.execute_write(annotate_samples, "samples.csv")
-        if do_all: bar()
-        session.execute_write(annotate_experimental_methods,
-                              "experimental_methods.csv")
-        if do_all: bar()
-        session.execute_write(annotate_units, "units.csv")
-        if do_all: bar()
-        session.execute_write(annotate_auto_units, "units.csv")
-        if do_all: bar()
-        session.execute_write(annotate_cancers, "cancers.csv")
-        if do_all: bar()
-        session.execute_write(annotate_cohorts, "cohorts.csv")
-        if do_all: bar()
-        session.execute_write(annotate_microbial_metabolite_info,
-                              "microbial_metabolites.csv")
-        if do_all: bar()
-        session.execute_write(annotate_publications, "publications.csv")
-        if do_all: bar()
-        session.execute_write(annotate_reproducibilities, "reproducibilities.csv")
-        if do_all: bar()
-        session.execute_write(annotate_specimens, "specimens.csv")
-        if do_all: bar()
-        session.execute_write(annotate_subjects, "subjects.csv")
-        if do_all: bar()
+    misc.manage_transaction(annotate_measurements("measurements.csv"), driver)
+    if do_all: bar()
+    misc.manage_transaction(annotate_samples("samples.csv"), driver)
+    if do_all: bar()
+    misc.manage_transaction(annotate_experimental_methods(
+                            "experimental_methods.csv"), driver)
+    if do_all: bar()
+    misc.manage_transaction(annotate_units("units.csv"), driver)
+    if do_all: bar()
+    misc.manage_transaction(annotate_auto_units("units.csv"), driver)
+    if do_all: bar()
+    misc.manage_transaction(annotate_cancers("cancers.csv"), driver)
+    if do_all: bar()
+    misc.manage_transaction(annotate_cohorts("cohorts.csv"), driver)
+    if do_all: bar()
+    misc.manage_transaction(annotate_microbial_metabolite_info(
+                            "microbial_metabolites.csv"), driver)
+    if do_all: bar()
+    misc.manage_transaction(annotate_publications("publications.csv"), driver)
+    if do_all: bar()
+    misc.manage_transaction(annotate_reproducibilities("reproducibilities.csv"), driver)
+    if do_all: bar()
+    misc.manage_transaction(annotate_specimens("specimens.csv"), driver)
+    if do_all: bar()
+    misc.manage_transaction(annotate_subjects("subjects.csv"), driver)
+    if do_all: bar()
 
     # Finally, we remove the cross-properties that are of no use anymore (this is optional, of course)
     if keep_cross_properties == False:
-        with driver.session() as session:
-            session.execute_write(remove_cross_properties)
+        misc.manage_transaction(remove_cross_properties(), driver)
 
     os.remove(f"{Neo4JImportPath}/measurements.csv");               os.remove(f"{Neo4JImportPath}/samples.csv")
     os.remove(f"{Neo4JImportPath}/experimental_methods.csv");       os.remove(f"{Neo4JImportPath}/units.csv")

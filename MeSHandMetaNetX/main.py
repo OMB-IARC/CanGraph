@@ -104,7 +104,7 @@ def main():
 
         # And export it:
         with driver.session() as session:
-            session.execute_write(misc.export_graphml, "graph.graphml")
+            session.manage_transaction(misc.export_graphml, "graph.graphml")
             bar()
 
     print(f"You can find the exported graph at {Neo4JImportPath}/graph.graphml")

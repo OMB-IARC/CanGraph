@@ -43,9 +43,10 @@ function remap_args {
   }
 
   if [[ "$original_args" == *"$arg_query"* ]]; then
-    split_args_by_query=(${original_args//$arg_query/ })
-    split_args_by_space=(${split_args_by_query// / })
-    arg_value=${split_args_by_space[0]}
+    export arg_query=$1
+    export original_args="${@:3}"
+    arg_value=$(python3 -c 'import os; \
+    print(os.environ["original_args"].split(os.environ["arg_query"])[1].split(" ")[1])')
 
     echo $(return_default_if_no_args $default $arg_value)
   else

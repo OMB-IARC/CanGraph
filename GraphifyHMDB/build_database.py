@@ -12,7 +12,6 @@ to annotate existing metabolites (as showcased in :obj:`CanGraph.main`).
 """
 
 # Import external modules necessary for the script
-from neo4j import GraphDatabase      # The Neo4J python driver
 from alive_progress import alive_bar # A cute progress bar that shows the script is still running
 import os, sys, shutil               # Vital modules to interact with the filesystem
 from time import sleep               # A hack to avoid starving the system resources
@@ -24,7 +23,7 @@ sys.path.append("../")
 # This is not the most elegant, but simplifies code maintenance, and this script shouldnt be used much so...
 import miscelaneous as misc
 
-def add_metabolites(tx, filename):
+def add_metabolites(filename):
     """
     Creates "Metabolite" nodes based on XML files obtained from the HMDB website,
     adding some essential identifiers and external properties.
@@ -39,7 +38,7 @@ def add_metabolites(tx, filename):
     Returns:
         neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.load.xml("file:///{filename}")
         YIELD value
         WITH [x in value._children WHERE x._type = "metabolite"] AS metabolites
@@ -119,7 +118,7 @@ def add_metabolites(tx, filename):
         )
         """)
 
-def add_diseases(tx, filename):
+def add_diseases(filename):
     """
     Creates "Publication" nodes based on XML files obtained from the HMDB website.
 
@@ -148,7 +147,7 @@ def add_diseases(tx, filename):
             RETURN p
 
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.load.xml("file:///{filename}")
         YIELD value
         WITH [x in value._children WHERE x._type = "metabolite"] AS metabolites
@@ -205,7 +204,7 @@ def add_diseases(tx, filename):
         
         """)
 
-def add_concentrations_normal(tx, filename):
+def add_concentrations_normal(filename):
     """
     Creates "Concentration" nodes based on XML files obtained from the HMDB website.
     In this function, only metabolites that are labeled as "normal_concentration" are added.
@@ -224,7 +223,7 @@ def add_concentrations_normal(tx, filename):
         some values might be missing. However, this means some bogus nodes could be added,
         which MUST be accounted for at the end of the DB-Creation process.
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.load.xml("file:///{filename}")
         YIELD value
         WITH [x in value._children WHERE x._type = "metabolite"] AS metabolites
@@ -306,7 +305,7 @@ def add_concentrations_normal(tx, filename):
 
         """)
 
-def add_concentrations_abnormal(tx, filename):
+def add_concentrations_abnormal(filename):
     """
     Creates "Concentration" nodes based on XML files obtained from the HMDB website.
     In this function, only metabolites that are labeled as "abnormal_concentration" are added.
@@ -325,7 +324,7 @@ def add_concentrations_abnormal(tx, filename):
         some values might be missing. However, this means some bogus nodes could be added,
         which MUST be accounted for at the end of the DB-Creation process.
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.load.xml("file:///{filename}")
         YIELD value
         WITH [x in value._children WHERE x._type = "metabolite"] AS metabolites
@@ -404,7 +403,7 @@ def add_concentrations_abnormal(tx, filename):
 
         """)
 
-def add_taxonomy(tx, filename):
+def add_taxonomy(filename):
     """
     Creates "Taxonomy" nodes based on XML files obtained from the HMDB website.
     These represent the "kind" of metabolite we are dealing with (Family, etc)
@@ -421,7 +420,7 @@ def add_taxonomy(tx, filename):
         Kingdom -> Super Class -> Class -> Subclass is absent, the line will be broken; hopefully
         in that case a new metabolite will come in to rescue and settle the relation!
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.load.xml("file:///{filename}")
         YIELD value
         WITH [x in value._children WHERE x._type = "metabolite"] AS metabolites
@@ -526,7 +525,7 @@ def add_taxonomy(tx, filename):
         MERGE (m)-[:PART_OF_CLADE]->(tt)
         """)
 
-def add_experimental_properties(tx, filename):
+def add_experimental_properties(filename):
     """
     Adds properties to existing "Metabolite" nodes based on XML files obtained from the HMDB website.
     In this case, only properties labeled as <experimental_properties> are added.
@@ -544,7 +543,7 @@ def add_experimental_properties(tx, filename):
 
     .. TODO:: It would be nice to be able to distinguish between experimental and predicted properties
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.load.xml("file:///{filename}")
         YIELD value
         WITH [x in value._children WHERE x._type = "metabolite"] AS metabolites
@@ -569,7 +568,7 @@ def add_experimental_properties(tx, filename):
              m.Melting_Point = dict["melting_point"], m.Boiling_Point = dict["boiling_point"]
         """)
 
-def add_predicted_properties(tx, filename):
+def add_predicted_properties(filename):
     """
     Adds properties to existing "Metabolite" nodes based on XML files obtained from the HMDB website.
     In this case, only properties labeled as <predicted_properties> are added.
@@ -587,7 +586,7 @@ def add_predicted_properties(tx, filename):
 
     .. TODO:: It would be nice to be able to distinguish between experimental and predicted properties
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.load.xml("file:///{filename}")
         YIELD value
         WITH [x in value._children WHERE x._type = "metabolite"] AS metabolites
@@ -619,7 +618,7 @@ def add_predicted_properties(tx, filename):
             m.Formal_Charge = dict["formal_charge"], m.Verber_Rule = dict["veber_rule"]
         """)
 
-def add_biological_properties(tx, filename):
+def add_biological_properties(filename):
     """
     Adds biological properties to existing "Metabolite" nodes based on XML files obtained from the HMDB website.
     In this case, only properties labeled as <predicted_properties> are added.
@@ -637,7 +636,7 @@ def add_biological_properties(tx, filename):
 
     .. TODO:: It would be nice to be able to distinguish between experimental and predicted properties
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.load.xml("file:///{filename}")
         YIELD value
         WITH [x in value._children WHERE x._type = "metabolite"] AS metabolites
@@ -686,7 +685,7 @@ def add_biological_properties(tx, filename):
         MERGE (m)-[r:PART_OF_PATHWAY]->(p)
         """)
 
-def add_proteins(tx, filename):
+def add_proteins(filename):
     """
     Creates "Protein" nodes based on XML files obtained from the HMDB website.
 
@@ -700,7 +699,7 @@ def add_proteins(tx, filename):
     .. NOTE:: We are not creating "Gene" nodes (even though each protein comes from a given gene)
         because we believe not enough information is being given about them.
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.load.xml("file:///{filename}")
         YIELD value
         WITH [x in value._children WHERE x._type = "protein"] AS metabolites
@@ -759,7 +758,7 @@ def add_proteins(tx, filename):
         )
         """)
 
-def add_go_classifications(tx, filename):
+def add_go_classifications(filename):
     """
     Creates "Gene Ontology" nodes based on XML files obtained from the HMDB website.
     This relates each protein to some GO-Terms
@@ -771,7 +770,7 @@ def add_go_classifications(tx, filename):
     Returns:
         neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.load.xml("file:///{filename}")
         YIELD value
         WITH [x in value._children WHERE x._type = "protein"] AS metabolites
@@ -799,7 +798,7 @@ def add_go_classifications(tx, filename):
         MERGE (p)-[r:PART_OF_GENE_ONTOLOGY]-(g)
         """)
 
-def add_gene_properties(tx, filename):
+def add_gene_properties(filename):
     """
     Adds some properties to existing "Protein" nodes based on XML files obtained from the HMDB website.
     In this case, properties will mostly relate to the gene from which the protein originates.
@@ -814,7 +813,7 @@ def add_gene_properties(tx, filename):
     .. NOTE:: We are not creating "Gene" nodes (even though each protein comes from a given gene)
         because we believe not enough information is being given about them.
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.load.xml("file:///{filename}")
         YIELD value
         WITH [x in value._children WHERE x._type = "protein"] AS metabolites
@@ -846,7 +845,7 @@ def add_gene_properties(tx, filename):
 
         """)
 
-def add_protein_properties(tx, filename):
+def add_protein_properties(filename):
     """
     Adds some properties to existing "Protein" nodes based on XML files obtained from the HMDB website.
     In this case, properties will mostly relate to the protein itself.
@@ -861,7 +860,7 @@ def add_protein_properties(tx, filename):
     .. NOTE:: The "signal_regions" and the "transmembrane_regions" properties were left out
         because, after a preliminary search, they were mostly empty
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.load.xml("file:///{filename}")
         YIELD value
         WITH [x in value._children WHERE x._type = "protein"] AS metabolites
@@ -910,7 +909,7 @@ def add_protein_properties(tx, filename):
 
         """)
 
-def add_general_references(tx, filename, type_of):
+def add_general_references(filename, type_of):
     """
     Creates "Publication" nodes based on XML files obtained from the HMDB website.
 
@@ -927,7 +926,7 @@ def add_general_references(tx, filename, type_of):
 
     .. NOTE:: Unlike the rest, here we are not matching metabolites, but ALSO proteins. This is intentional.
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.load.xml("file:///{filename}")
         YIELD value
         WITH [x in value._children WHERE x._type = "{type_of}"] AS metabolites
@@ -968,7 +967,7 @@ def add_general_references(tx, filename, type_of):
 
         """)
 
-def add_protein_associations(tx, filename):
+def add_protein_associations(filename):
     """
     Creates "Protein" nodes based on XML files obtained from the HMDB website.
 
@@ -983,7 +982,7 @@ def add_protein_associations(tx, filename):
         "Metabolite" files, not on the "Protein" files themselves. This could mean node duplication, but,
         hopefully, the MERGE by Accession will mean that this duplicates will be catched.
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.load.xml("file:///{filename}")
         YIELD value
         WITH [x in value._children WHERE x._type = "metabolite"] AS metabolites
@@ -1014,7 +1013,7 @@ def add_protein_associations(tx, filename):
         MERGE (m)-[r:INTERACTS_WITH]-(p)
         """)
 
-def add_metabolite_associations(tx, filename):
+def add_metabolite_associations(filename):
     """
     Adds associations contained in the "protein" file, between proteins and metabolites.
 
@@ -1030,7 +1029,7 @@ def add_metabolite_associations(tx, filename):
 
     .. NOTE:: The "ON CREATE SET" clause for the "Name" param ensures no overwriting
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.load.xml("file:///{filename}")
         YIELD value
         WITH [x in value._children WHERE x._type = "protein"] AS metabolites
@@ -1057,7 +1056,7 @@ def add_metabolite_associations(tx, filename):
         MERGE (m)-[r:INTERACTS_WITH]-(p)
         """)
 
-def add_metabolite_references(tx, filename):
+def add_metabolite_references(filename):
     """
     Creates references for relations betweens Protein nodes and Metabolite nodes
 
@@ -1072,7 +1071,7 @@ def add_metabolite_references(tx, filename):
         and so, this time, a r.PubMed_ID list with the references could not be created. Nonetheless,
         I considered adding this useful.
     """
-    return tx.run(f"""
+    return (f"""
         CALL apoc.load.xml("file:///{filename}")
         YIELD value
         WITH [x in value._children WHERE x._type = "protein"] AS metabolites
@@ -1135,20 +1134,13 @@ def build_from_protein_file(newfile, driver):
     Returns:
         This function modifies the Neo4J Database as desired, but does not produce any particular return.
     """
-    with driver.session() as session:
-        session.execute_write(add_proteins, newfile)
-    with driver.session() as session:
-        session.execute_write(add_go_classifications, newfile)
-    with driver.session() as session:
-        session.execute_write(add_gene_properties, newfile)
-    with driver.session() as session:
-        session.execute_write(add_protein_properties, newfile)
-    with driver.session() as session:
-        session.execute_write(add_metabolite_associations, newfile)
-    with driver.session() as session:
-        session.execute_write(add_metabolite_references, newfile)
-    with driver.session() as session:
-        session.execute_write(add_general_references, newfile, "protein")
+    misc.manage_transaction(add_proteins(newfile), driver)
+    misc.manage_transaction(add_go_classifications(newfile), driver)
+    misc.manage_transaction(add_gene_properties(newfile), driver)
+    misc.manage_transaction(add_protein_properties(newfile), driver)
+    misc.manage_transaction(add_metabolite_associations(newfile), driver)
+    misc.manage_transaction(add_metabolite_references(newfile), driver)
+    misc.manage_transaction(add_general_references(newfile, "protein"), driver)
 
 
 def build_from_metabolite_file(newfile, driver):
@@ -1164,22 +1156,13 @@ def build_from_metabolite_file(newfile, driver):
     Returns:
         This function modifies the Neo4J Database as desired, but does not produce any particular return.
     """
-    with driver.session() as session:
-        session.execute_write(add_metabolites, newfile)
-    with driver.session() as session:
-        session.execute_write(add_protein_associations, newfile)
-    with driver.session() as session:
-        session.execute_write(add_diseases, newfile)
-    with driver.session() as session:
-        session.execute_write(add_concentrations_normal, newfile)
-    with driver.session() as session:
-        session.execute_write(add_concentrations_abnormal, newfile)
-    with driver.session() as session:
-        session.execute_write(add_taxonomy, newfile)
-    with driver.session() as session:
-        session.execute_write(add_biological_properties, newfile)
-    with driver.session() as session:
-        session.execute_write(add_experimental_properties, newfile)
-        session.execute_write(add_predicted_properties, newfile)
-    with driver.session() as session:
-        session.execute_write(add_general_references, newfile, "metabolite")
+    misc.manage_transaction(add_metabolites(newfile), driver)
+    misc.manage_transaction(add_protein_associations(newfile), driver)
+    misc.manage_transaction(add_diseases(newfile), driver)
+    misc.manage_transaction(add_concentrations_normal(newfile), driver)
+    misc.manage_transaction(add_concentrations_abnormal(newfile), driver)
+    misc.manage_transaction(add_taxonomy(newfile), driver)
+    misc.manage_transaction(add_biological_properties(newfile), driver)
+    misc.manage_transaction(add_experimental_properties(newfile), driver)
+    misc.manage_transaction(add_predicted_properties(newfile), driver)
+    misc.manage_transaction(add_general_references(newfile, "metabolite"), driver)

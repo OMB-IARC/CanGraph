@@ -55,7 +55,7 @@ CanGraph uses a lot of python packages (collections of related modules) to run i
 ## Installing Apptainer
 
 ````{eval-rst}
-.. note:: Installing Apptainer is optional; you can just run the :ref:`pre-packaged files <Downloads>` or use the program's :ref:`Command Line Interface <Running the Software>`.
+.. note:: You need to install Apptainer to use the :ref:`pre-packaged files <Downloads>`, but you can use the :ref:`CLI <Running the Software>` without it.
 ````
 
 To make the results from the CanGraph program easily reproducible and shareable, an Apptainer image is provided by us in the {ref}`downloads page <Downloads>`. If you want to re-generate the image yourself, either to make use of the simpler Private Image which we do not normally provide ourselves, or just to replicate our results, you will need to install Apptainer first. There are [a lot of tutorials availaible online](http://apptainer.org/docs/user/main/quick_start.html), which may or may not work on your computer, and which are sometimes split between the (old) Singularity and the (new) Apptainer brands.

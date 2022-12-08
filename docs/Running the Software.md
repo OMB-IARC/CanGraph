@@ -94,6 +94,10 @@ The time the program takes to process is variable, and depends on the number of 
 
 ## Running on Slurn
 
+````{eval-rst}
+.. note:: You need to install Apptainer to use the :ref:`pre-packaged files <Downloads>`, but you can use the :ref:`CLI <Running the Software>` without it.
+````
+
 For IARC users, as well as for any other user with access to it, the use of a High-Performance Computing platform is advised, since Neo4J is quite unstable and resource-hungry, and the program may take a long time to process during which, if using it in your own machine, it is advisable not to run any other programs at the same time. Thus, a tutorial follows:
 
 0. **Log into [IARC's HPC Portal](https://portal.sit.iarc.fr/pun/sys/dashboard).** There, click on *Jobs* > *Job Composer* in the top menu
@@ -120,3 +124,10 @@ For IARC users, as well as for any other user with access to it, the use of a Hi
 6. **Download the Results:** You will find them inside the ``--results`` folder, and you can either download the full folder (*Select* > *Download*) or get individual files by selecting them inside the folder.
 
 ![IARC's HPC's "Files" Page](./_static/Tutorials/HPC-Files-Tab.png)
+
+## Known Issues
+
+Here are some known issues you may encounter when running the software, together with possible solutions:
+
+* Sometimes, the Apptainer-packaged version refuses to run all-in-one if it needs to set up the database folder or the neo4j program from scratch. If this happens, try re-launching the program; on this second run, it should work without problems
+* On IARC's HPC system, the Public version of the Apptainer-packaged program does not work, outputting a ``subprocess.CalledProcessError`` with error code: ``Command '['cypher-shell', '-d', 'system', '-u', 'neo4j', '-p', 'neo4j', "ALTER CURRENT USER SET PASSWORD FROM 'X' TO 'Y'"]' returned non-zero exit status 1.``. To our knowledge, this happens only on the HPC, and nowhere else; if you encounter this error, consider either building/using the Private version, or {ref}`installing the CLI <Installing CanGraph>`

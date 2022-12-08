@@ -10,7 +10,7 @@ From: debian:11
     # run before each ``apptainer build``, to prepare the container itself
 
     # And thus, we first setup the python requirements and the database folders
-    # python3 ../setup.py -i --databases ../DataBases --requirements ../requirements.txt
+    python3 ../setup.py --dbfolder ../DataBases --requirements ../requirements.txt
 
 %files
     # This section is where the files that will conform the container are declared.

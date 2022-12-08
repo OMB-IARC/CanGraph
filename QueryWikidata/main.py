@@ -43,55 +43,55 @@ def main():
         print("Connected to Neo4J")
 
         with driver.session() as session:
-            session.run( misc.clean_database() )
+            misc.manage_transaction( misc.clean_database(), driver )
             bar()
         print("Cleaned DataBase")
 
         with driver.session() as session:
-            session.execute_write(build_database.initial_cancer_discovery)
+            misc.manage_transaction(build_database.initial_cancer_discovery(), driver)
             bar()
 
         for number in range(3):
             with driver.session() as session:
-                misc.repeat_transaction(build_database.find_subclass_of_disease, 10, driver)
+                misc.manage_transaction(build_database.find_subclass_of_disease(), driver)
                 bar(); bar()
 
         with driver.session() as session:
-            misc.repeat_transaction(build_database.find_instance_of_disease, 10, driver)
+            misc.manage_transaction(build_database.find_instance_of_disease(), driver)
             bar(); bar()
 
         for number in range(10):
             with driver.session() as session:
-                misc.repeat_transaction(build_database.add_disease_info, 10, driver, number)
+                misc.manage_transaction(build_database.add_disease_info(), driver, number)
                 bar()
 
         for number in range(10):
             with driver.session() as session:
-                misc.repeat_transaction(build_database.add_drugs, 10, driver, number)
-                misc.repeat_transaction(build_database.add_causes, 10, driver, number)
-                misc.repeat_transaction(build_database.add_genes, 10, driver, number)
+                misc.manage_transaction(build_database.add_drugs(), driver, number)
+                misc.manage_transaction(build_database.add_causes(), driver, number)
+                misc.manage_transaction(build_database.add_genes(), driver, number)
                 bar(); bar(); bar();
 
         with driver.session() as session:
-            misc.repeat_transaction(build_database.add_drug_external_ids, 10, driver)
-            misc.repeat_transaction(build_database.add_more_drug_info, 10, driver)
+            misc.manage_transaction(build_database.add_drug_external_ids(), driver)
+            misc.manage_transaction(build_database.add_more_drug_info(), driver)
             bar(); bar()
 
         with driver.session() as session:
-            misc.repeat_transaction(build_database.add_gene_info, 10, driver)
+            misc.manage_transaction(build_database.add_gene_info(), driver)
             bar()
 
         for number in range(4):
             with driver.session() as session:
-                misc.repeat_transaction(build_database.add_metabolite_info, 10, driver)
+                misc.manage_transaction(build_database.add_metabolite_info(), driver)
                 bar()
 
         with driver.session() as session:
-            session.execute_write(misc.purge_database, driver)
-            session.execute_write(misc.merge_duplicate_nodes, "", "n.WikiData_ID as wdt")
+            misc.manage_transaction(misc.purge_database(), driver)
+            misc.manage_transaction(misc.merge_duplicate_nodes("", "n.WikiData_ID as wdt"), driver)
             # And, then, we delete duplicate relationships
             #NOTE: We will just do this once to decrease processing time
-            session.execute_write(misc.remove_duplicate_relationships)
+            misc.manage_transaction(misc.remove_duplicate_relationships(), driver)
             bar()
 
         # # At the end, purge the database
@@ -100,8 +100,8 @@ def main():
         # And export it:
         with driver.session() as session:
             # We might want to remove ExternalEquivalent nodes
-            #session.execute_write(misc.remove_ExternalEquivalent)
-            session.execute_write(misc.export_graphml, "graph.graphml")
+            #misc.manage_transaction(misc.remove_ExternalEquivalent)
+            misc.manage_transaction(misc.export_graphml("graph.graphml"), driver)
             bar()
 
     print(f"You can find the exported graph at {Neo4JImportPath}/graph.graphml")
