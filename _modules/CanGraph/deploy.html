@@ -1,0 +1,720 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CanGraph.deploy &#8212; CanGraph 1.0 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <link rel="shortcut icon" href="../../_static/cangraph-mini.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/cangraph-logo.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../index.html">
+                    Main Page
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../Downloads.html">
+   Downloads
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../Tutorials.html">
+   Tutorials
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../Other%20Reading%20Material.html">
+     Other Reading Material
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../Installing%20CanGraph.html">
+     Installing CanGraph
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../Running%20the%20Software.html">
+     Running the Software
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../Understanding%20its%20Outputs.html">
+     Understanding its Outputs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://www.pablomarcos.me/es/posts/master-en-biolog%c3%ada-computacional/tfm/">
+   Presentations
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../CanGraph.html">
+   CanGraph package
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../CanGraph.ExposomeExplorer.html">
+     CanGraph.ExposomeExplorer package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../CanGraph.GraphifyDrugBank.html">
+     CanGraph.GraphifyDrugBank package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../CanGraph.GraphifyHMDB.html">
+     CanGraph.GraphifyHMDB package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../CanGraph.GraphifySMPDB.html">
+     CanGraph.GraphifySMPDB package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../CanGraph.MeSHandMetaNetX.html">
+     CanGraph.MeSHandMetaNetX package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../CanGraph.QueryWikidata.html">
+     CanGraph.QueryWikidata package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../Install%20Apptainer.html">
+     Install Apptainer
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../ToDoList.html">
+   To-Do List
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Logo by <a href="https://www.instagram.com/danonino.caducado/"> Daniel Marcos </a> </br>
+                     Website by <a href="https://www.pablomarcos.me/"> Pablo Marcos </a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/OMB-IARC/CanGraph/"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/OMB-IARC/CanGraph//issues/new?title=Issue%20on%20page%20%2F_modules/CanGraph/deploy.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <h1>Source code for CanGraph.deploy</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="c1"># SPDX-FileCopyrightText: 2022 Pablo Marcos &lt;software@loreak.org&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: MIT</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A python module that simplifies deploying the different formats the program can present itself as:</span>
+
+<span class="sd">* A web documentation that is made using sphinx</span>
+<span class="sd">* A PDF manual likewise made, also using LaTeX</span>
+<span class="sd">* A git repo where the program can be accessed and version-tagged</span>
+<span class="sd">* And, in the future... a singularity container!</span>
+
+<span class="sd">CanGraph.deploy Usage</span>
+<span class="sd">---------------------</span>
+
+<span class="sd">To use this module:</span>
+
+<span class="sd">.. argparse::</span>
+<span class="sd">   :module: CanGraph.deploy</span>
+<span class="sd">   :func: args_parser</span>
+<span class="sd">   :prog: python3 deploy.py</span>
+<span class="sd">   :nodefault:</span>
+
+<span class="sd">.. NOTE:: For this program to work, the Git environment **has to be set up first**.</span>
+<span class="sd">    You can ensure this by using: :obj:`CanGraph.setup.setup_git`</span>
+
+<span class="sd">CanGraph.deploy Functions</span>
+<span class="sd">-------------------------</span>
+
+<span class="sd">This module is comprised of:</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># Import external modules necessary for the script</span>
+<span class="kn">from</span> <span class="nn">git</span> <span class="kn">import</span> <span class="n">Repo</span>    <span class="c1"># Manage Git directly from Python</span>
+<span class="kn">import</span> <span class="nn">argparse</span>         <span class="c1"># Arguments pàrser for Python</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">shutil</span>  <span class="c1"># Vital modules to interact with the filesystem</span>
+
+<div class="viewcode-block" id="args_parser"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.deploy.args_parser">[docs]</a><span class="k">def</span> <span class="nf">args_parser</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parses the command line arguments into a more usable form, providing help and more</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        argparse.ArgumentParser:</span>
+<span class="sd">            A dictionary of the different possible options for the program as keys, specifying their set value.</span>
+<span class="sd">            If no command-line arguments are provided, the help message is shown and the program exits.</span>
+
+<span class="sd">    .. NOTE:: Note that, in Google Docstrings, if you want a multi-line ``Returns`` comment,</span>
+<span class="sd">        you have to start it in a different line :(</span>
+<span class="sd">    .. NOTE:: The return **must** be of type :obj:`argparse.ArgumentParser` for the ``argparse``</span>
+<span class="sd">        directive to work and auto-gen docs</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;--main&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;deploy code to your dev branch&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-d&quot;</span><span class="p">,</span> <span class="s2">&quot;--dev&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;deploy code to your main branch&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-w&quot;</span><span class="p">,</span> <span class="s2">&quot;--web&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;deploys the documentation to the &#39;pages&#39; web site, depending on which is activated&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-p&quot;</span><span class="p">,</span> <span class="s2">&quot;--pdf&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;generates a PDF version of the sphinx manual, and saves it to the repo&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">)</span>
+
+    <span class="c1"># If no args are provided, show the help message</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">print_help</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">parser</span></div>
+
+<div class="viewcode-block" id="git_push"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.deploy.git_push">[docs]</a><span class="k">def</span> <span class="nf">git_push</span><span class="p">(</span><span class="n">path_to_repo</span><span class="p">,</span> <span class="n">remote_names</span><span class="p">,</span> <span class="n">commit_message</span><span class="p">,</span> <span class="n">force</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Pushes the current repo&#39;s state and current branch to a remote git repository</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path_to_repo (str): The path to the local ``.git`` folder</span>
+<span class="sd">        remote_names (list or str): The names of the remote to which we want to commit, which must be previously</span>
+<span class="sd">            configured (see :obj:`CanGraph.setup.setup_git`). e.g.: [&quot;github&quot;, &quot;codeberg&quot;]</span>
+<span class="sd">        commit_message (str): The Git Commit Message for the current repo&#39;s state</span>
+<span class="sd">        force (bool): Whether to force the commit (necessary if you are resetting the HEAD)</span>
+
+<span class="sd">    .. NOTE:: ``gitpython`` is not good at managing complex commit messages (i.e. those with a Subject and a Body).</span>
+<span class="sd">        If you want to add one of those, please, use ``\\n`` as the separator; the function will take care of the rest</span>
+
+<span class="sd">    .. seealso:: The approach taken hare was inspired</span>
+<span class="sd">        by `StackOverflow #41836988 &lt;https://stackoverflow.com/questions/41836988/git-push-via-gitpython&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">repo</span> <span class="o">=</span> <span class="n">Repo</span><span class="p">(</span><span class="n">path_to_repo</span><span class="p">)</span>
+    <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+
+    <span class="n">current_branch</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">active_branch</span><span class="o">.</span><span class="n">name</span>
+    <span class="n">repo</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">commit</span><span class="p">(</span><span class="n">commit_message</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">n&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">remote_names</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">remote</span> <span class="ow">in</span> <span class="n">remote_names</span><span class="p">:</span>
+                    <span class="n">origin</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">remote</span><span class="p">)</span>
+                    <span class="n">origin</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">refspec</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">current_branch</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">current_branch</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">remote_names</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">origin</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">remote_names</span><span class="p">)</span>
+                <span class="n">origin</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">refspec</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">current_branch</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">current_branch</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">)</span>
+            <span class="k">break</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">Please try again (</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">/3)...&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="make_sphinx_prechecks"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.deploy.make_sphinx_prechecks">[docs]</a><span class="k">def</span> <span class="nf">make_sphinx_prechecks</span><span class="p">(</span><span class="n">docs_folder</span> <span class="o">=</span> <span class="s2">&quot;./docs/&quot;</span><span class="p">,</span> <span class="n">work_dir</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">gen_apidocs</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates sphinx api-docs for automatic documentation and uses ``make linkcheck``` to check for broken links</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        gen_apidocs (bool): Whether to re-generate the API docs. Default is ``False`` since we use MD (we dont want RST files)</span>
+<span class="sd">        docs_folder (str): The path to sphinx&#39;s docs folder, where the tests will be run; by default ``./docs/``</span>
+<span class="sd">        work_dir (str): The current Working Directory; by default ``.``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">();</span> <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">docs_folder</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">gen_apidocs</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;First, lets generate all the needed RST auto-doc files that don&#39;t already exist&quot;</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;sphinx-apidoc -o . ..&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;If everything is OK, press [ENTER]&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">);</span> <span class="n">response</span> <span class="o">=</span> <span class="nb">input</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Now, I will use sphinx&#39;s make linkcheck to list all broken links for you to fix them&quot;</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;make linkcheck&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;If everything is OK, press [ENTER]&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">);</span> <span class="n">response</span> <span class="o">=</span> <span class="nb">input</span><span class="p">()</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">cwd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="deploy_webdocs"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.deploy.deploy_webdocs">[docs]</a><span class="k">def</span> <span class="nf">deploy_webdocs</span><span class="p">(</span><span class="n">docs_folder</span> <span class="o">=</span> <span class="s2">&quot;./docs/&quot;</span><span class="p">,</span> <span class="n">work_dir</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">prechecks_done</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">custom_domain</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates the HTML web docs, and publishes it both to Github and Codeberg pages</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        docs_folder (str): The path to sphinx&#39;s docs folder, where the tests will be run;</span>
+<span class="sd">            by default ``./docs/``</span>
+<span class="sd">        work_dir (str): The current Working Directory; by default</span>
+<span class="sd">        prechecks_done (bool): Whether the prechecks present</span>
+<span class="sd">            in `~CanGraph.deploy.make_sphinx_prechecks` have already been made</span>
+<span class="sd">        custom_domain (str): A custom domain to deploy de docs to.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: Whether the prechecks have already been done; always True if the function is run</span>
+
+<span class="sd">    .. NOTE:: For ``custom_domain`` to work, please configure your DNS records apparently</span>
+<span class="sd">    .. NOTE:: ``modules.rst`` is not removed, but it is correctly ignored in conf.py</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;You have decided to update the project&#39;s web documentation.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Avoid double pre-checking with sphinx-linkcheck and sphink-apidoc</span>
+    <span class="k">if</span> <span class="n">prechecks_done</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;I see you have already checked sphinx&#39;s linkcheck and generated the RST auto-doc files&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Let&#39;s skip to sphinx&#39;s make html&quot;</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">make_sphinx_prechecks</span><span class="p">()</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Finally, I will use sphinx&#39;s make html to generate the web docs&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Make HTML documentation</span>
+    <span class="n">cwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">();</span> <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">docs_folder</span><span class="p">));</span> <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;make html&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;If everything is OK, press [ENTER]&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">);</span> <span class="n">response</span> <span class="o">=</span> <span class="nb">input</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done! Now, lets deploy the docs to the Web Repository using Git&quot;</span><span class="p">)</span>
+
+    <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">cwd</span><span class="p">)</span> <span class="c1"># Remember to go back to the workdir!</span>
+
+    <span class="c1"># First, we copy the &quot;docs&quot; folder to a higher folder so that it stops being affected by Git</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;../html&quot;</span><span class="p">)):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;I need to use ../html to preserve files from Git, but path ../html already exists.&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Allow me to remove it? [Y/n]&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">);</span> <span class="n">response</span> <span class="o">=</span> <span class="nb">input</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">response</span> <span class="o">==</span> <span class="s2">&quot;n&quot;</span> <span class="ow">or</span> <span class="n">response</span> <span class="o">==</span> <span class="s2">&quot;N&quot;</span> <span class="ow">or</span> <span class="n">response</span> <span class="o">==</span> <span class="s2">&quot;No&quot;</span> <span class="ow">or</span> <span class="n">response</span> <span class="o">==</span> <span class="s2">&quot;no&quot;</span> <span class="ow">or</span> <span class="n">response</span> <span class="o">==</span> <span class="s2">&quot;NO&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Please fix the folder situation. Exiting...&quot;</span><span class="p">);</span> <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Saving contents from git...&quot;</span><span class="p">)</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="s2">&quot;../html&quot;</span><span class="p">)</span>
+    <span class="n">shutil</span><span class="o">.</span><span class="n">copytree</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;./docs/_build/html/&quot;</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;../html&quot;</span><span class="p">))</span>
+
+    <span class="c1"># Then, we save the git repo&#39;s current state before checkout</span>
+    <span class="n">repo</span> <span class="o">=</span> <span class="n">Repo</span><span class="p">(</span><span class="s2">&quot;.git&quot;</span><span class="p">)</span>
+    <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+    <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">stash</span><span class="p">(</span><span class="s1">&#39;save&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Annotating the current branch name for the future</span>
+    <span class="n">current_branch</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">active_branch</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Let me clean the &#39;pages&#39; repo first...&quot;</span><span class="p">)</span>
+
+    <span class="c1"># And checkout to the pages branch</span>
+    <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">checkout</span><span class="p">(</span><span class="s1">&#39;pages&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Where we remove previous contents</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">item</span> <span class="ow">not</span> <span class="ow">in</span> <span class="s2">&quot;.git&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+    <span class="c1"># Reset to the previous commit to make the repo smaller</span>
+    <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">);</span> <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="s1">&#39;HEAD~1&#39;</span><span class="p">)</span>
+
+    <span class="c1"># And then copy the contents of the saved &quot;html&quot; folder</span>
+    <span class="n">shutil</span><span class="o">.</span><span class="n">copytree</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;../html/&quot;</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;./&quot;</span><span class="p">),</span> <span class="n">dirs_exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># [OPTIONAL] And we add some files to enable accessing from domains</span>
+    <span class="k">if</span> <span class="n">custom_domain</span><span class="p">:</span>
+        <span class="c1"># On Codeberg</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;.domains&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">domains_file</span><span class="p">:</span>
+            <span class="n">domains_file</span><span class="o">.</span><span class="n">write</span><span class="p">((</span><span class="s2">&quot;cangraph.pablomarcos.me </span><span class="se">\n</span><span class="s2">&quot;</span>
+                                <span class="s2">&quot;cangraph.flyingflamingo.codeberg.page </span><span class="se">\n</span><span class="s2">&quot;</span>
+                                <span class="s2">&quot;pages.cangraph.flyingflamingo.codeberg.page </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+
+        <span class="c1"># And on GitHub, too:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;CNAME&quot;</span><span class="p">,</span> <span class="s2">&quot;w+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">CNAME_file</span><span class="p">:</span>
+            <span class="n">CNAME_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;cangraph.pablomarcos.me&quot;&quot;&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Add .nojekyll to force github to correctly process the pages branch</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;.nojekyll&quot;</span><span class="p">,</span> <span class="s2">&quot;w+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">nojekyll</span><span class="p">:</span>
+            <span class="n">nojekyll</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># The repo is ready! Lets commit:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Now, please provide a comment for Git ...&quot;</span><span class="p">)</span>
+    <span class="n">commit_message</span> <span class="o">=</span> <span class="nb">input</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Uploading to Git Repos ...&quot;</span><span class="p">)</span>
+    <span class="n">git_push</span><span class="p">(</span><span class="s2">&quot;.git&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;github&quot;</span><span class="p">,</span> <span class="s2">&quot;codeberg&quot;</span><span class="p">],</span> <span class="n">commit_message</span><span class="p">,</span> <span class="n">force</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># And leave everything as it was</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Site has been deployed&quot;</span><span class="p">)</span>
+    <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;../html/&quot;</span><span class="p">))</span>
+
+    <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">checkout</span><span class="p">(</span><span class="n">current_branch</span><span class="p">)</span>
+    <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">stash</span><span class="p">(</span><span class="s1">&#39;apply&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Prechecks have been done</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="deploy_pdf_manual"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.deploy.deploy_pdf_manual">[docs]</a><span class="k">def</span> <span class="nf">deploy_pdf_manual</span><span class="p">(</span><span class="n">docs_folder</span> <span class="o">=</span> <span class="s2">&quot;./docs/&quot;</span><span class="p">,</span> <span class="n">work_dir</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">manual_location</span> <span class="o">=</span> <span class="s2">&quot;./CanGraph_Manual.pdf&quot;</span><span class="p">,</span>
+                      <span class="n">prechecks_done</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">custom_domain</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parses the command line arguments into a more usable form, providing help and more</span>
+
+<span class="sd">    Generates the PDF docs guide, and publishes it in ``manual_location``</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        docs_folder (str): The path to sphinx&#39;s docs folder, where the tests will be run;</span>
+<span class="sd">            by default ``./docs/``</span>
+<span class="sd">        work_dir (str): The current Working Directory; by default</span>
+<span class="sd">        prechecks_done (bool): Whether the prechecks present</span>
+<span class="sd">            in `~CanGraph.deploy.make_sphinx_prechecks` have already been made</span>
+<span class="sd">        custom_domain (str): A custom domain to deploy de docs to.</span>
+<span class="sd">        manual_location (str): The location (**including filename**) of the finalised PDF manual,</span>
+<span class="sd">            relative to the location of the script</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: Whether the prechecks have already been done; always True if the function is run</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Avoid double pre-checking with sphinx-linkcheck and sphink-apidoc</span>
+    <span class="k">if</span> <span class="n">prechecks_done</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;I see you have already checked sphinx&#39;s linkcheck and generated the RST auto-doc files&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Let&#39;s skip to sphinx&#39;s make latexpdf&quot;</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">make_sphinx_prechecks</span><span class="p">()</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Finally, I will use sphinx&#39;s make latexpdf to generate the web docs&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Generate the PDF docs</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Now, let me use sphinx&#39;s latexpdf to generate a PDF doc&quot;</span><span class="p">)</span>
+    <span class="n">cwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">();</span> <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">docs_folder</span><span class="p">));</span> <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;make latexpdf &gt; /dev/null&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;If everything is OK, press [ENTER]&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">);</span> <span class="n">response</span> <span class="o">=</span> <span class="nb">input</span><span class="p">()</span>
+
+    <span class="c1"># And copy them in the appropriate place</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">cwd</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">manual_location</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">manual_location</span><span class="p">)</span>
+    <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;./docs/_build/latex/cangraph.pdf&quot;</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">manual_location</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The PDF Manual has been copied in the Repo&#39;s Root Folder (CanGraph_Manual.pdf)&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Prechecks have been done</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="deploy_code"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.deploy.deploy_code">[docs]</a><span class="k">def</span> <span class="nf">deploy_code</span><span class="p">(</span><span class="n">branch</span> <span class="o">=</span> <span class="s2">&quot;dev&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Deploys code from a given branch to the corresponding remote.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        branch (str): The name of the branch of the **local** git repo that we want to deploy</span>
+
+<span class="sd">    .. NOTE:: Normally, the ``pages`` branch should be published using :obj:`~CanGraph.deploy.deploy_webdocs`,</span>
+<span class="sd">        which in theory would be weird to publish without updating the docs first</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Ask for a Git Commit Message</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;You have decided to push the updated code to your </span><span class="si">{</span><span class="n">branch</span><span class="si">}</span><span class="s2"> branch.&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;First, please provide a comment for Git ...&quot;</span><span class="p">)</span>
+    <span class="n">commit_message</span> <span class="o">=</span> <span class="nb">input</span><span class="p">()</span>
+
+    <span class="n">repo</span> <span class="o">=</span> <span class="n">Repo</span><span class="p">(</span><span class="s1">&#39;.git&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Annotating the current branch name for the future</span>
+    <span class="n">current_branch</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">active_branch</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="k">if</span> <span class="n">branch</span> <span class="o">==</span> <span class="s2">&quot;main&quot;</span><span class="p">:</span>
+        <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+        <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">stash</span> <span class="p">(</span><span class="s2">&quot;save&quot;</span><span class="p">)</span>
+        <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">checkout</span><span class="p">(</span><span class="s2">&quot;main&quot;</span><span class="p">)</span>
+        <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="s2">&quot;dev&quot;</span><span class="p">)</span>
+
+        <span class="n">commit_message</span> <span class="o">=</span> <span class="s2">&quot;🔀 Merged advances from dev into main&quot;</span>
+
+        <span class="n">git_push</span><span class="p">(</span><span class="s2">&quot;.git&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;github&quot;</span><span class="p">,</span> <span class="s2">&quot;codeberg&quot;</span><span class="p">],</span> <span class="n">commit_message</span><span class="p">,</span> <span class="n">force</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># Finally, we reset the dev branch</span>
+        <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">branch</span><span class="p">(</span><span class="s2">&quot;-D&quot;</span><span class="p">,</span> <span class="n">current_branch</span><span class="p">)</span>
+        <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">checkout</span><span class="p">(</span><span class="s2">&quot;-b&quot;</span><span class="p">,</span> <span class="n">current_branch</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">branch</span> <span class="o">==</span> <span class="s2">&quot;dev&quot;</span><span class="p">:</span>
+        <span class="c1"># And git add / commit / push</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Uploading to Git Repos ...&quot;</span><span class="p">)</span>
+        <span class="n">git_push</span><span class="p">(</span><span class="s2">&quot;.git&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;github&quot;</span><span class="p">,</span> <span class="s2">&quot;codeberg&quot;</span><span class="p">],</span> <span class="n">commit_message</span><span class="p">,</span> <span class="n">force</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.deploy.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The function that executes the code</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Parse the command line arguments</span>
+    <span class="c1"># Done first in order to show errors if bad commands are issued</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">args_parser</span><span class="p">();</span> <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hi! This is a helper program intended to ease the burden of maintaining Codeberg </span><span class="se">\n</span><span class="s2">&quot;</span>
+          <span class="s2">&quot;and GitHub mirror repos for the CanGraph project, as well as some other things, </span><span class="se">\n</span><span class="s2">&quot;</span>
+          <span class="s2">&quot;such as the Singularity Container or the PDF Manuals&quot;</span><span class="p">)</span>
+
+    <span class="n">prechecks_done</span> <span class="o">=</span> <span class="kc">False</span> <span class="c1"># No prechecks are done at first, of course</span>
+
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;./docs/_build/&quot;</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Let me remove any cached files in the &#39;_build&#39; folder...&quot;</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="s2">&quot;./docs/_build/&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Do what we were asked to do</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">web</span><span class="p">:</span>
+        <span class="n">prechecks_done</span> <span class="o">=</span> <span class="n">deploy_webdocs</span><span class="p">(</span><span class="n">prechecks_done</span><span class="o">=</span><span class="n">prechecks_done</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">pdf</span><span class="p">:</span>
+        <span class="n">prechecks_done</span> <span class="o">=</span> <span class="n">deploy_pdf_manual</span><span class="p">(</span><span class="n">prechecks_done</span><span class="o">=</span><span class="n">prechecks_done</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">dev</span><span class="p">:</span>
+        <span class="n">deploy_code</span><span class="p">(</span><span class="n">branch</span> <span class="o">=</span> <span class="s2">&quot;dev&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">main</span><span class="p">:</span>
+        <span class="n">deploy_code</span><span class="p">(</span><span class="n">branch</span> <span class="o">=</span> <span class="s2">&quot;main&quot;</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;That was it! Thanks for using this helper script :p&quot;</span><span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Pablo Marcos<br/>
+  
+      &copy; Copyright 2022, Pablo Marcos &lt;software@loreak.org&gt;.<br/>
+    Last updated on Dec 17, 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

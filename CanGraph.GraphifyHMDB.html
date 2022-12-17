@@ -1,0 +1,1051 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>CanGraph.GraphifyHMDB package &#8212; CanGraph 1.0 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script src="_static/design-tabs.js"></script>
+    <link rel="shortcut icon" href="_static/cangraph-mini.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="CanGraph.GraphifySMPDB package" href="CanGraph.GraphifySMPDB.html" />
+    <link rel="prev" title="CanGraph.GraphifyDrugBank package" href="CanGraph.GraphifyDrugBank.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="_static/cangraph-logo.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="index.html">
+                    Main Page
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="Downloads.html">
+   Downloads
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="Tutorials.html">
+   Tutorials
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Other%20Reading%20Material.html">
+     Other Reading Material
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Installing%20CanGraph.html">
+     Installing CanGraph
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Running%20the%20Software.html">
+     Running the Software
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Understanding%20its%20Outputs.html">
+     Understanding its Outputs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://www.pablomarcos.me/es/posts/master-en-biolog%c3%ada-computacional/tfm/">
+   Presentations
+  </a>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="CanGraph.html">
+   CanGraph package
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="CanGraph.ExposomeExplorer.html">
+     CanGraph.ExposomeExplorer package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="CanGraph.GraphifyDrugBank.html">
+     CanGraph.GraphifyDrugBank package
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     CanGraph.GraphifyHMDB package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="CanGraph.GraphifySMPDB.html">
+     CanGraph.GraphifySMPDB package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="CanGraph.MeSHandMetaNetX.html">
+     CanGraph.MeSHandMetaNetX package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="CanGraph.QueryWikidata.html">
+     CanGraph.QueryWikidata package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Install%20Apptainer.html">
+     Install Apptainer
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ToDoList.html">
+   To-Do List
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Logo by <a href="https://www.instagram.com/danonino.caducado/"> Daniel Marcos </a> </br>
+                     Website by <a href="https://www.pablomarcos.me/"> Pablo Marcos </a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/OMB-IARC/CanGraph/"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/OMB-IARC/CanGraph//issues/new?title=Issue%20on%20page%20%2FCanGraph.GraphifyHMDB.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/OMB-IARC/CanGraph/edit/main/docs/CanGraph.GraphifyHMDB.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/CanGraph.GraphifyHMDB.md.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> In this page
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#important-notices">
+   Important Notices
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-CanGraph.GraphifyHMDB.build_database">
+   CanGraph.GraphifyHMDB.build_database module
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-CanGraph.GraphifyHMDB.main">
+   CanGraph.GraphifyHMDB.main module
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>CanGraph.GraphifyHMDB package</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> In this page </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#important-notices">
+   Important Notices
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-CanGraph.GraphifyHMDB.build_database">
+   CanGraph.GraphifyHMDB.build_database module
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-CanGraph.GraphifyHMDB.main">
+   CanGraph.GraphifyHMDB.main module
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <!--
+SPDX-FileCopyrightText: 2022 Pablo Marcos <software@loreak.org>
+
+SPDX-License-Identifier: MIT
+-->
+<section id="cangraph-graphifyhmdb-package">
+<h1>CanGraph.GraphifyHMDB package<a class="headerlink" href="#cangraph-graphifyhmdb-package" title="Permalink to this headline">#</a></h1>
+<!--
+SPDX-FileCopyrightText: 2022 Pablo Marcos <software@loreak.org>
+
+SPDX-License-Identifier: MIT
+-->
+<p><img alt="The Schema for the GraphifyHMDB package, shown on Neo4J browser" src="_images/hmdb_schema.png" />
+<br></p>
+<p>This script, created as part of my Master’s Intenship at IARC, imports nodes from the <a class="reference external" href="https://hmdb.ca/">Human Metabolome Database</a> (a high quality, database containing a list of metabolites and proteins associated to different diseases) to Neo4J format in an automated way, providing an export in GraphML format.</p>
+<p>To run, it uses <code class="docutils literal notranslate"><span class="pre">alive_progress</span></code> to generate an interactive progress bar (that shows the script is still running through its most time-consuming parts) and the <code class="docutils literal notranslate"><span class="pre">neo4j</span></code> python driver. This requirements can be installed using: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirements.txt</span></code>.</p>
+<p>To run the script itself, use:</p>
+<p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">main.py</span> <span class="pre">neo4jadress</span> <span class="pre">username</span> <span class="pre">databasepassword</span></code></p>
+<p>where:</p>
+<ul class="simple">
+<li><p><strong>neo4jadress</strong>: is the URL of the database, in neo4j:// or bolt:// format</p></li>
+<li><p><strong>username</strong>: the username for your neo4j instance. Remember, the default is neo4j</p></li>
+<li><p><strong>password</strong>: the passowrd for your database. Since the arguments are passed by BaSH onto python3, you might need to escape special characters</p></li>
+</ul>
+<p>Please note that there are two kinds of functions in the associated code: those that use python f-strings, which themselves contain text that <em>cannot</em> be directly copied into Neo4J (for instance, double brackets have to be turned into simple brackets) and normal multi-line strings, which can. This is because f-strings allow for variable customization, while normal strings dont.</p>
+<p>An archived version of this repository that takes into account the gitignored files can be created using: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">archive</span> <span class="pre">HEAD</span> <span class="pre">-o</span> <span class="pre">${PWD##*/}.zip</span></code></p>
+<section id="important-notices">
+<h2>Important Notices<a class="headerlink" href="#important-notices" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>Please ensure you have internet access, enough espace in your hard drive (around 5 GB) and read-write access in <code class="docutils literal notranslate"><span class="pre">./xmlfolder</span></code>. The files needed to build the database will be stored there.</p></li>
+<li><p>There are two kinds of high-level nodes stored in this database: “Metabolites”, which are individual compounds present in the Human Metabolome; and “Proteins”, which are normally enzimes and are related to one or multiple metabolites. There are different types of metabolites, but they were all imported in the same way; their origin can be differenced by the “<biospecimen>” field on the corresponding “Concentration” nodes. You could run a query such as: <code class="docutils literal notranslate"><span class="pre">MATCH</span> <span class="pre">(n:Metabolite)-[r:MEASURED_AT]-(c:Concentration)</span> <span class="pre">RETURN</span> <span class="pre">DISTINCT</span> <span class="pre">c.Biospecimen</span></code></p></li>
+<li><p>Some XML tags have been intentionally not processed; for example, the <substituents> tag seemed like too much info unrelated to our project, or the <spectra> tags, which could be useful but seemed to only link to external DBs</p></li>
+</ul>
+<hr class="docutils" />
+<p>The package consists of the following modules:</p>
+</section>
+<section id="module-CanGraph.GraphifyHMDB.build_database">
+<span id="cangraph-graphifyhmdb-build-database-module"></span><h2>CanGraph.GraphifyHMDB.build_database module<a class="headerlink" href="#module-CanGraph.GraphifyHMDB.build_database" title="Permalink to this headline">#</a></h2>
+<p>A python module that provides the necessary functions to transition the HMDB database to graph format,
+either from scratch importing all the nodes (as showcased in <a class="reference internal" href="#module-CanGraph.GraphifyHMDB.main" title="CanGraph.GraphifyHMDB.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CanGraph.GraphifyHMDB.main</span></code></a>) or in a case-by-case basis,
+to annotate existing metabolites (as showcased in <a class="reference internal" href="CanGraph.html#module-CanGraph.main" title="CanGraph.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CanGraph.main</span></code></a>).</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyHMDB.build_database.add_biological_properties">
+<span class="sig-name descname"><span class="pre">add_biological_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/GraphifyHMDB/build_database.html#add_biological_properties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.GraphifyHMDB.build_database.add_biological_properties" title="Permalink to this definition">#</a></dt>
+<dd><p>Adds biological properties to existing “Metabolite” nodes based on XML files obtained from the HMDB website.
+In this case, only properties labeled as &lt;predicted_properties&gt; are added.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v5.2)"><em>neo4j.Session</em></a>) – The session under which the driver is running</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the XML file that is being imported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v5.2)">neo4j.Result</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Another option would have been to auto-add all the properties, and name them using
+RETURN “Predicted ” + apoc.text.capitalizeAll(replace(kind, “_”, ” “)), value; however, this
+way we can select and not duplicate / overwrite values.</p>
+</div>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>It would be nice to be able to distinguish between experimental and predicted properties</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyHMDB.build_database.add_concentrations_abnormal">
+<span class="sig-name descname"><span class="pre">add_concentrations_abnormal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/GraphifyHMDB/build_database.html#add_concentrations_abnormal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.GraphifyHMDB.build_database.add_concentrations_abnormal" title="Permalink to this definition">#</a></dt>
+<dd><p>Creates “Concentration” nodes based on XML files obtained from the HMDB website.
+In this function, only metabolites that are labeled as “abnormal_concentration” are added.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v5.2)"><em>neo4j.Session</em></a>) – The session under which the driver is running</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the XML file that is being imported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v5.2)">neo4j.Result</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Here, an UNWIND clause is used instead of a FOREACH clause. This provides
+better performance, since, unlike FOREACH, UNWIND does not process rows with empty values</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Using the CREATE row forces the creation of a Concentration node, even when
+some values might be missing. However, this means some bogus nodes could be added,
+which MUST be accounted for at the end of the DB-Creation process.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyHMDB.build_database.add_concentrations_normal">
+<span class="sig-name descname"><span class="pre">add_concentrations_normal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/GraphifyHMDB/build_database.html#add_concentrations_normal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.GraphifyHMDB.build_database.add_concentrations_normal" title="Permalink to this definition">#</a></dt>
+<dd><p>Creates “Concentration” nodes based on XML files obtained from the HMDB website.
+In this function, only metabolites that are labeled as “normal_concentration” are added.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v5.2)"><em>neo4j.Session</em></a>) – The session under which the driver is running</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the XML file that is being imported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v5.2)">neo4j.Result</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Here, an UNWIND clause is used instead of a FOREACH clause. This provides
+better performance, since, unlike FOREACH, UNWIND does not process rows with empty values</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Using the CREATE row forces the creation of a Concentration node, even when
+some values might be missing. However, this means some bogus nodes could be added,
+which MUST be accounted for at the end of the DB-Creation process.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyHMDB.build_database.add_diseases">
+<span class="sig-name descname"><span class="pre">add_diseases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/GraphifyHMDB/build_database.html#add_diseases"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.GraphifyHMDB.build_database.add_diseases" title="Permalink to this definition">#</a></dt>
+<dd><p>Creates “Publication” nodes based on XML files obtained from the HMDB website.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v5.2)"><em>neo4j.Session</em></a>) – The session under which the driver is running</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the XML file that is being imported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v5.2)">neo4j.Result</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Here, an UNWIND clause is used instead of a FOREACH clause. This provides
+better performance, since, unlike FOREACH, UNWIND does not process rows with empty values
+(and, logically, there should be no Publication if there is no Disease)</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Publications are created with a (m)-[r:CITED_IN]-&gt;(p) relation with Metabolite nodes.
+If one wants to find the Publication nodes related to a given Metabolite/Disease relation,
+one can use:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">MATCH</span> <span class="n">p</span><span class="o">=</span><span class="p">()</span><span class="o">-</span><span class="p">[</span><span class="n">r</span><span class="p">:</span><span class="n">RELATED_WITH</span><span class="p">]</span><span class="o">-&gt;</span><span class="p">()</span>
+  <span class="n">WITH</span> <span class="n">split</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">PubMed_ID</span><span class="p">,</span> <span class="s2">&quot;,&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">pubmed</span>
+    <span class="n">UNWIND</span> <span class="n">pubmed</span> <span class="k">as</span> <span class="n">find_this</span>
+    <span class="n">MATCH</span> <span class="p">(</span><span class="n">p</span><span class="p">:</span><span class="n">Publication</span><span class="p">)</span>
+      <span class="n">WHERE</span> <span class="n">p</span><span class="o">.</span><span class="n">PubMed_ID</span> <span class="o">=</span> <span class="n">find_this</span>
+<span class="n">RETURN</span> <span class="n">p</span>
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyHMDB.build_database.add_experimental_properties">
+<span class="sig-name descname"><span class="pre">add_experimental_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/GraphifyHMDB/build_database.html#add_experimental_properties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.GraphifyHMDB.build_database.add_experimental_properties" title="Permalink to this definition">#</a></dt>
+<dd><p>Adds properties to existing “Metabolite” nodes based on XML files obtained from the HMDB website.
+In this case, only properties labeled as &lt;experimental_properties&gt; are added.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v5.2)"><em>neo4j.Session</em></a>) – The session under which the driver is running</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the XML file that is being imported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v5.2)">neo4j.Result</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Another option would have been to auto-add all the properties, and name them using
+RETURN “Experimental ” + apoc.text.capitalizeAll(replace(kind, “_”, ” “)), value; however, this
+way we can select and not duplicate / overwrite values.</p>
+</div>
+<div class="admonition-todo admonition" id="id2">
+<p class="admonition-title">Todo</p>
+<p>It would be nice to be able to distinguish between experimental and predicted properties</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyHMDB.build_database.add_gene_properties">
+<span class="sig-name descname"><span class="pre">add_gene_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/GraphifyHMDB/build_database.html#add_gene_properties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.GraphifyHMDB.build_database.add_gene_properties" title="Permalink to this definition">#</a></dt>
+<dd><p>Adds some properties to existing “Protein” nodes based on XML files obtained from the HMDB website.
+In this case, properties will mostly relate to the gene from which the protein originates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v5.2)"><em>neo4j.Session</em></a>) – The session under which the driver is running</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the XML file that is being imported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v5.2)">neo4j.Result</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We are not creating “Gene” nodes (even though each protein comes from a given gene)
+because we believe not enough information is being given about them.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyHMDB.build_database.add_general_references">
+<span class="sig-name descname"><span class="pre">add_general_references</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_of</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/GraphifyHMDB/build_database.html#add_general_references"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.GraphifyHMDB.build_database.add_general_references" title="Permalink to this definition">#</a></dt>
+<dd><p>Creates “Publication” nodes based on XML files obtained from the HMDB website.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v5.2)"><em>neo4j.Session</em></a>) – The session under which the driver is running</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the XML file that is being imported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v5.2)">neo4j.Result</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Since not all nodes present a “PubMed_ID” field (which would be ideal to uniquely-identify
+Publications, as the “Text” field is way more prone to typos/errors), nodes will be created using
+the “Authors” field. This means some duplicates might exist, which should be accounted for.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Unlike the rest, here we are not matching metabolites, but ALSO proteins. This is intentional.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyHMDB.build_database.add_go_classifications">
+<span class="sig-name descname"><span class="pre">add_go_classifications</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/GraphifyHMDB/build_database.html#add_go_classifications"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.GraphifyHMDB.build_database.add_go_classifications" title="Permalink to this definition">#</a></dt>
+<dd><p>Creates “Gene Ontology” nodes based on XML files obtained from the HMDB website.
+This relates each protein to some GO-Terms</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v5.2)"><em>neo4j.Session</em></a>) – The session under which the driver is running</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the XML file that is being imported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v5.2)">neo4j.Result</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyHMDB.build_database.add_metabolite_associations">
+<span class="sig-name descname"><span class="pre">add_metabolite_associations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/GraphifyHMDB/build_database.html#add_metabolite_associations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.GraphifyHMDB.build_database.add_metabolite_associations" title="Permalink to this definition">#</a></dt>
+<dd><p>Adds associations contained in the “protein” file, between proteins and metabolites.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v5.2)"><em>neo4j.Session</em></a>) – The session under which the driver is running</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the XML file that is being imported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v5.2)">neo4j.Result</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Like he “add_metabolite_associations” function, this creates non-directional
+relationships (m)-[r:ASSOCIATED_WITH]-(p) ; this helps duplicates be detected.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The “ON CREATE SET” clause for the “Name” param ensures no overwriting</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyHMDB.build_database.add_metabolite_references">
+<span class="sig-name descname"><span class="pre">add_metabolite_references</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/GraphifyHMDB/build_database.html#add_metabolite_references"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.GraphifyHMDB.build_database.add_metabolite_references" title="Permalink to this definition">#</a></dt>
+<dd><p>Creates references for relations betweens Protein nodes and Metabolite nodes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v5.2)"><em>neo4j.Session</em></a>) – The session under which the driver is running</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the XML file that is being imported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v5.2)">neo4j.Result</a></p>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Unfortunately, Neo4J makes it really, really, really difficult to work with XML,
+and so, this time, a r.PubMed_ID list with the references could not be created. Nonetheless,
+I considered adding this useful.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyHMDB.build_database.add_metabolites">
+<span class="sig-name descname"><span class="pre">add_metabolites</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/GraphifyHMDB/build_database.html#add_metabolites"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.GraphifyHMDB.build_database.add_metabolites" title="Permalink to this definition">#</a></dt>
+<dd><p>Creates “Metabolite” nodes based on XML files obtained from the HMDB website,
+adding some essential identifiers and external properties.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>This way of working has been taken from
+<a class="reference external" href="https://lyonwj.com/blog/grandstack-podcast-app-parsing-xml-neo4j-rss-episodes-playlists">William Lyon’s Blog</a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v5.2)"><em>neo4j.Session</em></a>) – The session under which the driver is running</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the XML file that is being imported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v5.2)">neo4j.Result</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyHMDB.build_database.add_predicted_properties">
+<span class="sig-name descname"><span class="pre">add_predicted_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/GraphifyHMDB/build_database.html#add_predicted_properties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.GraphifyHMDB.build_database.add_predicted_properties" title="Permalink to this definition">#</a></dt>
+<dd><p>Adds properties to existing “Metabolite” nodes based on XML files obtained from the HMDB website.
+In this case, only properties labeled as &lt;predicted_properties&gt; are added.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v5.2)"><em>neo4j.Session</em></a>) – The session under which the driver is running</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the XML file that is being imported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v5.2)">neo4j.Result</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Another option would have been to auto-add all the properties, and name them using
+RETURN “Predicted ” + apoc.text.capitalizeAll(replace(kind, “_”, ” “)), value; however, this
+way we can select and not duplicate / overwrite values.</p>
+</div>
+<div class="admonition-todo admonition" id="id3">
+<p class="admonition-title">Todo</p>
+<p>It would be nice to be able to distinguish between experimental and predicted properties</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyHMDB.build_database.add_protein_associations">
+<span class="sig-name descname"><span class="pre">add_protein_associations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/GraphifyHMDB/build_database.html#add_protein_associations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.GraphifyHMDB.build_database.add_protein_associations" title="Permalink to this definition">#</a></dt>
+<dd><p>Creates “Protein” nodes based on XML files obtained from the HMDB website.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v5.2)"><em>neo4j.Session</em></a>) – The session under which the driver is running</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the XML file that is being imported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v5.2)">neo4j.Result</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Unlike the “add_protein” function, this creates Proteins based on info on the
+“Metabolite” files, not on the “Protein” files themselves. This could mean node duplication, but,
+hopefully, the MERGE by Accession will mean that this duplicates will be catched.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyHMDB.build_database.add_protein_properties">
+<span class="sig-name descname"><span class="pre">add_protein_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/GraphifyHMDB/build_database.html#add_protein_properties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.GraphifyHMDB.build_database.add_protein_properties" title="Permalink to this definition">#</a></dt>
+<dd><p>Adds some properties to existing “Protein” nodes based on XML files obtained from the HMDB website.
+In this case, properties will mostly relate to the protein itself.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v5.2)"><em>neo4j.Session</em></a>) – The session under which the driver is running</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the XML file that is being imported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v5.2)">neo4j.Result</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The “signal_regions” and the “transmembrane_regions” properties were left out
+because, after a preliminary search, they were mostly empty</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyHMDB.build_database.add_proteins">
+<span class="sig-name descname"><span class="pre">add_proteins</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/GraphifyHMDB/build_database.html#add_proteins"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.GraphifyHMDB.build_database.add_proteins" title="Permalink to this definition">#</a></dt>
+<dd><p>Creates “Protein” nodes based on XML files obtained from the HMDB website.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v5.2)"><em>neo4j.Session</em></a>) – The session under which the driver is running</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the XML file that is being imported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v5.2)">neo4j.Result</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We are not creating “Gene” nodes (even though each protein comes from a given gene)
+because we believe not enough information is being given about them.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyHMDB.build_database.add_taxonomy">
+<span class="sig-name descname"><span class="pre">add_taxonomy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/GraphifyHMDB/build_database.html#add_taxonomy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.GraphifyHMDB.build_database.add_taxonomy" title="Permalink to this definition">#</a></dt>
+<dd><p>Creates “Taxonomy” nodes based on XML files obtained from the HMDB website.
+These represent the “kind” of metabolite we are dealing with (Family, etc)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tx</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session" title="(in Neo4j Python Driver v5.2)"><em>neo4j.Session</em></a>) – The session under which the driver is running</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the XML file that is being imported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v5.2)">neo4j.Result</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It only creates relationships in the Kingdom -&gt; Super Class -&gt; Class -&gt; Subclass
+direction, and from any node -&gt; Metabolite. This means that, if any member of the
+Kingdom -&gt; Super Class -&gt; Class -&gt; Subclass is absent, the line will be broken; hopefully
+in that case a new metabolite will come in to rescue and settle the relation!</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyHMDB.build_database.build_from_metabolite_file">
+<span class="sig-name descname"><span class="pre">build_from_metabolite_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">driver</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/GraphifyHMDB/build_database.html#build_from_metabolite_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.GraphifyHMDB.build_database.build_from_metabolite_file" title="Permalink to this definition">#</a></dt>
+<dd><p>A function able to build a portion of the HMDB database in graph format, provided that one “Metabolite” XML is supplied to it.
+This are downloaded separately from the website, as all the files that are not <code class="docutils literal notranslate"><span class="pre">`hmdb_proteins.zip`</span></code>, and can be presented either
+as the full file, or as a splitted version of it, with just one item per file (which is recommended due to memory limitations)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>newfile</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The path of the XML file to import</p></li>
+<li><p><strong>driver</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Driver" title="(in Neo4j Python Driver v5.2)"><em>neo4j.Driver</em></a>) – Neo4J’s Bolt Driver currently in use</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>This function modifies the Neo4J Database as desired, but does not produce any particular return.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyHMDB.build_database.build_from_protein_file">
+<span class="sig-name descname"><span class="pre">build_from_protein_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">driver</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/GraphifyHMDB/build_database.html#build_from_protein_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.GraphifyHMDB.build_database.build_from_protein_file" title="Permalink to this definition">#</a></dt>
+<dd><p>A function able to build a portion of the HMDB database in graph format, provided that one “Protein” XML is supplied to it.
+This are downloaded separately from the website, as <code class="docutils literal notranslate"><span class="pre">`hmdb_proteins.zip`</span></code>, and can be presented either as the full file,
+or as a splitted version of it, with just one item per file (which is recommended due to memory limitations)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>newfile</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The path of the XML file to import</p></li>
+<li><p><strong>driver</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Driver" title="(in Neo4j Python Driver v5.2)"><em>neo4j.Driver</em></a>) – Neo4J’s Bolt Driver currently in use</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>This function modifies the Neo4J Database as desired, but does not produce any particular return.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-CanGraph.GraphifyHMDB.main">
+<span id="cangraph-graphifyhmdb-main-module"></span><h2>CanGraph.GraphifyHMDB.main module<a class="headerlink" href="#module-CanGraph.GraphifyHMDB.main" title="Permalink to this headline">#</a></h2>
+<p>A python module that leverages the functions present in the <a class="reference internal" href="#module-CanGraph.GraphifyHMDB.build_database" title="CanGraph.GraphifyHMDB.build_database"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_database</span></code></a>
+module to recreate <a class="reference external" href="https://hmdb.ca/">the HMDB database</a> using a graph forma and Neo4J, and then provides an GraphML export file.</p>
+<p>Please note that, to work, the functions here pre-suppose you have internet access, which will be used to download
+HMDB’s XMLs under <code class="docutils literal notranslate"><span class="pre">`./xmlfolder/`</span></code> (please ensure you have read-write access there).</p>
+<p>For more details on how to run this script, please consult the package’s README</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.GraphifyHMDB.main.main">
+<span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/GraphifyHMDB/main.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.GraphifyHMDB.main.main" title="Permalink to this definition">#</a></dt>
+<dd><p>The function that executes the code</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="CanGraph.GraphifyDrugBank.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">CanGraph.GraphifyDrugBank package</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="CanGraph.GraphifySMPDB.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">CanGraph.GraphifySMPDB package</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Pablo Marcos<br/>
+  
+      &copy; Copyright 2022, Pablo Marcos &lt;software@loreak.org&gt;.<br/>
+    Last updated on Dec 17, 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

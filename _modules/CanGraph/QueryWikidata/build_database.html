@@ -1,0 +1,1313 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CanGraph.QueryWikidata.build_database &#8212; CanGraph 1.0 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script src="../../../_static/design-tabs.js"></script>
+    <link rel="shortcut icon" href="../../../_static/cangraph-mini.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../../_static/cangraph-logo.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../index.html">
+                    Main Page
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../Downloads.html">
+   Downloads
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../Tutorials.html">
+   Tutorials
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../Other%20Reading%20Material.html">
+     Other Reading Material
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../Installing%20CanGraph.html">
+     Installing CanGraph
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../Running%20the%20Software.html">
+     Running the Software
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../Understanding%20its%20Outputs.html">
+     Understanding its Outputs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://www.pablomarcos.me/es/posts/master-en-biolog%c3%ada-computacional/tfm/">
+   Presentations
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../CanGraph.html">
+   CanGraph package
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../CanGraph.ExposomeExplorer.html">
+     CanGraph.ExposomeExplorer package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../CanGraph.GraphifyDrugBank.html">
+     CanGraph.GraphifyDrugBank package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../CanGraph.GraphifyHMDB.html">
+     CanGraph.GraphifyHMDB package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../CanGraph.GraphifySMPDB.html">
+     CanGraph.GraphifySMPDB package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../CanGraph.MeSHandMetaNetX.html">
+     CanGraph.MeSHandMetaNetX package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../CanGraph.QueryWikidata.html">
+     CanGraph.QueryWikidata package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../Install%20Apptainer.html">
+     Install Apptainer
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../ToDoList.html">
+   To-Do List
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Logo by <a href="https://www.instagram.com/danonino.caducado/"> Daniel Marcos </a> </br>
+                     Website by <a href="https://www.pablomarcos.me/"> Pablo Marcos </a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/OMB-IARC/CanGraph/"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/OMB-IARC/CanGraph//issues/new?title=Issue%20on%20page%20%2F_modules/CanGraph/QueryWikidata/build_database.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <h1>Source code for CanGraph.QueryWikidata.build_database</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="c1"># SPDX-FileCopyrightText: 2022 Pablo Marcos &lt;software@loreak.org&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: MIT</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A python module that provides the necessary functions to transition selected parts of the Wikidata database to graph format,</span>
+<span class="sd">either from scratch importing all the nodes (as showcased in :obj:`CanGraph.QueryWikidata.main`) or in a case-by-case basis,</span>
+<span class="sd">to annotate existing metabolites (as showcased in :obj:`CanGraph.main`).</span>
+
+<span class="sd">.. NOTE:: You may notice some functions here present the ``**kwargs`` arguments option.</span>
+<span class="sd">    This is in order to make the functions compatible with the</span>
+<span class="sd">    :obj:`CanGraph.miscelaneous.manage_transaction` function, which might send back a variable</span>
+<span class="sd">    number of arguments (although technically it could work without the ``**kwargs`` option)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="initial_cancer_discovery"><a class="viewcode-back" href="../../../CanGraph.QueryWikidata.html#CanGraph.QueryWikidata.build_database.initial_cancer_discovery">[docs]</a><span class="k">def</span> <span class="nf">initial_cancer_discovery</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Neo4J Cypher Statment that queries wikidata for Human Cancers. Since using the &quot;afflicts:human&quot;</span>
+<span class="sd">    tag didnt have much use here, I used a simple workaround: Query wikidata for all humans, and, among them,</span>
+<span class="sd">    find all of this for which their cause of death was a subclass of &quot;Cancer&quot; (Q12078). Unfortunaltely,</span>
+<span class="sd">    some of them were diagnosed &quot;Cancer&quot; (Q12078), which is too general, so I removed it.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        WITH &#39;SELECT DISTINCT ?cause_of_death ?cause_of_death_name</span>
+<span class="s2">        WHERE {</span>
+<span class="s2">                ?human wdt:P31 wd:Q5;</span>
+<span class="s2">                wdt:P509 ?cause_of_death.</span>
+<span class="s2">                ?cause_of_death wdt:P279* wd:Q12078.</span>
+<span class="s2">        SERVICE wikibase:label { bd:serviceParam wikibase:language &quot;en&quot;.</span>
+<span class="s2">                                 ?cause_of_death rdfs:label ?cause_of_death_name. }</span>
+<span class="s2">                }&#39; AS sparql</span>
+
+<span class="s2">        CALL apoc.load.jsonParams(</span>
+<span class="s2">                replace(&quot;https://query.wikidata.org/sparql?query=&quot; + apoc.text.urlencode(sparql), &quot;</span><span class="se">\n</span><span class="s2">&quot;, &quot;&quot;),</span>
+<span class="s2">                { Accept: &quot;application/sparql-results+json&quot; }, null )</span>
+<span class="s2">        YIELD value</span>
+
+<span class="s2">        UNWIND value[&#39;results&#39;][&#39;bindings&#39;] as row</span>
+<span class="s2">        WITH row[&#39;cause_of_death_name&#39;][&#39;value&#39;] as label,</span>
+<span class="s2">            row[&#39;cause_of_death&#39;][&#39;value&#39;] as url,</span>
+<span class="s2">            split(row[&#39;cause_of_death&#39;][&#39;value&#39;],&#39;/&#39;)[-1] as id</span>
+
+<span class="s2">        CREATE (c:Disease)</span>
+<span class="s2">        SET c.Name = label,</span>
+<span class="s2">            c.URL = url,</span>
+<span class="s2">            c.WikiData_ID = id</span>
+
+<span class="s2">        WITH c</span>
+<span class="s2">        MATCH (n:Disease)</span>
+<span class="s2">            WHERE n.WikiData_ID = &quot;Q12078&quot;</span>
+<span class="s2">        DETACH DELETE n</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="find_subclass_of_disease"><a class="viewcode-back" href="../../../CanGraph.QueryWikidata.html#CanGraph.QueryWikidata.build_database.find_subclass_of_disease">[docs]</a><span class="k">def</span> <span class="nf">find_subclass_of_disease</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Neo4J Cypher Statment that queries wikidata for subclasses of &quot;Disease&quot; nodes already</span>
+<span class="sd">    present on the Database. Since these are expected to only affect humans, this subclasses</span>
+<span class="sd">    should also, only affect humans</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: A CYPHER query that modifies the DB according to the CYPHER statement contained in the function.</span>
+
+<span class="sd">    .. NOTE:: We are forcing c.WikiData_ID to not be null or &quot;&quot;. This is not necessary if we are just building the wikidata database,</span>
+<span class="sd">        because there will always be a WikiData_ID, but it is useful in the rest of the cases</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL {</span>
+<span class="s2">        MATCH (c:Disease)</span>
+<span class="s2">        WHERE c.WikiData_ID IS NOT NULL AND c.WikiData_ID &lt;&gt; &quot;&quot;</span>
+<span class="s2">        WITH &#39;SELECT DISTINCT ?cancer ?cancer_name</span>
+<span class="s2">        WHERE {</span>
+<span class="s2">                ?cancer wdt:P279 wd:&#39; + c.WikiData_ID + &#39; .</span>
+<span class="s2">                SERVICE wikibase:label { bd:serviceParam wikibase:language &quot;en&quot;.</span>
+<span class="s2">                                 ?cancer rdfs:label ?cancer_name. }</span>
+<span class="s2">                }&#39; AS sparql, c</span>
+
+<span class="s2">        CALL apoc.load.jsonParams(</span>
+<span class="s2">                replace(&quot;https://query.wikidata.org/sparql?query=&quot; + apoc.text.urlencode(sparql), &quot;</span><span class="se">\n</span><span class="s2">&quot;, &quot;&quot;),</span>
+<span class="s2">                { Accept: &quot;application/sparql-results+json&quot; }, null )</span>
+<span class="s2">        YIELD value</span>
+
+<span class="s2">        UNWIND value[&#39;results&#39;][&#39;bindings&#39;] as row</span>
+
+<span class="s2">        CREATE (s:Disease)</span>
+<span class="s2">        SET s.Name = row[&#39;cancer_name&#39;][&#39;value&#39;],</span>
+<span class="s2">            s.URL = row[&#39;cancer&#39;][&#39;value&#39;],</span>
+<span class="s2">            s.WikiData_ID = split(row[&#39;cancer&#39;][&#39;value&#39;],&#39;/&#39;)[-1]</span>
+
+<span class="s2">        CREATE (s)-[:SUBCLASS_OF]-&gt;(c)</span>
+<span class="s2">        } IN TRANSACTIONS OF 10 rows</span>
+<span class="s2">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="find_instance_of_disease"><a class="viewcode-back" href="../../../CanGraph.QueryWikidata.html#CanGraph.QueryWikidata.build_database.find_instance_of_disease">[docs]</a><span class="k">def</span> <span class="nf">find_instance_of_disease</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Neo4J Cypher Statment that queries wikidata for instances of &quot;Disease&quot; nodes already</span>
+<span class="sd">    present on the Database. Since these are expected to only affect humans, this subclasses</span>
+<span class="sd">    should also, only affect humans</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: A CYPHER query that modifies the DB according to the CYPHER statement contained in the function.</span>
+
+<span class="sd">    .. NOTE:: We are forcing c.WikiData_ID to not be null or &quot;&quot;. This is not necessary if we are just building the wikidata database,</span>
+<span class="sd">        because there will always be a WikiData_ID, but it is useful in the rest of the cases</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL {</span>
+<span class="s2">        MATCH (c:Disease)</span>
+<span class="s2">        WHERE c.WikiData_ID IS NOT NULL AND c.WikiData_ID &lt;&gt; &quot;&quot;</span>
+<span class="s2">        WITH &#39;SELECT DISTINCT ?cancer ?cancer_name</span>
+<span class="s2">        WHERE {</span>
+<span class="s2">                ?cancer wdt:P31 wd:&#39; + c.WikiData_ID + &#39; .</span>
+<span class="s2">                SERVICE wikibase:label { bd:serviceParam wikibase:language &quot;en&quot;.</span>
+<span class="s2">                                 ?cancer rdfs:label ?cancer_name. }</span>
+<span class="s2">                }&#39; AS sparql, c</span>
+
+<span class="s2">        CALL apoc.load.jsonParams(</span>
+<span class="s2">                replace(&quot;https://query.wikidata.org/sparql?query=&quot; + apoc.text.urlencode(sparql), &quot;</span><span class="se">\n</span><span class="s2">&quot;, &quot;&quot;),</span>
+<span class="s2">                { Accept: &quot;application/sparql-results+json&quot; }, null )</span>
+<span class="s2">        YIELD value</span>
+
+<span class="s2">        UNWIND value[&#39;results&#39;][&#39;bindings&#39;] as row</span>
+
+<span class="s2">        CREATE (i:Disease)</span>
+<span class="s2">        SET i.Name = row[&#39;cancer_name&#39;][&#39;value&#39;],</span>
+<span class="s2">            i.URL = row[&#39;cancer&#39;][&#39;value&#39;],</span>
+<span class="s2">            i.WikiData_ID = split(row[&#39;cancer&#39;][&#39;value&#39;],&#39;/&#39;)[-1]</span>
+
+<span class="s2">        CREATE (i)-[:INSTANCE_OF]-&gt;(c)</span>
+<span class="s2">        } IN TRANSACTIONS OF 10 rows</span>
+<span class="s2">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="add_disease_info"><a class="viewcode-back" href="../../../CanGraph.QueryWikidata.html#CanGraph.QueryWikidata.build_database.add_disease_info">[docs]</a><span class="k">def</span> <span class="nf">add_disease_info</span><span class="p">(</span><span class="n">number</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adds info to &quot;Disease&quot; nodes for which its WikiData_ID ends in a given number. This way, only some of the nodes</span>
+<span class="sd">    are targeted, and the Java Virtual Machine does not run out of memory</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        number (int): From 0 to 9, the number under which the WikiData_IDs to process should ends.</span>
+<span class="sd">            This allows us tho divide the work, although its not very elegant.</span>
+<span class="sd">        **kwargs: Any number of arbitrary keyword arguments</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: A CYPHER query that modifies the DB according to the CYPHER statement contained in the function.</span>
+
+<span class="sd">    .. NOTE:: Here, there is no need to force c.WikiData_ID to not be null</span>
+<span class="sd">        or &quot;&quot; because it will already be = ``number`` (and, thus, exist)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL </span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">        MATCH (c:Disease)</span>
+<span class="s2">            WHERE toFloat(split(c.WikiData_ID,&quot;&quot;)[-1]) = toFloat(</span><span class="si">{</span><span class="n">number</span><span class="si">}</span><span class="s2">)</span>
+<span class="s2">        WITH &#39;SELECT *</span>
+<span class="s2">            WHERE</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">                filter (?item = wd:&#39; + c.WikiData_ID + &#39;)</span>
+
+<span class="s2">            OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">                ?item wdt:P665 ?kegg_id </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">            OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">                ?item wdt:P699 ?Disease_Ont </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">            OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">                ?item wdt:P927 ?Anatomical_Location</span>
+<span class="s2">                SERVICE wikibase:label </span><span class="se">{{</span><span class="s2"> bd:serviceParam wikibase:language &quot;en&quot;.</span>
+<span class="s2">                                         ?Anatomical_Location rdfs:label ?Anatomical_Location_name. </span><span class="se">}}</span><span class="s2"> </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">            OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">                ?item wdt:P3841 ?HPO_ID </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">            OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">                ?item wdt:P494 ?ICD_1O </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">            OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">                ?item wdt:P7807 ?ICD_11 </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">            OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">                ?item wdt:P492 ?OMIM_ID </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">            </span><span class="se">}}</span><span class="s2">&#39; AS sparql, c</span>
+
+<span class="s2">            CALL apoc.load.jsonParams(</span>
+<span class="s2">                replace(&quot;https://query.wikidata.org/sparql?query=&quot; + apoc.text.urlencode(sparql), &quot;</span><span class="se">\n</span><span class="s2">&quot;, &quot;&quot;),</span>
+<span class="s2">                </span><span class="se">{{</span><span class="s2"> Accept: &quot;application/sparql-results+json&quot;</span><span class="se">}}</span><span class="s2">, null)</span>
+<span class="s2">        YIELD value</span>
+
+<span class="s2">        UNWIND value[&#39;results&#39;][&#39;bindings&#39;] as row</span>
+
+<span class="s2">        SET c.KEGG_ID = row[&#39;kegg_id&#39;][&#39;value&#39;],</span>
+<span class="s2">            c.Disease_Ontology_ID = row[&#39;Disease_Ont&#39;][&#39;value&#39;],</span>
+<span class="s2">            c.Anatomical_Location = row[&#39;Anatomical_Location_name&#39;][&#39;value&#39;],</span>
+<span class="s2">            c.HPO_ID = row[&#39;HPO_ID&#39;][&#39;value&#39;],</span>
+<span class="s2">            c.ICD_1O = row[&#39;ICD_1O&#39;][&#39;value&#39;],</span>
+<span class="s2">            c.OMIM_ID = row[&#39;OMIM_ID&#39;][&#39;value&#39;],</span>
+<span class="s2">            c.ICD_11 = row[&#39;ICD_11&#39;][&#39;value&#39;]</span>
+
+<span class="s2">        </span><span class="se">}}</span><span class="s2"> IN TRANSACTIONS OF 10 rows</span>
+<span class="s2">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="add_drugs"><a class="viewcode-back" href="../../../CanGraph.QueryWikidata.html#CanGraph.QueryWikidata.build_database.add_drugs">[docs]</a><span class="k">def</span> <span class="nf">add_drugs</span><span class="p">(</span><span class="n">number</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates drug nodes related with each of the &quot;Cancer&quot; nodes already on the database</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        number (int): From 0 to 9, the number under which the WikiData_IDs to process should ends.</span>
+<span class="sd">            This allows us tho divide the work, although its not very elegant.</span>
+<span class="sd">        **kwargs: Any number of arbitrary keyword arguments</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: A CYPHER query that modifies the DB according to the CYPHER statement contained in the function.</span>
+
+<span class="sd">    .. NOTE:: Here, there is no need to force c.WikiData_ID to not be null</span>
+<span class="sd">        or &quot;&quot; because it will already be = ``number`` (and, thus, exist)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL </span><span class="se">{{</span><span class="s2"></span>
+
+<span class="s2">        MATCH (c:Disease)</span>
+<span class="s2">            WHERE toFloat(split(c.WikiData_ID,&quot;&quot;)[-1]) = toFloat(</span><span class="si">{</span><span class="n">number</span><span class="si">}</span><span class="s2">)</span>
+<span class="s2">        WITH &#39;SELECT *</span>
+<span class="s2">            WHERE</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">                filter (?item = wd:&#39; + c.WikiData_ID + &#39;)</span>
+
+<span class="s2">            OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">                ?item wdt:P2176 ?Drugs</span>
+<span class="s2">                SERVICE wikibase:label </span><span class="se">{{</span><span class="s2"> bd:serviceParam wikibase:language &quot;en&quot;.</span>
+<span class="s2">                                         ?Drugs rdfs:label ?DrugName. </span><span class="se">}}</span><span class="s2"> </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">            OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">                ?item wdt:P2888 ?Exact_Matches </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">            </span><span class="se">}}</span><span class="s2">&#39; AS sparql, c</span>
+
+<span class="s2">            CALL apoc.load.jsonParams(</span>
+<span class="s2">                replace(&quot;https://query.wikidata.org/sparql?query=&quot; + apoc.text.urlencode(sparql), &quot;</span><span class="se">\n</span><span class="s2">&quot;, &quot;&quot;),</span>
+<span class="s2">                </span><span class="se">{{</span><span class="s2"> Accept: &quot;application/sparql-results+json&quot;</span><span class="se">}}</span><span class="s2">, null)</span>
+<span class="s2">        YIELD value</span>
+
+<span class="s2">        UNWIND value[&#39;results&#39;][&#39;bindings&#39;] as row</span>
+
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN row[&#39;Drugs&#39;] IS NOT NULL THEN [1] ELSE [] END |</span>
+<span class="s2">                MERGE (d:Drug</span><span class="se">{{</span><span class="s2">URL:row[&#39;Drugs&#39;][&#39;value&#39;],</span>
+<span class="s2">                               WikiData_ID:split(row[&#39;Drugs&#39;][&#39;value&#39;],&#39;/&#39;)[-1],</span>
+<span class="s2">                               Name:row[&#39;DrugName&#39;][&#39;value&#39;] </span><span class="se">}}</span><span class="s2"> )</span>
+<span class="s2">                MERGE (c)-[:TARGETED_BY]-&gt;(d))</span>
+
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN row[&#39;Exact_Matches&#39;] IS NOT NULL THEN [1] ELSE [] END |</span>
+<span class="s2">                MERGE (e:ExternalEquivalent</span><span class="se">{{</span><span class="s2">URL:row[&#39;Exact_Matches&#39;][&#39;value&#39;],</span>
+<span class="s2">                                            WikiData_ID:split(row[&#39;Exact_Matches&#39;][&#39;value&#39;],&#39;/&#39;)[-1]</span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">                MERGE (c)-[:EQUALS]-(e))</span>
+
+<span class="s2">        </span><span class="se">}}</span><span class="s2"> IN TRANSACTIONS OF 10 rows</span>
+<span class="s2">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="add_causes"><a class="viewcode-back" href="../../../CanGraph.QueryWikidata.html#CanGraph.QueryWikidata.build_database.add_causes">[docs]</a><span class="k">def</span> <span class="nf">add_causes</span><span class="p">(</span><span class="n">number</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates drug nodes related with each of the &quot;Cancer&quot; nodes already on the database</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        number (int): From 0 to 9, the number under which the WikiData_IDs to process should ends.</span>
+<span class="sd">            This allows us tho divide the work, although its not very elegant.</span>
+<span class="sd">        **kwargs: Any number of arbitrary keyword arguments</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: A CYPHER query that modifies the DB according to the CYPHER statement contained in the function.</span>
+
+<span class="sd">    .. NOTE:: Here, there is no need to force c.WikiData_ID to not be null</span>
+<span class="sd">        or &quot;&quot; because it will already be = ``number`` (and, thus, exist)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL </span><span class="se">{{</span><span class="s2"></span>
+
+<span class="s2">        MATCH (c:Disease)</span>
+<span class="s2">            WHERE toFloat(split(c.WikiData_ID,&quot;&quot;)[-1]) = toFloat(</span><span class="si">{</span><span class="n">number</span><span class="si">}</span><span class="s2">)</span>
+<span class="s2">        WITH &#39;SELECT ?Causes ?CauseName</span>
+<span class="s2">            WHERE</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">                filter (?item = wd:&#39; + c.WikiData_ID + &#39;)</span>
+
+<span class="s2">            OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">                ?item wdt:P828 ?Causes</span>
+<span class="s2">                SERVICE wikibase:label </span><span class="se">{{</span><span class="s2"> bd:serviceParam wikibase:language &quot;en&quot;.</span>
+<span class="s2">                                         ?Causes rdfs:label ?CauseName. </span><span class="se">}}</span><span class="s2"> </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">            </span><span class="se">}}</span><span class="s2">&#39; AS sparql, c</span>
+
+<span class="s2">            CALL apoc.load.jsonParams(</span>
+<span class="s2">                replace(&quot;https://query.wikidata.org/sparql?query=&quot; + apoc.text.urlencode(sparql), &quot;</span><span class="se">\n</span><span class="s2">&quot;, &quot;&quot;),</span>
+<span class="s2">                </span><span class="se">{{</span><span class="s2"> Accept: &quot;application/sparql-results+json&quot;</span><span class="se">}}</span><span class="s2">, null)</span>
+<span class="s2">        YIELD value</span>
+
+<span class="s2">        UNWIND value[&#39;results&#39;][&#39;bindings&#39;] as row</span>
+
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN row[&#39;Causes&#39;] IS NOT NULL THEN [1] ELSE [] END |</span>
+<span class="s2">                MERGE (ca:Cause</span><span class="se">{{</span><span class="s2">URL:row[&#39;Causes&#39;][&#39;value&#39;],</span>
+<span class="s2">                                WikiData_ID:split(row[&#39;Causes&#39;][&#39;value&#39;],&#39;/&#39;)[-1],</span>
+<span class="s2">                                Name:row[&#39;CauseName&#39;][&#39;value&#39;] </span><span class="se">}}</span><span class="s2"> )</span>
+<span class="s2">                MERGE (c)-[:CAUSED_BY]-&gt;(ca))</span>
+
+<span class="s2">        </span><span class="se">}}</span><span class="s2"> IN TRANSACTIONS OF 10 rows</span>
+<span class="s2">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="add_genes"><a class="viewcode-back" href="../../../CanGraph.QueryWikidata.html#CanGraph.QueryWikidata.build_database.add_genes">[docs]</a><span class="k">def</span> <span class="nf">add_genes</span><span class="p">(</span><span class="n">number</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates gene nodes related with each of the &quot;Cancer&quot; nodes already on the database</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        number (int): From 0 to 9, the number under which the WikiData_IDs to process should ends.</span>
+<span class="sd">            This allows us tho divide the work, although its not very elegant.</span>
+<span class="sd">        **kwargs: Any number of arbitrary keyword arguments</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: A CYPHER query that modifies the DB according to the CYPHER statement contained in the function.</span>
+
+<span class="sd">    .. NOTE:: Here, there is no need to force c.WikiData_ID to not be null</span>
+<span class="sd">        or &quot;&quot; because it will already be = ``number`` (and, thus, exist)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL </span><span class="se">{{</span><span class="s2"></span>
+
+<span class="s2">        MATCH (c:Disease)</span>
+<span class="s2">            WHERE toFloat(split(c.WikiData_ID,&quot;&quot;)[-1]) = toFloat(</span><span class="si">{</span><span class="n">number</span><span class="si">}</span><span class="s2">)</span>
+<span class="s2">        WITH &#39;SELECT *</span>
+<span class="s2">            WHERE</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">                filter (?item = wd:&#39; + c.WikiData_ID + &#39;)</span>
+
+<span class="s2">            OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">                ?item wdt:P2293 ?Genetic_Associations.</span>
+<span class="s2">                ?Genetic_Associations wdt:P703 wd:Q15978631</span>
+<span class="s2">                SERVICE wikibase:label </span><span class="se">{{</span><span class="s2"> bd:serviceParam wikibase:language &quot;en&quot;.</span>
+<span class="s2">                                         ?Genetic_Associations rdfs:label ?GeneName. </span><span class="se">}}</span><span class="s2"> </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">            </span><span class="se">}}</span><span class="s2">&#39; AS sparql, c</span>
+
+<span class="s2">            CALL apoc.load.jsonParams(</span>
+<span class="s2">                replace(&quot;https://query.wikidata.org/sparql?query=&quot; + apoc.text.urlencode(sparql), &quot;</span><span class="se">\n</span><span class="s2">&quot;, &quot;&quot;),</span>
+<span class="s2">                </span><span class="se">{{</span><span class="s2"> Accept: &quot;application/sparql-results+json&quot;</span><span class="se">}}</span><span class="s2">, null)</span>
+<span class="s2">        YIELD value</span>
+
+<span class="s2">        UNWIND value[&#39;results&#39;][&#39;bindings&#39;] as row</span>
+
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN row[&#39;Genetic_Associations&#39;] is not null and row[&#39;GeneName&#39;] IS NOT NULL THEN [1] ELSE [] END |</span>
+<span class="s2">                MERGE (g:Gene</span><span class="se">{{</span><span class="s2">URL:row[&#39;Genetic_Associations&#39;][&#39;value&#39;],</span>
+<span class="s2">                              WikiData_ID:split(row[&#39;Genetic_Associations&#39;][&#39;value&#39;],&#39;/&#39;)[-1],</span>
+<span class="s2">                              Name:row[&#39;GeneName&#39;][&#39;value&#39;] </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">                MERGE (g)-[:ASSOCIATED_DISEASE_GENE]-&gt;(c))</span>
+
+<span class="s2">        </span><span class="se">}}</span><span class="s2"> IN TRANSACTIONS OF 10 rows</span>
+<span class="s2">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="add_drug_external_ids"><a class="viewcode-back" href="../../../CanGraph.QueryWikidata.html#CanGraph.QueryWikidata.build_database.add_drug_external_ids">[docs]</a><span class="k">def</span> <span class="nf">add_drug_external_ids</span><span class="p">(</span><span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;Wikidata_ID&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adds some external IDs to any &quot;Drug&quot; nodes already present on the database.</span>
+<span class="sd">    Since the PDB information had too much values which caused triple duplicates that overcharged the system,</span>
+<span class="sd">    they were intentionally left out.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        query (str): One of [&quot;DrugBank_ID&quot;,&quot;WikiData_ID&quot;], a way to identify the nodes for which external IDs will be added.</span>
+<span class="sd">        **kwargs: Any number of arbitrary keyword arguments</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result:</span>
+<span class="sd">            A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</span>
+
+<span class="sd">    .. NOTE:: We are forcing c.WikiData_ID to not be null or &quot;&quot;. This is not necessary if we are just building the wikidata database,</span>
+<span class="sd">        because there will always be a WikiData_ID, but it is useful in the rest of the cases</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">query</span> <span class="o">==</span> <span class="s2">&quot;DrugBank_ID&quot;</span><span class="p">:</span>
+      <span class="n">query_text</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;&quot;&quot; WHERE d.DrugBank_ID IS NOT NULL AND d.DrugBank_ID &lt;&gt; &quot;&quot; &quot;&quot;&quot;</span><span class="p">,</span>
+                    <span class="sd">&quot;&quot;&quot;?item (wdt:P715) \&quot;&#39; + apoc.text.replace(d.DrugBank_ID, &quot;DB&quot;, &quot;&quot;) + &#39;\&quot; &quot;&quot;&quot;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">query_text</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;&quot;&quot;WHERE d.WikiData_ID IS NOT NULL AND d.WikiData_ID &lt;&gt; &quot;&quot; &quot;&quot;&quot;</span><span class="p">,</span>
+                    <span class="sd">&quot;&quot;&quot;filter (?item = wd:&#39; + d.WikiData_ID + &#39;)&quot;&quot;&quot;</span><span class="p">]</span>
+
+
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL </span><span class="se">{{</span><span class="s2"></span>
+
+<span class="s2">        MATCH (d:Drug)</span>
+<span class="s2">        </span><span class="si">{</span><span class="n">query_text</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"></span>
+<span class="s2">        WITH &#39;SELECT DISTINCT *</span>
+<span class="s2">        WHERE </span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            SERVICE wikibase:label </span><span class="se">{{</span><span class="s2"> bd:serviceParam wikibase:language &quot;[AUTO_LANGUAGE]&quot;. </span><span class="se">}}</span><span class="s2"></span>
+
+<span class="s2">        </span><span class="si">{</span><span class="n">query_text</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"></span>
+
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item wdt:P715 ?DrugBank </span><span class="se">}}</span><span class="s2"></span>
+
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item wdt:P683 ?ChEBI_ID </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item wdt:P592 ?CHEMBL_ID </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item wdt:P661 ?ChemSpider_ID </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item wdt:P662 ?PubChem_ID </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item wdt:P665 ?KEGG_ID </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item wdt:P231 ?CAS_Number </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item wdt:P267 ?ATC_Code </span><span class="se">}}</span><span class="s2"></span>
+
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item wdt:P2175 ?Medical_condition_treated</span>
+<span class="s2">            SERVICE wikibase:label </span><span class="se">{{</span><span class="s2"> bd:serviceParam wikibase:language &quot;en&quot;.</span>
+<span class="s2">                                    ?Medical_condition_treated rdfs:label ?Medical_condition_treated_name. </span><span class="se">}}</span><span class="s2"> </span><span class="se">}}</span><span class="s2"></span>
+
+<span class="s2">            </span><span class="se">}}</span><span class="s2">&#39; AS sparql, d</span>
+
+<span class="s2">            CALL apoc.load.jsonParams(</span>
+<span class="s2">                replace(&quot;https://query.wikidata.org/sparql?query=&quot; + apoc.text.urlencode(sparql), &quot;</span><span class="se">\n</span><span class="s2">&quot;, &quot;&quot;),</span>
+<span class="s2">                </span><span class="se">{{</span><span class="s2"> Accept: &quot;application/sparql-results+json&quot; </span><span class="se">}}</span><span class="s2">, null )</span>
+<span class="s2">        YIELD value</span>
+
+<span class="s2">        UNWIND value[&#39;results&#39;][&#39;bindings&#39;] as row</span>
+
+<span class="s2">        SET d.WikiData_ID = split(row[&#39;item&#39;][&#39;value&#39;],&#39;/&#39;)[-1],</span>
+<span class="s2">            d.CHEMBL_ID = row[&#39;CHEMBL_ID&#39;][&#39;value&#39;],</span>
+<span class="s2">            d.ChEBI_ID = row[&#39;ChEBI_ID&#39;][&#39;value&#39;],</span>
+<span class="s2">            d.PubChem_ID = row[&#39;PubChem_ID&#39;][&#39;value&#39;],</span>
+<span class="s2">            d.KEGG_ID = row[&#39;KEGG_ID&#39;][&#39;value&#39;],</span>
+<span class="s2">            d.DrugBank_ID = row[&#39;DrugBank&#39;][&#39;value&#39;],</span>
+<span class="s2">            d.CAS_Number = row[&#39;CAS_Number&#39;][&#39;value&#39;],</span>
+<span class="s2">            d.ChemSpider_ID = row[&#39;ChemSpider_ID&#39;][&#39;value&#39;]</span>
+
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN row[&#39;ATC_Code&#39;] IS NOT NULL THEN [1] ELSE [] END |</span>
+<span class="s2">            MERGE (pri:ATC </span><span class="se">{{</span><span class="s2"> Code:row[&#39;ATC_Code&#39;][&#39;value&#39;] </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            MERGE (d)-[r:RELATED_ATC]-&gt;(pri)</span>
+<span class="s2">        )</span>
+
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN row[&#39;MeSH_Descriptor_Name&#39;] IS NOT NULL THEN [1] ELSE [] END |</span>
+<span class="s2">            MERGE (c:MeSH </span><span class="se">{{</span><span class="s2"> MeSH_ID:row[&#39;MeSH_Descriptor_ID&#39;][&#39;value&#39;] ,</span>
+<span class="s2">                             Type:&quot;Descriptor&quot;, Name: row[&#39;MeSH_Descriptor_Name&#39;][&#39;value&#39;]</span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            MERGE (d)-[r2:RELATED_MESH]-&gt;(c)</span>
+<span class="s2">        )</span>
+
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN row[&#39;MeSH_Concept_Name&#39;] IS NOT NULL THEN [1] ELSE [] END |</span>
+<span class="s2">            MERGE (cc:MeSH </span><span class="se">{{</span><span class="s2"> MeSH_ID:row[&#39;MeSH_Concept_ID&#39;][&#39;value&#39;] ,</span>
+<span class="s2">                              Type:&quot;Concept&quot;, Name: row[&#39;MeSH_Concept_Name&#39;][&#39;value&#39;]</span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            MERGE (d)-[r3:RELATED_MESH]-&gt;(cc)</span>
+<span class="s2">        )</span>
+
+<span class="s2">        </span><span class="se">}}</span><span class="s2"> IN TRANSACTIONS OF 10 rows</span>
+<span class="s2">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="add_more_drug_info"><a class="viewcode-back" href="../../../CanGraph.QueryWikidata.html#CanGraph.QueryWikidata.build_database.add_more_drug_info">[docs]</a><span class="k">def</span> <span class="nf">add_more_drug_info</span><span class="p">(</span><span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;WikiData_ID&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates some nodes that are related with each of the &quot;Drug&quot; nodes already existing</span>
+<span class="sd">    on the database: routes of administration, targeted metabolites and approved drugs</span>
+<span class="sd">    that tehy are been used in</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        query (str): One of [&quot;DrugBank_ID&quot;,&quot;WikiData_ID&quot;], a way to identify the nodes for</span>
+<span class="sd">            which external IDs will be added; default is &quot;WikiData_ID&quot;</span>
+<span class="sd">        **kwargs: Any number of arbitrary keyword arguments</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: A CYPHER query that modifies the DB according to the CYPHER statement contained in the function.</span>
+
+
+<span class="sd">    .. TODO:: ADD ROLE to metabolite interactions</span>
+
+<span class="sd">    .. NOTE:: This transaction has been separated in order to keep response times low</span>
+
+<span class="sd">    .. NOTE:: We are forcing c.WikiData_ID to not be null or &quot;&quot;. This is not necessary if we are just building the wikidata database,</span>
+<span class="sd">        because there will always be a WikiData_ID, but it is useful in the rest of the cases</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">query</span> <span class="o">==</span> <span class="s2">&quot;DrugBank_ID&quot;</span><span class="p">:</span>
+      <span class="n">query_text</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;&quot;&quot; WHERE d.DrugBank_ID IS NOT NULL AND d.DrugBank_ID &lt;&gt; &quot;&quot; &quot;&quot;&quot;</span><span class="p">,</span>
+                    <span class="sd">&quot;&quot;&quot;?item (wdt:P715) \&quot;&#39; + apoc.text.replace(d.DrugBank_ID, &quot;DB&quot;, &quot;&quot;) + &#39;\&quot; &quot;&quot;&quot;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">query_text</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;&quot;&quot;WHERE d.WikiData_ID IS NOT NULL AND d.WikiData_ID &lt;&gt; &quot;&quot; &quot;&quot;&quot;</span><span class="p">,</span>
+                    <span class="sd">&quot;&quot;&quot;filter (?item = wd:&#39; + d.WikiData_ID + &#39;)&quot;&quot;&quot;</span><span class="p">]</span>
+
+
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL </span><span class="se">{{</span><span class="s2"></span>
+
+<span class="s2">        MATCH (d:Drug)</span>
+<span class="s2">        </span><span class="si">{</span><span class="n">query_text</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"></span>
+<span class="s2">        WITH &#39;SELECT DISTINCT *</span>
+<span class="s2">        WHERE </span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            SERVICE wikibase:label </span><span class="se">{{</span><span class="s2"> bd:serviceParam wikibase:language &quot;[AUTO_LANGUAGE]&quot;. </span><span class="se">}}</span><span class="s2"></span>
+
+<span class="s2">        </span><span class="si">{</span><span class="n">query_text</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"></span>
+
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item wdt:P234 ?InChI </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item wdt:P235 ?InChIKey </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item wdt:P2067 ?Mass </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item wdt:P274 ?Chemical_Formula </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item wdt:P233 ?Canonical_Smiles </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item wdt:P7830 ?LiverTox </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">            </span><span class="se">}}</span><span class="s2">&#39; AS sparql, d</span>
+
+<span class="s2">            CALL apoc.load.jsonParams(</span>
+<span class="s2">                replace(&quot;https://query.wikidata.org/sparql?query=&quot; + apoc.text.urlencode(sparql), &quot;</span><span class="se">\n</span><span class="s2">&quot;, &quot;&quot;),</span>
+<span class="s2">                </span><span class="se">{{</span><span class="s2"> Accept: &quot;application/sparql-results+json&quot; </span><span class="se">}}</span><span class="s2">, null )</span>
+<span class="s2">        YIELD value</span>
+
+<span class="s2">        UNWIND value[&#39;results&#39;][&#39;bindings&#39;] as row</span>
+
+<span class="s2">        SET d.WikiData_ID = split(row[&#39;item&#39;][&#39;value&#39;],&#39;/&#39;)[-1],</span>
+<span class="s2">            d.InChI = row[&#39;InChI&#39;][&#39;value&#39;],</span>
+<span class="s2">            d.InChIKey = row[&#39;InChIKey&#39;][&#39;value&#39;],</span>
+<span class="s2">            d.Average_Mass = row[&#39;Mass&#39;][&#39;value&#39;],</span>
+<span class="s2">            d.Formula = row[&#39;Chemical_Formula&#39;][&#39;value&#39;],</span>
+<span class="s2">            d.SMILES = row[&#39;Canonical_Smiles&#39;][&#39;value&#39;],</span>
+<span class="s2">            d.Pregnancy_Category = row[&#39;Pregnancy_Category_Name&#39;][&#39;value&#39;],</span>
+<span class="s2">            d.LiverTox = row[&#39;LiverTox&#39;][&#39;value&#39;]</span>
+
+<span class="s2">        </span><span class="se">}}</span><span class="s2"> IN TRANSACTIONS OF 10 rows</span>
+<span class="s2">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="add_yet_more_drug_info"><a class="viewcode-back" href="../../../CanGraph.QueryWikidata.html#CanGraph.QueryWikidata.build_database.add_yet_more_drug_info">[docs]</a><span class="k">def</span> <span class="nf">add_yet_more_drug_info</span><span class="p">(</span><span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;WikiData_ID&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates some nodes that are related with each of the &quot;Drug&quot; nodes already existing</span>
+<span class="sd">    on the database: routes of administration, targeted metabolites and approved drugs</span>
+<span class="sd">    that tehy are been used in</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        query (str): One of [&quot;DrugBank_ID&quot;,&quot;WikiData_ID&quot;], a way to identify the nodes for</span>
+<span class="sd">            which external IDs will be added; default is &quot;WikiData_ID&quot;</span>
+<span class="sd">        **kwargs: Any number of arbitrary keyword arguments</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: A CYPHER query that modifies the DB according to the CYPHER statement contained in the function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">query</span> <span class="o">==</span> <span class="s2">&quot;DrugBank_ID&quot;</span><span class="p">:</span>
+      <span class="n">query_text</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;&quot;&quot; WHERE d.DrugBank_ID IS NOT NULL AND d.DrugBank_ID &lt;&gt; &quot;&quot; &quot;&quot;&quot;</span><span class="p">,</span>
+                    <span class="sd">&quot;&quot;&quot;?item (wdt:P715) &#39; + apoc.text.replace(d.DrugBank_ID, &quot;DB&quot;, &quot;&quot;) + &#39;&quot;&quot;&quot;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">query_text</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;&quot;&quot;WHERE d.WikiData_ID IS NOT NULL AND d.WikiData_ID &lt;&gt; &quot;&quot; &quot;&quot;&quot;</span><span class="p">,</span>
+                    <span class="sd">&quot;&quot;&quot;filter (?item = wd:&#39; + d.WikiData_ID + &#39;)&quot;&quot;&quot;</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL </span><span class="se">{{</span><span class="s2"></span>
+
+<span class="s2">        MATCH (d:Drug)</span>
+<span class="s2">        </span><span class="si">{</span><span class="n">query_text</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"></span>
+<span class="s2">        WITH &#39;SELECT DISTINCT *</span>
+<span class="s2">        WHERE </span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            SERVICE wikibase:label </span><span class="se">{{</span><span class="s2"> bd:serviceParam wikibase:language &quot;[AUTO_LANGUAGE]&quot;. </span><span class="se">}}</span><span class="s2"></span>
+
+<span class="s2">        </span><span class="si">{</span><span class="n">query_text</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"></span>
+
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item wdt:P636 ?Route_of_Admin</span>
+<span class="s2">            SERVICE wikibase:label </span><span class="se">{{</span><span class="s2"> bd:serviceParam wikibase:language &quot;en&quot;.</span>
+<span class="s2">                                    ?Route_of_Admin rdfs:label ?Route_of_Admin_name. </span><span class="se">}}</span><span class="s2"> </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item wdt:P3780 ?Active_ingredient_in</span>
+<span class="s2">            SERVICE wikibase:label </span><span class="se">{{</span><span class="s2"> bd:serviceParam wikibase:language &quot;en&quot;.</span>
+<span class="s2">                                    ?Active_ingredient_in rdfs:label ?Active_ingredient_in_name. </span><span class="se">}}</span><span class="s2"> </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item wdt:P129 ?Interacts_with</span>
+<span class="s2">            SERVICE wikibase:label </span><span class="se">{{</span><span class="s2"> bd:serviceParam wikibase:language &quot;en&quot;.</span>
+<span class="s2">                                    ?Interacts_with rdfs:label ?Interacts_with_name. </span><span class="se">}}</span><span class="s2"> </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">            </span><span class="se">}}</span><span class="s2">&#39; AS sparql, d</span>
+
+<span class="s2">            CALL apoc.load.jsonParams(</span>
+<span class="s2">                replace(&quot;https://query.wikidata.org/sparql?query=&quot; + apoc.text.urlencode(sparql), &quot;</span><span class="se">\n</span><span class="s2">&quot;, &quot;&quot;),</span>
+<span class="s2">                </span><span class="se">{{</span><span class="s2"> Accept: &quot;application/sparql-results+json&quot;</span><span class="se">}}</span><span class="s2">, null)</span>
+<span class="s2">        YIELD value</span>
+
+<span class="s2">        UNWIND value[&#39;results&#39;][&#39;bindings&#39;] as row</span>
+
+<span class="s2">        SET d.WikiData_ID = split(row[&#39;item&#39;][&#39;value&#39;],&#39;/&#39;)[-1]</span>
+
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN row[&#39;Interacts_with&#39;] IS NOT NULL THEN [1] ELSE [] END |</span>
+<span class="s2">            MERGE (m:Metabolite</span><span class="se">{{</span><span class="s2">URL:row[&#39;Interacts_with&#39;][&#39;value&#39;],</span>
+<span class="s2">                        WikiData_ID:split(row[&#39;Interacts_with&#39;][&#39;value&#39;],&#39;/&#39;)[-1],</span>
+<span class="s2">                        Name:row[&#39;Interacts_with_name&#39;][&#39;value&#39;] </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            MERGE (d)-[:INTERACTS_WITH]-(m))</span>
+
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN row[&#39;Route_of_Admin&#39;] IS NOT NULL THEN [1] ELSE [] END |</span>
+<span class="s2">            MERGE (r:AdministrationRoute</span><span class="se">{{</span><span class="s2">URL:row[&#39;Route_of_Admin&#39;][&#39;value&#39;],</span>
+<span class="s2">                        WikiData_ID:split(row[&#39;Route_of_Admin&#39;][&#39;value&#39;],&#39;/&#39;)[-1],</span>
+<span class="s2">                        Name:row[&#39;Route_of_Admin_name&#39;][&#39;value&#39;] </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            MERGE (d)-[:ADMINISTERED_VIA]-&gt;(r))</span>
+
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN row[&#39;Active_ingredient_in&#39;] IS NOT NULL THEN [1] ELSE [] END |</span>
+<span class="s2">            MERGE (me:Product</span><span class="se">{{</span><span class="s2">URL:row[&#39;Active_ingredient_in&#39;][&#39;value&#39;],</span>
+<span class="s2">                        WikiData_ID:split(row[&#39;Active_ingredient_in&#39;][&#39;value&#39;],&#39;/&#39;)[-1],</span>
+<span class="s2">                        Name:row[&#39;Active_ingredient_in_name&#39;][&#39;value&#39;] </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            MERGE (d)-[:PART_OF_PRODUCT]-&gt;(me))</span>
+
+<span class="s2">        </span><span class="se">}}</span><span class="s2"> IN TRANSACTIONS OF 10 rows</span>
+<span class="s2">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="add_gene_info"><a class="viewcode-back" href="../../../CanGraph.QueryWikidata.html#CanGraph.QueryWikidata.build_database.add_gene_info">[docs]</a><span class="k">def</span> <span class="nf">add_gene_info</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Cypher Query that adds some external IDs and properties to &quot;Gene&quot; nodes already existing on</span>
+<span class="sd">    the database. This query forces the genes to have a &quot;found_in_taxon:homo_sapiens&quot; label. This means</span>
+<span class="sd">    that any non-human genes will not be annotated (.. TODO:: delete those)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: A CYPHER query that modifies the DB according to the CYPHER statement contained in the function.</span>
+
+<span class="sd">    .. NOTE:: Genomic Start and ends keep just the 2nd position, as reported in wikidata</span>
+
+<span class="sd">    .. NOTE:: We are forcing c.WikiData_ID to not be null or &quot;&quot;. This is not necessary if we are just building the wikidata database,</span>
+<span class="sd">        because there will always be a WikiData_ID, but it is useful in the rest of the cases</span>
+
+<span class="sd">    .. TODO:: Might include P684 &quot;Orthologues&quot; for more info (it crashed java)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL {</span>
+
+<span class="s2">        MATCH (g:Gene)</span>
+<span class="s2">        WHERE g.WikiData_ID IS NOT NULL AND g.WikiData_ID &lt;&gt; &quot;&quot;</span>
+<span class="s2">        WITH &#39;SELECT *</span>
+<span class="s2">            WHERE{</span>
+<span class="s2">                filter (?item = wd:&#39; + g.WikiData_ID + &#39;)</span>
+<span class="s2">                ?item wdt:P703 wd:Q15978631</span>
+
+<span class="s2">            OPTIONAL{</span>
+<span class="s2">                ?item wdt:P351 ?Entrez_ID }</span>
+<span class="s2">            OPTIONAL{</span>
+<span class="s2">                ?item wdt:P594 ?Ensembl_Gene_ID }</span>
+<span class="s2">            OPTIONAL{</span>
+<span class="s2">                ?item wdt:P354 ?HGNC_ID }</span>
+<span class="s2">            OPTIONAL{</span>
+<span class="s2">                ?item wdt:P492 ?OMIM_ID }</span>
+<span class="s2">            OPTIONAL{</span>
+<span class="s2">                ?item wdt:P1057 ?Chromosome_Location</span>
+<span class="s2">                SERVICE wikibase:label { bd:serviceParam wikibase:language &quot;en&quot;.</span>
+<span class="s2">                                        ?Chromosome_Location rdfs:label ?Chromosome_Location_name. } }</span>
+<span class="s2">            OPTIONAL{</span>
+<span class="s2">                ?item wdt:P2548 ?Strand_Orientation</span>
+<span class="s2">                SERVICE wikibase:label { bd:serviceParam wikibase:language &quot;en&quot;.</span>
+<span class="s2">                                        ?Strand_Orientation rdfs:label ?Strand_Orientation_name. } }</span>
+<span class="s2">            OPTIONAL{</span>
+<span class="s2">                ?item wdt:P644 ?Genomic_Start }</span>
+<span class="s2">            OPTIONAL{</span>
+<span class="s2">                ?item wdt:P645 ?Genomic_End }</span>
+<span class="s2">            OPTIONAL{</span>
+<span class="s2">                ?item wdt:P4196 ?Cytogenetic_Location  }</span>
+<span class="s2">            OPTIONAL{</span>
+<span class="s2">                ?item wdt:P593 ?HomoloGene_ID }</span>
+
+<span class="s2">            OPTIONAL{</span>
+<span class="s2">                ?item wdt:P688 ?Encodes</span>
+<span class="s2">                SERVICE wikibase:label { bd:serviceParam wikibase:language &quot;en&quot;.</span>
+<span class="s2">                                        ?Encodes rdfs:label ?Encodes_name. } }</span>
+<span class="s2">            OPTIONAL{</span>
+<span class="s2">                ?item wdt:P5572 ?Expressed_in</span>
+<span class="s2">                SERVICE wikibase:label { bd:serviceParam wikibase:language &quot;en&quot;.</span>
+<span class="s2">                                        ?Expressed_in rdfs:label ?Expressed_in_name. } }</span>
+<span class="s2">            OPTIONAL{</span>
+<span class="s2">                ?item wdt:P2888 ?Exact_Matches }</span>
+
+<span class="s2">            }&#39; AS sparql, g</span>
+
+<span class="s2">            CALL apoc.load.jsonParams(</span>
+<span class="s2">                replace(&quot;https://query.wikidata.org/sparql?query=&quot; + apoc.text.urlencode(sparql), &quot;</span><span class="se">\n</span><span class="s2">&quot;, &quot;&quot;),</span>
+<span class="s2">                { Accept: &quot;application/sparql-results+json&quot; }, null )</span>
+<span class="s2">        YIELD value</span>
+
+<span class="s2">        UNWIND value[&#39;results&#39;][&#39;bindings&#39;] as row</span>
+
+<span class="s2">        SET g.Entrez_ID = row[&#39;Entrez_ID&#39;][&#39;value&#39;],</span>
+<span class="s2">            g.Ensembl_Gene_ID = row[&#39;Ensembl_Gene_ID&#39;][&#39;value&#39;],</span>
+<span class="s2">            g.HGNC_ID = row[&#39;HGNC_ID&#39;][&#39;value&#39;],</span>
+<span class="s2">            g.OMIM_ID = row[&#39;OMIM_ID&#39;][&#39;value&#39;],</span>
+<span class="s2">            g.HomoloGene_ID = row[&#39;HomoloGene_ID&#39;][&#39;value&#39;],</span>
+<span class="s2">            g.Cytogenetic_Location = row[&#39;Cytogenetic_Location&#39;][&#39;value&#39;],</span>
+<span class="s2">            g.Chromosome_Location = row[&#39;Chromosome_Location_name&#39;][&#39;value&#39;],</span>
+<span class="s2">            g.Strand_Orientation = row[&#39;Strand_Orientation_name&#39;][&#39;value&#39;],</span>
+<span class="s2">            g.Genomic_Start = row[&#39;Genomic_Start&#39;][&#39;value&#39;],</span>
+<span class="s2">            g.Genomic_End = row[&#39;Genomic_End&#39;][&#39;value&#39;]</span>
+
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN row[&#39;Encodes&#39;] IS NOT NULL THEN [1] ELSE [] END |</span>
+<span class="s2">                    MERGE (m:Metabolite{URL:row[&#39;Encodes&#39;][&#39;value&#39;],</span>
+<span class="s2">                                WikiData_ID:split(row[&#39;Encodes&#39;][&#39;value&#39;],&#39;/&#39;)[-1],</span>
+<span class="s2">                                Name:row[&#39;Encodes_name&#39;][&#39;value&#39;] })</span>
+<span class="s2">                    MERGE (g)-[:ENCODES]-&gt;(m))</span>
+
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN row[&#39;Expressed_in&#39;] IS NOT NULL THEN [1] ELSE [] END |</span>
+<span class="s2">                    MERGE (t:Tissue{URL:row[&#39;Expressed_in&#39;][&#39;value&#39;],</span>
+<span class="s2">                                WikiData_ID:split(row[&#39;Expressed_in&#39;][&#39;value&#39;],&#39;/&#39;)[-1],</span>
+<span class="s2">                                Name:row[&#39;Expressed_in_name&#39;][&#39;value&#39;] })</span>
+<span class="s2">                    MERGE (g)-[:EXPRESSED_IN]-&gt;(t))</span>
+
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN row[&#39;Exact_Matches&#39;] IS NOT NULL THEN [1] ELSE [] END |</span>
+<span class="s2">                MERGE (e:ExternalEquivalent{URL:row[&#39;Exact_Matches&#39;][&#39;value&#39;],</span>
+<span class="s2">                                            WikiData_ID:split(row[&#39;Exact_Matches&#39;][&#39;value&#39;],&#39;/&#39;)[-1]})</span>
+<span class="s2">                MERGE (g)-[:EQUALS]-(e))</span>
+
+<span class="s2">        } IN TRANSACTIONS OF 10 rows</span>
+<span class="s2">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="add_metabolite_info"><a class="viewcode-back" href="../../../CanGraph.QueryWikidata.html#CanGraph.QueryWikidata.build_database.add_metabolite_info">[docs]</a><span class="k">def</span> <span class="nf">add_metabolite_info</span><span class="p">(</span><span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;ChEBI_ID&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Cypher Query that adds some external IDs and properties to &quot;Metabolite&quot; nodes</span>
+<span class="sd">    already existing on the database. Two kind of metabolites exist: those that are</span>
+<span class="sd">    encoded by a given gene, and those that interact with a given drug. Both are</span>
+<span class="sd">    adressed here, since they are similar, and, most likely, instances of proteins.</span>
+
+<span class="sd">    * This function forces all metabolites to have a &quot;found_in_taxon:human&quot; target</span>
+<span class="sd">    * The metabolites are not forced to be proteins, but if they are, this is kept in the &quot;instance_of&quot; record</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        query (str): One of [&quot;DrugBank_ID&quot;,&quot;WikiData_ID&quot;], a way to identify the nodes for</span>
+<span class="sd">            which external IDs will be added; default is &quot;WikiData_ID&quot;</span>
+<span class="sd">        **kwargs: Any number of arbitrary keyword arguments</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: A CYPHER query that modifies the DB according to the CYPHER statement contained in the function.</span>
+
+<span class="sd">    .. TODO:: Might include P527 &quot;has part or parts&quot; for more info (it crashed java)</span>
+
+<span class="sd">    .. NOTE:: We are forcing c.WikiData_ID to not be null or &quot;&quot;. This is not necessary if we are just building the wikidata database,</span>
+<span class="sd">        because there will always be a WikiData_ID, but it is useful in the rest of the cases</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">query</span> <span class="o">==</span> <span class="s2">&quot;ChEBI_ID&quot;</span><span class="p">:</span>
+      <span class="n">query_text</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;&quot;&quot; WHERE m.ChEBI_ID IS NOT NULL AND m.ChEBI_ID &lt;&gt; &quot;&quot; &quot;&quot;&quot;</span><span class="p">,</span>
+                    <span class="sd">&quot;&quot;&quot;?item (wdt:P683) \&quot;&#39; +  m.ChEBI_ID + &#39;\&quot; .&quot;&quot;&quot;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">query_text</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;&quot;&quot;WHERE m.WikiData_ID IS NOT NULL AND m.WikiData_ID &lt;&gt; &quot;&quot; &quot;&quot;&quot;</span><span class="p">,</span>
+                    <span class="sd">&quot;&quot;&quot;filter (?item = wd:&#39; + m.WikiData_ID + &#39;)&quot;&quot;&quot;</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL </span><span class="se">{{</span><span class="s2"></span>
+
+<span class="s2">        MATCH (m:Metabolite)</span>
+<span class="s2">        </span><span class="si">{</span><span class="n">query_text</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"></span>
+<span class="s2">        WITH &#39;SELECT DISTINCT *</span>
+<span class="s2">        WHERE </span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            SERVICE wikibase:label </span><span class="se">{{</span><span class="s2"> bd:serviceParam wikibase:language &quot;[AUTO_LANGUAGE]&quot;. </span><span class="se">}}</span><span class="s2"></span>
+
+<span class="s2">        </span><span class="si">{</span><span class="n">query_text</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"></span>
+
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item wdt:P31 ?Instance_of</span>
+<span class="s2">            SERVICE wikibase:label </span><span class="se">{{</span><span class="s2"> bd:serviceParam wikibase:language &quot;en&quot;.</span>
+<span class="s2">                                     ?Instance_of rdfs:label ?Instance_of_name. </span><span class="se">}}</span><span class="s2"> </span><span class="se">}}</span><span class="s2"></span>
+
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item (wdt:P683) ?ChEBI_ID </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item wdt:P231 ?CAS_Number </span><span class="se">}}</span><span class="s2"></span>
+
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item wdt:P234 ?InChI </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item wdt:P235 ?InChIKey </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item wdt:P352 ?UniProt_ID </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item wdt:P7260 ?Transporter_DB_ID </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item wdt:P274 ?Chemical_Formula </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item wdt:P592 ?CHEMBL_ID </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item wdt:P662 ?PubChem_ID </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item wdt:P233 ?Canonical_Smiles </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item wdt:P8117 ?FooDB_Compound_ID </span><span class="se">}}</span><span class="s2"></span>
+
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item p:P486 ?statement1 .</span>
+<span class="s2">            ?statement1 ps:P486 ?MeSH_Descriptor_ID .</span>
+<span class="s2">            ?statement1 pq:P1810 ?MeSH_Descriptor_Name .</span>
+<span class="s2">            </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item p:P6694 ?statement2 .</span>
+<span class="s2">            ?statement2 ps:P6694 ?MeSH_Concept_ID .</span>
+<span class="s2">            ?statement2 pq:P1810 ?MeSH_Concept_Name . </span><span class="se">}}</span><span class="s2"></span>
+
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item wdt:P129 ?Interacts_with</span>
+<span class="s2">            SERVICE wikibase:label </span><span class="se">{{</span><span class="s2"> bd:serviceParam wikibase:language &quot;en&quot;.</span>
+<span class="s2">                    ?Interacts_with rdfs:label ?Interacts_with_name. </span><span class="se">}}</span><span class="s2"> </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            ?item wdt:P2888 ?Exact_Matches </span><span class="se">}}</span><span class="s2"></span>
+
+<span class="s2">            </span><span class="se">}}</span><span class="s2">&#39; AS sparql, m</span>
+
+<span class="s2">            CALL apoc.load.jsonParams(</span>
+<span class="s2">                replace(&quot;https://query.wikidata.org/sparql?query=&quot; + apoc.text.urlencode(sparql), &quot;</span><span class="se">\n</span><span class="s2">&quot;, &quot;&quot;),</span>
+<span class="s2">                </span><span class="se">{{</span><span class="s2"> Accept: &quot;application/sparql-results+json&quot;</span><span class="se">}}</span><span class="s2">, null)</span>
+<span class="s2">        YIELD value</span>
+
+<span class="s2">        UNWIND value[&#39;results&#39;][&#39;bindings&#39;] as row</span>
+
+<span class="s2">        SET m.WikiData_ID = split(row[&#39;item&#39;][&#39;value&#39;],&#39;/&#39;)[-1],</span>
+<span class="s2">            m.Function = row[&#39;Instance_of_name&#39;][&#39;value&#39;],</span>
+<span class="s2">            m.UniProt_ID = row[&#39;UniProt_ID&#39;][&#39;value&#39;],</span>
+<span class="s2">            m.ChEBI_ID = row[&#39;ChEBI_ID&#39;][&#39;value&#39;],</span>
+<span class="s2">            m.CAS_Number = row[&#39;CAS_Number&#39;][&#39;value&#39;],</span>
+<span class="s2">            m.Formula = row[&#39;Chemical_Formula&#39;][&#39;value&#39;],</span>
+<span class="s2">            m.InChI = row[&#39;InChI&#39;][&#39;value&#39;],</span>
+<span class="s2">            m.InChIKey = row[&#39;InChIKey&#39;][&#39;value&#39;],</span>
+<span class="s2">            m.CHEMBL_ID = row[&#39;CHEMBL_ID&#39;][&#39;value&#39;],</span>
+<span class="s2">            m.ChEBI_ID = row[&#39;ChEBI_ID&#39;][&#39;value&#39;],</span>
+<span class="s2">            m.PubChem_ID = row[&#39;PubChem_ID&#39;][&#39;value&#39;],</span>
+<span class="s2">            m.SMILES = row[&#39;Canonical_Smiles&#39;][&#39;value&#39;],</span>
+<span class="s2">            m.FooDB_Compound_ID = row[&#39;FooDB_Compound_ID&#39;][&#39;value&#39;],</span>
+<span class="s2">            m.Transporter_DB_ID = row[&#39;Transporter_DB_ID&#39;][&#39;value&#39;]</span>
+
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN row[&#39;MeSH_Descriptor_Name&#39;] IS NOT NULL THEN [1] ELSE [] END |</span>
+<span class="s2">            MERGE (c:MeSH </span><span class="se">{{</span><span class="s2"> MeSH_ID:row[&#39;MeSH_Descriptor_ID&#39;][&#39;value&#39;] ,</span>
+<span class="s2">                             Type:&quot;Descriptor&quot;, Name: row[&#39;MeSH_Descriptor_Name&#39;][&#39;value&#39;]</span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            MERGE (m)-[r:RELATED_MESH]-&gt;(c)</span>
+<span class="s2">        )</span>
+
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN row[&#39;MeSH_Concept_Name&#39;] IS NOT NULL THEN [1] ELSE [] END |</span>
+<span class="s2">            MERGE (cc:MeSH </span><span class="se">{{</span><span class="s2"> MeSH_ID:row[&#39;MeSH_Concept_ID&#39;][&#39;value&#39;] ,</span>
+<span class="s2">                              Type:&quot;Concept&quot;, Name: row[&#39;MeSH_Concept_Name&#39;][&#39;value&#39;]</span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            MERGE (m)-[r2:RELATED_MESH]-&gt;(cc)</span>
+<span class="s2">        )</span>
+
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN row[&#39;Interacts_with&#39;] IS NOT NULL THEN [1] ELSE [] END |</span>
+<span class="s2">                    MERGE (me:Metabolite</span><span class="se">{{</span><span class="s2">URL:row[&#39;Interacts_with&#39;][&#39;value&#39;],</span>
+<span class="s2">                                WikiData_ID:split(row[&#39;Interacts_with&#39;][&#39;value&#39;],&#39;/&#39;)[-1],</span>
+<span class="s2">                                Name:row[&#39;Interacts_with_name&#39;][&#39;value&#39;] </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">                    MERGE (m)-[:INTERACTS_WITH]-(me))</span>
+
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN row[&#39;Exact_Matches&#39;] IS NOT NULL THEN [1] ELSE [] END |</span>
+<span class="s2">                MERGE (e:ExternalEquivalent</span><span class="se">{{</span><span class="s2">URL:row[&#39;Exact_Matches&#39;][&#39;value&#39;],</span>
+<span class="s2">                                            WikiData_ID:split(row[&#39;Exact_Matches&#39;][&#39;value&#39;],&#39;/&#39;)[-1]</span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">                MERGE (m)-[:EQUALS]-(e))</span>
+
+<span class="s2">        </span><span class="se">}}</span><span class="s2"> IN TRANSACTIONS OF 10 rows</span>
+<span class="s2">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="add_toomuch_metabolite_info"><a class="viewcode-back" href="../../../CanGraph.QueryWikidata.html#CanGraph.QueryWikidata.build_database.add_toomuch_metabolite_info">[docs]</a><span class="k">def</span> <span class="nf">add_toomuch_metabolite_info</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A function that adds loads of info to existing &quot;Metabolite&quot; nodes. This was left out, first because</span>
+<span class="sd">    it might be too much information, (specially when it is already availaible by clicking the &quot;url&quot; field),</span>
+<span class="sd">    and because, due to it been so much, it crashes the JVM.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: A CYPHER query that modifies the DB according to the CYPHER statement contained in the function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL {</span>
+<span class="s2">        MATCH (m:Metabolite)</span>
+<span class="s2">        WHERE m.WikiData_ID IS NOT NULL AND m.WikiData_ID &lt;&gt; &quot;&quot;</span>
+<span class="s2">        WITH &#39;SELECT *</span>
+<span class="s2">            WHERE{</span>
+<span class="s2">                filter (?item = wd:&#39; + m.WikiData_ID + &#39;)</span>
+<span class="s2">                ?item wdt:P703 wd:Q15978631</span>
+
+<span class="s2">            OPTIONAL{</span>
+<span class="s2">                ?item wdt:P680 ?Molecular_Function }</span>
+<span class="s2">            OPTIONAL{</span>
+<span class="s2">                ?item wdt:P681 ?Cell_Component }</span>
+<span class="s2">            OPTIONAL{</span>
+<span class="s2">                ?item wdt:P682 ?Biological_Process }</span>
+<span class="s2">            OPTIONAL{</span>
+<span class="s2">                ?item wdt:P705 ?Ensembl_Protein_ID }</span>
+<span class="s2">            OPTIONAL{</span>
+<span class="s2">                ?item wdt:P637 ?RefSeq_Protein_ID }</span>
+<span class="s2">            OPTIONAL{</span>
+<span class="s2">                ?item wdt:P638 ?PDB_Structure_ID }</span>
+
+<span class="s2">        }&#39; AS sparql, m</span>
+
+<span class="s2">            CALL apoc.load.jsonParams(</span>
+<span class="s2">                replace(&quot;https://query.wikidata.org/sparql?query=&quot; + apoc.text.urlencode(sparql), &quot;</span><span class="se">\n</span><span class="s2">&quot;, &quot;&quot;),</span>
+<span class="s2">                { Accept: &quot;application/sparql-results+json&quot; }, null )</span>
+<span class="s2">        YIELD value</span>
+
+<span class="s2">        UNWIND value[&#39;results&#39;][&#39;bindings&#39;] as row</span>
+
+<span class="s2">        WITH m, row, CASE WHEN EXISTS(m.A) THEN m.A ELSE [] END AS nA</span>
+<span class="s2">            WHERE NONE (x IN nA WHERE x = row[&#39;Molecular_Function&#39;][&#39;value&#39;])</span>
+<span class="s2">        SET m.A = nA + row[&#39;Molecular_Function&#39;][&#39;value&#39;]</span>
+
+<span class="s2">        WITH m, row, CASE WHEN EXISTS(m.A) THEN m.A ELSE [] END AS nA</span>
+<span class="s2">            WHERE NONE (x IN nA WHERE x = row[&#39;Cell_Component&#39;][&#39;value&#39;])</span>
+<span class="s2">        SET m.A = nA + row[&#39;Cell_Component&#39;][&#39;value&#39;]</span>
+
+<span class="s2">        WITH m, row, CASE WHEN EXISTS(m.A) THEN m.A ELSE [] END AS nA</span>
+<span class="s2">            WHERE NONE (x IN nA WHERE x = row[&#39;Biological_Process&#39;][&#39;value&#39;])</span>
+<span class="s2">        SET m.A = nA + row[&#39;Biological_Process&#39;][&#39;value&#39;]</span>
+
+<span class="s2">        WITH m, row, CASE WHEN EXISTS(m.A) THEN m.A ELSE [] END AS nA</span>
+<span class="s2">            WHERE NONE (x IN nA WHERE x = row[&#39;Ensembl_Protein_ID&#39;][&#39;value&#39;])</span>
+<span class="s2">        SET m.A = nA + row[&#39;Ensembl_Protein_ID&#39;][&#39;value&#39;]</span>
+
+<span class="s2">        WITH m, row, CASE WHEN EXISTS(m.A) THEN m.A ELSE [] END AS nA</span>
+<span class="s2">            WHERE NONE (x IN nA WHERE x = row[&#39;PDB_Structure_ID&#39;][&#39;value&#39;])</span>
+<span class="s2">        SET m.A = nA + row[&#39;PDB_Structure_ID&#39;][&#39;value&#39;]</span>
+
+<span class="s2">        } IN TRANSACTIONS OF 10 rows</span>
+<span class="s2">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="add_wikidata_and_mesh_by_name"><a class="viewcode-back" href="../../../CanGraph.QueryWikidata.html#CanGraph.QueryWikidata.build_database.add_wikidata_and_mesh_by_name">[docs]</a><span class="k">def</span> <span class="nf">add_wikidata_and_mesh_by_name</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A function that adds some MeSH nodes and WikiData_IDs</span>
+<span class="sd">    to existing nodes, based on their Wikipedia Article Title.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx (neo4j.Session): The session under which the driver is running</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result:</span>
+<span class="sd">            A Neo4J connexion to the database that modifies it according</span>
+<span class="sd">            to the CYPHER statement contained in the function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL {</span>
+<span class="s2">        MATCH (d)</span>
+<span class="s2">        WHERE (d:AdministrationRoute OR d:Cause OR d:Disease OR d:Drug OR d:ExternalEquivalent</span>
+<span class="s2">                                     OR d:Gene OR d:Metabolite OR d:Product OR d:Tissue)</span>
+<span class="s2">        AND (d.Name IS NOT null)</span>
+<span class="s2">        WITH &#39;SELECT DISTINCT *</span>
+<span class="s2">        WHERE{</span>
+<span class="s2">            ?sitelink schema:about ?WikiData_ID;</span>
+<span class="s2">                    schema:isPartOf &lt;https://en.wikipedia.org/&gt;;</span>
+<span class="s2">                    schema:name </span><span class="se">\&quot;</span><span class="s2">&#39; +  replace(d.Name, &quot;  &quot;, &quot; &quot;) + &#39;</span><span class="se">\&quot;</span><span class="s2">@en.</span>
+<span class="s2">        OPTIONAL{</span>
+<span class="s2">            ?WikiData_ID p:P486 ?statement1 .</span>
+<span class="s2">            ?statement1 ps:P486 ?MeSH_Descriptor_ID .</span>
+<span class="s2">            ?statement1 pq:P1810 ?MeSH_Descriptor_Name .</span>
+<span class="s2">            }</span>
+<span class="s2">        OPTIONAL{</span>
+<span class="s2">            ?WikiData_ID p:P6694 ?statement2 .</span>
+<span class="s2">            ?statement2 ps:P6694 ?MeSH_Concept_ID .</span>
+<span class="s2">            ?statement2 pq:P1810 ?MeSH_Concept_Name . }</span>
+<span class="s2">        }&#39; AS sparql, d</span>
+
+<span class="s2">            CALL apoc.load.jsonParams(</span>
+<span class="s2">                replace(&quot;https://query.wikidata.org/sparql?query=&quot; + apoc.text.urlencode(sparql), &quot;</span><span class="se">\n</span><span class="s2">&quot;, &quot;&quot;),</span>
+<span class="s2">                { Accept: &quot;application/sparql-results+json&quot; }, null )</span>
+<span class="s2">        YIELD value</span>
+
+<span class="s2">        UNWIND value[&#39;results&#39;][&#39;bindings&#39;] as row</span>
+
+<span class="s2">        SET d.WikiData_ID = split(row[&#39;WikiData_ID&#39;][&#39;value&#39;],&#39;/&#39;)[-1]</span>
+
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN row[&#39;MeSH_Descriptor_Name&#39;] IS NOT NULL THEN [1] ELSE [] END |</span>
+<span class="s2">            MERGE (c:MeSH { MeSH_ID:row[&#39;MeSH_Descriptor_ID&#39;][&#39;value&#39;] ,</span>
+<span class="s2">                            Type:&quot;Descriptor&quot;, Name: row[&#39;MeSH_Descriptor_Name&#39;][&#39;value&#39;]})</span>
+<span class="s2">            MERGE (d)-[r:RELATED_MESH]-&gt;(c)</span>
+<span class="s2">        )</span>
+
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN row[&#39;MeSH_Concept_Name&#39;] IS NOT NULL THEN [1] ELSE [] END |</span>
+<span class="s2">            MERGE (cc:MeSH { MeSH_ID:row[&#39;MeSH_Concept_ID&#39;][&#39;value&#39;] ,</span>
+<span class="s2">                            Type:&quot;Concept&quot;, Name: row[&#39;MeSH_Concept_Name&#39;][&#39;value&#39;]})</span>
+<span class="s2">            MERGE (d)-[r2:RELATED_MESH]-&gt;(cc)</span>
+<span class="s2">        )</span>
+
+<span class="s2">        } IN TRANSACTIONS OF 10 rows</span>
+<span class="s2">        &quot;&quot;&quot;</span></div>
+</pre></div>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Pablo Marcos<br/>
+  
+      &copy; Copyright 2022, Pablo Marcos &lt;software@loreak.org&gt;.<br/>
+    Last updated on Dec 17, 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

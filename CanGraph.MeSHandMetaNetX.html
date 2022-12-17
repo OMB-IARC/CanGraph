@@ -1,0 +1,1057 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>CanGraph.MeSHandMetaNetX package &#8212; CanGraph 1.0 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script src="_static/design-tabs.js"></script>
+    <link rel="shortcut icon" href="_static/cangraph-mini.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="CanGraph.QueryWikidata package" href="CanGraph.QueryWikidata.html" />
+    <link rel="prev" title="CanGraph.GraphifySMPDB package" href="CanGraph.GraphifySMPDB.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="_static/cangraph-logo.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="index.html">
+                    Main Page
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="Downloads.html">
+   Downloads
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="Tutorials.html">
+   Tutorials
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Other%20Reading%20Material.html">
+     Other Reading Material
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Installing%20CanGraph.html">
+     Installing CanGraph
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Running%20the%20Software.html">
+     Running the Software
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Understanding%20its%20Outputs.html">
+     Understanding its Outputs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://www.pablomarcos.me/es/posts/master-en-biolog%c3%ada-computacional/tfm/">
+   Presentations
+  </a>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="CanGraph.html">
+   CanGraph package
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="CanGraph.ExposomeExplorer.html">
+     CanGraph.ExposomeExplorer package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="CanGraph.GraphifyDrugBank.html">
+     CanGraph.GraphifyDrugBank package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="CanGraph.GraphifyHMDB.html">
+     CanGraph.GraphifyHMDB package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="CanGraph.GraphifySMPDB.html">
+     CanGraph.GraphifySMPDB package
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     CanGraph.MeSHandMetaNetX package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="CanGraph.QueryWikidata.html">
+     CanGraph.QueryWikidata package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Install%20Apptainer.html">
+     Install Apptainer
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ToDoList.html">
+   To-Do List
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Logo by <a href="https://www.instagram.com/danonino.caducado/"> Daniel Marcos </a> </br>
+                     Website by <a href="https://www.pablomarcos.me/"> Pablo Marcos </a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/OMB-IARC/CanGraph/"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/OMB-IARC/CanGraph//issues/new?title=Issue%20on%20page%20%2FCanGraph.MeSHandMetaNetX.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/OMB-IARC/CanGraph/edit/main/docs/CanGraph.MeSHandMetaNetX.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/CanGraph.MeSHandMetaNetX.md.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> In this page
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#intallation">
+   Intallation
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#usage">
+   Usage
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#important-notices">
+   Important Notices
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#dependencies">
+   Dependencies
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-CanGraph.MeSHandMetaNetX.build_database">
+   CanGraph.MeSHandMetaNetX.build_database module
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-CanGraph.MeSHandMetaNetX.main">
+   CanGraph.MeSHandMetaNetX.main module
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>CanGraph.MeSHandMetaNetX package</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> In this page </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#intallation">
+   Intallation
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#usage">
+   Usage
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#important-notices">
+   Important Notices
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#dependencies">
+   Dependencies
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-CanGraph.MeSHandMetaNetX.build_database">
+   CanGraph.MeSHandMetaNetX.build_database module
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-CanGraph.MeSHandMetaNetX.main">
+   CanGraph.MeSHandMetaNetX.main module
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <!--
+SPDX-FileCopyrightText: 2022 Pablo Marcos <software@loreak.org>
+
+SPDX-License-Identifier: MIT
+-->
+<section id="cangraph-meshandmetanetx-package">
+<h1>CanGraph.MeSHandMetaNetX package<a class="headerlink" href="#cangraph-meshandmetanetx-package" title="Permalink to this headline">#</a></h1>
+<!--
+SPDX-FileCopyrightText: 2022 Pablo Marcos <software@loreak.org>
+
+SPDX-License-Identifier: MIT
+-->
+<p><img alt="The Schema for CanGraph, shown on Neo4J browser" src="_images/main_schema.png" />
+<br></p>
+<p>This Git Project, created as part of my Master’s Intenship at IARC, contains a series of scripts that pulls information from a series of <strong>five</strong> databases from their native format (XML, CSV, etc) into a common, GraphML format, using a shared schema that has been defined to minimize the number of repeated nodes and properties. This databases are:</p>
+<ul class="simple">
+<li><p>Exposome-Explorer: A hand-curated, high-quality database of associations between metabolites, food intakes and outakes and different diseases, specially cancers.</p></li>
+<li><p>Human Metabolome DataBase: An detailed, electronic database containing detailed information about small molecule metabolites found in the human body.</p></li>
+<li><p>DrugBank: A unique bioinformatics and cheminformatics resource that combines detailed drug data with comprehensive drug target information.</p></li>
+<li><p>Small Molecule Pathway Database: An interactive database containing more than 618 small molecule pathways found in humans, More than 70% of which are unique to this DB</p></li>
+<li><p>WikiData: The world’s largest collaboratively generated collection of Open Data worldwide.</p></li>
+</ul>
+<p>Each of then have their unique advantages and disadvantages (size, quality, etc) but they have been chosen to work together and help in identifying metabolites and their potential cancer associations at IARC.</p>
+<p>With regards to the schema, it can be consulted in detail in the <code class="docutils literal notranslate"><span class="pre">new-schema.graphml</span></code> file, which can itself be opened in Neo4J by calling: <code class="docutils literal notranslate"><span class="pre">CALL</span> <span class="pre">apoc.import.graphml(&quot;new-schema.graphml&quot;,</span> <span class="pre">{useTypes:true,</span> <span class="pre">storeNodeIds:false,</span> <span class="pre">readLabels:True})</span></code> after placing it in your Neo4J’s import directory (you can find it in the settings shown after starting the server with <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">neo4j</span> <span class="pre">start</span></code>). It consists of a simplification of all the nodes present on the <code class="docutils literal notranslate"><span class="pre">old-schema.graphml</span></code> file (which itself represents the five different schemas that our five databases natively presented), arrived at by merging nodes and changing relationship names so that they are unique (and, thus, more actionable). One property, <code class="docutils literal notranslate"><span class="pre">LabelName</span></code> has been added as a dummy name to generate the image you can see in the header.</p>
+<p>This repo contains two kind of scripts: first, some <code class="docutils literal notranslate"><span class="pre">build_database.py</span></code> scripts, which contain the information to re-build the databases in the common format from scratch, and are located in subsequent subfolders named after the database they come from (more info can be consulted on them on their respective READMEs) and a common <code class="docutils literal notranslate"><span class="pre">main.py</span></code> script, which can be used to query for sub-networks based solely on info presented on a <strong>sample_input.csv</strong> database of identified compounds which we would like to annotate.</p>
+<section id="intallation">
+<h2>Intallation<a class="headerlink" href="#intallation" title="Permalink to this headline">#</a></h2>
+<p>To use this script, you should first clone it into your personal computer. The easiest way to do this is to <a class="reference external" href="https://docs.codeberg.org/git/clone-commit-via-cli/">git clone</a> the repo:</p>
+<ol class="arabic simple">
+<li><p>Install git (if not already installed) and other requirements. On linux: <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt</span> <span class="pre">install</span> <span class="pre">git</span> <span class="pre">curl</span></code></p></li>
+<li><p>Clone the repo: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://codeberg.org/FlyingFlamingo/graphify-databases</span></code></p></li>
+<li><p>Step into the directory <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">graphify-databases</span></code></p></li>
+</ol>
+<p>Once the project has been installed, you <strong>must</strong> run <code class="docutils literal notranslate"><span class="pre">setup.py</span></code>, a preparation script that guides you through the process of installing all five databases on your computer, so that then we can correctly process them and generate the sub-networks. You should also install the required python modules and run the setup script:</p>
+<ol class="arabic simple" start="4">
+<li><p>PIP install all dependencies: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirements.txt</span></code></p></li>
+<li><p>Run the setup script: <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">setup.py</span></code></p></li>
+</ol>
+<p>Once this has been done, you are ready to start using the main script!</p>
+<p>NOTE: If you do not wish to use git, you can manually download the repo by clicking <a class="reference external" href="https://codeberg.org/FlyingFlamingo/CanGraph/archive/main.zip">here</a></p>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">#</a></h2>
+<p>To generate this sub-networks (the original idea of the project) you should run:</p>
+<p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">main.py</span> <span class="pre">neo4jadress</span> <span class="pre">databaseusername</span> <span class="pre">databasepassword</span> <span class="pre">databasefolder</span> <span class="pre">inputfile</span></code></p>
+<p>where:</p>
+<ul class="simple">
+<li><p><strong>neo4jadress</strong>: is the URL of the database, in neo4j:// or bolt:// format</p></li>
+<li><p><strong>username</strong>: the username for your neo4j instance. Remember, the default is neo4j</p></li>
+<li><p><strong>password</strong>: the password for your database. Since the arguments are passed by BaSH onto python3, you might need to escape special characters</p></li>
+<li><p><strong>databasefolder</strong>: The folder indicated to <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> as the one where your databases will be stored</p></li>
+<li><p><strong>inputfile</strong>: The location of the CSV file in which the program will search for metabolites. This file should be a Comma-Separated file, with the following format: <code class="docutils literal notranslate"><span class="pre">MonoisotopicMass,</span> <span class="pre">SMILES,</span> <span class="pre">InChIKey,</span> <span class="pre">Name,</span> <span class="pre">InChI,</span> <span class="pre">Identifier,</span> <span class="pre">ChEBI</span></code></p></li>
+</ul>
+<p>All images in this repository are <a class="reference external" href="https://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA-4.0 International</a> Licensed.</p>
+<p>NOTE: When committing to the repo, try to use <a class="reference external" href="https://gitmoji.dev/">GitMojis</a> to illustrate your commit :p</p>
+</section>
+<section id="important-notices">
+<h2>Important Notices<a class="headerlink" href="#important-notices" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>Some databases are auto-integrated based on their URLs. This URLs, as well as those of existing dependencies, may change over time. Please make sure to have them updated in case you want to run the latest version of the databases</p></li>
+<li><p>We have made our best efforts to make the script as multi-platform as possible; however, the script has been developed with Linux in mind, and you may need to install additional packages if you want to run it on Windows or MacOS. Please, check the <code class="docutils literal notranslate"><span class="pre">dependencies</span></code> section for more info</p></li>
+</ul>
+</section>
+<section id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">#</a></h2>
+<p>This python package has the following known dependencies:</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Package</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Order to install</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Python 3.8</p></td>
+<td><p>the python programming language</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt</span> <span class="pre">install</span> <span class="pre">python3</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>cURL</p></td>
+<td><p>command line tool for transferring data from URLs</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt</span> <span class="pre">install</span> <span class="pre">curl</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>neo4j</p></td>
+<td><p>a graph dbms</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">-c'import</span> <span class="pre">setup;</span> <span class="pre">setup.setup_neo4j(&quot;neo4j&quot;,</span> <span class="pre">True)'</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>Alternatively, as a one-liner: <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt</span> <span class="pre">install</span> <span class="pre">python3</span> <span class="pre">curl;</span> <span class="pre">python3</span> <span class="pre">-c'import</span> <span class="pre">setup;</span> <span class="pre">setup.setup_neo4j(&quot;neo4j&quot;,</span> <span class="pre">True)</span></code></p>
+<hr class="docutils" />
+<p>The package consists of the following modules:</p>
+</section>
+<section id="module-CanGraph.MeSHandMetaNetX.build_database">
+<span id="cangraph-meshandmetanetx-build-database-module"></span><h2>CanGraph.MeSHandMetaNetX.build_database module<a class="headerlink" href="#module-CanGraph.MeSHandMetaNetX.build_database" title="Permalink to this headline">#</a></h2>
+<p>A python module that provides the necessary functions to transition the MetaNetX database
+(and related MeSH terms and KEGG IDs) to graph format, either from scratch importing all
+the nodes (as showcased in <a class="reference internal" href="#module-CanGraph.MeSHandMetaNetX.main" title="CanGraph.MeSHandMetaNetX.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CanGraph.MeSHandMetaNetX.main</span></code></a>) or in a case-by-case basis,
+to annotate existing metabolites (as showcased in <a class="reference internal" href="CanGraph.html#module-CanGraph.main" title="CanGraph.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CanGraph.main</span></code></a>).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You may notice some functions here present the <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> arguments option.
+This is in order to make the functions compatible with the
+<a class="reference internal" href="CanGraph.html#CanGraph.miscelaneous.manage_transaction" title="CanGraph.miscelaneous.manage_transaction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CanGraph.miscelaneous.manage_transaction</span></code></a> function, which might send back a variable
+number of arguments (although technically it could work without the <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> option)</p>
+</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.MeSHandMetaNetX.build_database.add_chem_isom">
+<span class="sig-name descname"><span class="pre">add_chem_isom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/MeSHandMetaNetX/build_database.html#add_chem_isom"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.MeSHandMetaNetX.build_database.add_chem_isom" title="Permalink to this definition">#</a></dt>
+<dd><p>A CYPHER query that loads the <cite>chem_isom.tsv</cite> file availaible at the MetaNetX site, using a graph format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the CSV file that is being imported</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v5.2)">neo4j.Result</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For performance, it is recommended to split the file in 1 subfile for each row in the DataBase</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.MeSHandMetaNetX.build_database.add_chem_prop">
+<span class="sig-name descname"><span class="pre">add_chem_prop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/MeSHandMetaNetX/build_database.html#add_chem_prop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.MeSHandMetaNetX.build_database.add_chem_prop" title="Permalink to this definition">#</a></dt>
+<dd><p>A CYPHER query that loads the <cite>chem_prop.tsv</cite> file availaible at the MetaNetX site, using a graph format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the CSV file that is being imported</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v5.2)">neo4j.Result</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For performance, it is recommended to split the file in 1 subfile for each row in the DataBase</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.MeSHandMetaNetX.build_database.add_chem_xref">
+<span class="sig-name descname"><span class="pre">add_chem_xref</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/MeSHandMetaNetX/build_database.html#add_chem_xref"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.MeSHandMetaNetX.build_database.add_chem_xref" title="Permalink to this definition">#</a></dt>
+<dd><p>A CYPHER query that loads the <cite>chem_xref.tsv</cite> file availaible at the MetaNetX site, using a graph format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the CSV file that is being imported</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v5.2)">neo4j.Result</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For performance, it is recommended to split the file in 1 subfile for each row in the DataBase</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.MeSHandMetaNetX.build_database.add_comp_prop">
+<span class="sig-name descname"><span class="pre">add_comp_prop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/MeSHandMetaNetX/build_database.html#add_comp_prop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.MeSHandMetaNetX.build_database.add_comp_prop" title="Permalink to this definition">#</a></dt>
+<dd><p>A CYPHER query that loads the <cite>comp_prop.tsv</cite> file availaible at the MetaNetX site, using a graph format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the CSV file that is being imported</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v5.2)">neo4j.Result</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For performance, it is recommended to split the file in 1 subfile for each row in the DataBase</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.MeSHandMetaNetX.build_database.add_comp_xref">
+<span class="sig-name descname"><span class="pre">add_comp_xref</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/MeSHandMetaNetX/build_database.html#add_comp_xref"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.MeSHandMetaNetX.build_database.add_comp_xref" title="Permalink to this definition">#</a></dt>
+<dd><p>A CYPHER query that loads the <cite>comp_xref.tsv</cite> file availaible at the MetaNetX site, using a graph format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the CSV file that is being imported</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Result" title="(in Neo4j Python Driver v5.2)">neo4j.Result</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For performance, it is recommended to split the file in 1 subfile for each row in the DataBase</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Some identifiers present the CL/cl prefix. Since I could not find what this prefix refers to,
+and since it only pertains to one single MetaNetX ID, we did not take them into account</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The “description” field in the DataBase is ignored, since it seems to be quite similar, but less useful,
+than the “name” field from comp_prop, which is more coherent with our pre-existing schema</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.MeSHandMetaNetX.build_database.add_mesh_by_name">
+<span class="sig-name descname"><span class="pre">add_mesh_by_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/MeSHandMetaNetX/build_database.html#add_mesh_by_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.MeSHandMetaNetX.build_database.add_mesh_by_name" title="Permalink to this definition">#</a></dt>
+<dd><p>A function that adds some MeSH nodes to any existing nodes, based on their Name property.
+Only currently active MeSH_IDs are parsed</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A text chain that represents the CYPHER query with the desired output. This can be run using: <a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session.run" title="(in Neo4j Python Driver v5.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">neo4j.Session.run</span></code></a></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)">str</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only exact matches work here, which is not ideal.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Be careful when writing CYPHER commands for the driver: sometimes, ” != ‘ !!!</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 1.0: </span>Reverted the filtering to old version in order to make the search more specific</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.MeSHandMetaNetX.build_database.add_pept">
+<span class="sig-name descname"><span class="pre">add_pept</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/MeSHandMetaNetX/build_database.html#add_pept"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.MeSHandMetaNetX.build_database.add_pept" title="Permalink to this definition">#</a></dt>
+<dd><p>A CYPHER query that all the protein availaible at the MetaNetX site, using a graph format and SPARQL.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A text chain that represents the CYPHER query with the desired output. This can be run using: <a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session.run" title="(in Neo4j Python Driver v5.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">neo4j.Session.run</span></code></a></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)">str</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>SPARQL was only used here because, unlike with the other files, there is no download available;
+also, given there are few proteins, Neo4J is able to process it without running out of memory
+(unlike what happened with the other fields)</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is an <strong>autocommit transaction</strong>. This means that, in order to not keep data in memory
+(and make running it with a huge amount of data) more efficient, you will need to add <code class="docutils literal notranslate"><span class="pre">`:auto</span> <span class="pre">`</span></code>
+when calling it from the Neo4J browser, or call it as <code class="docutils literal notranslate"><span class="pre">`session.run(</span> <span class="pre">clean_database()</span> <span class="pre">)`</span></code> from the driver.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.MeSHandMetaNetX.build_database.add_prefixes">
+<span class="sig-name descname"><span class="pre">add_prefixes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/MeSHandMetaNetX/build_database.html#add_prefixes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.MeSHandMetaNetX.build_database.add_prefixes" title="Permalink to this definition">#</a></dt>
+<dd><p>Add some prefixes necessary for all MetaNetX queries to work.
+This are kept together since adding extra prefixes does not increase computation time</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A text chain that represents the CYPHER query with the desired output. This can be run using: <a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session.run" title="(in Neo4j Python Driver v5.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">neo4j.Session.run</span></code></a></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.MeSHandMetaNetX.build_database.build_from_file">
+<span class="sig-name descname"><span class="pre">build_from_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">driver</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/MeSHandMetaNetX/build_database.html#build_from_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.MeSHandMetaNetX.build_database.build_from_file" title="Permalink to this definition">#</a></dt>
+<dd><p>A function able to build a portion of the MetaNetX database in graph format, provided that one MetaNetX CSV is supplied to it.
+This CSVs are downloaded from the website, and can be presented either as the full file, or as a splitted
+version of it, with just one item per file (which is recommended due to memory limitations). If you want all the database to be
+imported, you should run this function with all the CSVs that form it, as portrayed in the <a class="reference internal" href="#module-CanGraph.MeSHandMetaNetX.main" title="CanGraph.MeSHandMetaNetX.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a> module</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>driver</strong> (<a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Driver" title="(in Neo4j Python Driver v5.2)"><em>neo4j.Driver</em></a>) – Neo4J’s Bolt Driver currently in use</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the CSV file that is being imported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>This function modifies the Neo4J Database as desired, but does not produce any particular return.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.MeSHandMetaNetX.build_database.find_metabolites_related_to_mesh">
+<span class="sig-name descname"><span class="pre">find_metabolites_related_to_mesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/MeSHandMetaNetX/build_database.html#find_metabolites_related_to_mesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.MeSHandMetaNetX.build_database.find_metabolites_related_to_mesh" title="Permalink to this definition">#</a></dt>
+<dd><p>A function that finds Metabolites related to a given MeSH ID, on the MeSH DataBase</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mesh_id</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The MeSH_ID of the thing for which we want to find related proteins</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A text chain that represents the CYPHER query with the desired output. This can be run using: <a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session.run" title="(in Neo4j Python Driver v5.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">neo4j.Session.run</span></code></a></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)">str</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is intended to be run as a execute_read, only returning synonyms present in the DB. No modifications will be applied.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Could be turned into a read query by substituting <code class="docutils literal notranslate"><span class="pre">mesh_id</span></code> with <code class="docutils literal notranslate"><span class="pre">'</span> <span class="pre">+</span> <span class="pre">n.MeSH_ID</span> <span class="pre">+</span> <span class="pre">'</span></code></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.MeSHandMetaNetX.build_database.find_protein_data_in_metanetx">
+<span class="sig-name descname"><span class="pre">find_protein_data_in_metanetx</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/MeSHandMetaNetX/build_database.html#find_protein_data_in_metanetx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.MeSHandMetaNetX.build_database.find_protein_data_in_metanetx" title="Permalink to this definition">#</a></dt>
+<dd><p>A SPARQL function that annotates Protein nodes in an exiting Neo4J database by using the information provided by MetaNetX</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A text chain that represents the CYPHER query with the desired output. This can be run using: <a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session.run" title="(in Neo4j Python Driver v5.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">neo4j.Session.run</span></code></a></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)">str</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is partly a duplicate of <cite>self.find_protein_interactions_in_metanetx()</cite>, which was split to prevent timeouts</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.MeSHandMetaNetX.build_database.find_protein_interactions_in_metanetx">
+<span class="sig-name descname"><span class="pre">find_protein_interactions_in_metanetx</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/MeSHandMetaNetX/build_database.html#find_protein_interactions_in_metanetx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.MeSHandMetaNetX.build_database.find_protein_interactions_in_metanetx" title="Permalink to this definition">#</a></dt>
+<dd><p>A SPARQL function that finds the Metabolites a given Protein (based on its UniProt_ID) interacts with, using MetaNetX.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A text chain that represents the CYPHER query with the desired output. This can be run using: <a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session.run" title="(in Neo4j Python Driver v5.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">neo4j.Session.run</span></code></a></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)">str</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We are not using peptXref: since all proteins in MetaNetX come from UniProt, there is no use here</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.MeSHandMetaNetX.build_database.find_synonyms_in_cts">
+<span class="sig-name descname"><span class="pre">find_synonyms_in_cts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fromIdentifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">toIdentifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">searchTerm</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/MeSHandMetaNetX/build_database.html#find_synonyms_in_cts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.MeSHandMetaNetX.build_database.find_synonyms_in_cts" title="Permalink to this definition">#</a></dt>
+<dd><p>Finds synonyms for a given metabolite in CTS, The Chemical Translation Service</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fromIdentifier</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the database from which we want the conversion</p></li>
+<li><p><strong>toIdentifier</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the database to which we want the conversion</p></li>
+<li><p><strong>searchTerm</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The search termm, which should be an ID of database: <code class="docutils literal notranslate"><span class="pre">fromIdentifier</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The requested synonym</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)">str</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please, be sure to use a database name that is in compliance with those specified in
+CTS itself; if you dont, this function will fail with a 500 error</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To prevent random downtimes from crashing the function, any one URL will be tried at least 5 times
+before crashing (see: <a class="reference external" href="https://stackoverflow.com/questions/9446387/how-to-retry-urllib2-request-when-fails">StackOverflow #9446387</a></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.MeSHandMetaNetX.build_database.get_identifiers">
+<span class="sig-name descname"><span class="pre">get_identifiers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">from_sparql</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/MeSHandMetaNetX/build_database.html#get_identifiers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.MeSHandMetaNetX.build_database.get_identifiers" title="Permalink to this definition">#</a></dt>
+<dd><p>Part of a CYPHER query that processes the outcome from a SPARQL query that searches for information on MetaNetX
+It takes an original metabolite (n) and a row variable, which should have columns named external_identifier,
+cross_refference, InChIKey, InChI, SMILES, Formula and Mass with the adequated format; it is basically a code-reuser,
+not intended to be used separately.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>from_sparql</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – A True/False param defining whether the identifiers are being parsed from a SPARQL query;
+default is False (i.e. imported from file)</p></li>
+<li><p><strong>**kwargs</strong> – Any number of arbitrary keyword arguments</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A text chain that represents the CYPHER query with the desired output. This can be run using: <a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session.run" title="(in Neo4j Python Driver v5.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">neo4j.Session.run</span></code></a></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)">str</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>All HMDB matches might create a Metabolite without CHEBI_ID or CAS_Number, which would violate our schema. This will be later on accounted for.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Some keys, such as VMH_ID, are not merged into their own node, but rather added to an existing one.
+This is because this do not prevously exist in our Schema, and might be changed in the future.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We dont care about overwriting InChI and InChIKey because they are necessarily unique; the same is true for Mass and Formula,
+as they are not all that important. However, for HMDB ID and others, we will take care not to overwrite, which could mess up the DB</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.MeSHandMetaNetX.build_database.get_kegg_pathways_for_metabolites">
+<span class="sig-name descname"><span class="pre">get_kegg_pathways_for_metabolites</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/MeSHandMetaNetX/build_database.html#get_kegg_pathways_for_metabolites"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.MeSHandMetaNetX.build_database.get_kegg_pathways_for_metabolites" title="Permalink to this definition">#</a></dt>
+<dd><p>A function that finds the Pathways a given Metabolite (based on its Kegg_ID) is a part of, using KEGG.
+This uses genome.jp’s dbget web service, since I honestly could not find a way to use KEGG’s SPARQL
+service (<a class="reference external" href="https://www.genome.jp/linkdb/linkdb_rdf.html">https://www.genome.jp/linkdb/linkdb_rdf.html</a>) for that.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Another possibility could be using <a class="reference external" href="https://rest.kegg.jp/get/R00703/">Kegg’s Rest API</a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A text chain that represents the CYPHER query with the desired output. This can be run using: <a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session.run" title="(in Neo4j Python Driver v5.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">neo4j.Session.run</span></code></a></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.MeSHandMetaNetX.build_database.read_synonyms_in_metanetx">
+<span class="sig-name descname"><span class="pre">read_synonyms_in_metanetx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/MeSHandMetaNetX/build_database.html#read_synonyms_in_metanetx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.MeSHandMetaNetX.build_database.read_synonyms_in_metanetx" title="Permalink to this definition">#</a></dt>
+<dd><p>A SPARQL function that finds synonyms for metabolites, proteins or drugs based on a given <cite>query</cite>, using MetaNetX.
+At the same time, it is able to annotate them a bit, adding Name, InChI, InChIKey, SMILES, Formula, Mass, some External IDs,
+and finding whether the metabolite in question has any known isomers, anootating if so.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query_type</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The type of query that is being searched for. One of [“Name”,”KEGG_ID”,”ChEBI_ID”,”HMDB_ID”,”InChI”,”InChIKey”]</p></li>
+<li><p><strong>query</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The query we are searching for; must be of type <code class="docutils literal notranslate"><span class="pre">`query_type`</span></code></p></li>
+<li><p><strong>**kwargs</strong> – Any number of arbitrary keyword arguments</p></li>
+</ul>
+</dd>
+</dl>
+<p>Returns:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.8/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – If the query type is not one of those accepted by the function</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is intended to be run as a execute_read, only returning synonyms present in the DB. No modifications will be applied.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.MeSHandMetaNetX.build_database.write_synonyms_in_metanetx">
+<span class="sig-name descname"><span class="pre">write_synonyms_in_metanetx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/MeSHandMetaNetX/build_database.html#write_synonyms_in_metanetx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.MeSHandMetaNetX.build_database.write_synonyms_in_metanetx" title="Permalink to this definition">#</a></dt>
+<dd><p>A SPARQL function that finds synonyms for metabolites, proteins or drugs in an existing Neo4J database, using MetaNetX.
+At the same time, it is able to annotate them a bit, adding Name, InChI, InChIKey, SMILES, Formula, Mass, some External IDs,
+and finding whether the metabolite in question has any known isomers, anootating if so.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query</strong> (<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The type of query that is being searched for. One of [“Name”,”KEGG_ID”,”ChEBI_ID”,”HMDB_ID”,”InChI”,”InChIKey”].</p></li>
+<li><p><strong>**kwargs</strong> – Any number of arbitrary keyword arguments</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A text chain that represents the CYPHER query with the desired output. This can be run using: <a class="reference external" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session.run" title="(in Neo4j Python Driver v5.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">neo4j.Session.run</span></code></a></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)">str</a></p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.8/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – If the query type is not one of those accepted by the function</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is intended to be run as a manage_transaction, modifying the existing database.</p>
+</div>
+</dd></dl>
+
+</section>
+<section id="module-CanGraph.MeSHandMetaNetX.main">
+<span id="cangraph-meshandmetanetx-main-module"></span><h2>CanGraph.MeSHandMetaNetX.main module<a class="headerlink" href="#module-CanGraph.MeSHandMetaNetX.main" title="Permalink to this headline">#</a></h2>
+<p>A python module that leverages the functions present in the <a class="reference internal" href="#module-CanGraph.MeSHandMetaNetX.build_database" title="CanGraph.MeSHandMetaNetX.build_database"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_database</span></code></a>
+module to recreate <a class="reference external" href="https://www.metanetx.org/">the MetaNetX database</a> using a graph format and Neo4J,
+and then provides an GraphML export file. It also annotates related MeSH_IDs and KEGG Pathway IDs</p>
+<p>Please note that, to work, the functions here pre-suppose you have internet access, which will be used to download
+MetaNetX’s TSVs under a folder provided as <code class="docutils literal notranslate"><span class="pre">`sys.argv[4]`</span></code>. (please ensure you have read-write access there)
+and query some web SPARQL and REST web services.</p>
+<p>For more details on how to run this script, please consult the package’s README</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="CanGraph.MeSHandMetaNetX.main.main">
+<span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/CanGraph/MeSHandMetaNetX/main.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CanGraph.MeSHandMetaNetX.main.main" title="Permalink to this definition">#</a></dt>
+<dd><p>The function that executes the code</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="CanGraph.GraphifySMPDB.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">CanGraph.GraphifySMPDB package</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="CanGraph.QueryWikidata.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">CanGraph.QueryWikidata package</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Pablo Marcos<br/>
+  
+      &copy; Copyright 2022, Pablo Marcos &lt;software@loreak.org&gt;.<br/>
+    Last updated on Dec 17, 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

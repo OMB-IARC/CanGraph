@@ -1,0 +1,1246 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CanGraph.MeSHandMetaNetX.build_database &#8212; CanGraph 1.0 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script src="../../../_static/design-tabs.js"></script>
+    <link rel="shortcut icon" href="../../../_static/cangraph-mini.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../../_static/cangraph-logo.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../index.html">
+                    Main Page
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../Downloads.html">
+   Downloads
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../Tutorials.html">
+   Tutorials
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../Other%20Reading%20Material.html">
+     Other Reading Material
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../Installing%20CanGraph.html">
+     Installing CanGraph
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../Running%20the%20Software.html">
+     Running the Software
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../Understanding%20its%20Outputs.html">
+     Understanding its Outputs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://www.pablomarcos.me/es/posts/master-en-biolog%c3%ada-computacional/tfm/">
+   Presentations
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../CanGraph.html">
+   CanGraph package
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../CanGraph.ExposomeExplorer.html">
+     CanGraph.ExposomeExplorer package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../CanGraph.GraphifyDrugBank.html">
+     CanGraph.GraphifyDrugBank package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../CanGraph.GraphifyHMDB.html">
+     CanGraph.GraphifyHMDB package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../CanGraph.GraphifySMPDB.html">
+     CanGraph.GraphifySMPDB package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../CanGraph.MeSHandMetaNetX.html">
+     CanGraph.MeSHandMetaNetX package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../CanGraph.QueryWikidata.html">
+     CanGraph.QueryWikidata package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../Install%20Apptainer.html">
+     Install Apptainer
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../ToDoList.html">
+   To-Do List
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Logo by <a href="https://www.instagram.com/danonino.caducado/"> Daniel Marcos </a> </br>
+                     Website by <a href="https://www.pablomarcos.me/"> Pablo Marcos </a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/OMB-IARC/CanGraph/"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/OMB-IARC/CanGraph//issues/new?title=Issue%20on%20page%20%2F_modules/CanGraph/MeSHandMetaNetX/build_database.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <h1>Source code for CanGraph.MeSHandMetaNetX.build_database</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="c1"># SPDX-FileCopyrightText: 2022 Pablo Marcos &lt;software@loreak.org&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: MIT</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A python module that provides the necessary functions to transition the MetaNetX database</span>
+<span class="sd">(and related MeSH terms and KEGG IDs) to graph format, either from scratch importing all</span>
+<span class="sd">the nodes (as showcased in :obj:`CanGraph.MeSHandMetaNetX.main`) or in a case-by-case basis,</span>
+<span class="sd">to annotate existing metabolites (as showcased in :obj:`CanGraph.main`).</span>
+
+<span class="sd">.. NOTE:: You may notice some functions here present the ``**kwargs`` arguments option.</span>
+<span class="sd">    This is in order to make the functions compatible with the</span>
+<span class="sd">    :obj:`CanGraph.miscelaneous.manage_transaction` function, which might send back a variable</span>
+<span class="sd">    number of arguments (although technically it could work without the ``**kwargs`` option)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">json</span>                          <span class="c1"># Read JSON files from Python</span>
+<span class="kn">import</span> <span class="nn">urllib.request</span> <span class="k">as</span> <span class="nn">request</span>     <span class="c1"># Extensible library for opening URLs</span>
+<span class="kn">import</span> <span class="nn">urllib.parse</span>                  <span class="c1"># Parse URLs in Python</span>
+<span class="kn">import</span> <span class="nn">re</span>                            <span class="c1"># Regular expression search</span>
+<span class="kn">import</span> <span class="nn">time</span>                          <span class="c1"># Manage the time, and wait times, in python</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">shutil</span>               <span class="c1"># Vital modules to interact with the filesystem</span>
+
+<span class="c1"># Import subscripts for the program</span>
+<span class="c1"># This hack that allows us to de-duplicate the miscleaneous script in this less-used script</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;../&quot;</span><span class="p">)</span>
+<span class="c1"># .. NOTE::: Please beware that, if using this module by itself, you might need to copy &quot;miscelaneous.py&quot; into your path</span>
+<span class="c1"># This is not the most elegant, but simplifies code maintenance, and this script shouldnt be used much so...</span>
+<span class="kn">import</span> <span class="nn">miscelaneous</span> <span class="k">as</span> <span class="nn">misc</span>
+
+<span class="c1"># ********* SPARQL queries to annotate existing nodes using MeSH ********* #</span>
+
+<div class="viewcode-block" id="add_mesh_by_name"><a class="viewcode-back" href="../../../CanGraph.MeSHandMetaNetX.html#CanGraph.MeSHandMetaNetX.build_database.add_mesh_by_name">[docs]</a><span class="k">def</span> <span class="nf">add_mesh_by_name</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A function that adds some MeSH nodes to any existing nodes, based on their Name property.</span>
+<span class="sd">    Only currently active MeSH_IDs are parsed</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: A text chain that represents the CYPHER query with the desired output. This can be run using: :obj:`neo4j.Session.run`</span>
+
+<span class="sd">    .. NOTE:: Only exact matches work here, which is not ideal.</span>
+
+<span class="sd">    .. NOTE:: Be careful when writing CYPHER commands for the driver: sometimes, \&quot; != \&#39; !!!</span>
+
+<span class="sd">    .. versionchanged:: 1.0</span>
+<span class="sd">        Reverted the filtering to old version in order to make the search more specific</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;&quot;</span>
+
+<span class="s2">        CALL {</span>
+
+<span class="s2">        MATCH (n)</span>
+<span class="s2">        WHERE (n:Metabolite OR n:Protein OR n:Drug OR n:Disease OR n:Pathway OR n:Tissue</span>
+<span class="s2">            OR n:CelularLocation OR n:BioSpecimen OR n:Gene OR n:Cause OR n:AdministrationRoute)</span>
+<span class="s2">            AND n.Name IS NOT null AND n.Name &lt;&gt; &quot;&quot;</span>
+<span class="s2">        WITH &#39;</span>
+<span class="s2">        PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;</span>
+<span class="s2">        PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;</span>
+<span class="s2">        PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;</span>
+<span class="s2">        PREFIX owl: &lt;http://www.w3.org/2002/07/owl#&gt;</span>
+<span class="s2">        PREFIX meshv: &lt;http://id.nlm.nih.gov/mesh/vocab#&gt;</span>
+<span class="s2">        PREFIX mesh: &lt;http://id.nlm.nih.gov/mesh/&gt;</span>
+<span class="s2">        PREFIX mesh2022: &lt;http://id.nlm.nih.gov/mesh/2022/&gt;</span>
+<span class="s2">        PREFIX mesh2021: &lt;http://id.nlm.nih.gov/mesh/2021/&gt;</span>
+<span class="s2">        PREFIX mesh2020: &lt;http://id.nlm.nih.gov/mesh/2020/&gt;</span>
+
+<span class="s2">        SELECT DISTINCT  *</span>
+<span class="s2">        FROM &lt;http://id.nlm.nih.gov/mesh&gt;</span>
+<span class="s2">        WHERE</span>
+<span class="s2">        { ?MeSH_Descriptor_ID</span>
+<span class="s2">                     a              meshv:Descriptor ;</span>
+<span class="s2">                     meshv:concept  ?MeSH_Concept_ID ;</span>
+<span class="s2">                     meshv:active 1 ;</span>
+<span class="s2">                     rdfs:label     ?MeSH_Descriptor_Name .</span>
+<span class="s2">          ?MeSH_Concept_ID</span>
+<span class="s2">                     meshv:active 1 ;</span>
+<span class="s2">                     rdfs:label     ?MeSH_Concept_Name</span>
+
+<span class="s2">          FILTER ( ( ?MeSH_Descriptor_Name = </span><span class="se">\&quot;</span><span class="s2">&#39; +  replace(n.Name, &quot;  &quot;, &quot; &quot;) + &#39;</span><span class="se">\&quot;</span><span class="s2">@en ) ||</span>
+<span class="s2">                    ( ?MeSH_Concept_Name = </span><span class="se">\&quot;</span><span class="s2">&#39; +  replace(n.Name, &quot;  &quot;, &quot; &quot;) + &#39;</span><span class="se">\&quot;</span><span class="s2">@en ) )</span>
+<span class="s2">        }&#39; AS sparql, n</span>
+
+<span class="s2">        CALL apoc.load.jsonParams(</span>
+<span class="s2">            replace(&quot;https://id.nlm.nih.gov/mesh/sparql?query=&quot;</span>
+<span class="s2">                    + apoc.text.urlencode(sparql) + &quot;&amp;format=JSON&amp;limit=50&amp;offset=0&amp;inference=true&quot;, &quot;</span><span class="se">\n</span><span class="s2">&quot;, &quot;&quot;),</span>
+<span class="s2">            { Accept: &quot;application/sparql-results+json&quot; }, null )</span>
+<span class="s2">        YIELD value</span>
+
+<span class="s2">        UNWIND value[&#39;results&#39;][&#39;bindings&#39;] as row</span>
+
+<span class="s2">        MERGE (c:MeSH { MeSH_ID:split(row[&#39;MeSH_Descriptor_ID&#39;][&#39;value&#39;],&#39;/&#39;)[-1] , Type:&quot;Descriptor&quot;, Name: row[&#39;MeSH_Descriptor_Name&#39;][&#39;value&#39;]})</span>
+<span class="s2">        MERGE (n)-[r:RELATED_MESH]-&gt;(c)</span>
+<span class="s2">        MERGE (cc:MeSH { MeSH_ID:split(row[&#39;MeSH_Concept_ID&#39;][&#39;value&#39;],&#39;/&#39;)[-1] , Type:&quot;Concept&quot;, Name: row[&#39;MeSH_Concept_Name&#39;][&#39;value&#39;]})</span>
+<span class="s2">        MERGE (n)-[r2:RELATED_MESH]-&gt;(cc)</span>
+
+<span class="s2">        } IN TRANSACTIONS OF 10 rows</span>
+<span class="s2">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="find_metabolites_related_to_mesh"><a class="viewcode-back" href="../../../CanGraph.MeSHandMetaNetX.html#CanGraph.MeSHandMetaNetX.build_database.find_metabolites_related_to_mesh">[docs]</a><span class="k">def</span> <span class="nf">find_metabolites_related_to_mesh</span><span class="p">(</span><span class="n">mesh_id</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A function that finds Metabolites related to a given MeSH ID, on the MeSH DataBase</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        mesh_id (str): The MeSH_ID of the thing for which we want to find related proteins</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: A text chain that represents the CYPHER query with the desired output. This can be run using: :obj:`neo4j.Session.run`</span>
+
+<span class="sd">    .. NOTE:: This is intended to be run as a execute_read, only returning synonyms present in the DB. No modifications will be applied.</span>
+
+<span class="sd">    .. NOTE:: Could be turned into a read query by substituting ``mesh_id`` with ``&#39; + n.MeSH_ID + &#39;``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        WITH &#39;</span>
+<span class="s2">        PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;</span>
+<span class="s2">        PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;</span>
+<span class="s2">        PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;</span>
+<span class="s2">        PREFIX owl: &lt;http://www.w3.org/2002/07/owl#&gt;</span>
+<span class="s2">        PREFIX meshv: &lt;http://id.nlm.nih.gov/mesh/vocab#&gt;</span>
+<span class="s2">        PREFIX mesh: &lt;http://id.nlm.nih.gov/mesh/&gt;</span>
+<span class="s2">        PREFIX mesh2022: &lt;http://id.nlm.nih.gov/mesh/2022/&gt;</span>
+<span class="s2">        PREFIX mesh2021: &lt;http://id.nlm.nih.gov/mesh/2021/&gt;</span>
+<span class="s2">        PREFIX mesh2020: &lt;http://id.nlm.nih.gov/mesh/2020/&gt;</span>
+
+<span class="s2">        SELECT DISTINCT *</span>
+<span class="s2">        FROM &lt;http://id.nlm.nih.gov/mesh&gt;</span>
+<span class="s2">        WHERE</span>
+<span class="s2">        </span><span class="se">{{</span><span class="s2">  ?MeSH_ID a meshv:SCR_Chemical .</span>
+<span class="s2">            ?MeSH_ID meshv:active 1 .</span>
+<span class="s2">            ?MeSH_ID ?o mesh:</span><span class="si">{</span><span class="n">mesh_id</span><span class="si">}</span><span class="s2"> .</span>
+
+<span class="s2">            OPTIONAL</span><span class="se">{{</span><span class="s2"> ?MeSH_ID rdfs:label ?MetaboliteName </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        </span><span class="se">}}</span><span class="s2">  &#39; AS sparql</span>
+
+<span class="s2">        CALL apoc.load.jsonParams(</span>
+<span class="s2">            replace(&quot;https://id.nlm.nih.gov/mesh/sparql?query=&quot; + apoc.text.urlencode(sparql) + &quot;&amp;format=JSON0&amp;inference=true&quot;, &quot;</span><span class="se">\n</span><span class="s2">&quot;, &quot;&quot;),</span>
+<span class="s2">            </span><span class="se">{{</span><span class="s2"> Accept: &quot;application/sparql-results+json&quot; </span><span class="se">}}</span><span class="s2">, null )</span>
+<span class="s2">        YIELD value</span>
+
+<span class="s2">        UNWIND value[&#39;results&#39;][&#39;bindings&#39;] as row</span>
+
+<span class="s2">        WITH</span>
+<span class="s2">            row[&quot;MeSH_ID&quot;][&quot;value&quot;] as MeSH_ID,</span>
+<span class="s2">            split(row[&quot;MetaboliteName&quot;][&quot;value&quot;], &quot;,&quot;)[0] as Name,</span>
+<span class="s2">            split(row[&quot;MetaboliteName&quot;][&quot;value&quot;], &quot;,&quot;)[1] as Species</span>
+
+<span class="s2">        RETURN MeSH_ID, Name, Species</span>
+<span class="s2">        &quot;&quot;&quot;</span></div>
+
+<span class="c1"># ********* SPARQL queries to annotate existing nodes using MetaNetX ********* #</span>
+
+<div class="viewcode-block" id="add_prefixes"><a class="viewcode-back" href="../../../CanGraph.MeSHandMetaNetX.html#CanGraph.MeSHandMetaNetX.build_database.add_prefixes">[docs]</a><span class="k">def</span> <span class="nf">add_prefixes</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Add some prefixes necessary for all MetaNetX queries to work.</span>
+<span class="sd">    This are kept together since adding extra prefixes does not increase computation time</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: A text chain that represents the CYPHER query with the desired output. This can be run using: :obj:`neo4j.Session.run`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        PREFIX mnx: &lt;https://rdf.metanetx.org/schema/&gt;</span>
+<span class="s2">        PREFIX owl: &lt;http://www.w3.org/2002/07/owl#&gt;</span>
+<span class="s2">        PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;</span>
+<span class="s2">        PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;</span>
+
+<span class="s2">        PREFIX up: &lt;http://purl.uniprot.org/uniprot/&gt;</span>
+<span class="s2">        PREFIX chebi: &lt;http://purl.obolibrary.org/obo/CHEBI_&gt;</span>
+<span class="s2">        PREFIX hmdb: &lt;https://identifiers.org/hmdb:&gt;</span>
+<span class="s2">        PREFIX keggC: &lt;https://identifiers.org/kegg.compound:&gt;</span>
+<span class="s2">        PREFIX keggR: &lt;https://identifiers.org/kegg.reaction:&gt;</span>
+<span class="s2">           &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_identifiers"><a class="viewcode-back" href="../../../CanGraph.MeSHandMetaNetX.html#CanGraph.MeSHandMetaNetX.build_database.get_identifiers">[docs]</a><span class="k">def</span> <span class="nf">get_identifiers</span><span class="p">(</span><span class="n">from_sparql</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Part of a CYPHER query that processes the outcome from a SPARQL query that searches for information on MetaNetX</span>
+<span class="sd">    It takes an original metabolite (n) and a row variable, which should have columns named external_identifier,</span>
+<span class="sd">    cross_refference, InChIKey, InChI, SMILES, Formula and Mass with the adequated format; it is basically a code-reuser,</span>
+<span class="sd">    not intended to be used separately.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        from_sparql (bool): A True/False param defining whether the identifiers are being parsed from a SPARQL query;</span>
+<span class="sd">            default is False (i.e. imported from file)</span>
+<span class="sd">        **kwargs: Any number of arbitrary keyword arguments</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: A text chain that represents the CYPHER query with the desired output. This can be run using: :obj:`neo4j.Session.run`</span>
+
+<span class="sd">    .. NOTE:: All HMDB matches might create a Metabolite without CHEBI_ID or CAS_Number, which would violate our schema. This will be later on accounted for.</span>
+
+<span class="sd">    .. NOTE:: Some keys, such as VMH_ID, are not merged into their own node, but rather added to an existing one.</span>
+<span class="sd">          This is because this do not prevously exist in our Schema, and might be changed in the future.</span>
+
+<span class="sd">    .. NOTE:: We dont care about overwriting InChI and InChIKey because they are necessarily unique; the same is true for Mass and Formula,</span>
+<span class="sd">          as they are not all that important. However, for HMDB ID and others, we will take care not to overwrite, which could mess up the DB</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">from_sparql</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">sparql_parser</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;&quot;&quot;</span>
+
+<span class="s2">        WITH</span>
+<span class="s2">            toLower(split(row[&quot;external_identifier&quot;][&quot;value&quot;], &quot;:&quot;)[0]) as databasename,</span>
+<span class="s2">            split(row[&quot;external_identifier&quot;][&quot;value&quot;], &quot;:&quot;)[-1] as databaseid,</span>
+<span class="s2">            row[&quot;cross_refference&quot;][&quot;value&quot;] as url, row[&quot;InChI&quot;][&quot;value&quot;] as InChI,</span>
+<span class="s2">            row[&quot;InChIKey&quot;][&quot;value&quot;] as InChIKey, row[&quot;SMILES&quot;][&quot;value&quot;] as SMILES,</span>
+<span class="s2">            row[&quot;Formula&quot;][&quot;value&quot;] as Formula, row[&quot;Mass&quot;][&quot;value&quot;] as Mass,</span>
+<span class="s2">            split(row[&#39;mnx_url&#39;][&#39;value&#39;],&#39;/&#39;)[-1] as MetaNetX_ID,</span>
+<span class="s2">            split(row[&#39;Isomers&#39;][&#39;value&#39;],&#39;/&#39;)[-1] as Isomer,</span>
+<span class="s2">            n</span>
+
+<span class="s2">        FOREACH(ignoreme in case when MetaNetX_ID IS NOT NULL</span>
+<span class="s2">                AND MetaNetX_ID &lt;&gt; &quot;&quot; then [1] else [] end |</span>
+<span class="s2">            SET n.MetaNetX_ID = MetaNetX_ID</span>
+<span class="s2">        )</span>
+<span class="s2">        FOREACH(ignoreme in case when InChIKey IS NOT NULL</span>
+<span class="s2">                AND InChIKey &lt;&gt; &quot;&quot; then [1] else [] end |</span>
+<span class="s2">            SET n.InChIKey = InChIKey</span>
+<span class="s2">        )</span>
+<span class="s2">        FOREACH(ignoreme in case when InChI IS NOT NULL</span>
+<span class="s2">                AND InChI &lt;&gt; &quot;&quot; then [1] else [] end |</span>
+<span class="s2">            SET n.InChI = InChI</span>
+<span class="s2">        )</span>
+<span class="s2">        FOREACH(ignoreme in case when Formula IS NOT NULL</span>
+<span class="s2">                AND Formula &lt;&gt; &quot;&quot; then [1] else [] end |</span>
+<span class="s2">            SET n.Formula = Formula</span>
+<span class="s2">        )</span>
+<span class="s2">        FOREACH(ignoreme in case when Mass IS NOT NULL</span>
+<span class="s2">                AND Mass &lt;&gt; &quot;&quot; then [1] else [] end |</span>
+<span class="s2">            SET n.Average_Mass = Mass</span>
+<span class="s2">        )</span>
+<span class="s2">        FOREACH(ignoreme in case when SMILES IS NOT NULL</span>
+<span class="s2">                AND SMILES &lt;&gt; &quot;&quot; then [1] else [] end |</span>
+<span class="s2">            SET n.SMILES = SMILES</span>
+<span class="s2">        )</span>
+<span class="s2">            &quot;&quot;&quot;</span><span class="p">,</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        WITH n, databasename, databaseid, MetaNetX_ID, Isomer</span>
+<span class="sd">        MATCH (m) WHERE (m:Metabolite OR m:Protein)</span>
+
+<span class="sd">        FOREACH(ignoreme in case when databasename = &quot;hmdb&quot; then [1] else [] end |</span>
+<span class="sd">            FOREACH(ignoreme in case when databaseid IN n.Secondary_HMDB_IDs then [1] else [] end |</span>
+<span class="sd">                MERGE (n)-[r:SYNONYM_OF]-(m)</span>
+<span class="sd">                 FOREACH(ignoreme in case when MetaNetX_ID IS NOT NULL AND MetaNetX_ID &lt;&gt; &quot;&quot; then [1] else [] end |</span>
+<span class="sd">                     SET m.MetaNetX_ID = MetaNetX_ID</span>
+<span class="sd">                )</span>
+<span class="sd">            )</span>
+<span class="sd">        )</span>
+
+<span class="sd">        FOREACH(ignoreme in case when Isomer IS NOT NULL AND Isomer &lt;&gt; &quot;&quot; then [1] else [] end |</span>
+<span class="sd">            MERGE (z:Metabolite { MetaNetX_ID:Isomer })</span>
+<span class="sd">            MERGE (z)-[r:ISOMER_OF]-(n)</span>
+<span class="sd">        )</span>
+<span class="sd">            &quot;&quot;&quot;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span> <span class="n">sparql_parser</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+
+<span class="s2">        </span><span class="si">{</span><span class="n">sparql_parser</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"></span>
+
+<span class="s2">        FOREACH(ignoreme in case when databasename = &quot;chebi&quot;</span>
+<span class="s2">                AND n.ChEBI_ID &lt;&gt; databaseid then [1] else [] end |</span>
+<span class="s2">            MERGE (m </span><span class="se">{{</span><span class="s2">ChEBI_ID: databaseid</span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            MERGE (n)-[r:SYNONYM_OF]-(m)</span>
+<span class="s2">            FOREACH(ignoreme in case when size(labels(m)) &lt; 1 then [1] else [] end |</span>
+<span class="s2">                SET m:Metabolite</span>
+<span class="s2">            )</span>
+<span class="s2">        )</span>
+
+<span class="s2">        FOREACH(ignoreme in case when databasename = &quot;kegg.compound&quot;</span>
+<span class="s2">                OR databasename = &quot;keggc&quot; AND n.KEGG_ID &lt;&gt; databaseid then [1] else [] end |</span>
+<span class="s2">            MERGE (m </span><span class="se">{{</span><span class="s2">KEGG_ID: split(databaseid, &quot;M_&quot;)[-1]</span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            MERGE (n)-[r:SYNONYM_OF]-(m)</span>
+<span class="s2">            FOREACH(ignoreme in case when size(labels(m)) &lt; 1 then [1] else [] end |</span>
+<span class="s2">                SET m:Metabolite</span>
+<span class="s2">            )</span>
+<span class="s2">        )</span>
+
+<span class="s2">        FOREACH(ignoreme in case when databasename = &quot;hmdb&quot;</span>
+<span class="s2">                AND n.HMDB_ID &lt;&gt; databaseid then [1] else [] end |</span>
+<span class="s2">            MERGE (m </span><span class="se">{{</span><span class="s2">HMDB_ID: split(databaseid, &quot;M_&quot;)[-1]</span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            MERGE (n)-[r:SYNONYM_OF]-(m)</span>
+<span class="s2">            FOREACH(ignoreme in case when size(labels(m)) &lt; 1 then [1] else [] end |</span>
+<span class="s2">                SET m:Metabolite</span>
+<span class="s2">            )</span>
+<span class="s2">        )</span>
+
+<span class="s2">        FOREACH(ignoreme in case when databasename = &quot;vmhmetabolite&quot; then [1] else [] end |</span>
+<span class="s2">            SET n.VMH_ID = databaseid</span>
+<span class="s2">        )</span>
+
+<span class="s2">        FOREACH(ignoreme in case when databasename = &quot;biggm&quot;</span>
+<span class="s2">                OR databasename = &quot;bigg.metabolite&quot; then [1] else [] end |</span>
+<span class="s2">            SET n.BiGG_ID = databaseid</span>
+<span class="s2">        )</span>
+
+<span class="s2">        FOREACH(ignoreme in case when databasename = &quot;sabiork.compound&quot;</span>
+<span class="s2">                OR databasename = &quot;sabiorkm&quot; then [1] else [] end |</span>
+<span class="s2">            SET n.SabioRK_ID = databaseid</span>
+<span class="s2">        )</span>
+
+<span class="s2">        FOREACH(ignoreme in case when databasename = &quot;seed.compound&quot; then [1] else [] end |</span>
+<span class="s2">            SET n.ModelSeed_ID = databaseid</span>
+<span class="s2">        )</span>
+
+<span class="s2">        FOREACH(ignoreme in case when databasename = &quot;seedm&quot; then [1] else [] end |</span>
+<span class="s2">            SET n.ModelSeed_ID = split(databaseid, &quot;M_&quot;)[-1]</span>
+<span class="s2">        )</span>
+
+<span class="s2">        FOREACH(ignoreme in case when databasename = &quot;metacyc.compound&quot;</span>
+<span class="s2">                OR databasename = &quot;metacycm&quot; then [1] else [] end |</span>
+<span class="s2">            SET n.MetaCyc_ID = databaseid</span>
+<span class="s2">        )</span>
+
+<span class="s2">        FOREACH(ignoreme in case when databasename = &quot;slm&quot; then [1] else [] end |</span>
+<span class="s2">            SET n.SwissLipids_ID = databaseid</span>
+<span class="s2">        )</span>
+
+<span class="s2">        FOREACH(ignoreme in case when databasename = &quot;envipath&quot;</span>
+<span class="s2">                OR databasename = &quot;envipathm&quot; then [1] else [] end |</span>
+<span class="s2">            SET n.EnviPath_ID = databaseid</span>
+<span class="s2">        )</span>
+
+<span class="s2">        </span><span class="si">{</span><span class="n">sparql_parser</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"></span>
+<span class="s2">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="write_synonyms_in_metanetx"><a class="viewcode-back" href="../../../CanGraph.MeSHandMetaNetX.html#CanGraph.MeSHandMetaNetX.build_database.write_synonyms_in_metanetx">[docs]</a><span class="k">def</span> <span class="nf">write_synonyms_in_metanetx</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A SPARQL function that finds synonyms for metabolites, proteins or drugs in an existing Neo4J database, using MetaNetX.</span>
+<span class="sd">    At the same time, it is able to annotate them a bit, adding Name, InChI, InChIKey, SMILES, Formula, Mass, some External IDs,</span>
+<span class="sd">    and finding whether the metabolite in question has any known isomers, anootating if so.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        query (str): The type of query that is being searched for. One of [&quot;Name&quot;,&quot;KEGG_ID&quot;,&quot;ChEBI_ID&quot;,&quot;HMDB_ID&quot;,&quot;InChI&quot;,&quot;InChIKey&quot;].</span>
+<span class="sd">        **kwargs: Any number of arbitrary keyword arguments</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: A text chain that represents the CYPHER query with the desired output. This can be run using: :obj:`neo4j.Session.run`</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If the query type is not one of those accepted by the function</span>
+
+<span class="sd">    .. NOTE:: This is intended to be run as a manage_transaction, modifying the existing database.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">query</span> <span class="o">==</span> <span class="s2">&quot;Name&quot;</span><span class="p">:</span>
+      <span class="n">query_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;?mnx_url  rdfs:comment  </span><span class="se">\&quot;</span><span class="s2">&#39; +  n.Name + &#39;</span><span class="se">\&quot;</span><span class="s2"> . &quot;&quot;&quot;</span>
+    <span class="k">elif</span> <span class="n">query</span> <span class="o">==</span> <span class="s2">&quot;KEGG_ID&quot;</span><span class="p">:</span>
+      <span class="n">query_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;?mnx_url  mnx:chemXref  keggC:&#39; +  n.KEGG_ID + &#39;  . &quot;&quot;&quot;</span>
+    <span class="k">elif</span> <span class="n">query</span> <span class="o">==</span> <span class="s2">&quot;ChEBI_ID&quot;</span><span class="p">:</span>
+      <span class="n">query_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;?mnx_url  mnx:chemXref  chebi:&#39; +  n.ChEBI_ID + &#39; . &quot;&quot;&quot;</span>
+    <span class="k">elif</span> <span class="n">query</span> <span class="o">==</span> <span class="s2">&quot;HMDB_ID&quot;</span><span class="p">:</span>
+      <span class="n">query_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;?mnx_url  mnx:chemXref  hmdb:&#39; +  n.HMDB_ID + &#39; . &quot;&quot;&quot;</span>
+    <span class="k">elif</span> <span class="n">query</span> <span class="o">==</span> <span class="s2">&quot;InChI&quot;</span><span class="p">:</span>
+      <span class="n">query_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;?mnx_url  mnx:inchi  </span><span class="se">\&quot;</span><span class="s2">&#39; +  n.InChI + &#39;</span><span class="se">\&quot;</span><span class="s2"> . &quot;&quot;&quot;</span>
+    <span class="k">elif</span> <span class="n">query</span> <span class="o">==</span> <span class="s2">&quot;InChIKey&quot;</span><span class="p">:</span>
+      <span class="n">query_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;?mnx_url  mnx:inchikey  </span><span class="se">\&quot;</span><span class="s2">InChIKey=&#39; +  n.InChIKey + &#39;</span><span class="se">\&quot;</span><span class="s2"> . &quot;&quot;&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2"> is not a valid query type&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL </span><span class="se">{{</span><span class="s2"></span>
+
+<span class="s2">        MATCH (n)</span>
+<span class="s2">        WHERE (n:Metabolite OR n:Protein OR n:Drug) AND n.</span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2"> IS NOT null AND n.</span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2"> &lt;&gt; &quot;&quot;</span>
+<span class="s2">        WITH &#39;</span>
+
+<span class="s2">        </span><span class="si">{</span> <span class="n">add_prefixes</span><span class="p">()</span> <span class="si">}</span><span class="s2"></span>
+
+<span class="s2">        SELECT DISTINCT *</span>
+<span class="s2">        WHERE</span>
+<span class="s2">            </span><span class="se">{{</span><span class="s2">      ?mnx_url    rdf:type        mnx:CHEM .</span>
+
+<span class="s2">                    </span><span class="si">{</span><span class="n">query_text</span><span class="si">}</span><span class="s2"></span>
+
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2">  ?mnx_url    rdfs:comment    ?Name       </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2">  ?mnx_url    mnx:inchi       ?InChI      </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2">  ?mnx_url    mnx:inchikey    ?InChIKey   </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2">  ?mnx_url    mnx:smiles      ?SMILES     </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2">  ?mnx_url    mnx:formula     ?Formula    </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2">  ?mnx_url    mnx:mass        ?Mass       </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2">  ?mnx_url    mnx:hasIsomericChild    ?Isomers </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">                    ?mnx_url    mnx:chemXref    ?cross_refference .</span>
+
+<span class="s2">                ?cross_refference</span>
+<span class="s2">                                rdfs:label      ?external_identifier</span>
+<span class="s2">            </span><span class="se">}}</span><span class="s2">&#39; AS sparql, n</span>
+
+<span class="s2">        CALL apoc.load.jsonParams(</span>
+<span class="s2">            replace(&quot;https://rdf.metanetx.org/sparql/?query=&quot; + apoc.text.urlencode(sparql), &quot;</span><span class="se">\n</span><span class="s2">&quot;, &quot;&quot;),</span>
+<span class="s2">            </span><span class="se">{{</span><span class="s2"> Accept: &quot;application/sparql-results+json&quot; </span><span class="se">}}</span><span class="s2">, null )</span>
+<span class="s2">        YIELD value</span>
+
+<span class="s2">        UNWIND value[&#39;results&#39;][&#39;bindings&#39;] as row</span>
+
+<span class="s2">        FOREACH(ignoreme in case when n.Name IS NULL OR n.Name = &quot;&quot; then [1] else [] end |</span>
+<span class="s2">                SET n.Name = row[&quot;Name&quot;][&quot;value&quot;]</span>
+<span class="s2">        )</span>
+
+<span class="s2">        </span><span class="si">{</span> <span class="n">get_identifiers</span><span class="p">(</span><span class="n">from_sparql</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="si">}</span><span class="s2"></span>
+
+<span class="s2">        </span><span class="se">}}</span><span class="s2"> IN TRANSACTIONS OF 10 rows</span>
+<span class="s2">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="read_synonyms_in_metanetx"><a class="viewcode-back" href="../../../CanGraph.MeSHandMetaNetX.html#CanGraph.MeSHandMetaNetX.build_database.read_synonyms_in_metanetx">[docs]</a><span class="k">def</span> <span class="nf">read_synonyms_in_metanetx</span><span class="p">(</span><span class="n">query_type</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A SPARQL function that finds synonyms for metabolites, proteins or drugs based on a given `query`, using MetaNetX.</span>
+<span class="sd">    At the same time, it is able to annotate them a bit, adding Name, InChI, InChIKey, SMILES, Formula, Mass, some External IDs,</span>
+<span class="sd">    and finding whether the metabolite in question has any known isomers, anootating if so.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        query_type   (str): The type of query that is being searched for. One of [&quot;Name&quot;,&quot;KEGG_ID&quot;,&quot;ChEBI_ID&quot;,&quot;HMDB_ID&quot;,&quot;InChI&quot;,&quot;InChIKey&quot;]</span>
+<span class="sd">        query       (str): The query we are searching for; must be of type ```query_type```</span>
+<span class="sd">        **kwargs: Any number of arbitrary keyword arguments</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If the query type is not one of those accepted by the function</span>
+
+<span class="sd">    .. NOTE:: This is intended to be run as a execute_read, only returning synonyms present in the DB. No modifications will be applied.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">query_type</span> <span class="o">==</span> <span class="s2">&quot;Name&quot;</span><span class="p">:</span>
+      <span class="n">query_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;?mnx_url  rdfs:comment  </span><span class="se">\&quot;</span><span class="si">{</span> <span class="n">query</span> <span class="si">}</span><span class="se">\&quot;</span><span class="s2"> . &quot;&quot;&quot;</span>
+    <span class="k">elif</span> <span class="n">query_type</span> <span class="o">==</span> <span class="s2">&quot;ChEBI_ID&quot;</span><span class="p">:</span>
+      <span class="n">query_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;?mnx_url  mnx:chemXref  chebi:</span><span class="si">{</span> <span class="n">query</span> <span class="si">}</span><span class="s2"> . &quot;&quot;&quot;</span>
+    <span class="k">elif</span> <span class="n">query_type</span> <span class="o">==</span> <span class="s2">&quot;HMDB_ID&quot;</span><span class="p">:</span>
+      <span class="n">query_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;?mnx_url  mnx:chemXref  hmdb:</span><span class="si">{</span> <span class="n">query</span> <span class="si">}</span><span class="s2"> . &quot;&quot;&quot;</span>
+    <span class="k">elif</span> <span class="n">query_type</span> <span class="o">==</span> <span class="s2">&quot;InChI&quot;</span><span class="p">:</span>
+      <span class="n">query_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;?mnx_url  mnx:inchi  </span><span class="se">\&quot;</span><span class="si">{</span> <span class="n">query</span> <span class="si">}</span><span class="se">\&quot;</span><span class="s2"> . &quot;&quot;&quot;</span>
+    <span class="k">elif</span> <span class="n">query_type</span> <span class="o">==</span> <span class="s2">&quot;InChIKey&quot;</span><span class="p">:</span>
+      <span class="n">query_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;?mnx_url  mnx:inchikey  </span><span class="se">\&quot;</span><span class="s2">InChIKey=</span><span class="si">{</span> <span class="n">query</span> <span class="si">}</span><span class="se">\&quot;</span><span class="s2"> . &quot;&quot;&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">query_type</span><span class="si">}</span><span class="s2"> is not a valid query type&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        WITH &#39;</span>
+
+<span class="s2">        </span><span class="si">{</span> <span class="n">add_prefixes</span><span class="p">()</span> <span class="si">}</span><span class="s2"></span>
+
+<span class="s2">        SELECT DISTINCT *</span>
+<span class="s2">        WHERE</span>
+<span class="s2">            </span><span class="se">{{</span><span class="s2">      ?mnx_url            rdf:type        mnx:CHEM .</span>
+
+<span class="s2">                    </span><span class="si">{</span><span class="n">query_text</span><span class="si">}</span><span class="s2"></span>
+
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2">  ?mnx_url    rdfs:comment    ?Name       </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2">  ?mnx_url    mnx:inchi       ?InChI      </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2">  ?mnx_url    mnx:inchikey    ?InChIKey   </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2">  ?mnx_url    mnx:smiles      ?SMILES     </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2">  ?mnx_url    mnx:formula     ?Formula    </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2">  ?mnx_url    mnx:mass        ?Mass       </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2">  ?mnx_url    mnx:hasIsomericChild    ?Isomers </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">                    ?mnx_url    mnx:chemXref    ?cross_refference .</span>
+
+<span class="s2">                    ?cross_refference</span>
+<span class="s2">                                rdfs:label      ?external_identifier</span>
+<span class="s2">            </span><span class="se">}}</span><span class="s2">&#39; AS sparql</span>
+
+<span class="s2">        CALL apoc.load.jsonParams(</span>
+<span class="s2">            replace(&quot;https://rdf.metanetx.org/sparql/?query=&quot; + apoc.text.urlencode(sparql), &quot;</span><span class="se">\n</span><span class="s2">&quot;, &quot;&quot;),</span>
+<span class="s2">            </span><span class="se">{{</span><span class="s2"> Accept: &quot;application/sparql-results+json&quot; </span><span class="se">}}</span><span class="s2">, null )</span>
+<span class="s2">        YIELD value</span>
+
+<span class="s2">        UNWIND value[&#39;results&#39;][&#39;bindings&#39;] as row</span>
+
+<span class="s2">        WITH</span>
+<span class="s2">            toLower(split(row[&quot;external_identifier&quot;][&quot;value&quot;], &quot;:&quot;)[0]) as databasename,</span>
+<span class="s2">            split(row[&quot;external_identifier&quot;][&quot;value&quot;], &quot;:&quot;)[-1] as databaseid,</span>
+<span class="s2">            row[&quot;InChI&quot;][&quot;value&quot;] as InChI, row[&quot;InChIKey&quot;][&quot;value&quot;] as InChIKey,</span>
+<span class="s2">            row[&quot;Name&quot;][&quot;value&quot;] as Name</span>
+
+<span class="s2">        RETURN databasename, databaseid, InChI, InChIKey, Name</span>
+<span class="s2">        &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="find_protein_interactions_in_metanetx"><a class="viewcode-back" href="../../../CanGraph.MeSHandMetaNetX.html#CanGraph.MeSHandMetaNetX.build_database.find_protein_interactions_in_metanetx">[docs]</a><span class="k">def</span> <span class="nf">find_protein_interactions_in_metanetx</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A SPARQL function that finds the Metabolites a given Protein (based on its UniProt_ID) interacts with, using MetaNetX.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: A text chain that represents the CYPHER query with the desired output. This can be run using: :obj:`neo4j.Session.run`</span>
+
+<span class="sd">    .. NOTE:: We are not using peptXref: since all proteins in MetaNetX come from UniProt, there is no use here</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL </span><span class="se">{{</span><span class="s2"></span>
+
+<span class="s2">        MATCH (p)</span>
+<span class="s2">        WHERE (p:Metabolite OR p:Protein OR p:Drug) AND p.UniProt_ID IS NOT null AND p.UniProt_ID &lt;&gt; &quot;&quot;</span>
+<span class="s2">        WITH &#39;</span>
+
+<span class="s2">        </span><span class="si">{</span> <span class="n">add_prefixes</span><span class="p">()</span> <span class="si">}</span><span class="s2"></span>
+
+<span class="s2">        SELECT DISTINCT  *</span>
+<span class="s2">        WHERE</span>
+<span class="s2">            </span><span class="se">{{</span><span class="s2">      ?pept       mnx:peptXref  up:&#39; +  p.UniProt_ID + &#39; .</span>
+
+<span class="s2">                    ?cata       mnx:pept      ?pept .</span>
+<span class="s2">                    ?gpr        mnx:cata      ?cata ;</span>
+<span class="s2">                                mnx:reac      ?reac .</span>
+<span class="s2">                    ?reac       ?side         ?part .</span>
+<span class="s2">                    ?part       mnx:chem      ?mnx_url .</span>
+
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2">  ?mnx_url    rdfs:comment    ?Name       </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2">  ?mnx_url    mnx:inchi       ?InChI      </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2">  ?mnx_url    mnx:inchikey    ?InChIKey   </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2">  ?mnx_url    mnx:smiles      ?SMILES     </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2">  ?mnx_url    mnx:formula     ?Formula    </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2">  ?mnx_url    mnx:mass        ?Mass       </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2">  ?mnx_url    mnx:hasIsomericChild    ?Isomers </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">                    ?mnx_url    mnx:chemXref  ?cross_refference .</span>
+<span class="s2">               ?cross_refference</span>
+<span class="s2">                            rdfs:label    ?external_identifier .</span>
+
+<span class="s2">            </span><span class="se">}}</span><span class="s2">&#39; AS sparql, p</span>
+
+<span class="s2">        CALL apoc.load.jsonParams(</span>
+<span class="s2">            replace(&quot;https://rdf.metanetx.org/sparql/?default-graph-uri=https://rdf.metanetx.org/&amp;query=&quot; + apoc.text.urlencode(sparql), &quot;</span><span class="se">\n</span><span class="s2">&quot;, &quot;&quot;),</span>
+<span class="s2">            </span><span class="se">{{</span><span class="s2"> Accept: &quot;application/sparql-results+json&quot; </span><span class="se">}}</span><span class="s2">, null )</span>
+<span class="s2">        YIELD value</span>
+
+<span class="s2">        UNWIND value[&#39;results&#39;][&#39;bindings&#39;] as row</span>
+
+<span class="s2">        SET p.MetaNetX_ID = split(row[&#39;pept&#39;][&#39;value&#39;],&#39;/&#39;)[-1]</span>
+
+<span class="s2">        MERGE (n:Metabolite </span><span class="se">{{</span><span class="s2"> MetaNetX_ID: split(row[&#39;mnx_url&#39;][&#39;value&#39;],&#39;/&#39;)[-1] </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">        SET n.Name = row[&quot;Name&quot;][&quot;value&quot;]</span>
+<span class="s2">        MERGE (p)-[r:INTERACTS_WITH]-&gt;(n)</span>
+
+<span class="s2">        </span><span class="si">{</span> <span class="n">get_identifiers</span><span class="p">(</span><span class="n">from_sparql</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="si">}</span><span class="s2"></span>
+
+<span class="s2">        </span><span class="se">}}</span><span class="s2"> IN TRANSACTIONS OF 10 rows</span>
+<span class="s2">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="find_protein_data_in_metanetx"><a class="viewcode-back" href="../../../CanGraph.MeSHandMetaNetX.html#CanGraph.MeSHandMetaNetX.build_database.find_protein_data_in_metanetx">[docs]</a><span class="k">def</span> <span class="nf">find_protein_data_in_metanetx</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A SPARQL function that annotates Protein nodes in an exiting Neo4J database by using the information provided by MetaNetX</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: A text chain that represents the CYPHER query with the desired output. This can be run using: :obj:`neo4j.Session.run`</span>
+
+<span class="sd">    .. NOTE:: This function is partly a duplicate of `self.find_protein_interactions_in_metanetx()`, which was split to prevent timeouts</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL </span><span class="se">{{</span><span class="s2"></span>
+
+<span class="s2">        MATCH (p)</span>
+<span class="s2">        WHERE (p:Metabolite OR p:Protein OR p:Drug) AND p.UniProt_ID IS NOT null AND p.UniProt_ID &lt;&gt; &quot;&quot;</span>
+
+<span class="s2">        WITH &#39;</span>
+
+<span class="s2">        </span><span class="si">{</span> <span class="n">add_prefixes</span><span class="p">()</span> <span class="si">}</span><span class="s2"></span>
+
+<span class="s2">        SELECT DISTINCT  *</span>
+<span class="s2">        WHERE</span>
+<span class="s2">            </span><span class="se">{{</span><span class="s2">      ?pept       mnx:peptXref  up:&#39; +  p.UniProt_ID + &#39; .</span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2">  ?pept       mnx:geneName       ?geneName      </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2">  ?pept       rdfs:comment       ?peptName      </span><span class="se">}}</span><span class="s2"></span>
+
+<span class="s2">                    ?cata       mnx:pept      ?pept .</span>
+<span class="s2">                    ?gpr        mnx:cata      ?cata ;</span>
+<span class="s2">                                mnx:reac      ?reac .</span>
+<span class="s2">                    ?reac       ?side         ?part .</span>
+
+<span class="s2">        OPTIONAL</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">                    ?part       mnx:comp      ?component .</span>
+<span class="s2">                    ?component  rdfs:comment  ?CelularLocation </span><span class="se">}}</span><span class="s2"></span>
+<span class="s2">            </span><span class="se">}}</span><span class="s2">&#39; AS sparql, p</span>
+
+<span class="s2">        CALL apoc.load.jsonParams(</span>
+<span class="s2">            replace(&quot;https://rdf.metanetx.org/sparql/?query=&quot; + apoc.text.urlencode(sparql), &quot;</span><span class="se">\n</span><span class="s2">&quot;, &quot;&quot;),</span>
+<span class="s2">            </span><span class="se">{{</span><span class="s2"> Accept: &quot;application/sparql-results+json&quot; </span><span class="se">}}</span><span class="s2">, null )</span>
+<span class="s2">        YIELD value</span>
+
+<span class="s2">        UNWIND value[&#39;results&#39;][&#39;bindings&#39;] as row</span>
+
+<span class="s2">        SET p.MetaNetX_ID = split(row[&#39;pept&#39;][&#39;value&#39;],&#39;/&#39;)[-1]</span>
+
+<span class="s2">        FOREACH(ignoreme in case when row[&quot;CelularLocation&quot;][&quot;value&quot;] IS NOT NULL then [1] else [] end |</span>
+<span class="s2">            MERGE (c:CelularLocation </span><span class="se">{{</span><span class="s2">Name:row[&quot;CelularLocation&quot;][&quot;value&quot;]</span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            MERGE (p)-[r:LOCATED_INSIDE_CELL]-&gt;(c)</span>
+<span class="s2">        )</span>
+
+<span class="s2">        FOREACH(ignoreme in case when p.Name IS NULL OR p.Name = &quot;&quot; then [1] else [] end |</span>
+<span class="s2">            SET p.Name = row[&quot;peptName&quot;][&quot;value&quot;]</span>
+<span class="s2">        )</span>
+
+<span class="s2">        FOREACH(ignoreme in case when row[&quot;geneName&quot;][&quot;value&quot;] IS NOT NULL then [1] else [] end |</span>
+<span class="s2">            MERGE (g:Gene </span><span class="se">{{</span><span class="s2"> Name:row[&quot;geneName&quot;][&quot;value&quot;]</span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            MERGE (g)-[:ENCODES]-&gt;(p)</span>
+<span class="s2">        )</span>
+
+<span class="s2">        </span><span class="se">}}</span><span class="s2"> IN TRANSACTIONS OF 10 rows</span>
+<span class="s2">        &quot;&quot;&quot;</span></div>
+
+<span class="c1"># ********* Build the entire MetaNetX DB as a graph under our format ********* #</span>
+
+
+<div class="viewcode-block" id="add_chem_xref"><a class="viewcode-back" href="../../../CanGraph.MeSHandMetaNetX.html#CanGraph.MeSHandMetaNetX.build_database.add_chem_xref">[docs]</a><span class="k">def</span> <span class="nf">add_chem_xref</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A CYPHER query that loads the `chem_xref.tsv` file availaible at the MetaNetX site, using a graph format.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filename    (str): The name of the CSV file that is being imported</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</span>
+
+<span class="sd">    .. NOTE:: For performance, it is recommended to split the file in 1 subfile for each row in the DataBase</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        LOAD CSV WITH HEADERS FROM (&#39;file:///</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39;) AS line FIELDTERMINATOR &#39;</span><span class="se">\t</span><span class="s2">&#39;</span>
+
+<span class="s2">        MERGE (n:Metabolite </span><span class="se">{{</span><span class="s2"> MetaNetX_ID:line.ID </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">        SET n.Description = line.description</span>
+
+<span class="s2">        WITH toLower(split(line[&quot;#source&quot;], &quot;:&quot;)[0]) as databasename,</span>
+<span class="s2">        split(line[&quot;#source&quot;], &quot;:&quot;)[-1] as databaseid,</span>
+<span class="s2">        n</span>
+
+<span class="s2">        </span><span class="si">{</span> <span class="n">get_identifiers</span><span class="p">(</span><span class="n">from_sparql</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="si">}</span><span class="s2"></span>
+<span class="s2">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="add_chem_prop"><a class="viewcode-back" href="../../../CanGraph.MeSHandMetaNetX.html#CanGraph.MeSHandMetaNetX.build_database.add_chem_prop">[docs]</a><span class="k">def</span> <span class="nf">add_chem_prop</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A CYPHER query that loads the `chem_prop.tsv` file availaible at the MetaNetX site, using a graph format.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filename    (str): The name of the CSV file that is being imported</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</span>
+
+<span class="sd">    .. NOTE:: For performance, it is recommended to split the file in 1 subfile for each row in the DataBase</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        LOAD CSV WITH HEADERS FROM (&#39;file:///</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39;) AS line FIELDTERMINATOR &#39;</span><span class="se">\t</span><span class="s2">&#39;</span>
+
+<span class="s2">        MERGE (n:Metabolite </span><span class="se">{{</span><span class="s2"> MetaNetX_ID:line[&quot;#ID&quot;] </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">        SET n.Name = line.name, n.Formula = line.Formula, n.Charge = line.charge, n.Average_Mass = line.mass,</span>
+<span class="s2">            n.InChI = line.InChI, n.InChIKey = line.InChIKey, n.SMILES = line.SMILES</span>
+<span class="s2">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="add_chem_isom"><a class="viewcode-back" href="../../../CanGraph.MeSHandMetaNetX.html#CanGraph.MeSHandMetaNetX.build_database.add_chem_isom">[docs]</a><span class="k">def</span> <span class="nf">add_chem_isom</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A CYPHER query that loads the `chem_isom.tsv` file availaible at the MetaNetX site, using a graph format.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filename    (str): The name of the CSV file that is being imported</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</span>
+
+<span class="sd">    .. NOTE:: For performance, it is recommended to split the file in 1 subfile for each row in the DataBase</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        LOAD CSV WITH HEADERS FROM (&#39;file:///</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39;) AS line FIELDTERMINATOR &#39;</span><span class="se">\t</span><span class="s2">&#39;</span>
+
+<span class="s2">        MERGE (n:Metabolite </span><span class="se">{{</span><span class="s2"> MetaNetX_ID:line[&quot;#parent&quot;] </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">        MERGE (m:Metabolite </span><span class="se">{{</span><span class="s2"> MetaNetX_ID:line[&quot;child&quot;] </span><span class="se">}}</span><span class="s2">)</span>
+
+<span class="s2">        MERGE (m)-[r:ISOMER_OF]-(m)</span>
+
+<span class="s2">        SET n.Alternative_names = split(line.description,&quot; -&gt; &quot;)[0] + &quot;,&quot; + n.Alternative_names</span>
+<span class="s2">        SET m.Alternative_names = split(line.description,&quot; -&gt; &quot;)[1] + &quot;,&quot; + m.Alternative_names</span>
+<span class="s2">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="add_comp_xref"><a class="viewcode-back" href="../../../CanGraph.MeSHandMetaNetX.html#CanGraph.MeSHandMetaNetX.build_database.add_comp_xref">[docs]</a><span class="k">def</span> <span class="nf">add_comp_xref</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A CYPHER query that loads the `comp_xref.tsv` file availaible at the MetaNetX site, using a graph format.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filename    (str): The name of the CSV file that is being imported</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</span>
+
+<span class="sd">    .. NOTE:: For performance, it is recommended to split the file in 1 subfile for each row in the DataBase</span>
+
+<span class="sd">    .. NOTE:: Some identifiers present the CL/cl prefix. Since I could not find what this prefix refers to,</span>
+<span class="sd">          and since it only pertains to one single MetaNetX ID, we did not take them into account</span>
+
+<span class="sd">    .. NOTE:: The &quot;description&quot; field in the DataBase is ignored, since it seems to be quite similar, but less useful,</span>
+<span class="sd">          than the &quot;name&quot; field from comp_prop, which is more coherent with our pre-existing schema</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        LOAD CSV WITH HEADERS FROM (&#39;file:///</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39;) AS line FIELDTERMINATOR &#39;</span><span class="se">\t</span><span class="s2">&#39;</span>
+
+<span class="s2">        MERGE (n:CelularLocation </span><span class="se">{{</span><span class="s2"> MetaNetX_ID:line.ID </span><span class="se">}}</span><span class="s2">)</span>
+
+<span class="s2">        WITH toLower(split(line[&quot;#source&quot;], &quot;:&quot;)[0]) as databasename,</span>
+<span class="s2">        split(line[&quot;#source&quot;], &quot;:&quot;)[-1] as databaseid,</span>
+<span class="s2">        n</span>
+
+<span class="s2">        FOREACH(ignoreme in case when databasename = &quot;biggc&quot; OR databasename = &quot;bigg.compartment&quot; then [1] else [] end |</span>
+<span class="s2">            SET n.BiGG_ID = databaseid</span>
+<span class="s2">        )</span>
+
+<span class="s2">        FOREACH(ignoreme in case when databasename = &quot;go&quot; then [1] else [] end |</span>
+<span class="s2">            SET n.GO_ID = databaseid</span>
+<span class="s2">        )</span>
+
+<span class="s2">        FOREACH(ignoreme in case when databasename = &quot;seedc&quot; then [1] else [] end |</span>
+<span class="s2">            SET n.ModelSeed_ID = databaseid</span>
+<span class="s2">        )</span>
+
+<span class="s2">        FOREACH(ignoreme in case when databasename = &quot;cl&quot; then [1] else [] end |</span>
+<span class="s2">            SET n.ModelSeed_ID = databaseid</span>
+<span class="s2">        )</span>
+
+<span class="s2">        FOREACH(ignoreme in case when databasename = &quot;cco&quot; then [1] else [] end |</span>
+<span class="s2">            SET n.Cell_Component_Ontology_ID = databaseid</span>
+<span class="s2">        )</span>
+<span class="s2">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="add_comp_prop"><a class="viewcode-back" href="../../../CanGraph.MeSHandMetaNetX.html#CanGraph.MeSHandMetaNetX.build_database.add_comp_prop">[docs]</a><span class="k">def</span> <span class="nf">add_comp_prop</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A CYPHER query that loads the `comp_prop.tsv` file availaible at the MetaNetX site, using a graph format.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filename    (str): The name of the CSV file that is being imported</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</span>
+
+<span class="sd">    .. NOTE:: For performance, it is recommended to split the file in 1 subfile for each row in the DataBase</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        LOAD CSV WITH HEADERS FROM (&#39;file:///</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39;) AS line FIELDTERMINATOR &#39;</span><span class="se">\t</span><span class="s2">&#39;</span>
+
+<span class="s2">        MERGE (n:CelularLocation </span><span class="se">{{</span><span class="s2"> MetaNetX_ID:line[&quot;#ID&quot;] </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">        SET n.Name = line.name</span>
+<span class="s2">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="add_pept"><a class="viewcode-back" href="../../../CanGraph.MeSHandMetaNetX.html#CanGraph.MeSHandMetaNetX.build_database.add_pept">[docs]</a><span class="k">def</span> <span class="nf">add_pept</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A CYPHER query that all the protein availaible at the MetaNetX site, using a graph format and SPARQL.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: A text chain that represents the CYPHER query with the desired output. This can be run using: :obj:`neo4j.Session.run`</span>
+
+<span class="sd">    .. NOTE:: SPARQL was only used here because, unlike with the other files, there is no download available;</span>
+<span class="sd">          also, given there are few proteins, Neo4J is able to process it without running out of memory</span>
+<span class="sd">          (unlike what happened with the other fields)</span>
+
+<span class="sd">    .. NOTE:: This is an **autocommit transaction**. This means that, in order to not keep data in memory</span>
+<span class="sd">          (and make running it with a huge amount of data) more efficient, you will need to add ```:auto ```</span>
+<span class="sd">          when calling it from the Neo4J browser, or call it as ```session.run( clean_database() )``` from the driver.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        WITH &#39;</span>
+
+<span class="s2">        </span><span class="si">{</span> <span class="n">add_prefixes</span><span class="p">()</span> <span class="si">}</span><span class="s2"></span>
+
+<span class="s2">        SELECT DISTINCT  *</span>
+<span class="s2">        WHERE</span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">                    ?protein    a               mnx:PEPT ;</span>
+<span class="s2">                                mnx:peptXref    ?cross_refference .</span>
+<span class="s2">             </span><span class="se">}}</span><span class="s2">&#39; AS sparql</span>
+
+<span class="s2">        CALL apoc.load.jsonParams(</span>
+<span class="s2">            replace(&quot;https://rdf.metanetx.org/sparql/?query=&quot; + sparql, &quot;</span><span class="se">\n</span><span class="s2">&quot;, &quot;&quot;),</span>
+<span class="s2">            </span><span class="se">{{</span><span class="s2"> Accept: &quot;application/sparql-results+json&quot; </span><span class="se">}}</span><span class="s2">, null )</span>
+<span class="s2">        YIELD value</span>
+
+<span class="s2">        UNWIND value[&#39;results&#39;][&#39;bindings&#39;] as row</span>
+
+<span class="s2">        CALL </span><span class="se">{{</span><span class="s2"></span>
+<span class="s2">            WITH row</span>
+<span class="s2">            MERGE (p:Metabolite </span><span class="se">{{</span><span class="s2">MetaNetX_ID:split(row[&#39;protein&#39;][&#39;value&#39;],&#39;/&#39;)[-1]</span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            SET p:Protein, p.UniProt_ID = split(row[&#39;cross_refference&#39;][&#39;value&#39;],&#39;/&#39;)[-1]</span>
+<span class="s2">        </span><span class="se">}}</span><span class="s2"> IN TRANSACTIONS OF 100 rows</span>
+<span class="s2">        &quot;&quot;&quot;</span></div>
+
+<span class="c1"># ********* Annotate existing nodes using KEGG Pathways and Component IDs ********* #</span>
+
+<div class="viewcode-block" id="get_kegg_pathways_for_metabolites"><a class="viewcode-back" href="../../../CanGraph.MeSHandMetaNetX.html#CanGraph.MeSHandMetaNetX.build_database.get_kegg_pathways_for_metabolites">[docs]</a><span class="k">def</span> <span class="nf">get_kegg_pathways_for_metabolites</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A function that finds the Pathways a given Metabolite (based on its Kegg_ID) is a part of, using KEGG.</span>
+<span class="sd">    This uses genome.jp&#39;s dbget web service, since I honestly could not find a way to use KEGG&#39;s SPARQL</span>
+<span class="sd">    service (https://www.genome.jp/linkdb/linkdb_rdf.html) for that.</span>
+
+<span class="sd">    .. seealso:: Another possibility could be using `Kegg&#39;s Rest API &lt;https://rest.kegg.jp/get/R00703/&gt;`_</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: A text chain that represents the CYPHER query with the desired output. This can be run using: :obj:`neo4j.Session.run`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL {</span>
+
+<span class="s2">        MATCH (n)</span>
+<span class="s2">        WHERE (n:Metabolite OR n:Protein OR n:Drug) AND n.KEGG_ID IS NOT null AND n.KEGG_ID &lt;&gt; &quot;&quot;</span>
+
+<span class="s2">        LOAD CSV FROM &quot;https://www.genome.jp/dbget-bin/get_linkdb?targettype=all&amp;keywords=cpd:&quot; +  n.KEGG_ID + &quot;&amp;targetformat=text&quot; AS line FIELDTERMINATOR &#39;</span><span class="se">\t</span><span class="s2">&#39;</span>
+<span class="s2">        WITH</span>
+<span class="s2">                split(line[1],&quot;:&quot;)[0] AS databasename,</span>
+<span class="s2">                split(line[1],&quot;:&quot;)[1] AS databaseid,</span>
+<span class="s2">                n</span>
+<span class="s2">        FOREACH(ignoreme in case when databasename = &quot;path&quot; then [1] else [] end |</span>
+<span class="s2">                MERGE (p:Pathway {KEGG_ID:databaseid})</span>
+<span class="s2">                MERGE (n)-[r:PART_OF_PATHWAY]-(p)</span>
+<span class="s2">        )</span>
+
+<span class="s2">        } IN TRANSACTIONS OF 10 rows</span>
+<span class="s2">        &quot;&quot;&quot;</span></div>
+
+<span class="c1"># ********* Translate a given identifier to another using The Chemical Translation Service ********* #</span>
+
+<div class="viewcode-block" id="find_synonyms_in_cts"><a class="viewcode-back" href="../../../CanGraph.MeSHandMetaNetX.html#CanGraph.MeSHandMetaNetX.build_database.find_synonyms_in_cts">[docs]</a><span class="k">def</span> <span class="nf">find_synonyms_in_cts</span><span class="p">(</span><span class="n">fromIdentifier</span><span class="p">,</span> <span class="n">toIdentifier</span><span class="p">,</span> <span class="n">searchTerm</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Finds synonyms for a given metabolite in CTS, The Chemical Translation Service</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        fromIdentifier (str): The name of the database from which we want the conversion</span>
+<span class="sd">        toIdentifier (str): The name of the database to which we want the conversion</span>
+<span class="sd">        searchTerm (str): The search termm, which should be an ID of database: ``fromIdentifier``</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: The requested synonym</span>
+
+<span class="sd">    .. NOTE:: Please, be sure to use a database name that is in compliance with those specified in</span>
+<span class="sd">        CTS itself; if you dont, this function will fail with a 500 error</span>
+
+<span class="sd">    .. NOTE:: To prevent random downtimes from crashing the function, any one URL will be tried at least 5 times</span>
+<span class="sd">        before crashing (see: `StackOverflow #9446387 &lt;https://stackoverflow.com/questions/9446387/how-to-retry-urllib2-request-when-fails&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">src</span>   <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">fromIdentifier</span><span class="p">)</span>
+    <span class="n">dest</span>  <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">toIdentifier</span><span class="p">)</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">searchTerm</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">results_file</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;https://cts.fiehnlab.ucdavis.edu/rest/convert/</span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">dest</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">results_file</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;results&#39;</span><span class="p">]</span>
+            <span class="k">break</span> <span class="c1"># success</span>
+        <span class="k">except</span> <span class="n">request</span><span class="o">.</span><span class="n">URLError</span> <span class="k">as</span> <span class="n">E</span><span class="p">:</span>
+            <span class="c1"># For timeouts and internal server errors, just asume no result would be given</span>
+            <span class="c1"># (weird that I&#39;m finding these)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">error_code</span> <span class="o">=</span> <span class="n">E</span><span class="o">.</span><span class="n">code</span>
+                <span class="k">if</span> <span class="n">E</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="mi">500</span> <span class="ow">or</span> <span class="n">E</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="mi">504</span><span class="p">:</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                    <span class="k">break</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="n">result</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="n">error_code</span> <span class="o">=</span> <span class="s2">&quot;Undefined&quot;</span>
+
+            <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;An error with the URL has been detected. Retrying in 2 seconds...&quot;</span><span class="p">)</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;An HTTP Error with Code: </span><span class="si">{</span><span class="n">error_code</span><span class="si">}</span><span class="s2"> was found. Aborting...&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">result</span></div>
+
+<span class="c1"># ********* Build from file ********* #</span>
+
+<div class="viewcode-block" id="build_from_file"><a class="viewcode-back" href="../../../CanGraph.MeSHandMetaNetX.html#CanGraph.MeSHandMetaNetX.build_database.build_from_file">[docs]</a><span class="k">def</span> <span class="nf">build_from_file</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">driver</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A function able to build a portion of the MetaNetX database in graph format, provided that one MetaNetX CSV is supplied to it.</span>
+<span class="sd">    This CSVs are downloaded from the website, and can be presented either as the full file, or as a splitted</span>
+<span class="sd">    version of it, with just one item per file (which is recommended due to memory limitations). If you want all the database to be</span>
+<span class="sd">    imported, you should run this function with all the CSVs that form it, as portrayed in the :obj:`~CanGraph.MeSHandMetaNetX.main` module</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        driver (neo4j.Driver): Neo4J&#39;s Bolt Driver currently in use</span>
+<span class="sd">        filename    (str): The name of the CSV file that is being imported</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        This function modifies the Neo4J Database as desired, but does not produce any particular return.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s2">&quot;chem_xref&quot;</span> <span class="ow">in</span> <span class="n">filename</span><span class="p">:</span>
+        <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">add_chem_xref</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="s2">&quot;chem_prop&quot;</span> <span class="ow">in</span> <span class="n">filename</span><span class="p">:</span>
+        <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">add_chem_prop</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="s2">&quot;chem_isom&quot;</span> <span class="ow">in</span> <span class="n">filename</span><span class="p">:</span>
+        <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">add_chem_isom</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="s2">&quot;comp_xref&quot;</span> <span class="ow">in</span> <span class="n">filename</span><span class="p">:</span>
+       <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">add_comp_xref</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="s2">&quot;comp_prop&quot;</span> <span class="ow">in</span> <span class="n">filename</span><span class="p">:</span>
+        <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">add_comp_prop</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span></div>
+</pre></div>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Pablo Marcos<br/>
+  
+      &copy; Copyright 2022, Pablo Marcos &lt;software@loreak.org&gt;.<br/>
+    Last updated on Dec 17, 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

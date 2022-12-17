@@ -1,0 +1,723 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Running the Software &#8212; CanGraph 1.0 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script src="_static/design-tabs.js"></script>
+    <link rel="shortcut icon" href="_static/cangraph-mini.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Understanding its Outputs" href="Understanding%20its%20Outputs.html" />
+    <link rel="prev" title="Installing CanGraph" href="Installing%20CanGraph.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="_static/cangraph-logo.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="index.html">
+                    Main Page
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="Downloads.html">
+   Downloads
+  </a>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="Tutorials.html">
+   Tutorials
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="Other%20Reading%20Material.html">
+     Other Reading Material
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Installing%20CanGraph.html">
+     Installing CanGraph
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Running the Software
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Understanding%20its%20Outputs.html">
+     Understanding its Outputs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://www.pablomarcos.me/es/posts/master-en-biolog%c3%ada-computacional/tfm/">
+   Presentations
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="CanGraph.html">
+   CanGraph package
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="CanGraph.ExposomeExplorer.html">
+     CanGraph.ExposomeExplorer package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="CanGraph.GraphifyDrugBank.html">
+     CanGraph.GraphifyDrugBank package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="CanGraph.GraphifyHMDB.html">
+     CanGraph.GraphifyHMDB package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="CanGraph.GraphifySMPDB.html">
+     CanGraph.GraphifySMPDB package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="CanGraph.MeSHandMetaNetX.html">
+     CanGraph.MeSHandMetaNetX package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="CanGraph.QueryWikidata.html">
+     CanGraph.QueryWikidata package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Install%20Apptainer.html">
+     Install Apptainer
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ToDoList.html">
+   To-Do List
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Logo by <a href="https://www.instagram.com/danonino.caducado/"> Daniel Marcos </a> </br>
+                     Website by <a href="https://www.pablomarcos.me/"> Pablo Marcos </a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/OMB-IARC/CanGraph/"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/OMB-IARC/CanGraph//issues/new?title=Issue%20on%20page%20%2FRunning the Software.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/OMB-IARC/CanGraph/edit/main/docs/Running the Software.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/Running the Software.md.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> In this page
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#setting-up-the-environment">
+   Setting up the environment
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#starting-the-neo4j-server">
+   Starting the Neo4J server
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#understanding-the-arguments">
+   Understanding the arguments
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Named Arguments">
+     Named Arguments
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-query-file">
+     The Query File
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#other-aguments-of-interest">
+     Other Aguments of Interest
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#running-on-slurn">
+   Running on Slurn
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#known-issues">
+   Known Issues
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Running the Software</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> In this page </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#setting-up-the-environment">
+   Setting up the environment
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#starting-the-neo4j-server">
+   Starting the Neo4J server
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#understanding-the-arguments">
+   Understanding the arguments
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Named Arguments">
+     Named Arguments
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-query-file">
+     The Query File
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#other-aguments-of-interest">
+     Other Aguments of Interest
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#running-on-slurn">
+   Running on Slurn
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#known-issues">
+   Known Issues
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <!--
+SPDX-FileCopyrightText: 2022 Pablo Marcos <software@loreak.org>
+
+SPDX-License-Identifier: MIT
+-->
+<section id="running-the-software">
+<h1>Running the Software<a class="headerlink" href="#running-the-software" title="Permalink to this headline">#</a></h1>
+<p>There are two supported ways of running the CanGraph package: you can either launch the CanGraph script from the <strong>command line software</strong> or you can use a pre-packaged <strong>apptainer image</strong>. Of these, there are two versions: a Private Image, which is built with the DataBases pre-bundled so that is is easier to use, although a bit more heavy to transmit; and a Public one, in which DataBases need to be manually set up at least at first use and is thus less heavy, but more resource intensive. Because the Private version contains copyrighted information, only the Public compiled file is provided in the <a class="reference internal" href="Downloads.html#downloads"><span class="std std-ref">downloads page</span></a></p>
+<p>You can thus either download a <a class="reference internal" href="Downloads.html#downloads"><span class="std std-ref">pre-packaged file</span></a>, compile one yourself or use the program’s <a class="reference internal" href="#running-the-software"><span class="std std-ref">Command Line Interface</span></a>; since all three options use the same underlying script (<a class="reference internal" href="CanGraph.html#module-CanGraph.main" title="CanGraph.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CanGraph.main</span></code></a>) to work, they will all work independently of the form you choose to run the program under.</p>
+<p>In the rest of this example, we will be providing examples on how to run the software from the command line; if you want to use an Apptainer Image instead, just replace <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">main.py</span></code> by <code class="docutils literal notranslate"><span class="pre">./yourcontainer.sif</span></code></p>
+<section id="setting-up-the-environment">
+<h2>Setting up the environment<a class="headerlink" href="#setting-up-the-environment" title="Permalink to this headline">#</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you are running a pre-packaged file, you can skip directly to the  <a class="reference internal" href="#understanding-the-arguments"><span class="std std-ref">usage section</span></a>.</p>
+</div>
+<p>In order for the script to work properly, we need to set up some things first; the most important of them being <strong>the DataBases folder</strong>, which is where all important information regarding all databases will be stored. To aid in this, the <a class="reference internal" href="CanGraph.html#module-CanGraph.setup" title="CanGraph.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CanGraph.setup</span></code></a> was developed; you can read more about how it works and how to use it in its own <a class="reference internal" href="CanGraph.html#cangraph-main-usage"><span class="std std-ref">usage page</span></a>, but, essentially, you should run:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">setup.py</span> <span class="pre">-i</span> <span class="pre">--databases</span> <span class="pre">databasefolder</span></code></p></li>
+</ul>
+<p>where <code class="docutils literal notranslate"><span class="pre">databasefolder</span></code> is the folder where all databases will be stored (keep this value in hand because we will use it later on for the <a class="reference internal" href="CanGraph.html#module-CanGraph.main" title="CanGraph.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a> module).</p>
+<p>The software will then guide you, in an interactive an easy to understand way, through the process of setting up all the needed databases, as well as on the generation of an index that might be needed later on in the database search. Once the process is finished, you shall proceed to the next step.</p>
+</section>
+<section id="starting-the-neo4j-server">
+<h2>Starting the Neo4J server<a class="headerlink" href="#starting-the-neo4j-server" title="Permalink to this headline">#</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you are running a pre-packaged file, you can skip directly to the  <a class="reference internal" href="#understanding-the-arguments"><span class="std std-ref">usage section</span></a>.</p>
+</div>
+<p>As a graph-oriented software, CanGraph uses Neo4J as its underlying DataBase Management System. This means that, in order for the program to work, it needs to stablish a connection to a Neo4J database, where it will store all the relevant information. To simplify the process of downloading, configuring, and starting the Neo4J server, some functions have been created for you on the <a class="reference internal" href="CanGraph.html#module-CanGraph.setup" title="CanGraph.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a> module. You can call them using the script below, which will create a neo4j folder in CanGraph’s WorkDir:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">setup.py</span> <span class="pre">--neo4j</span> <span class="pre">neo4j</span> <span class="pre">--neo4j_username</span> <span class="pre">neo4j</span> <span class="pre">--neo4j_password</span> <span class="pre">neo4j</span> </code></p></li>
+</ul>
+<p>For it to work propperly, please ensure that there are no neo4j sessions running before the command call. The program will then be installed alongside the main program, with its password being stored in a file called <code class="docutils literal notranslate"><span class="pre">.neo4jpassword</span></code>. You can then start your very first neo4j server by running: <code class="docutils literal notranslate"><span class="pre">./neo4j/bin/neo4j</span> <span class="pre">start</span></code>; its username will be <code class="docutils literal notranslate"><span class="pre">neo4j</span></code>, and its password can be seen by running: <code class="docutils literal notranslate"><span class="pre">head</span> <span class="pre">-n</span> <span class="pre">1</span> <span class="pre">.neo4jpassword)</span></code>.</p>
+<p>You can alternatively start your own server, either by using a previously installed version of neo4j or by running an online version of the database; the only difference being, that you will need to provide the username, bolt adress and password to main.py as arguments.</p>
+</section>
+<section id="understanding-the-arguments">
+<h2>Understanding the arguments<a class="headerlink" href="#understanding-the-arguments" title="Permalink to this headline">#</a></h2>
+<p>The program presents the following arguments, which can be passed, as the text below explains, just after the name of the program:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">python3</span> <span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">c</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">n</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">s</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">w</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">i</span><span class="p">]</span> <span class="o">--</span><span class="n">query</span> <span class="n">QUERY</span>
+                       <span class="p">[</span><span class="o">--</span><span class="n">dbfolder</span> <span class="n">DBFOLDER</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">results</span> <span class="n">RESULTS</span><span class="p">]</span>
+                       <span class="p">[</span><span class="o">--</span><span class="n">adress</span> <span class="n">ADRESS</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">username</span> <span class="n">USERNAME</span><span class="p">]</span>
+                       <span class="p">[</span><span class="o">--</span><span class="n">password</span> <span class="n">PASSWORD</span><span class="p">]</span>
+</pre></div>
+</div>
+<section id="Named Arguments">
+<h3>Named Arguments<a class="headerlink" href="#Named Arguments" title="Permalink to this headline">#</a></h3>
+<dl class="option-list">
+<dt><kbd>-c, --check_args</kbd></dt>
+<dd><p>Checks if the rest of the arguments are OK, then exits</p>
+</dd>
+<dt><kbd>-n, --noindex</kbd></dt>
+<dd><p>Runs the program checking each file one-by-one, instead of using a JSON index</p>
+</dd>
+<dt><kbd>-s, --similarity</kbd></dt>
+<dd><p>Deactivates the import of information based on Structural Similarity.This might dramatically increase processing time; default is True.</p>
+</dd>
+<dt><kbd>-w, --webdbs</kbd></dt>
+<dd><p>Activates import of information based on web databases.This might dramatically increase processing time; default is True.</p>
+</dd>
+<dt><kbd>-i, --interactive</kbd></dt>
+<dd><p>tells the script if it wants interaction from the user and more information shown to them; similar to –verbose</p>
+</dd>
+<dt><kbd>--query</kbd></dt>
+<dd><p>The location of the CSV file in which the program will search for metabolites</p>
+</dd>
+<dt><kbd>--dbfolder</kbd></dt>
+<dd><p>The folder indicated to <code class="docutils literal notranslate"><span class="pre">`setup.py`</span></code> as the one where your databases will be stored; default is <code class="docutils literal notranslate"><span class="pre">./DataBases</span></code></p>
+<p>Default: DataBases</p>
+</dd>
+<dt><kbd>--results</kbd></dt>
+<dd><p>The folder where the resulting GraphML exports will be stored; default is <code class="docutils literal notranslate"><span class="pre">./Results</span></code></p>
+<p>Default: “Results”</p>
+</dd>
+<dt><kbd>--adress</kbd></dt>
+<dd><p>the URL of the database, in neo4j:// or bolt:// format</p>
+<p>Default: bolt://localhost:7687</p>
+</dd>
+<dt><kbd>--username</kbd></dt>
+<dd><p>the username of the neo4j database in use</p>
+<p>Default: “neo4j”</p>
+</dd>
+<dt><kbd>--password</kbd></dt>
+<dd><p>the password for the neo4j database in use. NOTE: Since passed through bash, you may need to escape some chars</p>
+<p>Default: “neo4j”</p>
+</dd>
+</dl>
+</section>
+<section id="the-query-file">
+<h3>The Query File<a class="headerlink" href="#the-query-file" title="Permalink to this headline">#</a></h3>
+<p>Of these arguments, only <code class="docutils literal notranslate"><span class="pre">--query</span></code> is required, since the program requires for at least one query to search among all the different databases. This query file should take the form of a table of Comma Separated Values, where the columns are as follows:</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>InChI</p></th>
+<th class="head"><p>HMDB_ID</p></th>
+<th class="head"><p>ChEBI_ID</p></th>
+<th class="head"><p>MeSH_ID</p></th>
+</tr>
+</thead>
+</table>
+<p>Inside each <strong>comma-separated column</strong>, you can either have one string of text (one <em>field</em>) or a series of <em>fields</em> <strong>separated by semi-colons</strong>. For example, you can either have:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Name</span><span class="p">,</span><span class="n">InChI</span><span class="p">,</span><span class="n">HMDB_ID</span><span class="p">,</span><span class="n">ChEBI</span><span class="p">,</span><span class="n">MeSH_ID</span>
+<span class="mi">1</span><span class="o">-</span><span class="n">Amino</span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="n">propanol</span><span class="p">,,</span><span class="n">HMDB0012136</span><span class="p">,</span><span class="n">CHEBI</span><span class="p">:</span><span class="mi">19030</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>where there is just one <strong>Name</strong>, <strong>1-Amino-2-propanol</strong>, in the name column; or:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Name</span><span class="p">,</span><span class="n">InChI</span><span class="p">,</span><span class="n">HMDB_ID</span><span class="p">,</span><span class="n">ChEBI</span><span class="p">,</span><span class="n">MeSH_ID</span>
+<span class="mi">1</span><span class="o">-</span><span class="n">Amino</span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="n">propanol</span><span class="p">;</span><span class="mi">1</span><span class="o">-</span><span class="n">aminopropanol</span><span class="p">,,</span><span class="n">HMDB0012136</span><span class="p">,</span><span class="n">CHEBI</span><span class="p">:</span><span class="mi">19030</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>where <strong>1-Amino-2-propanol</strong> is specified as a synonym / another query of interest for the <strong>Name</strong> field.</p>
+<p>This query file can be either created in <a class="reference external" href="https://www.libreoffice.org/">LibreOffice Calc</a> / Microsoft Excel, simply generating a new file with <em>as many of the proposed columns as you’d like</em>, and filling them with the values you want the program to search based on. Any other columns present in the CSV file will be ignored by the program, which will identify each row as the information pertaining to <em>a given metabolite</em>, thus having <strong>as many metabolites as rows are present on the CSV, with each metabolite having as many identifiers as columns are present and as many synonyms for each identifier as semicolon values are in a given cell</strong>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Pay special attention to the formatting of the columns; if they are wrongly specified (for example, <em>ChEBI</em> instead of <em>ChEBI_ID</em>), the program will ignore them, too.</p>
+</div>
+</section>
+<section id="other-aguments-of-interest">
+<h3>Other Aguments of Interest<a class="headerlink" href="#other-aguments-of-interest" title="Permalink to this headline">#</a></h3>
+<p>Some other arguments that require consideration are:</p>
+<ul class="simple">
+<li><p><strong>–webdbs</strong>: When set to false (<code class="docutils literal notranslate"><span class="pre">--webdbs</span> <span class="pre">False</span></code>), no web databases are queried. This makes the program run fully offline, gets more reliable results and runs faster, but it returns less information.</p></li>
+<li><p><strong>–similarity</strong>: Disables search based on similarity criteria computed using RDKit. This reduces search time, but includes less results</p></li>
+<li><p><strong>–noindex</strong>: Runs the program by using direct search, instead of using the database index generated with the <a class="reference internal" href="CanGraph.html#module-CanGraph.setup" title="CanGraph.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a> module. <strong>The use of this option is discouraged</strong>, as it is slower and produces less accurate results; it is presented here just for backwards compatibility and because the “Name” chain can be used as a <em>wildcard</em> field for exact text matches in the unindexed files.</p></li>
+</ul>
+<p>Once you have the query ready, you can run it using: <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">main.py</span> <span class="pre">--query</span> <span class="pre">inputfile.csv</span> <span class="pre">--password</span> <span class="pre">$(head</span> <span class="pre">-n</span> <span class="pre">1</span> <span class="pre">.neo4jpassword)</span></code>. This assumes that all the defaults are set to what is specified above in this same section, and sets neo4j’s password to be whatever is stored in <code class="docutils literal notranslate"><span class="pre">.neo4jpassword</span></code>; you can add any additional arguments as you wish.</p>
+<p>The time the program takes to process is variable, and depends on the number of matches; it may take anything from a few seconds to more than a day, as every match means, approximately, 3-5 minutes of extra processing time.</p>
+</section>
+</section>
+<section id="running-on-slurn">
+<h2>Running on Slurn<a class="headerlink" href="#running-on-slurn" title="Permalink to this headline">#</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You need to install Apptainer to use the <a class="reference internal" href="Downloads.html#downloads"><span class="std std-ref">pre-packaged files</span></a>, but you can use the <a class="reference internal" href="#running-the-software"><span class="std std-ref">CLI</span></a> without it.</p>
+</div>
+<p>For IARC users, as well as for any other user with access to it, the use of a High-Performance Computing platform is advised, since Neo4J is quite unstable and resource-hungry, and the program may take a long time to process during which, if using it in your own machine, it is advisable not to run any other programs at the same time. Thus, a tutorial follows:</p>
+<ol class="arabic simple" start="0">
+<li><p><strong>Log into <a class="reference external" href="https://portal.sit.iarc.fr/pun/sys/dashboard">IARC’s HPC Portal</a>.</strong> There, click on <em>Jobs</em> &gt; <em>Job Composer</em> in the top menu</p></li>
+</ol>
+<p><img alt="IARC's HPC Portal's Home Page" src="_images/HPC-Portal-Homepage.png" /></p>
+<ol class="arabic">
+<li><p><strong>Create a new Job.</strong> To do this, click on the light blue <em>New Job</em> button, and then select one of the option; it is recommended that you choose <em>From Default Template</em></p></li>
+<li><p><strong>(Optional) Change the Job’s name.</strong> You can do so by selecting any job and clicking <em>Job Options</em></p></li>
+<li><p><strong>Modify the Runscript.</strong> After clicking on the <em>Open Editor</em> button, an editor will appear in a new window. You should modify <code class="docutils literal notranslate"><span class="pre">main_job.sh</span></code> for it to include an order calling the script preceded by another giving the HPC permission to use it (<code class="docutils literal notranslate"><span class="pre">chmod</span></code>). For example, if you are using the pre-packaged CanGraph-Private image:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">chmod</span> <span class="o">+</span><span class="mi">755</span> <span class="n">CanGraph</span><span class="o">-</span><span class="n">Private</span><span class="o">.</span><span class="n">sif</span>
+<span class="o">./</span><span class="n">CanGraph</span><span class="o">-</span><span class="n">Private</span><span class="o">.</span><span class="n">sif</span>  <span class="o">--</span><span class="n">query</span> <span class="n">sample_input</span><span class="o">.</span><span class="n">csv</span>
+</pre></div>
+</div>
+<p>If you are, however, using the Command Line Interface, you may want to also include the <code class="docutils literal notranslate"><span class="pre">--databases</span></code>parameter, and so on</p>
+</li>
+<li><p><strong>Add all the necessary files:</strong> Click on <em>Open Dir</em>, which will open a new window containing all the files in the current WorkDir. There, you should Drag and Drop the necessary files: the <code class="docutils literal notranslate"><span class="pre">DataBases</span></code> folder in case you are using it, the different scripts and modules that form the Command Line Program (possibly in compressed <code class="docutils literal notranslate"><span class="pre">.zip</span></code> form), the apptainer image, the input file…</p></li>
+<li><p><strong>Once everything is ready, run the file!:</strong> You can click on the green <em>Submit</em> button, which will mark your Job in blue as <em>Running</em>. While the HPC is working on your query, a new file, called <em>slurm-xxxxxxx.out</em>, will appear on the side <em>Folder Contents</em> panel, which can also be consulted using the <em>Open Dir</em> button. This file contains an output of the different logs the program is providing, enabling you to track the process and see how it is going. Once processing is finished, a green <em>Completed</em>, or a red <em>Failed</em>, label will appear. The results will appear in the folder provided to the program as <code class="docutils literal notranslate"><span class="pre">--results</span></code>; by default, <code class="docutils literal notranslate"><span class="pre">./Results</span></code>.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Sometimes, the software might not run in one-go, but might need two activations: one to install neo4j, and one for the run itself. Out of precaution, it is recommended you refresh 1 minute after submitting the job to see if it is prematurely marked as completed (with no results in the folder). If so, just re-submit the job: things should work fine this time.</p>
+</div>
+<p><img alt="IARC's HPC's Job Composing page" src="_images/HPC-Job-Composing.png" /></p>
+<ol class="arabic simple" start="6">
+<li><p><strong>Download the Results:</strong> You will find them inside the <code class="docutils literal notranslate"><span class="pre">--results</span></code> folder, and you can either download the full folder (<em>Select</em> &gt; <em>Download</em>) or get individual files by selecting them inside the folder.</p></li>
+</ol>
+<p><img alt="IARC's HPC's &quot;Files&quot; Page" src="_images/HPC-Files-Tab.png" /></p>
+</section>
+<section id="known-issues">
+<h2>Known Issues<a class="headerlink" href="#known-issues" title="Permalink to this headline">#</a></h2>
+<p>Here are some known issues you may encounter when running the software, together with possible solutions:</p>
+<ul class="simple">
+<li><p>Sometimes, the Apptainer-packaged version refuses to run all-in-one if it needs to set up the database folder or the neo4j program from scratch. If this happens, try re-launching the program; on this second run, it should work without problems</p></li>
+<li><p>On IARC’s HPC system, the Public version of the Apptainer-packaged program does not work, outputting a <code class="docutils literal notranslate"><span class="pre">subprocess.CalledProcessError</span></code> with error code: <code class="docutils literal notranslate"><span class="pre">Command</span> <span class="pre">'['cypher-shell',</span> <span class="pre">'-d',</span> <span class="pre">'system',</span> <span class="pre">'-u',</span> <span class="pre">'neo4j',</span> <span class="pre">'-p',</span> <span class="pre">'neo4j',</span> <span class="pre">&quot;ALTER</span> <span class="pre">CURRENT</span> <span class="pre">USER</span> <span class="pre">SET</span> <span class="pre">PASSWORD</span> <span class="pre">FROM</span> <span class="pre">'X'</span> <span class="pre">TO</span> <span class="pre">'Y'&quot;]'</span> <span class="pre">returned</span> <span class="pre">non-zero</span> <span class="pre">exit</span> <span class="pre">status</span> <span class="pre">1.</span></code>. To our knowledge, this happens only on the HPC, and nowhere else; if you encounter this error, consider either building/using the Private version, or <a class="reference internal" href="Installing%20CanGraph.html#installing-cangraph"><span class="std std-ref">installing the CLI</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="Installing%20CanGraph.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Installing CanGraph</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="Understanding%20its%20Outputs.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Understanding its Outputs</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Pablo Marcos<br/>
+  
+      &copy; Copyright 2022, Pablo Marcos &lt;software@loreak.org&gt;.<br/>
+    Last updated on Dec 17, 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

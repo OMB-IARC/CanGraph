@@ -1,0 +1,1224 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CanGraph.miscelaneous &#8212; CanGraph 1.0 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <link rel="shortcut icon" href="../../_static/cangraph-mini.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/cangraph-logo.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../index.html">
+                    Main Page
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../Downloads.html">
+   Downloads
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../Tutorials.html">
+   Tutorials
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../Other%20Reading%20Material.html">
+     Other Reading Material
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../Installing%20CanGraph.html">
+     Installing CanGraph
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../Running%20the%20Software.html">
+     Running the Software
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../Understanding%20its%20Outputs.html">
+     Understanding its Outputs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://www.pablomarcos.me/es/posts/master-en-biolog%c3%ada-computacional/tfm/">
+   Presentations
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../CanGraph.html">
+   CanGraph package
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../CanGraph.ExposomeExplorer.html">
+     CanGraph.ExposomeExplorer package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../CanGraph.GraphifyDrugBank.html">
+     CanGraph.GraphifyDrugBank package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../CanGraph.GraphifyHMDB.html">
+     CanGraph.GraphifyHMDB package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../CanGraph.GraphifySMPDB.html">
+     CanGraph.GraphifySMPDB package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../CanGraph.MeSHandMetaNetX.html">
+     CanGraph.MeSHandMetaNetX package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../CanGraph.QueryWikidata.html">
+     CanGraph.QueryWikidata package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../Install%20Apptainer.html">
+     Install Apptainer
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../ToDoList.html">
+   To-Do List
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Logo by <a href="https://www.instagram.com/danonino.caducado/"> Daniel Marcos </a> </br>
+                     Website by <a href="https://www.pablomarcos.me/"> Pablo Marcos </a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/OMB-IARC/CanGraph/"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/OMB-IARC/CanGraph//issues/new?title=Issue%20on%20page%20%2F_modules/CanGraph/miscelaneous.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <h1>Source code for CanGraph.miscelaneous</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="c1"># SPDX-FileCopyrightText: 2022 Pablo Marcos &lt;software@loreak.org&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: MIT</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A python module that provides a collection of functions to be used across the different</span>
+<span class="sd">scripts present in the CanGraph package, with various, useful functionalities</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># Import external modules necessary for the script</span>
+<span class="kn">import</span> <span class="nn">neo4j</span>                         <span class="c1"># The Neo4J python driver</span>
+<span class="kn">import</span> <span class="nn">urllib.request</span> <span class="k">as</span> <span class="nn">request</span>     <span class="c1"># Extensible library for opening URLs</span>
+<span class="kn">from</span> <span class="nn">zipfile</span> <span class="kn">import</span> <span class="n">ZipFile</span>          <span class="c1"># Work with ZIP files</span>
+<span class="kn">import</span> <span class="nn">tarfile</span>                       <span class="c1"># Work with tar.gz files</span>
+<span class="kn">import</span> <span class="nn">os</span>                            <span class="c1"># Integration with the system</span>
+<span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="k">as</span> <span class="nn">ET</span>   <span class="c1"># To parse and split XML files</span>
+<span class="kn">import</span> <span class="nn">re</span>                            <span class="c1"># To split XML files with a regex pattern</span>
+<span class="kn">import</span> <span class="nn">time</span>                          <span class="c1"># Manage the time, and wait times, in python</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>                  <span class="c1"># Analysis of tabular data</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>                    <span class="c1"># Manage python sub-processes</span>
+<span class="kn">import</span> <span class="nn">logging</span>                       <span class="c1"># Make ``verbose`` messages easier to show</span>
+<span class="kn">import</span> <span class="nn">psutil</span>                        <span class="c1"># Kill the burden of the neo4j process</span>
+<span class="kn">import</span> <span class="nn">argparse</span>                      <span class="c1"># Arguments pàrser for Python</span>
+<span class="kn">from</span> <span class="nn">alive_progress</span> <span class="kn">import</span> <span class="n">alive_bar</span> <span class="c1"># A cute progress bar</span>
+
+<span class="c1"># ********* Manage the Neo4J Database Connection and Transactions ********* #</span>
+
+<div class="viewcode-block" id="restart_neo4j"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.miscelaneous.restart_neo4j">[docs]</a><span class="k">def</span> <span class="nf">restart_neo4j</span><span class="p">(</span><span class="n">neo4j_home</span> <span class="o">=</span> <span class="s2">&quot;neo4j&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A simple function that (re)starts a neo4j server and returns its bolt adress</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        neo4j_home (str): the installation directory for the ``neo4j`` program; by default, ``neo4j``</span>
+
+<span class="sd">    .. NOTE:: Re-starting is better than starting, as it tries to kills old sessions (a task at which it fails</span>
+<span class="sd">        miserably, thus the need for :obj:`~CanGraph.miscelaneous.kill_neo4j`), and, most importantly,</span>
+<span class="sd">        because it returns the currently used bolt port</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">neo4j_home</span><span class="p">)</span><span class="si">}</span><span class="s2">/bin/neo4j&quot;</span><span class="p">,</span> <span class="s2">&quot;restart&quot;</span><span class="p">],</span>
+                             <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">STDOUT</span><span class="p">)</span>
+    <span class="n">neo4j_message</span> <span class="o">=</span> <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)))</span></div>
+
+<div class="viewcode-block" id="get_import_path"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.miscelaneous.get_import_path">[docs]</a><span class="k">def</span> <span class="nf">get_import_path</span><span class="p">(</span><span class="n">driver</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A function that runs an autocommit transaction to get Neo4J&#39;s Import Path</span>
+
+<span class="sd">    .. NOTE:: By doing the Neo4JImportPath search this way (in two functions), we are able to run the query as</span>
+<span class="sd">        a :obj: execute_read, which, unlike autocommit transactions, allows the query to be better controlled,</span>
+<span class="sd">        and repeated in case it fails.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        driver (neo4j.Driver): Neo4J&#39;s Bolt Driver currently in use</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: Neo4J&#39;s Import Path, i.e., where Neo4J will pick up files to be imported using the ```file:///``` schema</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">manage_transaction</span><span class="p">(</span>
+        <span class="sd">&quot;&quot;&quot; Call dbms.listConfig()</span>
+<span class="sd">            YIELD name, value</span>
+<span class="sd">            WHERE name=&#39;dbms.directories.import&#39;</span>
+<span class="sd">            RETURN value</span>
+<span class="sd">        &quot;&quot;&quot;</span><span class="p">,</span> <span class="n">driver</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t connect to Neo4j. Please, check the auths&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="connect_to_neo4j"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.miscelaneous.connect_to_neo4j">[docs]</a><span class="k">def</span> <span class="nf">connect_to_neo4j</span><span class="p">(</span><span class="n">port</span> <span class="o">=</span> <span class="s2">&quot;bolt://localhost:7687&quot;</span><span class="p">,</span> <span class="n">username</span> <span class="o">=</span> <span class="s2">&quot;neo4j&quot;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s2">&quot;neo4j&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A function that establishes a connection to the neo4j server and returns a :obj:`~neo4j.Driver`</span>
+<span class="sd">    into which transactions can be passed</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        port (str): The URL where the database is available to be queried. It must be of ``bolt://`` format</span>
+<span class="sd">        username (str): the username for your neo4j database; by default, ``neo4j``</span>
+<span class="sd">        password (str): the password for your database; by default, ``neo4j``</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Driver: An instance of Neo4J&#39;s Bolt Driver that can be used</span>
+
+<span class="sd">    .. NOTE:: Since this is a really short function, this doesn&#39;t really simplify the code that much,</span>
+<span class="sd">        but it makes it much more re-usable and understandable</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">instance</span> <span class="o">=</span> <span class="n">port</span><span class="p">;</span> <span class="n">user</span> <span class="o">=</span> <span class="n">username</span><span class="p">;</span> <span class="n">passwd</span> <span class="o">=</span> <span class="n">password</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">driver</span> <span class="o">=</span> <span class="n">neo4j</span><span class="o">.</span><span class="n">GraphDatabase</span><span class="o">.</span><span class="n">driver</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">passwd</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">driver</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">E</span><span class="p">:</span>
+        <span class="n">exit</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not connect to Neo4J due to error: </span><span class="si">{</span><span class="n">E</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="kill_neo4j"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.miscelaneous.kill_neo4j">[docs]</a><span class="k">def</span> <span class="nf">kill_neo4j</span><span class="p">(</span><span class="n">neo4j_home</span> <span class="o">=</span> <span class="s2">&quot;neo4j&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A simple function that kills any process that was started using a cmd argument including &quot;neo4j&quot;</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        neo4j_home (str): the installation directory for the ``neo4j`` program; by default, ``neo4j``</span>
+
+<span class="sd">    .. WARNING:: This function may unintendedly kill any command run from the ``neo4j`` folder.</span>
+<span class="sd">        This is unfortunate, but the creation of this function was essential given that ``neo4j stop``</span>
+<span class="sd">        does not work properly; instead of dying, the process lingers on, interfering</span>
+<span class="sd">        with :obj:`~CanGraph.setup.find_neo4j_installation_status` and hindering the main program</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">neo4j_home</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">neo4j_home</span><span class="p">)</span>
+
+    <span class="n">neo4j_dead</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">neo4j_home</span><span class="si">}</span><span class="s2">/run/neo4j.pid&quot;</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">neo4j_home</span><span class="si">}</span><span class="s2">/run/neo4j.pid&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">neo4j_pid</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">proc</span> <span class="ow">in</span> <span class="n">psutil</span><span class="o">.</span><span class="n">process_iter</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">proc</span><span class="o">.</span><span class="n">pid</span> <span class="o">==</span> <span class="n">neo4j_pid</span><span class="p">:</span>
+                <span class="n">proc</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+                <span class="n">neo4j_dead</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">neo4j_home</span><span class="si">}</span><span class="s2">/run/neo4j.pid&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">neo4j_home</span><span class="p">):</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">neo4j_home</span><span class="p">)</span><span class="si">}</span><span class="s2">/bin/neo4j&quot;</span><span class="p">,</span> <span class="s2">&quot;stop&quot;</span><span class="p">],</span>
+                        <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">DEVNULL</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">STDOUT</span><span class="p">)</span>
+        <span class="n">neo4j_dead</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">for</span> <span class="n">proc</span> <span class="ow">in</span> <span class="n">psutil</span><span class="o">.</span><span class="n">process_iter</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">neo4j_home</span><span class="p">)</span> <span class="ow">in</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">proc</span><span class="o">.</span><span class="n">cmdline</span><span class="p">()):</span>
+            <span class="n">proc</span><span class="o">.</span><span class="n">kill</span><span class="p">()</span>
+            <span class="n">neo4j_dead</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">if</span> <span class="n">neo4j_dead</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span> <span class="n">sleep_with_counter</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Killing existing Neo4j sessions...&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="manage_transaction"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.miscelaneous.manage_transaction">[docs]</a><span class="k">def</span> <span class="nf">manage_transaction</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span> <span class="n">driver</span><span class="p">,</span> <span class="n">num_retries</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">neo4j_home</span> <span class="o">=</span> <span class="s2">&quot;neo4j&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A function that repeats transactions whenever an error is found.</span>
+<span class="sd">    This may make an incorrect script unnecessarily repeat; however, since the error is printed,</span>
+<span class="sd">    one can discriminate those out, and the function remains helpful to prevent SPARQL Read Time-Outs.</span>
+
+<span class="sd">    It will also re-start neo4j in case it randomly dies while executing a query.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx (str): The transaction that we desire to run, specified as a CYPHER query</span>
+<span class="sd">        driver (neo4j.Driver): Neo4J&#39;s Bolt Driver currently in use</span>
+<span class="sd">        num_retries (int): The number of times that we wish the transaction to be retried</span>
+<span class="sd">        neo4j_home (str): the installation directory for the ``neo4j`` program; by default, ``neo4j``</span>
+<span class="sd">        **kwargs: Any number of arbitrary keyword arguments</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        Exception:</span>
+<span class="sd">            An exception telling the user that the maximum number of retries</span>
+<span class="sd">            has been exceded, if such a thing happens</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: The response from the Neo4J Database</span>
+
+<span class="sd">    .. NOTE:: This function does not accept args, but only kwargs (named keyword arguments).</span>
+<span class="sd">        Thus, if you wish to add a parameter (say, ``number``, you should add it as: ``number=33``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># For as many times as has been specified</span>
+    <span class="k">for</span> <span class="n">attempt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_retries</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># We try to open a session and obtain a graph response</span>
+            <span class="n">session</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">session</span><span class="p">()</span>
+            <span class="n">graph_response</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">graph_response_list</span> <span class="o">=</span>  <span class="p">[</span><span class="n">record</span> <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">graph_response</span><span class="p">)</span> <span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">attempt</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error solved on attempt #</span><span class="si">{</span><span class="n">attempt</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">graph_response_list</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">graph_response_list</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;data&quot;</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="p">[</span><span class="n">record</span><span class="o">.</span><span class="n">data</span><span class="p">()</span> <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">graph_response_list</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="p">[]</span>
+            <span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="p">[]</span>
+
+            <span class="c1"># If we get to the graph response, we break and close</span>
+            <span class="k">break</span><span class="p">;</span> <span class="n">session</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="c1"># Else if Neo4J decides to DIE</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">OSError</span><span class="p">,</span> <span class="n">neo4j</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ServiceUnavailable</span><span class="p">)</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">neo4j_home</span><span class="p">)</span><span class="si">}</span><span class="s2">/bin/neo4j&quot;</span><span class="p">,</span> <span class="s2">&quot;start&quot;</span><span class="p">],</span>
+                        <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">DEVNULL</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">STDOUT</span><span class="p">)</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Neo4J has died. Restarting Neo4J &amp; Retrying... (</span><span class="si">{</span><span class="n">attempt</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">num_retries</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+
+        <span class="c1"># Else if there is another kind of error</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="n">graph_response</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="n">error_code</span> <span class="o">=</span> <span class="n">error</span><span class="o">.</span><span class="n">code</span> <span class="k">if</span> <span class="s2">&quot;code&quot;</span> <span class="ow">in</span> <span class="nb">vars</span><span class="p">(</span><span class="n">error</span><span class="p">)</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;Unknown&quot;</span>
+            <span class="k">if</span> <span class="n">attempt</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">num_retries</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;An error with error code: </span><span class="si">{</span><span class="n">error_code</span><span class="si">}</span><span class="s2"> was found.&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Retrying... (</span><span class="si">{</span><span class="n">attempt</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">num_retries</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+
+            <span class="c1"># If the error is a ProcedureCallFailed error and we tried num_retries, skip</span>
+            <span class="k">elif</span> <span class="n">error_code</span> <span class="o">==</span> <span class="s2">&quot;Neo.ClientError.Procedure.ProcedureCallFailed&quot;</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Falied to invoke a procedure, most likely due to a read time out&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Skipping this function...&quot;</span><span class="p">);</span> <span class="k">return</span> <span class="p">[]</span>
+
+            <span class="c1"># If its any other error, exit, as it seems it could he a really bad error</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">num_retries</span><span class="si">}</span><span class="s2"> consecutive attempts were made on a function. Aborting...&quot;</span><span class="p">)</span></div>
+
+<span class="c1"># ********* Interact with the Neo4J Database ********* #</span>
+
+<div class="viewcode-block" id="call_db_schema_visualization"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.miscelaneous.call_db_schema_visualization">[docs]</a><span class="k">def</span> <span class="nf">call_db_schema_visualization</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Shows the DB Schema. This function is intended to be run only in Neo4J&#39;s console,</span>
+<span class="sd">    since it produces no output when called from the driver.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+
+<span class="sd">    .. TODO:: Make it download the image</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL db.schema.visualization()</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="clean_database"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.miscelaneous.clean_database">[docs]</a><span class="k">def</span> <span class="nf">clean_database</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A CYPHER query that gets all the nodes in a Neo4J database and</span>
+<span class="sd">    removes them, in transactions of 100 rows to alleviate memory load</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str:</span>
+<span class="sd">            A text chain that represents the CYPHER query with the desired</span>
+<span class="sd">            output. This can be run using: :obj:`neo4j.Session.run`</span>
+
+<span class="sd">    .. NOTE:: This is an **autocommit transaction**. This means that, in order to not keep data in memory</span>
+<span class="sd">        (and make running it with a huge amount of data) more efficient, you will need to add ```:auto ```</span>
+<span class="sd">        when calling it from the Neo4J browser, or call it as using :obj:`neo4j.Session.run` from the driver.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        MATCH (n)</span>
+<span class="s2">        CALL { WITH n</span>
+<span class="s2">        DETACH DELETE n</span>
+<span class="s2">        } IN TRANSACTIONS OF 100 ROWS</span>
+<span class="s2">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="create_n10s_graphconfig"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.miscelaneous.create_n10s_graphconfig">[docs]</a><span class="k">def</span> <span class="nf">create_n10s_graphconfig</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A CYPHER query that creates a *neosemantics* (n10s) constraint to hold all the RDF we will import.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</span>
+
+<span class="sd">    .. seealso:: More information on this approach can be found in `Neosemantics&#39; 101 Guide &lt;https://neo4j.com/labs/neosemantics/&gt;`_</span>
+<span class="sd">        and in `Neo4J&#39;s guide on how to import data from Wikidata &lt;https://neo4j.com/labs/neosemantics/how-to-guide/&gt;`_ ,</span>
+<span class="sd">        where this approach was taken from</span>
+
+<span class="sd">    .. deprecated:: 0.9</span>
+<span class="sd">        Since we are importing based on apoc.load.jsonParams, this is not needed anymore</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL n10s.graphconfig.init({</span>
+<span class="s2">            handleVocabUris: &#39;MAP&#39;,</span>
+<span class="s2">            handleMultival: &#39;ARRAY&#39;,</span>
+<span class="s2">            keepLangTag: true,</span>
+<span class="s2">            keepCustomDataTypes: true,</span>
+<span class="s2">            applyNeo4jNaming: true</span>
+<span class="s2">        })</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="remove_n10s_graphconfig"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.miscelaneous.remove_n10s_graphconfig">[docs]</a><span class="k">def</span> <span class="nf">remove_n10s_graphconfig</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Removes the &quot;_GraphConfig&quot; node, which is necessary for querying SPARQL endpoints</span>
+<span class="sd">    but not at all useful in our final export</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</span>
+
+<span class="sd">    .. deprecated:: 0.9</span>
+<span class="sd">        Since we are importing based on apoc.load.jsonParams, this is not needed anymore</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        MATCH (n:`_GraphConfig`) DETACH DELETE n</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="remove_ExternalEquivalent"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.miscelaneous.remove_ExternalEquivalent">[docs]</a><span class="k">def</span> <span class="nf">remove_ExternalEquivalent</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Removes all nodes of type: ExternalEquivalent from he DataBase; since this do not add</span>
+<span class="sd">    new info, one might consider them not useful.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result:</span>
+<span class="sd">            A Neo4J connexion to the database that</span>
+<span class="sd">            modifies it according to the CYPHER statement contained in the function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        MATCH (e:ExternalEquivalent)</span>
+<span class="s2">        DETACH DELETE e</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="remove_duplicate_relationships"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.miscelaneous.remove_duplicate_relationships">[docs]</a><span class="k">def</span> <span class="nf">remove_duplicate_relationships</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Removes duplicated relationships between ANY existing pair of nodes.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result:</span>
+<span class="sd">            A Neo4J connexion to the database that</span>
+<span class="sd">            modifies it according to the CYPHER statement contained in the function.</span>
+
+<span class="sd">    .. NOTE:: Only deletes DIRECTED relationships between THE SAME nodes, combining their properties</span>
+
+<span class="sd">    .. seealso:: This way of working has been taken from</span>
+<span class="sd">        `StackOverflow #18724939 &lt;https://stackoverflow.com/questions/18724939/neo4j-cypher-merge-duplicate-relationships&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            MATCH (s)-[r]-&gt;(e)</span>
+<span class="s2">            WITH s, e, type(r) as typ, collect(r) as rels</span>
+<span class="s2">            CALL apoc.refactor.mergeRelationships(rels, {properties:&quot;combine&quot;})</span>
+<span class="s2">            YIELD rel</span>
+<span class="s2">            RETURN rel</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="merge_duplicate_nodes"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.miscelaneous.merge_duplicate_nodes">[docs]</a><span class="k">def</span> <span class="nf">merge_duplicate_nodes</span><span class="p">(</span><span class="n">node_types</span><span class="p">,</span> <span class="n">node_property</span><span class="p">,</span> <span class="n">optional_condition</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">more_props</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Removes any two nodes of any given ```node_type``` with the same ```condition```.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        node_types (str): The labels of the nodes that will</span>
+<span class="sd">            be selected for merging; i.e. ``n:Fruit OR n:Vegetable``</span>
+<span class="sd">        node_property (str): The node properties used for collecting,</span>
+<span class="sd">            if not using all properties.</span>
+<span class="sd">        optional_condition (str): An optional Neo4J Statement, starting</span>
+<span class="sd">            with &quot;AND&quot;, to be added after the ``WHERE`` clause.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result:</span>
+<span class="sd">            A Neo4J connexion to the database that</span>
+<span class="sd">            modifies it according to the CYPHER statement contained in the function.</span>
+
+<span class="sd">    .. WARNING:: When using, take good care on how the keys names are written:</span>
+<span class="sd">        sometimes, if a key is not present, all nodes will be merged!</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">more_props</span><span class="p">:</span>
+        <span class="n">condition_any</span> <span class="o">=</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;AND ( ANY(x IN n.</span><span class="si">{</span><span class="n">node_property</span><span class="si">}</span><span class="s2"> &quot;</span>
+                         <span class="sa">f</span><span class="s2">&quot;WHERE x IN m.</span><span class="si">{</span><span class="n">node_property</span><span class="si">}</span><span class="s2">) )&quot;</span><span class="p">)</span>
+        <span class="n">more_props</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;HEAD(COLLECT(DISTINCT [n, m])) AS alt_thing&quot;</span>
+    <span class="k">else</span><span class="p">:</span> <span class="n">condition_any</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">node_types</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span> <span class="n">node_types</span><span class="o">=</span><span class="s2">&quot;1=1&quot;</span> <span class="c1"># Allow all nodes</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        MATCH (n), (m)</span>
+<span class="s2">        WHERE</span>
+<span class="s2">            (</span><span class="si">{</span><span class="n">node_types</span><span class="si">}</span><span class="s2">)</span>
+<span class="s2">            AND</span>
+<span class="s2">            (</span><span class="si">{</span><span class="n">node_types</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;n:&quot;</span><span class="p">,</span> <span class="s2">&quot;m:&quot;</span><span class="p">)</span><span class="si">}</span><span class="s2">)</span>
+
+<span class="s2">            AND (n.</span><span class="si">{</span><span class="n">node_property</span><span class="si">}</span><span class="s2"> IS NOT null)</span>
+<span class="s2">            AND (m.</span><span class="si">{</span><span class="n">node_property</span><span class="si">}</span><span class="s2"> IS NOT null)</span>
+<span class="s2">            AND ID(n) &lt; ID(m)</span>
+
+<span class="s2">            </span><span class="si">{</span><span class="n">condition_any</span><span class="si">}</span><span class="s2"></span>
+
+<span class="s2">            </span><span class="si">{</span><span class="n">optional_condition</span><span class="si">}</span><span class="s2"></span>
+
+<span class="s2">        WITH </span><span class="si">{</span><span class="n">more_props</span><span class="si">}</span><span class="s2">, HEAD(COLLECT(DISTINCT [n, m])) AS ns</span>
+<span class="s2">        WHERE size(ns) &gt; 1</span>
+<span class="s2">            CALL apoc.refactor.mergeNodes(ns,</span>
+<span class="s2">                </span><span class="se">{{</span><span class="s2">properties:&quot;combine&quot;, mergeRels:true</span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">        YIELD node</span>
+<span class="s2">        RETURN node</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="purge_database"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.miscelaneous.purge_database">[docs]</a><span class="k">def</span> <span class="nf">purge_database</span><span class="p">(</span><span class="n">driver</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;merge&quot;</span><span class="p">,</span> <span class="s2">&quot;delete&quot;</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A series of commands that purge a database, removing unnecessary, duplicated or empty nodes</span>
+<span class="sd">    and merging those without required properties. This has been converted into a common function</span>
+<span class="sd">    to standarize the ways the nodes are merged.</span>
+
+<span class="sd">     Args:</span>
+<span class="sd">        driver (neo4j.Driver): Neo4J&#39;s Bolt Driver currently in use</span>
+<span class="sd">        method (list): The part of the function that we want to execute; if [&quot;delete&quot;], only call</span>
+<span class="sd">            queries that delete nodes; if [&quot;merge&quot;], only call those that merge; if both, do both</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        This function modifies the Neo4J Database as desired, but does not produce any particular return.</span>
+
+<span class="sd">    .. WARNING:: When modifying, take good care on how the keys names are written:</span>
+<span class="sd">        with :obj:`~CanGraph.miscelaneous.merge_duplicate_nodes`,</span>
+<span class="sd">        sometimes, if a key is not present, all nodes will be merged!</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">method</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">method</span><span class="p">)</span>
+    <span class="n">session</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">session</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="s2">&quot;merge&quot;</span> <span class="ow">in</span> <span class="n">method</span><span class="p">:</span>
+        <span class="c1"># Fist, we purge Publications by PubMed_ID, using the abstract to merge those that have no PubMed_ID</span>
+        <span class="n">manage_transaction</span><span class="p">(</span><span class="n">merge_duplicate_nodes</span><span class="p">(</span><span class="s2">&quot;n:Publication&quot;</span><span class="p">,</span> <span class="s2">&quot;Pubmed_ID&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+        <span class="n">manage_transaction</span><span class="p">(</span><span class="n">merge_duplicate_nodes</span><span class="p">(</span><span class="s2">&quot;n:Publication&quot;</span><span class="p">,</span> <span class="s2">&quot;Abstract&quot;</span><span class="p">,</span> <span class="s2">&quot;AND (n.Pubmed_ID IS null)&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+
+        <span class="c1"># Now, we work on Proteins/Metabolites/Drugs:</span>
+        <span class="c1"># We merge Proteins by UniProt_ID, and, when there is none, by Name:</span>
+        <span class="n">manage_transaction</span><span class="p">(</span><span class="n">merge_duplicate_nodes</span><span class="p">(</span><span class="s2">&quot;n:Protein&quot;</span><span class="p">,</span> <span class="s2">&quot;UniProt_ID&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+        <span class="n">manage_transaction</span><span class="p">(</span><span class="n">merge_duplicate_nodes</span><span class="p">(</span><span class="s2">&quot;n:Protein&quot;</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="p">,</span> <span class="s2">&quot;AND (n.UniProt_ID IS null)&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+        <span class="c1"># We merge by HMDB_ID, ChEBI_ID, Name, InChI and InChIKey (normally, they should be unique):</span>
+        <span class="n">manage_transaction</span><span class="p">(</span><span class="n">merge_duplicate_nodes</span><span class="p">(</span>
+            <span class="s2">&quot;n:Protein OR n:Metabolite OR n:Drug OR n:OriginalMetabolite&quot;</span><span class="p">,</span> <span class="s2">&quot;HMDB_ID&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+        <span class="n">manage_transaction</span><span class="p">(</span><span class="n">merge_duplicate_nodes</span><span class="p">(</span>
+            <span class="s2">&quot;n:Protein OR n:Metabolite OR n:Drug OR n:OriginalMetabolite&quot;</span><span class="p">,</span> <span class="s2">&quot;ChEBI_ID&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+        <span class="n">manage_transaction</span><span class="p">(</span><span class="n">merge_duplicate_nodes</span><span class="p">(</span>
+            <span class="s2">&quot;n:Protein OR n:Metabolite OR n:Drug OR n:OriginalMetabolite&quot;</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+        <span class="n">manage_transaction</span><span class="p">(</span><span class="n">merge_duplicate_nodes</span><span class="p">(</span>
+            <span class="s2">&quot;n:Protein OR n:Metabolite OR n:Drug OR n:OriginalMetabolite&quot;</span><span class="p">,</span> <span class="s2">&quot;InChI&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+        <span class="n">manage_transaction</span><span class="p">(</span><span class="n">merge_duplicate_nodes</span><span class="p">(</span>
+            <span class="s2">&quot;n:Protein OR n:Metabolite OR n:Drug OR n:OriginalMetabolite&quot;</span><span class="p">,</span> <span class="s2">&quot;InChIKey&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+
+        <span class="c1"># WikiData_IDs showuld also be unique:</span>
+        <span class="n">manage_transaction</span><span class="p">(</span><span class="n">merge_duplicate_nodes</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;WikiData_ID&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+
+        <span class="c1"># We also remove all non-unique Subjects. We do this by passing on all three parameters</span>
+        <span class="c1"># this nodes may have to apoc.mergeNodes</span>
+        <span class="c1"># .. NOTE:: This concerns only those nodes that DO NOT COME from Exposome_Explorer</span>
+        <span class="n">manage_transaction</span><span class="p">(</span><span class="n">merge_duplicate_nodes</span><span class="p">(</span><span class="s2">&quot;n:Subject&quot;</span><span class="p">,</span> <span class="s2">&quot;Age_Mean&quot;</span><span class="p">,</span>
+                            <span class="n">more_props</span><span class="o">=</span><span class="s2">&quot;n.Gender as gender, n.Information as inf&quot;</span><span class="p">,</span>
+                            <span class="n">optional_condition</span><span class="o">=</span><span class="s2">&quot;AND (n.Exposome_Explorer_ID IS null)&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+
+        <span class="c1"># We can do the same for the different Dosages; this has to be done manually</span>
+        <span class="c1"># because otherwise the database somehow crases (no idea why)</span>
+        <span class="n">manage_transaction</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;MATCH (n:Dosage)</span>
+<span class="s2">                WITH n.Form as frm, n.Stength as str, n.Route as rt, COLLECT(n) AS ns</span>
+<span class="s2">                WHERE size(ns) &gt; 1</span>
+<span class="s2">                    CALL apoc.refactor.mergeNodes(ns, {properties:&quot;combine&quot;, mergeRels:True})</span>
+<span class="s2">                YIELD node RETURN node&quot;&quot;&quot;</span><span class="p">,</span> <span class="n">driver</span><span class="p">)</span>
+
+        <span class="c1"># For products, we merge all those with the same EMA_MA_Number or FDA_Application_Number to</span>
+        <span class="c1"># try to minimize duplicates, although this is not the best approach</span>
+        <span class="n">manage_transaction</span><span class="p">(</span><span class="n">merge_duplicate_nodes</span><span class="p">(</span><span class="s2">&quot;n:Product&quot;</span><span class="p">,</span> <span class="s2">&quot;EMA_MA_Number&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+        <span class="n">manage_transaction</span><span class="p">(</span><span class="n">merge_duplicate_nodes</span><span class="p">(</span><span class="s2">&quot;n:Product&quot;</span><span class="p">,</span> <span class="s2">&quot;FDA_Application_Number&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+
+        <span class="c1"># For CelularLocations and BioSpecimens, we merge those with the same Name:</span>
+        <span class="n">manage_transaction</span><span class="p">(</span><span class="n">merge_duplicate_nodes</span><span class="p">(</span><span class="s2">&quot;n:CelularLocation&quot;</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+        <span class="n">manage_transaction</span><span class="p">(</span><span class="n">merge_duplicate_nodes</span><span class="p">(</span><span class="s2">&quot;n:BioSpecimen&quot;</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="s2">&quot;delete&quot;</span> <span class="ow">in</span> <span class="n">method</span><span class="p">:</span>
+
+        <span class="c1"># Finally, we delete all empty nodes. This shouldn&#39;t be created on the first place,</span>
+        <span class="c1"># but, in case anyone escapes, this makes the DB cleaner.</span>
+        <span class="c1"># .. NOTE:: In the case of Taxonomies, these &quot;empty nodes&quot; are</span>
+        <span class="c1">#       actually created on purpose. Here, they are removed.</span>
+        <span class="n">manage_transaction</span><span class="p">(</span><span class="s2">&quot;MATCH (n) WHERE size(keys(properties(n))) &lt; 1 CALL &quot;</span>
+                            <span class="s2">&quot;{ WITH n DETACH DELETE n } IN TRANSACTIONS OF 1000 ROWS&quot;</span><span class="p">,</span> <span class="n">driver</span><span class="p">)</span>
+        <span class="c1"># For Measurements and Sequences, 2 properties are the minimum, since they are always booleans</span>
+        <span class="n">manage_transaction</span><span class="p">(</span><span class="s2">&quot;MATCH (m:Measurement) &quot;</span>
+                           <span class="s2">&quot;WHERE size(keys(properties(m))) &lt; 2 DETACH DELETE m&quot;</span><span class="p">,</span> <span class="n">driver</span><span class="p">)</span>
+        <span class="n">manage_transaction</span><span class="p">(</span><span class="s2">&quot;MATCH (s:Sequence) &quot;</span>
+                           <span class="s2">&quot;WHERE size(keys(properties(s))) &lt; 2 DETACH DELETE s&quot;</span><span class="p">,</span> <span class="n">driver</span><span class="p">)</span>
+
+        <span class="c1"># And those that do not match our Schema - Be careful with the \&quot; character</span>
+        <span class="n">manage_transaction</span><span class="p">(</span><span class="s2">&quot;&quot;&quot; MATCH (n:Metabolite)</span>
+<span class="s2">                        WHERE (n.ChEBI_ID IS NULL OR n.ChEBI_ID = &quot;&quot;</span>
+<span class="s2">                             OR n.CAS_Number IS NULL OR n.CAS_Number = &quot;&quot;)</span>
+<span class="s2">                        DETACH DELETE n&quot;&quot;&quot;</span><span class="p">,</span> <span class="n">driver</span><span class="p">)</span>
+
+        <span class="c1"># We will also remove all disconnected nodes (they give no useful information)</span>
+        <span class="n">manage_transaction</span><span class="p">(</span><span class="s2">&quot;MATCH (n) WHERE NOT (n)--() DETACH DELETE n&quot;</span><span class="p">,</span> <span class="n">driver</span><span class="p">)</span>
+
+    <span class="c1">#At last, we may remove any duplicate relationships, which, since we have merged nodes, will surely be there:</span>
+    <span class="n">manage_transaction</span><span class="p">(</span><span class="n">remove_duplicate_relationships</span><span class="p">(),</span> <span class="n">driver</span><span class="p">)</span>
+
+    <span class="n">session</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<span class="c1"># ********* Work with Files ********* #</span>
+
+<div class="viewcode-block" id="check_file"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.miscelaneous.check_file">[docs]</a><span class="k">def</span> <span class="nf">check_file</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Checks for the presence of a file or folder. If it exists, it returns the filepath; if it doesn&#39;t, it</span>
+<span class="sd">    raises an :obj:`argparse.ArgumentTypeError`, which tells argparse how to process file exclussion</span>
+
+<span class="sd">    .. NOTE:: Perhaps its not ideal, but I will be using this also to check for file existence</span>
+<span class="sd">        throughout the CanGraph project, although the error type might not be correct</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filepath (str): The path of the file or folder whose existence is being checked</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: The original filepath, which now is sure to exist</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        argparse.ArgumentTypeError: If the file does not exist</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># First, turn the path into abspath for consistency</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+
+    <span class="c1"># Check if the filepath does exist</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentTypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing file: </span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2">. Please add the file and run the script back&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">filepath</span> <span class="c1"># Return the same string for argparse to work</span></div>
+
+<div class="viewcode-block" id="check_neo4j_protocol"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.miscelaneous.check_neo4j_protocol">[docs]</a><span class="k">def</span> <span class="nf">check_neo4j_protocol</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Checks that a given ``string`` starts with any of the protocols accepted by the :obj:`neo4j.Driver`</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        string (str): A string, which will normally represent the neo4j adress</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: The same string that was provided as an argument (required by :obj:`argparse.ArgumentParser`)</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        argparse.ArgumentTypeError: If the string is not of the correct protocol</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># First, declare a list of accepted formats</span>
+    <span class="n">accepted_formats</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;bolt&#39;</span><span class="p">,</span> <span class="s1">&#39;bolt+ssc&#39;</span><span class="p">,</span> <span class="s1">&#39;bolt+s&#39;</span><span class="p">,</span> <span class="s1">&#39;neo4j&#39;</span><span class="p">,</span> <span class="s1">&#39;neo4j+ssc&#39;</span><span class="p">,</span> <span class="s1">&#39;neo4j+s&#39;</span><span class="p">]</span>
+
+    <span class="c1"># This must be converted into a tuple for :obj:`str.startswith`</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">string</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">accepted_formats</span><span class="p">)):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Invalid format. Your string must start with one of </span><span class="si">{</span><span class="n">accepted_formats</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">raise</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentTypeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">string</span> <span class="c1"># Return the same string for argparse to work</span></div>
+
+<div class="viewcode-block" id="export_graphml"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.miscelaneous.export_graphml">[docs]</a><span class="k">def</span> <span class="nf">export_graphml</span><span class="p">(</span><span class="n">exportname</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Exports a Neo4J graph to GraphML format. The graph will be exported to Neo4JImportPath</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        exportname (str): The name for the exported file, which will be saved under ./Neo4JImportPath/</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that exports the file, using batch optimizations and</span>
+<span class="sd">            smaller batch sizes to try to keep the impact on memory use low</span>
+
+<span class="sd">    .. NOTE:: for this to work, you HAVE TO have APOC availaible on your Neo4J installation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL apoc.export.graphml.all(&quot;</span><span class="si">{</span><span class="n">exportname</span><span class="si">}</span><span class="s2">&quot;,</span>
+<span class="s2">                                     </span><span class="se">{{</span><span class="s2">batchSize: 5, useTypes:true, storeNodeIds:false,</span>
+<span class="s2">                                       useOptimizations:</span>
+<span class="s2">                                            </span><span class="se">{{</span><span class="s2">type: &quot;UNWIND_BATCH&quot;, unwindBatchSize: 5</span><span class="se">}}</span><span class="s2"> </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="import_graphml"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.miscelaneous.import_graphml">[docs]</a><span class="k">def</span> <span class="nf">import_graphml</span><span class="p">(</span><span class="n">importname</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Imports a GraphML file into a Neo4J graph. The file has to be located in Neo4JImportPath</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        importname (str): The name for the file to be imported, which must be under ./Neo4JImportPath/</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that imports the file, using batch optimizations and</span>
+<span class="sd">            smaller batch sizes to try to keep the impact on memory use low</span>
+
+<span class="sd">    .. NOTE:: for this to work, you HAVE TO have APOC availaible on your Neo4J installation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL apoc.import.graphml(&quot;</span><span class="si">{</span><span class="n">importname</span><span class="si">}</span><span class="s2">&quot;,</span>
+<span class="s2">                                 </span><span class="se">{{</span><span class="s2">batchSize: 5, useTypes:true, storeNodeIds:false, readLabels:True,</span>
+<span class="s2">                                   useOptimizations:</span>
+<span class="s2">                                        </span><span class="se">{{</span><span class="s2">type: &quot;UNWIND_BATCH&quot;, unwindBatchSize: 5</span><span class="se">}}</span><span class="s2"> </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="download"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.miscelaneous.download">[docs]</a><span class="k">def</span> <span class="nf">download</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">folder</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Downloads a file from the internet into a given folder</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        url (str): The Uniform Resource Locator for the Zipfile to be downloaded and unzipped</span>
+<span class="sd">        folder (str): The folder under which the file will be stored.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: The path where the file we just downloaded has been stored</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span> <span class="c1"># Set the folder to be an absolute path</span>
+
+    <span class="c1"># If the folder does not exist, we create it</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Create some naming variables and request the file from the URL</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">file_ext</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">file_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">file_ext</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">file_path</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">file_path</span></div>
+
+<div class="viewcode-block" id="unzip"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.miscelaneous.unzip">[docs]</a><span class="k">def</span> <span class="nf">unzip</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">folder</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Unizps a file present at a given ``file_path`` into a given ``folder``</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        url (str): The Uniform Resource Locator for the Zipfile to be unzipped</span>
+<span class="sd">        folder (str): The folder under which the file will be stored.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: The path where the file we just unzipped has been stored</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span> <span class="c1"># Set the folder to be an absolute path</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">file_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># Create some naming variables</span>
+
+    <span class="c1"># If the folder does not exist, we create it</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># And we unzip the file</span>
+    <span class="n">zf</span> <span class="o">=</span> <span class="n">ZipFile</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+    <span class="n">zf</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s2">/&quot;</span><span class="p">)</span>
+    <span class="n">zf</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">filename</span></div>
+
+<div class="viewcode-block" id="untargz"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.miscelaneous.untargz">[docs]</a><span class="k">def</span> <span class="nf">untargz</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">folder</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Untargzs a file present at a given ``file_path`` into a given ``folder``</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        url (str): The Uniform Resource Locator for the Tarfile to be untargz</span>
+<span class="sd">        folder (str): The folder under which the file will be stored.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: The path where the file we just untargz has been stored</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span> <span class="c1"># Set the folder to be an absolute path</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">file_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># Create some naming variables</span>
+
+    <span class="c1"># If the folder does not exist, we create it</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># And we untargz the file</span>
+    <span class="n">tf</span> <span class="o">=</span> <span class="n">tarfile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+    <span class="n">tf</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s2">/&quot;</span><span class="p">)</span>
+    <span class="n">tf</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">filename</span></div>
+
+<div class="viewcode-block" id="download_and_unzip"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.miscelaneous.download_and_unzip">[docs]</a><span class="k">def</span> <span class="nf">download_and_unzip</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">folder</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Downloads and unzips a given Zipfile from the internet; useful for databases which provide zip access.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        url (str): The Uniform Resource Locator for the Zipfile to be downloaded and unzipped</span>
+<span class="sd">        folder (str): The folder under which the file will be stored.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        This function downloads and unzips the file in the desired folder, but does not produce any particular return.</span>
+
+<span class="sd">    .. seealso:: Code snippets for this function were taken from</span>
+<span class="sd">        `Shyamal Vaderia&#39;s Github &lt;https://svaderia.github.io/articles/downloading-and-unzipping-a-zipfile/&gt;`_</span>
+<span class="sd">        and from `StackOverflow #32123394 &lt;https://stackoverflow.com/questions/32123394/workflow-to-create-a-folder-if-it-doesnt-exist-already&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">file_path</span> <span class="o">=</span> <span class="n">download</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;/tmp&quot;</span><span class="p">)</span>
+    <span class="n">unzip</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">folder</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="download_and_untargz"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.miscelaneous.download_and_untargz">[docs]</a><span class="k">def</span> <span class="nf">download_and_untargz</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">folder</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Downloads and unzips a given ``tar.gz`` from the internet</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        url (str): The Uniform Resource Locator for the ``tar.gz`` to be downloaded and unzipped</span>
+<span class="sd">        folder (str): The folder under which the file will be stored.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        This function downloads and unzips the file in the desired folder, but does not produce any particular return.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">file_path</span> <span class="o">=</span> <span class="n">download</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;/tmp&quot;</span><span class="p">)</span>
+    <span class="n">untargz</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">folder</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="split_xml"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.miscelaneous.split_xml">[docs]</a><span class="k">def</span> <span class="nf">split_xml</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">splittag</span><span class="p">,</span> <span class="n">bigtag</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Splits a given .xml file in n smaller XML files, one for each ``splittag`` section that is pressent in the original</span>
+<span class="sd">    file, which should be of type ``bigtag``. For example, we might have an ``&lt;hmdb&gt;`` file which we want to slit based on</span>
+<span class="sd">    the ``&lt;metabolite&gt;`` items therein contained. Ths is so that Neo4J does not crash when processing it.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filepath (str): The path to the file that needs to be xplitted</span>
+<span class="sd">        splittag (str): The tag based on which the file will be split</span>
+<span class="sd">        bigtag (str): The main tag of the file, which needs to be re-added.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        int: The number of files that have been produced from the original</span>
+
+<span class="sd">    .. WARNING:: The original file will be removed</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Set the filepath to be an absolute path</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+
+    <span class="c1"># Set counters and text variables to null</span>
+    <span class="n">current_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span> <span class="n">current_line</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">num_files</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># Open the file that we wish to split (but without reading! neat!)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span> <span class="c1"># For each line, scan and recount</span>
+            <span class="n">current_text</span> <span class="o">+=</span> <span class="n">line</span><span class="p">;</span> <span class="n">current_line</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="c1"># Whenever we find a closing tag, we know the info is over</span>
+            <span class="c1"># and we generate a new file</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;/</span><span class="si">{</span><span class="n">splittag</span><span class="si">}</span><span class="s2">&gt;&quot;</span><span class="p">):</span>
+                <span class="n">newfile</span> <span class="o">=</span> <span class="n">filepath</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">num_files</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.xml&quot;</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">newfile</span><span class="p">,</span> <span class="s2">&quot;w+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="c1"># Skip already-present headers for the first file</span>
+                    <span class="k">if</span> <span class="n">num_files</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&lt;?xml version=</span><span class="se">\&quot;</span><span class="s2">1.0</span><span class="se">\&quot;</span><span class="s2"> encoding=</span><span class="se">\&quot;</span><span class="s2">UTF-8</span><span class="se">\&quot;</span><span class="s2">?&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&lt;</span><span class="si">{</span><span class="n">bigtag</span><span class="si">}</span><span class="s1">&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">current_text</span><span class="p">)</span>
+                    <span class="c1"># This is the same since it will just stop processing at the last tag</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&lt;/</span><span class="si">{</span><span class="n">bigtag</span><span class="si">}</span><span class="s1">&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="n">num_files</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">current_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="c1"># Remove the original file</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">num_files</span> <span class="o">-</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="split_csv"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.miscelaneous.split_csv">[docs]</a><span class="k">def</span> <span class="nf">split_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="n">sep_out</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="n">startFrom</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">withStepsOf</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Splits a given .csv/tsv file in n smaller csv files, one for each row on the original file,</span>
+<span class="sd">    so that it does not crash when processing it. It also allows to start reading from ```startFrom``` lines</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filepath (str): The path to the file that needs to be xplitted</span>
+<span class="sd">        splittag (str): The tag based on which the file will be split</span>
+<span class="sd">        bigtag (str): The main tag of the file, which needs to be re-added.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        int: The number of files that have been produced from the original</span>
+
+<span class="sd">    .. WARNING:: The original file will be removed</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Set the filepath to be an absolute path</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Read the file using pandas (and hope it does not crash&quot;</span>
+    <span class="n">bigfile</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="n">sep</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="n">startFrom</span><span class="p">)</span>
+    <span class="n">filenumber</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">bigfile</span><span class="p">),</span> <span class="n">withStepsOf</span><span class="p">):</span>
+        <span class="n">new_df</span> <span class="o">=</span> <span class="n">bigfile</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">index</span><span class="p">:(</span><span class="n">index</span><span class="o">+</span><span class="n">withStepsOf</span><span class="p">)]</span>
+        <span class="n">new_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">filenumber</span><span class="si">}</span><span class="s2">.csv&quot;</span><span class="p">,</span> <span class="n">index</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="n">sep_out</span><span class="p">)</span>
+        <span class="n">filenumber</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span> <span class="c1"># And remove the file after finishing</span>
+
+    <span class="k">return</span> <span class="n">filenumber</span></div>
+
+<div class="viewcode-block" id="scan_folder"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.miscelaneous.scan_folder">[docs]</a><span class="k">def</span> <span class="nf">scan_folder</span><span class="p">(</span><span class="n">folder_path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Scans a folder and finds all the files present in it</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        folder_path (str): The folder that is to be scanned</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        list: A list of all the files in the folder, listed by their absolute path</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">all_files</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">root</span><span class="p">,</span><span class="n">dirs</span><span class="p">,</span><span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">folder_path</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+            <span class="n">all_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">filename</span><span class="p">))</span> <span class="p">)</span>
+    <span class="k">return</span> <span class="n">all_files</span></div>
+
+<div class="viewcode-block" id="countlines"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.miscelaneous.countlines">[docs]</a><span class="k">def</span> <span class="nf">countlines</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">begin_start</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A function that counts all the lines of code present in a given directory; useful to show off in Sphinx Docs</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        start (str): The directory from which to start the line counting</span>
+<span class="sd">        header (bool): whether to print a header, or not</span>
+<span class="sd">        lines (int): Number of lines already counted; do not fill, only for recursion</span>
+<span class="sd">        begin_start (str): The subdirectory currently in use; do not fill, only for recursion</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        int: The number of lines present in ``start``</span>
+
+<span class="sd">    .. seealso:: This function was taken from `StackOverflow #38543709</span>
+<span class="sd">        &lt;https://stackoverflow.com/questions/38543709/count-lines-of-code-in-directory-using-python/&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">header</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:&gt;10}</span><span class="s1"> |</span><span class="si">{:&gt;10}</span><span class="s1"> | </span><span class="si">{:&lt;20}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;ADDED&#39;</span><span class="p">,</span> <span class="s1">&#39;TOTAL&#39;</span><span class="p">,</span> <span class="s1">&#39;FILE&#39;</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:-&gt;11}</span><span class="s1">|</span><span class="si">{:-&gt;11}</span><span class="s1">|</span><span class="si">{:-&gt;20}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">thing</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">start</span><span class="p">):</span>
+        <span class="n">thing</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">thing</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">thing</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">thing</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.py&#39;</span><span class="p">):</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">thing</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">newlines</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+                    <span class="n">newlines</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">newlines</span><span class="p">)</span>
+                    <span class="n">lines</span> <span class="o">+=</span> <span class="n">newlines</span>
+
+                    <span class="k">if</span> <span class="n">begin_start</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">reldir_of_thing</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">thing</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">begin_start</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">reldir_of_thing</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">thing</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:&gt;10}</span><span class="s1"> |</span><span class="si">{:&gt;10}</span><span class="s1"> | </span><span class="si">{:&lt;20}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                            <span class="n">newlines</span><span class="p">,</span> <span class="n">lines</span><span class="p">,</span> <span class="n">reldir_of_thing</span><span class="p">))</span>
+
+
+    <span class="k">for</span> <span class="n">thing</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">start</span><span class="p">):</span>
+        <span class="n">thing</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">thing</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">thing</span><span class="p">):</span>
+            <span class="n">lines</span> <span class="o">=</span> <span class="n">countlines</span><span class="p">(</span><span class="n">thing</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="n">lines</span><span class="p">,</span> <span class="n">begin_start</span><span class="o">=</span><span class="n">start</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">lines</span></div>
+
+<span class="c1"># ********* Other useful functions ********* #</span>
+
+<div class="viewcode-block" id="sleep_with_counter"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.miscelaneous.sleep_with_counter">[docs]</a><span class="k">def</span> <span class="nf">sleep_with_counter</span><span class="p">(</span><span class="n">seconds</span><span class="p">,</span> <span class="n">step</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Waiting...&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A function that waits while showing a cute animation</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        seconds (int): The number of seconds that we would like the program to wait for</span>
+<span class="sd">        step (int): The number times the counter wheel will turn in a second; by default, 20</span>
+<span class="sd">        message (str): An optional, text message to add to the waiting period</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">alive_bar</span><span class="p">(</span><span class="n">seconds</span><span class="o">*</span><span class="n">step</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">message</span><span class="p">)</span> <span class="k">as</span> <span class="n">bar</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">seconds</span><span class="o">*</span><span class="n">step</span><span class="p">):</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">step</span><span class="p">);</span> <span class="n">bar</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="old_sleep_with_counter"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.miscelaneous.old_sleep_with_counter">[docs]</a><span class="k">def</span> <span class="nf">old_sleep_with_counter</span><span class="p">(</span><span class="n">seconds</span><span class="p">,</span> <span class="n">step</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Waiting...&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A function that waits while showing a cute animation, but **without using the ``alive_progress` module**</span>
+
+<span class="sd">    .. NOTE:: This function interacts weirdly with slurn; I&#39;d recommend to not use it on the HPC</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        seconds (int): The number of seconds that we would like the program to wait for</span>
+<span class="sd">        step (int): The number times the counter wheel will turn in a second; by default, 20</span>
+<span class="sd">        message (str): An optional, text message to add to the waiting period</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">animation</span> <span class="o">=</span> <span class="s2">&quot;|/-</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">;</span> <span class="c1"># The animation vector</span>
+
+    <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># Initialize the index</span>
+    <span class="n">total_steps</span> <span class="o">=</span> <span class="n">seconds</span><span class="o">*</span><span class="n">step</span> <span class="c1"># Calculate the number of steps</span>
+
+    <span class="k">while</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="n">total_steps</span><span class="p">:</span>
+
+        <span class="c1"># Calculate the current step on base 100</span>
+        <span class="n">current_step_100</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">index</span><span class="o">*</span><span class="mi">100</span><span class="o">/</span><span class="n">total_steps</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">animation</span><span class="p">[</span><span class="n">index</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">animation</span><span class="p">)]</span><span class="si">}</span><span class="se">\t</span><span class="si">{</span><span class="n">current_step_100</span><span class="si">}</span><span class="s2">/100&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">step</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">  ✱</span><span class="se">\t</span><span class="s2">100/100 [COMPLETED]&quot;</span><span class="p">)</span></div>
+</pre></div>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Pablo Marcos<br/>
+  
+      &copy; Copyright 2022, Pablo Marcos &lt;software@loreak.org&gt;.<br/>
+    Last updated on Dec 17, 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

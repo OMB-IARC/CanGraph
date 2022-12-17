@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+<key id="Issue" for="node" attr.name="Issue" attr.type="string"/>
+<key id="Authors" for="node" attr.name="Authors" attr.type="string"/>
+<key id="Physiological_Charge" for="node" attr.name="Physiological_Charge" attr.type="string"/>
+<key id="Gender" for="node" attr.name="Gender" attr.type="string"/>
+<key id="Exposome_Explorer_ID" for="node" attr.name="Exposome_Explorer_ID" attr.type="string"/>
+<key id="Alternative_Names" for="node" attr.name="Alternative_Names" attr.type="string"/>
+<key id="Acceptor_Count" for="node" attr.name="Acceptor_Count" attr.type="string"/>
+<key id="Reasons_To_Import" for="node" attr.name="Reasons_To_Import" attr.type="string" attr.list="string"/>
+<key id="Formula" for="node" attr.name="Formula" attr.type="string"/>
+<key id="Formal_Charge" for="node" attr.name="Formal_Charge" attr.type="string"/>
+<key id="HMDB_ID" for="node" attr.name="HMDB_ID" attr.type="string" attr.list="string"/>
+<key id="MDDR_Like_Rule" for="node" attr.name="MDDR_Like_Rule" attr.type="string"/>
+<key id="Donor_Count" for="node" attr.name="Donor_Count" attr.type="string"/>
+<key id="DOI" for="node" attr.name="DOI" attr.type="string"/>
+<key id="Ghose_Filter" for="node" attr.name="Ghose_Filter" attr.type="string"/>
+<key id="Synonyms" for="node" attr.name="Synonyms" attr.type="string"/>
+<key id="Status" for="node" attr.name="Status" attr.type="string"/>
+<key id="Organism" for="node" attr.name="Organism" attr.type="string"/>
+<key id="Displayed_Nb_of_proofs" for="node" attr.name="Displayed_Nb_of_proofs" attr.type="string"/>
+<key id="Specimen_Type" for="node" attr.name="Specimen_Type" attr.type="string"/>
+<key id="Publication" for="node" attr.name="Publication" attr.type="string"/>
+<key id="pKa_Strongest_Acidic" for="node" attr.name="pKa_Strongest_Acidic" attr.type="string"/>
+<key id="Bioavailability" for="node" attr.name="Bioavailability" attr.type="string"/>
+<key id="Public" for="node" attr.name="Public" attr.type="string"/>
+<key id="labels" for="node" attr.name="labels" attr.type="string"/>
+<key id="Pages" for="node" attr.name="Pages" attr.type="string"/>
+<key id="Average_Mass" for="node" attr.name="Average_Mass" attr.type="string"/>
+<key id="InChIKey" for="node" attr.name="InChIKey" attr.type="string"/>
+<key id="Volume" for="node" attr.name="Volume" attr.type="string"/>
+<key id="VMH_ID" for="node" attr.name="VMH_ID" attr.type="string"/>
+<key id="State" for="node" attr.name="State" attr.type="string"/>
+<key id="Value" for="node" attr.name="Value" attr.type="string"/>
+<key id="MetaNetX_ID" for="node" attr.name="MetaNetX_ID" attr.type="string"/>
+<key id="PubMed_ID" for="node" attr.name="PubMed_ID" attr.type="string"/>
+<key id="Level" for="node" attr.name="Level" attr.type="string"/>
+<key id="EnviPath_ID" for="node" attr.name="EnviPath_ID" attr.type="string"/>
+<key id="logS" for="node" attr.name="logS" attr.type="string"/>
+<key id="logP" for="node" attr.name="logP" attr.type="string"/>
+<key id="Boiling_Point" for="node" attr.name="Boiling_Point" attr.type="string"/>
+<key id="Secondary_HMDB_IDs" for="node" attr.name="Secondary_HMDB_IDs" attr.type="string"/>
+<key id="MeSH_ID" for="node" attr.name="MeSH_ID" attr.type="string"/>
+<key id="BiGG_ID" for="node" attr.name="BiGG_ID" attr.type="string"/>
+<key id="Metabolomics" for="node" attr.name="Metabolomics" attr.type="string"/>
+<key id="Bacterial_Source" for="node" attr.name="Bacterial_Source" attr.type="string"/>
+<key id="Description" for="node" attr.name="Description" attr.type="string"/>
+<key id="Polarizability" for="node" attr.name="Polarizability" attr.type="string"/>
+<key id="Average_Molecular_Weight" for="node" attr.name="Average_Molecular_Weight" attr.type="string"/>
+<key id="WikiPedia_Article" for="node" attr.name="WikiPedia_Article" attr.type="string"/>
+<key id="Refractivity" for="node" attr.name="Refractivity" attr.type="string"/>
+<key id="ChemSpider_ID" for="node" attr.name="ChemSpider_ID" attr.type="string"/>
+<key id="InChI" for="node" attr.name="InChI" attr.type="string"/>
+<key id="ChEBI_ID" for="node" attr.name="ChEBI_ID" attr.type="string" attr.list="string"/>
+<key id="Full_Annotation" for="node" attr.name="Full_Annotation" attr.type="string"/>
+<key id="Information" for="node" attr.name="Information" attr.type="string"/>
+<key id="Function" for="node" attr.name="Function" attr.type="string"/>
+<key id="Polar_Surface_Area" for="node" attr.name="Polar_Surface_Area" attr.type="string"/>
+<key id="Number_of_Rings" for="node" attr.name="Number_of_Rings" attr.type="string"/>
+<key id="PubChem_ID" for="node" attr.name="PubChem_ID" attr.type="string"/>
+<key id="Monisotopic_Molecular_Weight" for="node" attr.name="Monisotopic_Molecular_Weight" attr.type="string"/>
+<key id="Age" for="node" attr.name="Age" attr.type="string"/>
+<key id="Notes" for="node" attr.name="Notes" attr.type="string"/>
+<key id="Water_Solubility" for="node" attr.name="Water_Solubility" attr.type="string"/>
+<key id="Identification_Method" for="node" attr.name="Identification_Method" attr.type="string"/>
+<key id="pKa_Strongest_Basic" for="node" attr.name="pKa_Strongest_Basic" attr.type="string"/>
+<key id="Comments" for="node" attr.name="Comments" attr.type="string"/>
+<key id="First_Author" for="node" attr.name="First_Author" attr.type="string"/>
+<key id="Title" for="node" attr.name="Title" attr.type="string"/>
+<key id="SMILES" for="node" attr.name="SMILES" attr.type="string"/>
+<key id="IUPAC" for="node" attr.name="IUPAC" attr.type="string"/>
+<key id="WikiData_ID" for="node" attr.name="WikiData_ID" attr.type="string"/>
+<key id="Normal" for="node" attr.name="Normal" attr.type="string"/>
+<key id="Date" for="node" attr.name="Date" attr.type="string"/>
+<key id="Type" for="node" attr.name="Type" attr.type="string"/>
+<key id="CHEMBL_ID" for="node" attr.name="CHEMBL_ID" attr.type="string"/>
+<key id="Verber_Rule" for="node" attr.name="Verber_Rule" attr.type="string"/>
+<key id="Rotatable_Bond_Count" for="node" attr.name="Rotatable_Bond_Count" attr.type="string"/>
+<key id="Ro5" for="node" attr.name="Ro5" attr.type="string"/>
+<key id="Study_Design_Type" for="node" attr.name="Study_Design_Type" attr.type="string"/>
+<key id="KEGG_ID" for="node" attr.name="KEGG_ID" attr.type="string"/>
+<key id="CAS_Number" for="node" attr.name="CAS_Number" attr.type="string"/>
+<key id="Melting_Point" for="node" attr.name="Melting_Point" attr.type="string"/>
+<key id="MicobialMetabolite_ID" for="node" attr.name="MicobialMetabolite_ID" attr.type="string"/>
+<key id="label" for="edge" attr.name="label" attr.type="string"/>
+<graph id="G" edgedefault="directed">
+<node id="n0" labels=":Metabolite:OriginalMetabolite"><data key="labels">:Metabolite:OriginalMetabolite</data><data key="CHEMBL_ID">CHEMBL326602</data><data key="BiGG_ID">appl</data><data key="EnviPath_ID">650babc9-9d68-4b73-9332-11972ca26f7b/compound/d0a37a0c-a6b5-45b9-b8cd-3d633776e4a3</data><data key="Bacterial_Source">Specific-pathogen-free mouse faeces</data><data key="Identification_Method">3. Reduced in germ-free animals</data><data key="MicobialMetabolite_ID">264</data><data key="Organism">Colonized germ-free mice</data><data key="Water_Solubility">1.00E+06 mg/L @ 25 °C (exp)</data><data key="WikiPedia_Article">1-Amino-2-propanol</data><data key="Boiling_Point">160.00 to  161.00 °C. @  760.00 mm Hg</data><data key="KEGG_ID">C05771</data><data key="logP">-0.960</data><data key="Melting_Point">24.00 to   26.00 °C. @  760.00 mm Hg</data><data key="MetaNetX_ID">MNXM1107675</data><data key="Average_Mass">75.06841</data><data key="Function">pair of enantiomers</data><data key="VMH_ID">APPL</data><data key="Level">Single</data><data key="WikiData_ID">Q161580</data><data key="Exposome_Explorer_ID">Component_2324</data><data key="Alternative_Names">Isopropanolamine, 1-Amino-2-hydroxypropane</data><data key="Displayed_Nb_of_proofs">1</data><data key="Rotatable_Bond_Count">1</data><data key="Acceptor_Count">2</data><data key="Formal_Charge">0</data><data key="Verber_Rule">No</data><data key="logS">1.00</data><data key="MDDR_Like_Rule">No</data><data key="Ghose_Filter">No</data><data key="Refractivity">20.63</data><data key="pKa_Strongest_Basic">9.6</data><data key="Number_of_Rings">0</data><data key="Physiological_Charge">1</data><data key="Polarizability">8.45</data><data key="Donor_Count">2</data><data key="Polar_Surface_Area">46.25</data><data key="Ro5">Yes</data><data key="pKa_Strongest_Acidic">15.3</data><data key="Secondary_HMDB_IDs">HMDB12136,</data><data key="Description">Belongs to the class of organic compounds known as 1,2-aminoalcohols. These are organic compounds containing an alkyl chain with an amine group bound to the C1 atom and an alcohol group bound to the C2 atom.</data><data key="Bioavailability">Yes</data><data key="State">Solid</data><data key="PubChem_ID">4</data><data key="Synonyms">Threamine,mono-iso-Propanolamine,Mipa,Aminopropanol,1-Aminopropan-2-ol,1-amino-2-Hydroxypropanamine,Α-aminoisopropyl alcohol,a-Aminoisopropyl alcohol,1-Amino-2-propanol,Monoisopropanolamine,Isopropanolamine,alpha-Aminoisopropyl alcohol,2-Hydroxypropylamine,1-Methyl-2-aminoethanol,</data><data key="SMILES">CC(O)CN</data><data key="InChIKey">InChIKey=HXKKHQJGJAFBHI-UHFFFAOYSA-N</data><data key="ChemSpider_ID">3</data><data key="IUPAC">1-aminopropan-2-ol</data><data key="InChI">InChI=1S/C3H9NO/c1-3(5)2-4/h3,5H,2,4H2,1H3</data><data key="Monisotopic_Molecular_Weight">75.068413915</data><data key="CAS_Number">78-96-6</data><data key="Formula">C3H9NO</data><data key="Average_Molecular_Weight">75.1097</data><data key="Status">quantified</data><data key="HMDB_ID">["HMDB0012136","HMDB12136"]</data><data key="Reasons_To_Import">["ChEBI_ID","Name"]</data><data key="ChEBI_ID">["19030","610"]</data><data key="Name">["1-Amino-propan-2-ol","1-Amino-2-propanol","1-aminopropan-2-ol"]</data></node>
+<node id="n3" labels=":Measurement"><data key="labels">:Measurement</data><data key="Comments">Saliva samples were collected at 16:00 (n=27)</data><data key="Normal">True</data><data key="Value">0.324 +/- 0.413</data></node>
+<node id="n4" labels=":Subject"><data key="labels">:Subject</data><data key="Gender">Male</data><data key="Information">Normal</data><data key="Age">Adult (&gt;18 years old)</data></node>
+<node id="n5" labels=":Unit"><data key="labels">:Unit</data><data key="Name">uM</data></node>
+<node id="n6" labels=":Publication"><data key="labels">:Publication</data><data key="Pages">Sugimoto et al</data><data key="Title">Sugimoto et al</data><data key="Publication">(2013) Physiological and environmental parameters associated with mass spectrometry-based salivary metabolomic profiles</data><data key="Date"></data><data key="Issue">2013</data><data key="Authors">Sugimoto et al. (2013) Physiological and environmental parameters associated with mass spectrometry-based salivary metabolomic profiles.</data></node>
+<node id="n7" labels=":Taxonomy"><data key="labels">:Taxonomy</data><data key="Name">Organic compounds</data><data key="Type">Kingdom</data></node>
+<node id="n8" labels=":Taxonomy"><data key="labels">:Taxonomy</data><data key="Name">Organic nitrogen compounds</data><data key="Type">Super Class</data></node>
+<node id="n9" labels=":Taxonomy"><data key="labels">:Taxonomy</data><data key="Name">Organonitrogen compounds</data><data key="Type">Class</data></node>
+<node id="n10" labels=":Taxonomy"><data key="labels">:Taxonomy</data><data key="Type">Sub Class</data><data key="Name">Amines</data></node>
+<node id="n11" labels=":Taxonomy"><data key="labels">:Taxonomy</data><data key="Name">1,2-aminoalcohols</data></node>
+<node id="n12" labels=":Taxonomy"><data key="labels">:Taxonomy</data><data key="Name">Hydrocarbon derivatives</data></node>
+<node id="n13" labels=":Taxonomy"><data key="labels">:Taxonomy</data><data key="Name">Monoalkylamines</data></node>
+<node id="n14" labels=":Taxonomy"><data key="labels">:Taxonomy</data><data key="Name">Organopnictogen compounds</data></node>
+<node id="n15" labels=":Taxonomy"><data key="labels">:Taxonomy</data><data key="Name">Secondary alcohols</data></node>
+<node id="n16" labels=":BioSpecimen"><data key="labels">:BioSpecimen</data><data key="Name">Saliva</data></node>
+<node id="n17" labels=":Publication"><data key="labels">:Publication</data><data key="Authors">Peru KM, Headley JV, Doucette WJ</data><data key="Pages">1629-34</data><data key="PubMed_ID">15282789</data><data key="Issue">Typha latifolia</data><data key="Notes"></data><data key="Date"> 2004</data><data key="Volume">18</data><data key="Title">Determination of alkanolamines in cattails (Typha latifolia) utilizing electrospray ionization with selected reaction monitoring and ion-exchange chromatography</data><data key="Publication">Rapid Commun Mass Spectrom</data></node>
+<node id="n18" labels=":Publication"><data key="labels">:Publication</data><data key="Authors">Hervin RL, Lucas JB</data><data key="Title">Occupational health case report</data><data key="PubMed_ID">4274990</data><data key="Date"> 8</data><data key="Volume">16</data><data key="Issue">5</data><data key="Pages">355-7</data><data key="Publication">No</data><data key="Notes"> Monoisopropanolamine</data></node>
+<node id="n19" labels=":Publication"><data key="labels">:Publication</data><data key="PubMed_ID">17583405</data><data key="Title">Pharmacokinetics and bioavailability of diisopropanolamine (DIPA) in rats following intravenous or dermal application</data><data key="Authors">Saghir SA, Frantz SW, Spence MW, Nolan RJ, Lowe ER, Rick DL, Bartels MJ</data><data key="Date"> 2007 Oct</data><data key="Pages">2047-56</data><data key="Notes"> Epub 2007 May 18</data><data key="Issue">DIPA</data><data key="Publication">Food Chem Toxicol</data><data key="Volume">45</data></node>
+<node id="n21" labels=":Publication"><data key="labels">:Publication</data><data key="Authors">Matsumoto, M.; Kibe, R.; Ooga, T.; Aiba, Y.; Kurihara, S.; Sawaki, E.; Koga, Y.; Benno, Y.</data><data key="DOI">10.1038/srep00233</data><data key="Title">Impact of intestinal microbiota on intestinal luminal metabolome</data><data key="First_Author">Matsumoto</data><data key="Metabolomics">false</data><data key="Full_Annotation">false</data><data key="PubMed_ID">22724057</data><data key="Study_Design_Type">Microbiota</data><data key="Publication">Sci Rep</data><data key="Volume">2</data><data key="Public">true</data><data key="Exposome_Explorer_ID">Publication_957</data><data key="Date">2012</data></node>
+<node id="n22" labels=":BioSpecimen"><data key="labels">:BioSpecimen</data><data key="Name">Colon content</data><data key="Exposome_Explorer_ID">Specimen_99</data><data key="Specimen_Type">Excretion</data></node>
+<node id="n23" labels=":MeSH"><data key="labels">:MeSH</data><data key="Name">Saliva</data><data key="MeSH_ID">D012463</data><data key="Type">Descriptor</data></node>
+<node id="n24" labels=":MeSH"><data key="labels">:MeSH</data><data key="Name">Saliva</data><data key="MeSH_ID">M0019372</data><data key="Type">Concept</data></node>
+<edge id="e1" source="n3" target="n4" label="TAKEN_FROM_SUBJECT"><data key="label">TAKEN_FROM_SUBJECT</data></edge>
+<edge id="e2" source="n3" target="n5" label="MEASURED_IN"><data key="label">MEASURED_IN</data></edge>
+<edge id="e3" source="n3" target="n6" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e5" source="n7" target="n8" label="PART_OF_CLADE"><data key="label">PART_OF_CLADE</data></edge>
+<edge id="e6" source="n8" target="n9" label="PART_OF_CLADE"><data key="label">PART_OF_CLADE</data></edge>
+<edge id="e7" source="n10" target="n9" label="PART_OF_CLADE"><data key="label">PART_OF_CLADE</data></edge>
+<edge id="e19" source="n16" target="n23" label="RELATED_MESH"><data key="label">RELATED_MESH</data></edge>
+<edge id="e20" source="n16" target="n24" label="RELATED_MESH"><data key="label">RELATED_MESH</data></edge>
+<edge id="e33" source="n0" target="n21" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e34" source="n0" target="n22" label="LOCATED_IN_BIOSPECIMEN"><data key="label">LOCATED_IN_BIOSPECIMEN</data></edge>
+<edge id="e39" source="n0" target="n19" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e40" source="n0" target="n18" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e41" source="n0" target="n17" label="CITED_IN"><data key="label">CITED_IN</data></edge>
+<edge id="e42" source="n0" target="n16" label="LOCATED_IN_BIOSPECIMEN"><data key="label">LOCATED_IN_BIOSPECIMEN</data></edge>
+<edge id="e43" source="n0" target="n15" label="PART_OF_CLADE"><data key="label">PART_OF_CLADE</data></edge>
+<edge id="e44" source="n0" target="n14" label="PART_OF_CLADE"><data key="label">PART_OF_CLADE</data></edge>
+<edge id="e45" source="n0" target="n13" label="PART_OF_CLADE"><data key="label">PART_OF_CLADE</data></edge>
+<edge id="e46" source="n0" target="n12" label="PART_OF_CLADE"><data key="label">PART_OF_CLADE</data></edge>
+<edge id="e47" source="n0" target="n10" label="PART_OF_CLADE"><data key="label">PART_OF_CLADE</data></edge>
+<edge id="e48" source="n0" target="n11" label="PART_OF_CLADE"><data key="label">PART_OF_CLADE</data></edge>
+<edge id="e49" source="n0" target="n3" label="MEASURED_AS"><data key="label">MEASURED_AS</data></edge>
+<edge id="e52" source="n0" target="n0" label="SYNONYM_OF"><data key="label">SYNONYM_OF</data></edge>
+</graph>
+</graphml>

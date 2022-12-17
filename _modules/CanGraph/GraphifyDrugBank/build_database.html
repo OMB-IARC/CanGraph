@@ -1,0 +1,1519 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CanGraph.GraphifyDrugBank.build_database &#8212; CanGraph 1.0 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script src="../../../_static/design-tabs.js"></script>
+    <link rel="shortcut icon" href="../../../_static/cangraph-mini.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../../_static/cangraph-logo.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../index.html">
+                    Main Page
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../Downloads.html">
+   Downloads
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../Tutorials.html">
+   Tutorials
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../Other%20Reading%20Material.html">
+     Other Reading Material
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../Installing%20CanGraph.html">
+     Installing CanGraph
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../Running%20the%20Software.html">
+     Running the Software
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../Understanding%20its%20Outputs.html">
+     Understanding its Outputs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://www.pablomarcos.me/es/posts/master-en-biolog%c3%ada-computacional/tfm/">
+   Presentations
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../CanGraph.html">
+   CanGraph package
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../CanGraph.ExposomeExplorer.html">
+     CanGraph.ExposomeExplorer package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../CanGraph.GraphifyDrugBank.html">
+     CanGraph.GraphifyDrugBank package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../CanGraph.GraphifyHMDB.html">
+     CanGraph.GraphifyHMDB package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../CanGraph.GraphifySMPDB.html">
+     CanGraph.GraphifySMPDB package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../CanGraph.MeSHandMetaNetX.html">
+     CanGraph.MeSHandMetaNetX package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../CanGraph.QueryWikidata.html">
+     CanGraph.QueryWikidata package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../Install%20Apptainer.html">
+     Install Apptainer
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../ToDoList.html">
+   To-Do List
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Logo by <a href="https://www.instagram.com/danonino.caducado/"> Daniel Marcos </a> </br>
+                     Website by <a href="https://www.pablomarcos.me/"> Pablo Marcos </a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/OMB-IARC/CanGraph/"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/OMB-IARC/CanGraph//issues/new?title=Issue%20on%20page%20%2F_modules/CanGraph/GraphifyDrugBank/build_database.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <h1>Source code for CanGraph.GraphifyDrugBank.build_database</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="c1"># SPDX-FileCopyrightText: 2022 Pablo Marcos &lt;software@loreak.org&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: MIT</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A python module that provides the necessary functions to transition the DrugBank database to graph format,</span>
+<span class="sd">either from scratch importing all the nodes (as showcased in :obj:`CanGraph.GraphifyDrugBank.main`) or in a case-by-case basis,</span>
+<span class="sd">to annotate existing metabolites (as showcased in :obj:`CanGraph.main`).</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># Import external modules necessary for the script</span>
+<span class="kn">from</span> <span class="nn">alive_progress</span> <span class="kn">import</span> <span class="n">alive_bar</span> <span class="c1"># A cute progress bar that shows the script is still running</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">shutil</span>               <span class="c1"># Vital modules to interact with the filesystem</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>               <span class="c1"># A hack to avoid starving the system resources</span>
+
+<span class="c1"># Import subscripts for the program</span>
+<span class="c1"># This hack that allows us to de-duplicate the miscleaneous script in this less-used script</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;../&quot;</span><span class="p">)</span>
+<span class="c1"># .. NOTE::: Please beware that, if using this module by itself, you might need to copy &quot;miscelaneous.py&quot; into your path</span>
+<span class="c1"># This is not the most elegant, but simplifies code maintenance, and this script shouldnt be used much so...</span>
+<span class="kn">import</span> <span class="nn">miscelaneous</span> <span class="k">as</span> <span class="nn">misc</span>
+
+<div class="viewcode-block" id="add_drugs"><a class="viewcode-back" href="../../../CanGraph.GraphifyDrugBank.html#CanGraph.GraphifyDrugBank.build_database.add_drugs">[docs]</a><span class="k">def</span> <span class="nf">add_drugs</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates &quot;Drug&quot; nodes based on XML files obtained from the DrugBank website,</span>
+<span class="sd">    adding some essential identifiers and external properties.</span>
+
+<span class="sd">    .. seealso:: This way of working has been taken from</span>
+<span class="sd">        `William Lyon&#39;s Blog &lt;https://lyonwj.com/blog/grandstack-podcast-app-parsing-xml-neo4j-rss-episodes-playlists&gt;`_</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the XML file that is being imported</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</span>
+
+<span class="sd">    .. NOTE:: Since Publications dont have any standard identificator, they are created using the &quot;Title&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL apoc.load.xml(&quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;)</span>
+<span class="s2">        YIELD value</span>
+<span class="s2">        WITH [x in value._children WHERE x._type = &quot;drug&quot;] AS drugs</span>
+<span class="s2">        UNWIND drugs AS drug</span>
+
+<span class="s2">        WITH</span>
+<span class="s2">            drug.type AS type,</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;drugbank-id&quot; AND X.primary = &quot;true&quot;][0]._text AS Primary_Drugbank_ID,</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;name&quot;][0]._text AS name,</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;description&quot;][0]._text AS description,</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;cas-number&quot;][0]._text AS cas_number,</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;unii&quot;][0]._text AS unii,</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;state&quot;][0]._text AS state,</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;indication&quot;][0]._text AS indication,</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;pharmacodynamics&quot;][0]._text AS pharmacodynamics,</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;mechanism-of-action&quot;][0]._text AS mechanism_of_action,</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;toxicity&quot;][0]._text AS toxicity,</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;metabolism&quot;][0]._text AS metabolism,</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;absorption&quot;][0]._text AS absorption,</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;half-life&quot;][0]._text AS half_life,</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;route-of-elimination&quot;][0]._text AS route_of_elimination,</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;protein-binding&quot;][0]._text AS protein_binding_info,</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;volume-of-distribution&quot;][0]._text AS volume_of_distribution,</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;clearance&quot;][0]._text AS clearance,</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;fda-label&quot;][0]._text AS fda_label,</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;msds&quot;][0]._text AS msds,</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;synthesis-reference&quot;][0]._text AS synthesis_reference,</span>
+
+<span class="s2">            [X in drug._children WHERE X._type = &quot;synonyms&quot;] AS synonyms,</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;drugbank-id&quot; AND X.primary IS null] AS secondary_ids,</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;groups&quot;] AS groups,</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;food-interactions&quot;] AS food_interactions,</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;affected-organisms&quot;] AS affected_organisms</span>
+
+<span class="s2">        MERGE (d:Drug </span><span class="se">{{</span><span class="s2"> DrugBank_ID:Primary_Drugbank_ID </span><span class="se">}}</span><span class="s2"> )</span>
+
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN synthesis_reference IS NOT null THEN [1] ELSE [] END |</span>
+<span class="s2">            FOREACH(ignoreMe IN CASE WHEN split(synthesis_reference, &quot;</span><span class="se">\\</span><span class="s2">&quot;&quot;)[1] &lt;&gt; &quot;&quot; AND split(synthesis_reference, &quot;</span><span class="se">\\</span><span class="s2">&quot;&quot;)[1] IS NOT null THEN [1] ELSE [] END |</span>
+
+<span class="s2">                MERGE (p:Publication </span><span class="se">{{</span><span class="s2"> Title:split(synthesis_reference, &quot;</span><span class="se">\\</span><span class="s2">&quot;&quot;)[1] </span><span class="se">}}</span><span class="s2">)</span>
+
+<span class="s2">                SET p.Authors = split(synthesis_reference, &quot;</span><span class="se">\\</span><span class="s2">&quot;&quot;)[0]</span>
+<span class="s2">                SET p.Publication = &quot;US Patent Office&quot;</span>
+<span class="s2">                SET p.Notes = split(split(synthesis_reference, &quot;</span><span class="se">\\</span><span class="s2">&quot;&quot;)[2], &quot;,&quot;)[0]</span>
+<span class="s2">                SET p.Date = replace(split(split(synthesis_reference, &quot;</span><span class="se">\\</span><span class="s2">&quot;&quot;)[2], &quot;,&quot;)[1], &quot;issued &quot;, &quot;&quot;)</span>
+
+<span class="s2">                MERGE (d)-[r:CITED_IN]-&gt;(p)</span>
+<span class="s2">                SET r.Type = &quot;Synthesis&quot;</span>
+<span class="s2">            )</span>
+
+<span class="s2">            FOREACH(ignoreMe IN CASE WHEN split(split(synthesis_reference, &quot;:&quot;)[1], &quot;.&quot;)[0] &lt;&gt; &quot;&quot; AND split(split(synthesis_reference, &quot;:&quot;)[1], &quot;.&quot;)[0] IS NOT null THEN [1] ELSE [] END |</span>
+
+<span class="s2">                MERGE (p:Publication </span><span class="se">{{</span><span class="s2"> Title:split(split(synthesis_reference, &quot;:&quot;)[1], &quot;.&quot;)[0] </span><span class="se">}}</span><span class="s2">)</span>
+
+<span class="s2">                SET p.Authors = split(synthesis_reference, &quot;:&quot;)[0]</span>
+<span class="s2">                SET p.Publication = split(replace(synthesis_reference, split(synthesis_reference, &quot;.&quot;)[0]+&quot;. &quot;,&quot;&quot;), &quot;.&quot;)[0]</span>
+<span class="s2">                SET p.Notes = split(replace(synthesis_reference, split(synthesis_reference, &quot;.&quot;)[0]+&quot;. &quot;,&quot;&quot;), &quot;.&quot;)[2]</span>
+<span class="s2">                SET p.Date = split(split(replace(synthesis_reference, split(synthesis_reference, &quot;.&quot;)[0]+&quot;. &quot;,&quot;&quot;), &quot;.&quot;)[1],&quot;;&quot;)[0]</span>
+<span class="s2">                SET p.Volume = split(split(synthesis_reference, &quot;;&quot;)[1], &quot;(&quot;)[0]</span>
+<span class="s2">                SET p.Issue = split(split(synthesis_reference, &quot;(&quot;)[1], &quot;)&quot;)[0]</span>
+<span class="s2">                SET p.Pages = split(split(synthesis_reference, &quot;:&quot;)[-1], &quot;.&quot;)[0]</span>
+<span class="s2">                SET p.DOI = split(synthesis_reference, &quot;doi:&quot;)[1]</span>
+
+<span class="s2">                MERGE (d)-[r:CITED_IN]-&gt;(p)</span>
+<span class="s2">                SET r.Type = &quot;Synthesis&quot;</span>
+<span class="s2">            )</span>
+<span class="s2">        )</span>
+
+<span class="s2">        SET d.Name = name, d.Description = description, d.CAS_Number = cas_number,</span>
+<span class="s2">            d.UNII = unii, d.State = state, d.Indication = indication, d.Pharmacodynamics = pharmacodynamics,</span>
+<span class="s2">            d.Mechanism_of_Action = mechanism_of_action, d.Toxicity = toxicity,</span>
+<span class="s2">            d.Metabolism = metabolism, d.Absorption = absorption, d.Half_Life = half_life,</span>
+<span class="s2">            d.Route_of_Elimination = route_of_elimination, d.Protein_Binding_Info = protein_binding_info,</span>
+<span class="s2">            d.Volume_of_Distribution = volume_of_distribution, d.Clearance = clearance,</span>
+<span class="s2">            d.FDA_Label = fda_label, d.Safety_Data_Sheet = msds</span>
+
+
+<span class="s2">        WITH food_interactions, synonyms, groups, affected_organisms, secondary_ids,  d</span>
+
+<span class="s2">        SET d.Synonyms = &quot;&quot;, d.Food_Interactions = &quot;&quot;, d.Groups = &quot;&quot;,</span>
+<span class="s2">            d.Alternative_DrugBank_IDs = &quot;&quot;, d.Affected_Organisms = &quot;&quot;</span>
+<span class="s2">        FOREACH(element in food_interactions|</span>
+<span class="s2">            FOREACH(interaction in element._children|</span>
+<span class="s2">                SET d.Food_Interactions = interaction._text + &quot;,&quot; + d.Food_Interactions</span>
+<span class="s2">            )</span>
+<span class="s2">        )</span>
+
+<span class="s2">        FOREACH(element in groups|</span>
+<span class="s2">            FOREACH(group in element._children|</span>
+<span class="s2">                SET d.Groups = group._text + &quot;,&quot; + d.Groups</span>
+<span class="s2">            )</span>
+<span class="s2">        )</span>
+
+<span class="s2">        FOREACH(element in synonyms|</span>
+<span class="s2">            FOREACH(synonym in element._children|</span>
+<span class="s2">                SET d.Synonyms = synonym._text + &quot;,&quot; + d.Synonyms</span>
+<span class="s2">            )</span>
+<span class="s2">        )</span>
+
+<span class="s2">        FOREACH(element in affected_organisms|</span>
+<span class="s2">            FOREACH(organism in element._children|</span>
+<span class="s2">                SET d.Affected_Organisms = organism._text + &quot;,&quot; + d.Affected_Organisms</span>
+<span class="s2">            )</span>
+<span class="s2">        )</span>
+<span class="s2">        FOREACH(element in secondary_ids|</span>
+<span class="s2">            SET d.Alternative_DrugBank_IDs = element._text + &quot;,&quot; + d.Alternative_DrugBank_IDs</span>
+<span class="s2">        )</span>
+
+<span class="s2">        SET d.Groups = substring(d.Groups, 0, size(d.Groups) -1 )</span>
+<span class="s2">        SET d.Synonyms = substring(d.Synonyms, 0, size(d.Synonyms) -1 )</span>
+<span class="s2">        SET d.Food_Interactions = substring(d.Food_Interactions, 0, size(d.Food_Interactions) -1 )</span>
+<span class="s2">        SET d.Affected_Organisms = substring(d.Affected_Organisms, 0, size(d.Affected_Organisms) -1 )</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="add_general_references"><a class="viewcode-back" href="../../../CanGraph.GraphifyDrugBank.html#CanGraph.GraphifyDrugBank.build_database.add_general_references">[docs]</a><span class="k">def</span> <span class="nf">add_general_references</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates &quot;Publication&quot; nodes based on XML files obtained from the DrugBank website.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the XML file that is being imported</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</span>
+
+<span class="sd">    .. NOTE:: Since not all nodes present a &quot;PubMed_ID&quot; field (which would be ideal to uniquely-identify</span>
+<span class="sd">        Publications, as the &quot;Text&quot; field is way more prone to typos/errors), nodes will be created using</span>
+<span class="sd">        the &quot;Authors&quot; field. This means some duplicates might exist, which should be accounted for.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL apoc.load.xml(&quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;)</span>
+<span class="s2">        YIELD value</span>
+<span class="s2">        WITH [x in value._children WHERE x._type = &quot;drug&quot;] AS drugs</span>
+<span class="s2">        UNWIND drugs AS drug</span>
+<span class="s2">        WITH</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;drugbank-id&quot; AND X.primary = &quot;true&quot;][0]._text AS Primary_Drugbank_ID,</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;general-references&quot;] AS general_references</span>
+
+<span class="s2">        MERGE (d:Drug </span><span class="se">{{</span><span class="s2"> DrugBank_ID:Primary_Drugbank_ID </span><span class="se">}}</span><span class="s2">)</span>
+
+<span class="s2">        WITH general_references, d</span>
+<span class="s2">        UNWIND general_references AS general_reference</span>
+<span class="s2">        WITH general_reference, d</span>
+<span class="s2">        UNWIND general_reference[&quot;_children&quot;] AS my_references</span>
+<span class="s2">        WITH my_references, d</span>
+<span class="s2">        UNWIND my_references[&quot;_children&quot;] AS my_reference</span>
+
+<span class="s2">         WITH</span>
+<span class="s2">            [X in my_reference._children WHERE X._type = &quot;citation&quot;][0]._text AS citation,</span>
+<span class="s2">            [X in my_reference._children WHERE X._type = &quot;ref-id&quot;][0]._text AS ref_id,</span>
+<span class="s2">            [X in my_reference._children WHERE X._type = &quot;pubmed-id&quot;][0]._text AS pubmed_id,</span>
+<span class="s2">            d</span>
+
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN citation IS NOT null THEN [1] ELSE [] END |</span>
+<span class="s2">            FOREACH(ignoreMe IN CASE WHEN split(replace(citation, split(citation, &quot;:&quot;)[0]+&quot;: &quot;, &quot;&quot;), &quot;.&quot;)[0] &lt;&gt; &quot;&quot; THEN [1] ELSE [] END |</span>
+
+<span class="s2">                MERGE (p:Publication </span><span class="se">{{</span><span class="s2">Ref_ID:ref_id</span><span class="se">}}</span><span class="s2">)</span>
+
+<span class="s2">                SET p.Authors = split(citation, &quot;:&quot;)[0]</span>
+<span class="s2">                SET p.Title = split(replace(citation, split(citation, &quot;:&quot;)[0]+&quot;: &quot;, &quot;&quot;), &quot;.&quot;)[0]</span>
+<span class="s2">                SET p.Publication = split(replace(citation, split(citation, &quot;.&quot;)[0]+&quot;. &quot;,&quot;&quot;), &quot;.&quot;)[0]</span>
+<span class="s2">                SET p.Notes = split(replace(citation, split(citation, &quot;.&quot;)[0]+&quot;. &quot;,&quot;&quot;), &quot;.&quot;)[2]</span>
+<span class="s2">                SET p.Date = split(split(replace(citation, split(citation, &quot;.&quot;)[0]+&quot;. &quot;,&quot;&quot;), &quot;.&quot;)[1],&quot;;&quot;)[0]</span>
+<span class="s2">                SET p.Volume = split(split(citation, &quot;;&quot;)[1], &quot;(&quot;)[0]</span>
+<span class="s2">                SET p.Issue = split(split(citation, &quot;(&quot;)[1], &quot;)&quot;)[0]</span>
+<span class="s2">                SET p.Pages = split(split(citation, &quot;:&quot;)[-1], &quot;.&quot;)[0]</span>
+<span class="s2">                SET p.PubMed_ID = pubmed_id</span>
+
+<span class="s2">                MERGE (d)-[r:CITED_IN]-&gt;(p)</span>
+<span class="s2">            )</span>
+<span class="s2">        )</span>
+
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="add_taxonomy"><a class="viewcode-back" href="../../../CanGraph.GraphifyDrugBank.html#CanGraph.GraphifyDrugBank.build_database.add_taxonomy">[docs]</a><span class="k">def</span> <span class="nf">add_taxonomy</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates &quot;Taxonomy&quot; nodes based on XML files obtained from the DrugBank website.</span>
+<span class="sd">    These represent the &quot;kind&quot; of Drug we are dealing with (Family, etc)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the XML file that is being imported</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</span>
+
+<span class="sd">    .. NOTE:: It only creates relationships in the Kingdom -&gt; Super Class -&gt; Class -&gt; Subclass</span>
+<span class="sd">        direction, and from any node -&gt; Drug. This means that, if any member of the</span>
+<span class="sd">        Kingdom -&gt; Super Class -&gt; Class -&gt; Subclass is absent, the line will be broken; hopefully</span>
+<span class="sd">        in that case a new Drug will come in to rescue and settle the relation!</span>
+
+<span class="sd">    .. WARNING:: Some nodes without labels might be created if names are null:</span>
+<span class="sd">        This has to be accounted for later on in the process</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL apoc.load.xml(&quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;)</span>
+<span class="s2">        YIELD value</span>
+<span class="s2">        WITH [x in value._children WHERE x._type = &quot;drug&quot;] AS drugs</span>
+<span class="s2">        UNWIND drugs AS drug</span>
+<span class="s2">        WITH</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;drugbank-id&quot; AND X.primary = &quot;true&quot;][0]._text AS Primary_Drugbank_ID,</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;classification&quot;] AS classification</span>
+
+<span class="s2">        MERGE (d:Drug </span><span class="se">{{</span><span class="s2"> DrugBank_ID:Primary_Drugbank_ID </span><span class="se">}}</span><span class="s2">)</span>
+
+<span class="s2">        WITH classification, d</span>
+<span class="s2">        UNWIND classification as my_nodes</span>
+
+<span class="s2">        WITH</span>
+<span class="s2">            [X IN my_nodes._children WHERE X._type = &quot;description&quot;][0]._text AS description,</span>
+<span class="s2">            [X IN my_nodes._children WHERE X._type = &quot;direct-parent&quot;][0]._text AS direct_parent,</span>
+<span class="s2">            [X IN my_nodes._children WHERE X._type = &quot;kingdom&quot;][0]._text AS kingdom,</span>
+<span class="s2">            [X IN my_nodes._children WHERE X._type = &quot;superclass&quot;][0]._text AS super_class,</span>
+<span class="s2">            [X IN my_nodes._children WHERE X._type = &quot;class&quot;][0]._text AS class,</span>
+<span class="s2">            [X IN my_nodes._children WHERE X._type = &quot;subclass&quot;][0]._text AS sub_class,</span>
+
+<span class="s2">            [X IN my_nodes._children WHERE X._type = &quot;alternative-parent&quot;] AS alternative_parents,</span>
+<span class="s2">            [X IN my_nodes._children WHERE X._type = &quot;substituents&quot;] AS substituents,</span>
+<span class="s2">            d as m</span>
+
+<span class="s2">                // First, we create the Taxonomy nodes independently</span>
+
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN kingdom IS NOT null THEN [1] ELSE [] END |</span>
+<span class="s2">            MERGE (k:Taxonomy </span><span class="se">{{</span><span class="s2">Type:&quot;Kingdom&quot;, Name:kingdom</span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">        )</span>
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN super_class IS NOT null THEN [1] ELSE [] END |</span>
+<span class="s2">            MERGE (sp:Taxonomy </span><span class="se">{{</span><span class="s2">Type:&quot;Super Class&quot;, Name:super_class</span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">        )</span>
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN class IS NOT null THEN [1] ELSE [] END |</span>
+<span class="s2">            MERGE (c:Taxonomy </span><span class="se">{{</span><span class="s2">Type:&quot;Class&quot;, Name:class</span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">        )</span>
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN sub_class IS NOT null THEN [1] ELSE [] END |</span>
+<span class="s2">            MERGE (sb:Taxonomy </span><span class="se">{{</span><span class="s2">Type:&quot;Sub Class&quot;, Name:sub_class</span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">        )</span>
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN direct_parent IS NOT null THEN [1] ELSE [] END |</span>
+<span class="s2">            MERGE (dp:Taxonomy </span><span class="se">{{</span><span class="s2">Name:direct_parent</span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            MERGE (m)-[:PART_OF_CLADE]-&gt;(dp)</span>
+<span class="s2">        )</span>
+
+<span class="s2">        // Then, we add a hierarchy connecting the nodes as much as possible between them</span>
+
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN kingdom IS NOT null AND super_class IS NOT null THEN [1] ELSE [] END |</span>
+<span class="s2">            MERGE (k:Taxonomy </span><span class="se">{{</span><span class="s2"> Type:&quot;Kingdom&quot;, Name:kingdom </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            MERGE (sp:Taxonomy </span><span class="se">{{</span><span class="s2"> Type:&quot;Super Class&quot;, Name:super_class </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            MERGE (k)-[:PART_OF_CLADE]-&gt;(sp)</span>
+<span class="s2">        )</span>
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN class IS NOT null AND super_class IS NOT null THEN [1] ELSE [] END |</span>
+<span class="s2">            MERGE (c:Taxonomy </span><span class="se">{{</span><span class="s2"> Type:&quot;Class&quot;, Name:class </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            MERGE (sp:Taxonomy </span><span class="se">{{</span><span class="s2"> Type:&quot;Super Class&quot;, Name:super_class </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            MERGE (sp)-[:PART_OF_CLADE]-&gt;(c)</span>
+<span class="s2">        )</span>
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN sub_class IS NOT null AND class IS NOT null THEN [1] ELSE [] END |</span>
+<span class="s2">            MERGE (c:Taxonomy </span><span class="se">{{</span><span class="s2"> Type:&quot;Class&quot;, Name:class </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            MERGE (sb:Taxonomy </span><span class="se">{{</span><span class="s2"> Type:&quot;Sub Class&quot;, Name:sub_class </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            MERGE (sb)-[:PART_OF_CLADE]-&gt;(c)</span>
+<span class="s2">        )</span>
+
+<span class="s2">        // And we connect the hierarchy to the main node just once</span>
+
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN sub_class IS NOT null THEN [1] ELSE [] END |</span>
+<span class="s2">            MERGE (ta:Taxonomy </span><span class="se">{{</span><span class="s2"> Name:sub_class </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            MERGE (m)-[:PART_OF_CLADE]-&gt;(ta)</span>
+<span class="s2">        )</span>
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN class IS NOT null</span>
+<span class="s2">                AND sub_class IS null THEN [1] ELSE [] END |</span>
+<span class="s2">            MERGE (ta:Taxonomy </span><span class="se">{{</span><span class="s2"> Name:class </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            MERGE (m)-[:PART_OF_CLADE]-&gt;(ta)</span>
+<span class="s2">        )</span>
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN super_class IS NOT null</span>
+<span class="s2">                AND sub_class IS null AND class IS null THEN [1] ELSE [] END |</span>
+<span class="s2">            MERGE (ta:Taxonomy </span><span class="se">{{</span><span class="s2"> Name:super_class </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            MERGE (m)-[:PART_OF_CLADE]-&gt;(ta)</span>
+<span class="s2">        )</span>
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN kingdom IS NOT null AND sub_class IS null</span>
+<span class="s2">                AND class IS null AND super_class IS null  THEN [1] ELSE [] END |</span>
+<span class="s2">            MERGE (ta:Taxonomy </span><span class="se">{{</span><span class="s2"> Name:kingdom </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            MERGE (m)-[:PART_OF_CLADE]-&gt;(ta)</span>
+<span class="s2">        )</span>
+
+<span class="s2">        // We add the alternative_parents in the appropriate format</span>
+
+<span class="s2">        FOREACH(element in alternative_parents|</span>
+<span class="s2">            MERGE (t:Taxonomy </span><span class="se">{{</span><span class="s2">Name:element._text</span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            MERGE (m)-[:PART_OF_CLADE]-&gt;(t)</span>
+<span class="s2">        )</span>
+
+<span class="s2">        // If any Taxonomy is left without a connection, we connect it to the main graph</span>
+<span class="s2">        // Beware: if any disconnected taxonomy is left from before, this could lead to errors</span>
+
+<span class="s2">        WITH m, alternative_parents</span>
+<span class="s2">        MATCH (tt:Taxonomy) WHERE NOT (tt)--()</span>
+<span class="s2">        MERGE (m)-[:PART_OF_CLADE]-&gt;(tt)</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="add_products"><a class="viewcode-back" href="../../../CanGraph.GraphifyDrugBank.html#CanGraph.GraphifyDrugBank.build_database.add_products">[docs]</a><span class="k">def</span> <span class="nf">add_products</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates &quot;Product&quot; nodes based on XML files obtained from the DrugBank website.</span>
+<span class="sd">    These are the individal medicaments that have been approved (or not) by the FDA</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the XML file that is being imported</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</span>
+
+<span class="sd">    .. WARNING:: Using CREATE means that duplicates will appear; unfortunately, I couldnt any unique_id</span>
+<span class="sd">        field to use as ID when MERGEing the nodes. This should be accounted for.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL apoc.load.xml(&quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;)</span>
+<span class="s2">        YIELD value</span>
+<span class="s2">        WITH [x in value._children WHERE x._type = &quot;drug&quot;] AS drugs</span>
+<span class="s2">        UNWIND drugs AS drug</span>
+<span class="s2">        WITH</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;drugbank-id&quot; AND X.primary = &quot;true&quot;][0]._text AS Primary_Drugbank_ID,</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;products&quot;] AS products</span>
+
+<span class="s2">        MERGE (d:Drug </span><span class="se">{{</span><span class="s2"> DrugBank_ID:Primary_Drugbank_ID </span><span class="se">}}</span><span class="s2">)</span>
+
+<span class="s2">        WITH products, d</span>
+<span class="s2">        UNWIND products AS product</span>
+<span class="s2">        WITH product, d</span>
+<span class="s2">        UNWIND product[&quot;_children&quot;] AS my_product</span>
+
+<span class="s2">        WITH</span>
+<span class="s2">            [X in my_product._children WHERE X._type = &quot;name&quot;][0]._text AS name,</span>
+<span class="s2">            [X in my_product._children WHERE X._type = &quot;labeller&quot;][0]._text AS labeller,</span>
+<span class="s2">            [X in my_product._children WHERE X._type = &quot;ndc-id&quot;][0]._text AS ndc_id,</span>
+<span class="s2">            [X in my_product._children WHERE X._type = &quot;ndc-product-code&quot;][0]._text AS ndc_product_code,</span>
+<span class="s2">            [X in my_product._children WHERE X._type = &quot;dpd-id&quot;][0]._text AS dpd_id,</span>
+<span class="s2">            [X in my_product._children WHERE X._type = &quot;ema-product-code&quot;][0]._text AS ema_product_code,</span>
+<span class="s2">            [X in my_product._children WHERE X._type = &quot;ema-ma-number&quot;][0]._text AS ema_ma_number,</span>
+<span class="s2">            [X in my_product._children WHERE X._type = &quot;started-marketing-on&quot;][0]._text AS started_marketing_on,</span>
+<span class="s2">            [X in my_product._children WHERE X._type = &quot;ended-marketing-on&quot;][0]._text AS ended_marketing_on,</span>
+<span class="s2">            [X in my_product._children WHERE X._type = &quot;dosage-form&quot;][0]._text AS dosage_form,</span>
+<span class="s2">            [X in my_product._children WHERE X._type = &quot;strength&quot;][0]._text AS strength,</span>
+<span class="s2">            [X in my_product._children WHERE X._type = &quot;route&quot;][0]._text AS route,</span>
+<span class="s2">            [X in my_product._children WHERE X._type = &quot;fda-application-number&quot;][0]._text AS fda_application_number,</span>
+<span class="s2">            [X in my_product._children WHERE X._type = &quot;generic&quot;][0]._text AS generic,</span>
+<span class="s2">            [X in my_product._children WHERE X._type = &quot;over-the-counter&quot;][0]._text AS over_the_counter,</span>
+<span class="s2">            [X in my_product._children WHERE X._type = &quot;approved&quot;][0]._text AS approved,</span>
+<span class="s2">            [X in my_product._children WHERE X._type = &quot;country&quot;][0]._text AS country,</span>
+<span class="s2">            [X in my_product._children WHERE X._type = &quot;source&quot;][0]._text AS source,</span>
+<span class="s2">            d</span>
+
+<span class="s2">        CREATE (p:Product)</span>
+<span class="s2">        SET p.Labeller = labeller, p.NDC_ID = ndc_id, p.NDC_Product_Code = ndc_product_code,</span>
+<span class="s2">            p.DPD_ID = dpd_id, p.EMA_Product_Code = ema_product_code, p.EMA_MA_Number = ema_ma_number,</span>
+<span class="s2">            p.Started_Marketing_On = started_marketing_on, p.Ended_Marketing_On = ended_marketing_on,</span>
+<span class="s2">            p.Dosage_Form = dosage_form, p.Strength = strength, p.Route = route,</span>
+<span class="s2">            p.FDA_Application_Number = fda_application_number, p.Generic = generic,</span>
+<span class="s2">            p.Over_the_Counter = over_the_counter, p.Approved = approved, p.Country = country,</span>
+<span class="s2">            p.Source = source, p.Name = name</span>
+
+<span class="s2">        MERGE (d)-[r:PART_OF_PRODUCT]-&gt;(p)</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="add_mixtures"><a class="viewcode-back" href="../../../CanGraph.GraphifyDrugBank.html#CanGraph.GraphifyDrugBank.build_database.add_mixtures">[docs]</a><span class="k">def</span> <span class="nf">add_mixtures</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates &quot;Mixture&quot; nodes based on XML files obtained from the DrugBank website.</span>
+<span class="sd">    These are the mixtures of existing Drugs, which may or may not be on the market.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the XML file that is being imported</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</span>
+
+<span class="sd">    .. NOTE:: This doesn&#39;t seem of much use, but has been added nonetheless just in case.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL apoc.load.xml(&quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;)</span>
+<span class="s2">        YIELD value</span>
+<span class="s2">        WITH [x in value._children WHERE x._type = &quot;drug&quot;] AS drugs</span>
+<span class="s2">        UNWIND drugs AS drug</span>
+<span class="s2">        WITH</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;drugbank-id&quot; AND X.primary = &quot;true&quot;][0]._text AS Primary_Drugbank_ID,</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;mixtures&quot;] AS mixtures</span>
+
+<span class="s2">        MERGE (d:Drug </span><span class="se">{{</span><span class="s2"> DrugBank_ID:Primary_Drugbank_ID </span><span class="se">}}</span><span class="s2">)</span>
+
+<span class="s2">        WITH mixtures, d</span>
+<span class="s2">        UNWIND mixtures as mixture</span>
+<span class="s2">        WITH mixture, d</span>
+<span class="s2">        UNWIND mixture[&quot;_children&quot;] as my_mixture</span>
+
+<span class="s2">        WITH</span>
+<span class="s2">            [X in my_mixture._children WHERE X._type = &quot;name&quot;][0]._text AS name,</span>
+<span class="s2">            [X in my_mixture._children WHERE X._type = &quot;ingredients&quot;][0]._text AS ingredient,</span>
+<span class="s2">            d</span>
+
+<span class="s2">        MERGE (m:Product </span><span class="se">{{</span><span class="s2"> Name:name, Ingredient:ingredient </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">        MERGE (d)-[r:PART_OF_PRODUCT]-&gt;(m)</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="add_categories"><a class="viewcode-back" href="../../../CanGraph.GraphifyDrugBank.html#CanGraph.GraphifyDrugBank.build_database.add_categories">[docs]</a><span class="k">def</span> <span class="nf">add_categories</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates &quot;Category&quot; nodes based on XML files obtained from the DrugBank website.</span>
+<span class="sd">    These represent the different MeSH IDs a Drug can be related with</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the XML file that is being imported</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</span>
+
+<span class="sd">    .. NOTE:: Each category seems to have an associated MeSH ID. Maybe could rename nodes as MeSH?</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL apoc.load.xml(&quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;)</span>
+<span class="s2">        YIELD value</span>
+<span class="s2">        WITH [x in value._children WHERE x._type = &quot;drug&quot;] AS drugs</span>
+<span class="s2">        UNWIND drugs AS drug</span>
+<span class="s2">        WITH</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;drugbank-id&quot; AND X.primary = &quot;true&quot;][0]._text AS Primary_Drugbank_ID,</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;categories&quot;] AS categories</span>
+
+<span class="s2">        MERGE (d:Drug </span><span class="se">{{</span><span class="s2"> DrugBank_ID:Primary_Drugbank_ID </span><span class="se">}}</span><span class="s2">)</span>
+
+<span class="s2">        WITH categories, d</span>
+<span class="s2">        UNWIND categories as category</span>
+<span class="s2">        WITH category, d</span>
+<span class="s2">        UNWIND category[&quot;_children&quot;] as my_category</span>
+
+<span class="s2">        WITH</span>
+<span class="s2">            [X in my_category._children WHERE X._type = &quot;category&quot;][0]._text AS category,</span>
+<span class="s2">            [X in my_category._children WHERE X._type = &quot;mesh-id&quot;][0]._text AS MESH_ID,</span>
+<span class="s2">            d</span>
+
+<span class="s2">        MERGE (c:MeSH </span><span class="se">{{</span><span class="s2"> Name:category </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN substring(d.Name, 0, 1) = &quot;M&quot; THEN [1] ELSE [] END |</span>
+<span class="s2">            SET c.Type = &quot;Concept&quot;, c.MeSH_ID = MESH_ID</span>
+<span class="s2">        )</span>
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN substring(d.Name, 0, 1) = &quot;D&quot; THEN [1] ELSE [] END |</span>
+<span class="s2">            SET c.Type = &quot;Descriptor&quot;, c.MeSH_ID = MESH_ID</span>
+<span class="s2">        )</span>
+<span class="s2">        SET c.MeSH_ID = MESH_ID</span>
+<span class="s2">        MERGE (d)-[r:RELATED_MESH]-&gt;(c)</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="add_manufacturers"><a class="viewcode-back" href="../../../CanGraph.GraphifyDrugBank.html#CanGraph.GraphifyDrugBank.build_database.add_manufacturers">[docs]</a><span class="k">def</span> <span class="nf">add_manufacturers</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates &quot;Company&quot; nodes based on XML files obtained from the DrugBank website.</span>
+<span class="sd">    These represent the different Companies that manufacture a Drug&#39;s compound (not just package it)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the XML file that is being imported</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL apoc.load.xml(&quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;)</span>
+<span class="s2">        YIELD value</span>
+<span class="s2">        WITH [x in value._children WHERE x._type = &quot;drug&quot;] AS drugs</span>
+<span class="s2">        UNWIND drugs AS drug</span>
+<span class="s2">        WITH</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;drugbank-id&quot; AND X.primary = &quot;true&quot;][0]._text AS Primary_Drugbank_ID,</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;manufacturers&quot;] AS manufacturers</span>
+
+<span class="s2">        MERGE (d:Drug </span><span class="se">{{</span><span class="s2"> DrugBank_ID:Primary_Drugbank_ID </span><span class="se">}}</span><span class="s2">)</span>
+
+<span class="s2">        WITH manufacturers, d</span>
+<span class="s2">        UNWIND manufacturers as manufacturer</span>
+<span class="s2">        WITH manufacturer, d</span>
+<span class="s2">        UNWIND manufacturer[&quot;_children&quot;] as their_manufacturer</span>
+
+<span class="s2">        WITH</span>
+<span class="s2">            their_manufacturer.generic as generic, their_manufacturer.url as url,</span>
+<span class="s2">            apoc.text.capitalizeAll(their_manufacturer._text) as name, d</span>
+
+<span class="s2">        MERGE (c:Company </span><span class="se">{{</span><span class="s2"> Name:name, Manufacturer:&quot;True&quot; </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">        SET c.Generic = generic, c.Manufacturer = &quot;True&quot;</span>
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN NOT url = &quot;&quot; THEN [1] ELSE [] END |</span>
+<span class="s2">                SET c.URL = url</span>
+<span class="s2">        )</span>
+<span class="s2">        MERGE (d)-[r:MANUFACTURED_BY]-&gt;(c)</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="add_packagers"><a class="viewcode-back" href="../../../CanGraph.GraphifyDrugBank.html#CanGraph.GraphifyDrugBank.build_database.add_packagers">[docs]</a><span class="k">def</span> <span class="nf">add_packagers</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates &quot;Company&quot; nodes based on XML files obtained from the DrugBank website.</span>
+<span class="sd">    These represent the different Companies that package a Drug&#39;s compounds (not the ones that manufacture them)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the XML file that is being imported</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL apoc.load.xml(&quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;)</span>
+<span class="s2">        YIELD value</span>
+<span class="s2">        WITH [x in value._children WHERE x._type = &quot;drug&quot;] AS drugs</span>
+<span class="s2">        UNWIND drugs AS drug</span>
+<span class="s2">        WITH</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;drugbank-id&quot; AND X.primary = &quot;true&quot;][0]._text AS Primary_Drugbank_ID,</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;packagers&quot;] AS packagers</span>
+
+<span class="s2">        MERGE (d:Drug </span><span class="se">{{</span><span class="s2"> DrugBank_ID:Primary_Drugbank_ID </span><span class="se">}}</span><span class="s2">)</span>
+
+<span class="s2">        WITH packagers, d</span>
+<span class="s2">        UNWIND packagers as packager</span>
+<span class="s2">        WITH packager, d</span>
+<span class="s2">        UNWIND packager[&quot;_children&quot;] as their_packager</span>
+
+<span class="s2">        WITH</span>
+<span class="s2">            [X in their_packager._children WHERE X._type = &quot;name&quot;][0]._text AS name,</span>
+<span class="s2">            [X in their_packager._children WHERE X._type = &quot;url&quot;][0]._text AS url,</span>
+<span class="s2">            d</span>
+
+<span class="s2">        MERGE (c:Company </span><span class="se">{{</span><span class="s2"> Name:name </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">        SET c.Packager = &quot;True&quot;</span>
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN NOT url = &quot;&quot; THEN [1] ELSE [] END |</span>
+<span class="s2">                SET c.URL = url</span>
+<span class="s2">        )</span>
+<span class="s2">        MERGE (d)-[r:MANUFACTURED_BY]-&gt;(c)</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="add_dosages"><a class="viewcode-back" href="../../../CanGraph.GraphifyDrugBank.html#CanGraph.GraphifyDrugBank.build_database.add_dosages">[docs]</a><span class="k">def</span> <span class="nf">add_dosages</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates &quot;Dosage&quot; nodes based on XML files obtained from the DrugBank website.</span>
+<span class="sd">    These represent the different Dosages that a Drug should be administered at.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the XML file that is being imported</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</span>
+
+<span class="sd">    .. WARNING:: Using CREATE might generate duplicate nodes, but there was no</span>
+<span class="sd">        unique characteristic to MERGE nodes into.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL apoc.load.xml(&quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;)</span>
+<span class="s2">        YIELD value</span>
+<span class="s2">        WITH [x in value._children WHERE x._type = &quot;drug&quot;] AS drugs</span>
+<span class="s2">        UNWIND drugs AS drug</span>
+<span class="s2">        WITH</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;drugbank-id&quot; AND X.primary = &quot;true&quot;][0]._text AS Primary_Drugbank_ID,</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;dosages&quot;] AS dosages</span>
+
+<span class="s2">        MERGE (d:Drug </span><span class="se">{{</span><span class="s2"> DrugBank_ID:Primary_Drugbank_ID </span><span class="se">}}</span><span class="s2">)</span>
+
+<span class="s2">        WITH dosages, d</span>
+<span class="s2">        UNWIND dosages as dosage</span>
+<span class="s2">        WITH dosage, d</span>
+<span class="s2">        UNWIND dosage[&quot;_children&quot;] as my_dosage</span>
+
+<span class="s2">        WITH</span>
+<span class="s2">            [X in my_dosage._children WHERE X._type = &quot;form&quot;][0]._text AS form,</span>
+<span class="s2">            [X in my_dosage._children WHERE X._type = &quot;route&quot;][0]._text AS route,</span>
+<span class="s2">            [X in my_dosage._children WHERE X._type = &quot;strength&quot;][0]._text AS strength,</span>
+<span class="s2">            d</span>
+
+<span class="s2">        CREATE (do:Dosage </span><span class="se">{{</span><span class="s2"> Route:route </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">        SET do.Strength = strength, do.Form = form</span>
+<span class="s2">        MERGE (d)-[r:DOSED_AS]-&gt;(do)</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="add_atc_codes"><a class="viewcode-back" href="../../../CanGraph.GraphifyDrugBank.html#CanGraph.GraphifyDrugBank.build_database.add_atc_codes">[docs]</a><span class="k">def</span> <span class="nf">add_atc_codes</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates &quot;ATC&quot; nodes based on XML files obtained from the DrugBank website.</span>
+<span class="sd">    These represent the different ATC codes a Drug can be related with (including an small taxonomy)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the XML file that is being imported</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL apoc.load.xml(&quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;)</span>
+<span class="s2">        YIELD value</span>
+<span class="s2">        WITH [x in value._children WHERE x._type = &quot;drug&quot;] AS drugs</span>
+<span class="s2">        UNWIND drugs AS drug</span>
+<span class="s2">        WITH</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;drugbank-id&quot; AND X.primary = &quot;true&quot;][0]._text AS Primary_Drugbank_ID,</span>
+<span class="s2">            [X in drug._children WHERE X._type = &quot;atc-codes&quot;] AS atc_codes</span>
+
+<span class="s2">        WITH atc_codes, Primary_Drugbank_ID</span>
+<span class="s2">        UNWIND atc_codes as atc_code</span>
+<span class="s2">        WITH atc_code, Primary_Drugbank_ID</span>
+<span class="s2">        UNWIND atc_code._children as my_atc</span>
+
+<span class="s2">        WITH</span>
+<span class="s2">            my_atc.code AS primary_atc,</span>
+<span class="s2">            [X in my_atc._children WHERE X._type = &quot;level&quot;] AS levels,</span>
+<span class="s2">            Primary_Drugbank_ID</span>
+
+<span class="s2">        UNWIND levels as level</span>
+<span class="s2">        WITH</span>
+<span class="s2">            primary_atc, level.code as atc_subcode, level._text as atc_text,</span>
+<span class="s2">            Primary_Drugbank_ID</span>
+
+<span class="s2">        MERGE (d:Drug </span><span class="se">{{</span><span class="s2"> DrugBank_ID:Primary_Drugbank_ID </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">        MERGE (pri:ATC </span><span class="se">{{</span><span class="s2"> Code:primary_atc </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">        MERGE (sec:ATC </span><span class="se">{{</span><span class="s2"> Code:atc_subcode </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">        SET sec.Name = atc_text, pri.Type = &quot;Primary&quot;, sec.Type = &quot;Secondary&quot;</span>
+
+<span class="s2">        MERGE (d)-[r:RELATED_ATC]-&gt;(pri)</span>
+<span class="s2">        MERGE (pri)-[r2:RELATED_ATC]-&gt;(sec)</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="add_drug_interactions"><a class="viewcode-back" href="../../../CanGraph.GraphifyDrugBank.html#CanGraph.GraphifyDrugBank.build_database.add_drug_interactions">[docs]</a><span class="k">def</span> <span class="nf">add_drug_interactions</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates ```(d)-[r:RELATED_WITH_DRUG]-(dd)``` interactions between &quot;Drug&quot; nodes, whether they existed</span>
+<span class="sd">    before or not. These are intentionally non-directional, as they should be related with each other.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the XML file that is being imported</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL apoc.load.xml(&quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;)</span>
+<span class="s2">        YIELD value</span>
+<span class="s2">        WITH [x in value._children WHERE x._type = &quot;drug&quot;] AS metabolites</span>
+<span class="s2">        UNWIND metabolites AS metabolite</span>
+<span class="s2">        WITH</span>
+<span class="s2">            [X in metabolite._children WHERE X._type = &quot;drugbank-id&quot; AND X.primary = &quot;true&quot;][0]._text AS Primary_Drugbank_ID,</span>
+<span class="s2">            [X in metabolite._children WHERE X._type = &quot;drug-interactions&quot;] AS drug_interactions</span>
+
+<span class="s2">        UNWIND drug_interactions AS drug_interaction</span>
+<span class="s2">        WITH drug_interaction, Primary_Drugbank_ID</span>
+<span class="s2">        UNWIND drug_interaction[&quot;_children&quot;] AS my_interaction</span>
+
+<span class="s2">        WITH</span>
+<span class="s2">            [X in my_interaction._children WHERE X._type = &quot;drugbank-id&quot;][0]._text AS drugbank_id,</span>
+<span class="s2">            [X in my_interaction._children WHERE X._type = &quot;name&quot;][0]._text AS name,</span>
+<span class="s2">            [X in my_interaction._children WHERE X._type = &quot;description&quot;][0]._text AS description,</span>
+<span class="s2">            Primary_Drugbank_ID</span>
+
+<span class="s2">        MERGE (d:Drug </span><span class="se">{{</span><span class="s2"> DrugBank_ID:Primary_Drugbank_ID </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">        MERGE (dd:Drug </span><span class="se">{{</span><span class="s2"> DrugBank_ID:drugbank_id </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">        ON CREATE SET dd.Name = name</span>
+<span class="s2">        MERGE (d)-[r:INTERACTS_WITH]-(dd)</span>
+<span class="s2">        SET r.Description = description</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="add_sequences"><a class="viewcode-back" href="../../../CanGraph.GraphifyDrugBank.html#CanGraph.GraphifyDrugBank.build_database.add_sequences">[docs]</a><span class="k">def</span> <span class="nf">add_sequences</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates &quot;Sequence&quot; nodes based on XML files obtained from the DrugBank website.</span>
+<span class="sd">    These represent the AminoAcid sequence of Drugs that are of a peptidic nature.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the XML file that is being imported</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</span>
+
+<span class="sd">    .. TODO:: In some other parts of the script, sequences are being added as</span>
+<span class="sd">          properties on Protein nodes. A common format should be set.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL apoc.load.xml(&quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;)</span>
+<span class="s2">        YIELD value</span>
+<span class="s2">        WITH [x in value._children WHERE x._type = &quot;drug&quot;] AS metabolites</span>
+<span class="s2">        UNWIND metabolites AS metabolite</span>
+<span class="s2">        WITH</span>
+<span class="s2">            [X in metabolite._children WHERE X._type = &quot;drugbank-id&quot; AND X.primary = &quot;true&quot;][0]._text AS Primary_Drugbank_ID,</span>
+<span class="s2">            [X in metabolite._children WHERE X._type = &quot;sequences&quot;] AS sequences</span>
+
+<span class="s2">        UNWIND sequences AS sequence</span>
+<span class="s2">        WITH sequence, Primary_Drugbank_ID</span>
+<span class="s2">        UNWIND sequence[&quot;_children&quot;] AS my_sequence</span>
+
+<span class="s2">        WITH my_sequence.format AS format, my_sequence._text as text, Primary_Drugbank_ID</span>
+
+<span class="s2">        MERGE (d:Drug </span><span class="se">{{</span><span class="s2"> DrugBank_ID:Primary_Drugbank_ID </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">        MERGE (s:Sequence </span><span class="se">{{</span><span class="s2"> Sequence:text </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">        SET s.Format = format</span>
+<span class="s2">        SET s.Type = &quot;PROT&quot;</span>
+<span class="s2">        MERGE (d)-[r:SEQUENCED_AS]-&gt;(s)</span>
+
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN text IS NOT null THEN [1] ELSE [] END |</span>
+<span class="s2">            SET d:Protein</span>
+<span class="s2">        )</span>
+
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="add_experimental_properties"><a class="viewcode-back" href="../../../CanGraph.GraphifyDrugBank.html#CanGraph.GraphifyDrugBank.build_database.add_experimental_properties">[docs]</a><span class="k">def</span> <span class="nf">add_experimental_properties</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adds some experimental properties to existing &quot;Drug&quot; nodes based on XML files obtained from the DrugBank website.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the XML file that is being imported</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL apoc.load.xml(&quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;)</span>
+<span class="s2">        YIELD value</span>
+<span class="s2">        WITH [x in value._children WHERE x._type = &quot;drug&quot;] AS metabolites</span>
+<span class="s2">        UNWIND metabolites AS metabolite</span>
+<span class="s2">        WITH</span>
+<span class="s2">            [X in metabolite._children WHERE X._type = &quot;drugbank-id&quot; AND X.primary = &quot;true&quot;][0]._text AS Primary_Drugbank_ID,</span>
+<span class="s2">            [X in metabolite._children WHERE X._type = &quot;experimental-properties&quot;] AS experimental_properties</span>
+
+
+<span class="s2">        MERGE (d:Drug </span><span class="se">{{</span><span class="s2"> DrugBank_ID:Primary_Drugbank_ID </span><span class="se">}}</span><span class="s2">)</span>
+
+<span class="s2">        WITH experimental_properties, d</span>
+<span class="s2">        UNWIND experimental_properties as experimental_property</span>
+<span class="s2">        WITH experimental_property, d</span>
+<span class="s2">        UNWIND experimental_property[&quot;_children&quot;] AS my_property</span>
+<span class="s2">        WITH my_property, d</span>
+<span class="s2">        WITH</span>
+<span class="s2">            [X in my_property._children WHERE X._type = &quot;kind&quot;][0]._text AS kind,</span>
+<span class="s2">            [X in my_property._children WHERE X._type = &quot;value&quot;][0]._text AS value,</span>
+<span class="s2">            d</span>
+
+<span class="s2">        WITH apoc.map.fromLists(collect(kind), collect(value)) AS dict, d</span>
+<span class="s2">        SET d.Average_Mass = dict[&quot;Molecular Weight&quot;], d.Isoelectric_Point = dict[&quot;Isoelectric Point&quot;],</span>
+<span class="s2">            d.Water_Solubility = dict[&quot;Water Solubility&quot;], d.pKa = dict[&quot;pKa&quot;],</span>
+<span class="s2">            d.Hydrophobicity = dict.Hydrophobicity, d.Formula = dict[&quot;Molecular Formula&quot;],</span>
+<span class="s2">            d.Melting_Point = dict[&quot;Melting Point&quot;], d.logP = dict[&quot;logP&quot;]</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="add_external_identifiers"><a class="viewcode-back" href="../../../CanGraph.GraphifyDrugBank.html#CanGraph.GraphifyDrugBank.build_database.add_external_identifiers">[docs]</a><span class="k">def</span> <span class="nf">add_external_identifiers</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adds some external identifiers to existing &quot;Drug&quot; nodes based on XML files obtained from the DrugBank website.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the XML file that is being imported</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</span>
+
+<span class="sd">    .. NOTE:: These also adds a &quot;Protein&quot; label to any &quot;Drug&quot;-labeled nodes which have a &quot;UniProtKB&quot;-ID</span>
+<span class="sd">        among their properties. NOTE that this can look confusing in the DB Schema!!!</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL apoc.load.xml(&quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;)</span>
+<span class="s2">        YIELD value</span>
+<span class="s2">        WITH [x in value._children WHERE x._type = &quot;drug&quot;] AS metabolites</span>
+<span class="s2">        UNWIND metabolites AS metabolite</span>
+<span class="s2">        WITH</span>
+<span class="s2">            [X in metabolite._children WHERE X._type = &quot;drugbank-id&quot; AND X.primary = &quot;true&quot;][0]._text AS Primary_Drugbank_ID,</span>
+<span class="s2">            [X in metabolite._children WHERE X._type = &quot;external-identifiers&quot;] AS external_identifiers</span>
+
+<span class="s2">        WITH external_identifiers, Primary_Drugbank_ID</span>
+<span class="s2">        UNWIND external_identifiers as external_identifier</span>
+<span class="s2">        WITH external_identifier, Primary_Drugbank_ID</span>
+<span class="s2">        UNWIND external_identifier[&quot;_children&quot;] AS my_identifier</span>
+
+<span class="s2">        WITH</span>
+<span class="s2">            [X in my_identifier._children WHERE X._type = &quot;resource&quot;][0]._text AS resource,</span>
+<span class="s2">            [X in my_identifier._children WHERE X._type = &quot;identifier&quot;][0]._text AS identifier,</span>
+<span class="s2">            Primary_Drugbank_ID</span>
+
+<span class="s2">        MERGE (d:Drug </span><span class="se">{{</span><span class="s2"> DrugBank_ID:Primary_Drugbank_ID </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">        WITH apoc.map.fromLists(collect(resource), collect(identifier)) AS dict, d</span>
+
+<span class="s2">        SET d.Therapeutic_Targets_Database = dict[&quot;Therapeutic Targets Database&quot;], d.BindingDB = dict.BindingDB,</span>
+<span class="s2">            d.UniProt_ID = dict[&quot;UniProtKB&quot;], d.PubChem_ID= dict[&quot;PubChem Compound&quot;], d.WikiPedia_Article = dict.Wikipedia,</span>
+<span class="s2">            d.ChEMBL_ID = dict.ChEMBL, d.Genbank_Protein_ID = dict.GenBank, d.DPD_ID = dict[&quot;Drugs Product Database (DPD)&quot;],</span>
+<span class="s2">            d.RxCUI = dict[&quot;RxCUI&quot;], d.PharmGKB = dict[&quot;PharmGKB&quot;], d.ChemSpider_ID = dict.ChemSpider,</span>
+<span class="s2">            d.KEGG_ID = dict[&quot;KEGG Drug&quot;]+&quot;,&quot;+dict[&quot;KEGG Compound&quot;]</span>
+
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN d.UniProt_ID IS NOT null THEN [1] ELSE [] END |</span>
+<span class="s2">            SET d:Protein</span>
+<span class="s2">        )</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="add_external_equivalents"><a class="viewcode-back" href="../../../CanGraph.GraphifyDrugBank.html#CanGraph.GraphifyDrugBank.build_database.add_external_equivalents">[docs]</a><span class="k">def</span> <span class="nf">add_external_equivalents</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adds some external equivalents to existing &quot;Drug&quot; nodes based on XML files obtained from the DrugBank website.</span>
+<span class="sd">    This should be &quot;exact matches&quot; of the Drug in other databases.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the XML file that is being imported</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</span>
+
+<span class="sd">    .. NOTE:: The main reason to add them as &quot;External-Equivalents&quot; is because I felt these IDs where of not much use (and</span>
+<span class="sd">        are thus easier to eliminate due to their common label)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL apoc.load.xml(&quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;)</span>
+<span class="s2">        YIELD value</span>
+<span class="s2">        WITH [x in value._children WHERE x._type = &quot;drug&quot;] AS metabolites</span>
+<span class="s2">        UNWIND metabolites AS metabolite</span>
+<span class="s2">        WITH</span>
+<span class="s2">            [X in metabolite._children WHERE X._type = &quot;drugbank-id&quot; AND X.primary = &quot;true&quot;][0]._text AS Primary_Drugbank_ID,</span>
+<span class="s2">            [X in metabolite._children WHERE X._type = &quot;external-links&quot;] AS external_links</span>
+
+<span class="s2">        WITH external_links, Primary_Drugbank_ID</span>
+<span class="s2">        UNWIND external_links as external_link</span>
+<span class="s2">        WITH external_link, Primary_Drugbank_ID</span>
+<span class="s2">        UNWIND external_link[&quot;_children&quot;] AS my_identifier</span>
+
+<span class="s2">        WITH</span>
+<span class="s2">            [X in my_identifier._children WHERE X._type = &quot;resource&quot;][0]._text AS resource,</span>
+<span class="s2">            [X in my_identifier._children WHERE X._type = &quot;url&quot;][0]._text AS url,</span>
+<span class="s2">            Primary_Drugbank_ID</span>
+
+<span class="s2">        MERGE (d:Drug </span><span class="se">{{</span><span class="s2"> DrugBank_ID:Primary_Drugbank_ID </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">        MERGE (ee:ExternalEquivalent </span><span class="se">{{</span><span class="s2"> URL:url </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">        SET ee.Resource_Name = resource</span>
+
+<span class="s2">        MERGE (d)-[r:EQUALS]-(ee)</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="add_pathways_and_relations"><a class="viewcode-back" href="../../../CanGraph.GraphifyDrugBank.html#CanGraph.GraphifyDrugBank.build_database.add_pathways_and_relations">[docs]</a><span class="k">def</span> <span class="nf">add_pathways_and_relations</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adds &quot;Pathway&quot; nodes based on XML files obtained from the DrugBank website.</span>
+<span class="sd">    It also adds some relations between Drugs and Proteins (which, remember, could even be the same kind of node)</span>
+<span class="sd">    It is also able to tag both a Protein&#39;s and a Drug¡s relation with a given Pathway</span>
+<span class="sd">    In general, a Pathway involves a collection of Enzymes, Drugs and Proteins, with a SMPDB_ID (cool for interconnexion!)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the XML file that is being imported</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</span>
+
+<span class="sd">    .. WARNING:: This function uses a &quot;double UNWIND&quot; clause, which means that we are only representing &lt;pathways&gt; tags</span>
+<span class="sd">        with &lt;enzymes&gt; tags inside. Fortunately, this seems to seldom not happen, so it should represent no problem.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL apoc.load.xml(&quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;)</span>
+<span class="s2">        YIELD value</span>
+<span class="s2">        WITH [x in value._children WHERE x._type = &quot;drug&quot;] AS metabolites</span>
+<span class="s2">        UNWIND metabolites AS metabolite</span>
+<span class="s2">        WITH</span>
+<span class="s2">            [X in metabolite._children WHERE X._type = &quot;drugbank-id&quot; AND X.primary = &quot;true&quot;][0]._text AS Primary_Drugbank_ID,</span>
+<span class="s2">            [X in metabolite._children WHERE X._type = &quot;pathways&quot;] AS pathways</span>
+
+<span class="s2">        WITH pathways, Primary_Drugbank_ID</span>
+<span class="s2">        UNWIND pathways AS pathway</span>
+<span class="s2">        WITH pathway, Primary_Drugbank_ID</span>
+<span class="s2">        UNWIND pathway[&quot;_children&quot;] AS my_pathway</span>
+
+<span class="s2">        WITH</span>
+<span class="s2">            [X IN my_pathway._children WHERE X._type = &quot;smpdb-id&quot;][0]._text AS smpdb_id,</span>
+<span class="s2">            [X IN my_pathway._children WHERE X._type = &quot;name&quot;][0]._text AS pathway_name,</span>
+<span class="s2">            [X IN my_pathway._children WHERE X._type = &quot;category&quot;][0]._text AS category,</span>
+<span class="s2">            [X IN my_pathway._children WHERE X._type = &quot;drugs&quot;] AS drugs,</span>
+<span class="s2">            [X IN my_pathway._children WHERE X._type = &quot;enzymes&quot;] AS enzymes,</span>
+<span class="s2">            Primary_Drugbank_ID</span>
+
+<span class="s2">        UNWIND drugs as drug</span>
+<span class="s2">        UNWIND enzymes as enzyme</span>
+<span class="s2">        WITH drug, enzyme, smpdb_id, pathway_name, category, Primary_Drugbank_ID</span>
+<span class="s2">        UNWIND drug._children as my_drug</span>
+<span class="s2">        UNWIND enzyme._children as my_enzyme</span>
+<span class="s2">        WITH</span>
+<span class="s2">            my_enzyme._text AS UniProt_ID,</span>
+<span class="s2">            [X IN my_drug._children WHERE X._type = &quot;drugbank-id&quot;][0]._text AS DrugBank_ID,</span>
+<span class="s2">            [X IN my_drug._children WHERE X._type = &quot;name&quot;][0]._text AS drug_name,</span>
+<span class="s2">            smpdb_id, pathway_name, category, Primary_Drugbank_ID</span>
+
+<span class="s2">        MERGE (d:Drug </span><span class="se">{{</span><span class="s2"> DrugBank_ID:Primary_Drugbank_ID </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">        MERGE (s:Pathway </span><span class="se">{{</span><span class="s2"> SMPDB_ID:smpdb_id </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">        ON CREATE SET s.Name = pathway_name, s.Category = category</span>
+<span class="s2">        MERGE (dd:Drug </span><span class="se">{{</span><span class="s2"> DrugBank_ID:DrugBank_ID </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">        ON CREATE SET dd.Name = drug_name</span>
+<span class="s2">        MERGE (p:Protein </span><span class="se">{{</span><span class="s2"> UniProt_ID:UniProt_ID </span><span class="se">}}</span><span class="s2">)</span>
+
+<span class="s2">        MERGE (d)-[r:PART_OF_PATHWAY]-&gt;(s)</span>
+<span class="s2">        MERGE (dd)-[r2:PART_OF_PATHWAY]-&gt;(s)</span>
+<span class="s2">        MERGE (p)-[r3:PART_OF_PATHWAY]-&gt;(s)</span>
+<span class="s2">        MERGE (d)-[r4:INTERACTS_WITH]-(dd)</span>
+<span class="s2">        MERGE (d)-[r5:INTERACTS_WITH]-(p)</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="add_targets_enzymes_carriers_and_transporters"><a class="viewcode-back" href="../../../CanGraph.GraphifyDrugBank.html#CanGraph.GraphifyDrugBank.build_database.add_targets_enzymes_carriers_and_transporters">[docs]</a><span class="k">def</span> <span class="nf">add_targets_enzymes_carriers_and_transporters</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">tag_name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A *REALLY HUGE* function. It takes a filename and a tag_name, and gets info and creates &quot;Protein&quot; nodes with tag_name set as their role.</span>
+<span class="sd">    It also adds a bunch of additional info, such as Publications, Targets, Actions, GO_IDs, PFAMs and/or some External IDs</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the XML file that is being imported</span>
+<span class="sd">        tag_name    (str): The type of Protein node you want to import; it must be one of [&quot;enzymes&quot;, &quot;carriers&quot;, &quot;transporters&quot;]</span>
+<span class="sd">                    It is recommended that you run this function thrice, once for each type of protein</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</span>
+
+<span class="sd">    .. WARNING:: We are using a bunch of concatenated UNWINDs, which force the existance of all elements in the UNWIND chain. This might remove some</span>
+<span class="sd">        elements, but this is a HUUUUUGE database, and, to be honest, most things seem to almost always be present. An example is References and Polypeptides;</span>
+<span class="sd">        Since there seem to be more References that Polypeptides, we try to UNWIND those first. The same can be said on the rest of UNWINDS: as we have</span>
+<span class="sd">        external-id &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; go-classifier &gt;&gt;&gt;&gt; pfam &gt;&gt; synonyms (in order of *occurrence*. not *number* of tags) , we UNWIND in that order to mitigate data loss</span>
+
+<span class="sd">    .. NOTE:: To fix repetitions in properties such as Actions or Synonyms (caused by the HUGE number of UNWINDs), we tried lots of different strategies,</span>
+<span class="sd">        finally coming up with SET p.Synonyms = replace(p.Synonyms, synonym._text + &quot;,&quot;, &quot;&quot;). This is cool! But means there will always be a trailing</span>
+<span class="sd">        comma (removing it was not easy in this same transaction, though it could (TODO?) be done at the end.</span>
+
+<span class="sd">    .. NOTE:: &lt;tag_name&gt;</span>
+
+<span class="sd">    .. TODO:: Investigate https://stackoverflow.com/questions/14026217/using-neo4j-distinct-and-order-by-on-different-properties</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL apoc.load.xml(&quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;)</span>
+<span class="s2">        YIELD value</span>
+<span class="s2">        WITH [x in value._children WHERE x._type = &quot;drug&quot;] AS metabolites</span>
+<span class="s2">        UNWIND metabolites AS metabolite</span>
+<span class="s2">        WITH</span>
+<span class="s2">            [X in metabolite._children WHERE X._type = &quot;drugbank-id&quot; AND X.primary = &quot;true&quot;][0]._text AS Primary_Drugbank_ID,</span>
+<span class="s2">            [X in metabolite._children WHERE X._type = &quot;</span><span class="si">{</span><span class="n">tag_name</span><span class="si">}</span><span class="s2">&quot;] AS targets</span>
+
+<span class="s2">        WITH targets, Primary_Drugbank_ID</span>
+<span class="s2">        UNWIND targets AS target</span>
+<span class="s2">        WITH target, Primary_Drugbank_ID</span>
+<span class="s2">        UNWIND target[&quot;_children&quot;] AS my_target</span>
+
+<span class="s2">        WITH</span>
+<span class="s2">            my_target.position AS position,</span>
+<span class="s2">            [X IN my_target._children WHERE X._type = &quot;id&quot;][0]._text AS target_id,</span>
+<span class="s2">            [X IN my_target._children WHERE X._type = &quot;name&quot;][0]._text AS name,</span>
+<span class="s2">            [X IN my_target._children WHERE X._type = &quot;organism&quot;][0]._text AS target_organism,</span>
+<span class="s2">            [X IN my_target._children WHERE X._type = &quot;known-action&quot;][0]._text AS known_action,</span>
+
+<span class="s2">            [X IN my_target._children WHERE X._type = &quot;actions&quot;] AS actions,</span>
+<span class="s2">            [X IN my_target._children WHERE X._type = &quot;references&quot;] AS references,</span>
+<span class="s2">            [X IN my_target._children WHERE X._type = &quot;polypeptide&quot;] AS polypeptides,</span>
+<span class="s2">            Primary_Drugbank_ID</span>
+
+<span class="s2">        UNWIND references AS reference</span>
+<span class="s2">        UNWIND reference._children AS this_reference</span>
+<span class="s2">        UNWIND this_reference._children AS my_reference</span>
+
+<span class="s2">        WITH</span>
+<span class="s2">            my_reference._type AS ref_type,</span>
+<span class="s2">            [X in my_reference._children WHERE X._type = &quot;citation&quot;][0]._text AS citation,</span>
+<span class="s2">            [X in my_reference._children WHERE X._type = &quot;ref-id&quot;][0]._text AS ref_id,</span>
+<span class="s2">            [X in my_reference._children WHERE X._type = &quot;pubmed-id&quot;][0]._text AS pubmed_id,</span>
+<span class="s2">            Primary_Drugbank_ID, actions, polypeptides, target_id, name, target_organism,</span>
+<span class="s2">            known_action, position</span>
+
+<span class="s2">        MERGE (d:Drug </span><span class="se">{{</span><span class="s2"> DrugBank_ID:Primary_Drugbank_ID </span><span class="se">}}</span><span class="s2">)</span>
+
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN citation IS NOT null THEN [1] ELSE [] END |</span>
+<span class="s2">            FOREACH(ignoreMe IN CASE WHEN split(replace(citation, split(citation, &quot;:&quot;)[0]+&quot;: &quot;, &quot;&quot;), &quot;.&quot;)[0] &lt;&gt; &quot;&quot; THEN [1] ELSE [] END |</span>
+
+<span class="s2">                MERGE (pu:Publication </span><span class="se">{{</span><span class="s2"> Ref_ID:ref_id </span><span class="se">}}</span><span class="s2">)</span>
+
+<span class="s2">                SET pu.Authors = split(citation, &quot;:&quot;)[0]</span>
+<span class="s2">                SET pu.Title = split(replace(citation, split(citation, &quot;:&quot;)[0]+&quot;: &quot;, &quot;&quot;), &quot;.&quot;)[0]</span>
+<span class="s2">                SET pu.Publication = split(replace(citation, split(citation, &quot;.&quot;)[0]+&quot;. &quot;,&quot;&quot;), &quot;.&quot;)[0]</span>
+<span class="s2">                SET pu.Notes = split(replace(citation, split(citation, &quot;.&quot;)[0]+&quot;. &quot;,&quot;&quot;), &quot;.&quot;)[2]</span>
+<span class="s2">                SET pu.Date = split(split(replace(citation, split(citation, &quot;.&quot;)[0]+&quot;. &quot;,&quot;&quot;), &quot;.&quot;)[1],&quot;;&quot;)[0]</span>
+<span class="s2">                SET pu.Volume = split(split(citation, &quot;;&quot;)[1], &quot;(&quot;)[0]</span>
+<span class="s2">                SET pu.Issue = split(split(citation, &quot;(&quot;)[1], &quot;)&quot;)[0]</span>
+<span class="s2">                SET pu.Pages = split(split(citation, &quot;:&quot;)[-1], &quot;.&quot;)[0]</span>
+<span class="s2">                SET pu.PubMed_ID = pubmed_id, pu.Type = ref_type</span>
+
+<span class="s2">                MERGE (d)-[r2:CITED_IN]-&gt;(pu)</span>
+<span class="s2">            )</span>
+<span class="s2">        )</span>
+
+<span class="s2">        WITH polypeptides, target_id, name, target_organism, known_action, actions, position, d</span>
+<span class="s2">        UNWIND polypeptides AS polypeptide</span>
+<span class="s2">        WITH</span>
+<span class="s2">            polypeptide.id AS UniProt_ID, polypeptide.source AS polypeptide_source,</span>
+<span class="s2">            [X in polypeptide._children WHERE X._type = &quot;name&quot;][0]._text AS polypeptide_name,</span>
+<span class="s2">            [X in polypeptide._children WHERE X._type = &quot;general-function&quot;][0]._text AS general_function,</span>
+<span class="s2">            [X in polypeptide._children WHERE X._type = &quot;specific-function&quot;][0]._text AS specific_function,</span>
+<span class="s2">            [X in polypeptide._children WHERE X._type = &quot;gene-name&quot;][0]._text AS gene_name,</span>
+<span class="s2">            [X in polypeptide._children WHERE X._type = &quot;locus&quot;][0]._text AS locus,</span>
+<span class="s2">            [X in polypeptide._children WHERE X._type = &quot;transmembrane-regions&quot;][0]._text AS transmembrane_regions,</span>
+<span class="s2">            [X in polypeptide._children WHERE X._type = &quot;signal-regions&quot;][0]._text AS signal_regions,</span>
+<span class="s2">            [X in polypeptide._children WHERE X._type = &quot;theoretical-pi&quot;][0]._text AS theoretical_pi,</span>
+<span class="s2">            [X in polypeptide._children WHERE X._type = &quot;molecular-weight&quot;][0]._text AS molecular_weight,</span>
+<span class="s2">            [X in polypeptide._children WHERE X._type = &quot;chromosome-location&quot;][0]._text AS chromosome_location,</span>
+<span class="s2">            [X in polypeptide._children WHERE X._type = &quot;cellular-location&quot;] AS cellular_location,</span>
+<span class="s2">            [X in polypeptide._children WHERE X._type = &quot;organism&quot;][0]._text AS polypeptide_organism,</span>
+<span class="s2">            [X in polypeptide._children WHERE X._type = &quot;organism&quot;][0][&quot;ncbi-taxonomy-id&quot;] AS ncbi_taxonomy_id,</span>
+<span class="s2">            [X in polypeptide._children WHERE X._type = &quot;amino-acid-sequence&quot;][0]._text AS amino_acid_sequence,</span>
+<span class="s2">            [X in polypeptide._children WHERE X._type = &quot;amino-acid-sequence&quot;][0].format AS amino_acid_sequence_format,</span>
+<span class="s2">            [X in polypeptide._children WHERE X._type = &quot;gene-sequence&quot;][0]._text AS gene_sequence,</span>
+<span class="s2">            [X in polypeptide._children WHERE X._type = &quot;gene-sequence&quot;][0].format AS gene_sequence_format,</span>
+
+<span class="s2">            [X in polypeptide._children WHERE X._type = &quot;go-classifiers&quot;] AS go_classifiers,</span>
+<span class="s2">            [X in polypeptide._children WHERE X._type = &quot;synonyms&quot;] AS synonyms,</span>
+<span class="s2">            [X in polypeptide._children WHERE X._type = &quot;pfams&quot;] AS pfams,</span>
+<span class="s2">            [X in polypeptide._children WHERE X._type = &quot;external-identifiers&quot;] AS external_identifiers,</span>
+<span class="s2">            target_id, name, target_organism, known_action, actions, position, d</span>
+
+<span class="s2">        MERGE (p:Protein </span><span class="se">{{</span><span class="s2"> UniProt_ID:UniProt_ID </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">        SET p.Name = polypeptide_name, p.Function = general_function, p.Specific_Function = specific_function,</span>
+<span class="s2">            p.Gene_Name = gene_name, p.Locus = locus, p.Transmembrane_Regions = transmembrane_regions,</span>
+<span class="s2">            p.Signal_Regions = signal_regions, p.Theoretical_PI = theoretical_pi, p.Average_Mass = molecular_weight,</span>
+<span class="s2">            p.Organism = polypeptide_organism,</span>
+<span class="s2">            p.Target_Position = position, p.Source = polypeptide_source, p.Target_ID = target_id,</span>
+<span class="s2">            p.Taget_Name = name, p.Known_Action = known_action, p.Target_Organism = target_organism</span>
+
+<span class="s2">        SET p.Function = &quot;</span><span class="si">{</span><span class="n">tag_name</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="s2">        MERGE (d)-[r:TARGETS]-&gt;(p)</span>
+
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN amino_acid_sequence IS NOT null THEN [1] ELSE [] END |</span>
+<span class="s2">            MERGE (se:Sequence </span><span class="se">{{</span><span class="s2"> Sequence:amino_acid_sequence </span><span class="se">}}</span><span class="s2"> )</span>
+<span class="s2">            SET se.Format = amino_acid_sequence_format, se.Type=&quot;DNA&quot;,</span>
+<span class="s2">                se.UniProt_ID = UniProt_ID, se.Chromosome_Location = chromosome_location</span>
+<span class="s2">            MERGE (p)-[r:SEQUENCED_AS]-&gt;(se)</span>
+<span class="s2">        )</span>
+
+<span class="s2">        FOREACH(ignoreMe IN CASE WHEN gene_sequence IS NOT null THEN [1] ELSE [] END |</span>
+<span class="s2">            MERGE (se:Sequence </span><span class="se">{{</span><span class="s2"> Sequence:gene_sequence </span><span class="se">}}</span><span class="s2"> )</span>
+<span class="s2">            SET se.Format = gene_sequence_format, se.Type=&quot;DNA&quot;,</span>
+<span class="s2">                se.UniProt_ID = UniProt_ID, se.Chromosome_Location = chromosome_location</span>
+<span class="s2">            MERGE (p)-[r:SEQUENCED_AS]-&gt;(se)</span>
+<span class="s2">        )</span>
+
+<span class="s2">        SET d.Actions = &quot;&quot;</span>
+<span class="s2">        FOREACH(element in actions|</span>
+<span class="s2">            FOREACH(action in element._children|</span>
+<span class="s2">                SET d.Actions = replace(d.Actions, action._text + &quot;,&quot;, &quot;&quot;)</span>
+<span class="s2">                SET d.Actions = action._text + &quot;,&quot; + d.Actions</span>
+<span class="s2">            )</span>
+<span class="s2">        )</span>
+
+<span class="s2">        FOREACH(location IN cellular_location |</span>
+<span class="s2">            MERGE (c:CelularLocation)</span>
+<span class="s2">            SET c.Name = location._text</span>
+<span class="s2">            MERGE (p)-[r:LOCATED_INSIDE_CELL]-&gt;(c)</span>
+<span class="s2">        )</span>
+
+<span class="s2">        WITH external_identifiers, d, p, go_classifiers, pfams, synonyms</span>
+<span class="s2">        UNWIND external_identifiers AS external_identifier</span>
+<span class="s2">        UNWIND external_identifier._children AS my_identifiers</span>
+<span class="s2">        WITH</span>
+<span class="s2">            [X in my_identifiers._children WHERE X._type = &quot;resource&quot;][0]._text AS resource,</span>
+<span class="s2">            [X in my_identifiers._children WHERE X._type = &quot;identifier&quot;][0]._text AS identifier,</span>
+<span class="s2">            d, p, go_classifiers, pfams, synonyms</span>
+
+<span class="s2">        WITH apoc.map.fromLists(collect(resource), collect(identifier)) AS dict, d, p, go_classifiers, pfams, synonyms</span>
+<span class="s2">        SET d.IUPHAR_ID = dict[&quot;IUPHAR&quot;], d.Guide_to_Pharmacology_ID = dict[&quot;Guide to Pharmacology&quot;],</span>
+<span class="s2">            d.GenAtlas_ID = dict[&quot;GenAtlas&quot;], d.Genbank_Protein_ID = dict[&quot;GenBank Protein Database&quot;],</span>
+<span class="s2">            d.UniProt_ID = dict[&quot;UniProtKB&quot;],</span>
+<span class="s2">            d.HGNC_ID = dict[&quot;HUGO Gene Nomenclature Committee (HGNC)&quot;], d.GenBank_Gene_ID = dict[&quot;GenBank Gene Database&quot;]</span>
+
+<span class="s2">        WITH go_classifiers, pfams, d, p, synonyms</span>
+<span class="s2">        UNWIND go_classifiers AS go_classifier</span>
+<span class="s2">        UNWIND pfams AS pfam</span>
+<span class="s2">        WITH go_classifier, pfam, d, p, synonyms</span>
+<span class="s2">        UNWIND go_classifier[&quot;_children&quot;] AS my_go</span>
+<span class="s2">        UNWIND pfam[&quot;_children&quot;] AS my_pfam</span>
+
+<span class="s2">        WITH</span>
+<span class="s2">            [X in my_go._children WHERE X._type = &quot;category&quot;][0]._text AS category,</span>
+<span class="s2">            [X in my_go._children WHERE X._type = &quot;description&quot;][0]._text AS description,</span>
+<span class="s2">            [X in my_pfam._children WHERE X._type = &quot;identifier&quot;][0]._text AS identifier,</span>
+<span class="s2">            [X in my_pfam._children WHERE X._type = &quot;name&quot;][0]._text AS name,</span>
+<span class="s2">            synonyms, d, p</span>
+
+<span class="s2">        MERGE (g:GeneOntology </span><span class="se">{{</span><span class="s2"> Description:description </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">        SET g.Category = category</span>
+<span class="s2">        MERGE (pf:PFam </span><span class="se">{{</span><span class="s2"> PFAM_ID:identifier </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">        SET pf.Name = name</span>
+
+<span class="s2">        MERGE (p)-[r:PART_OF_PFAM]-&gt;(pf)</span>
+<span class="s2">        MERGE (p)-[r2:PART_OF_GENE_ONTOLOGY]-(g)</span>
+
+<span class="s2">        SET p.Synonyms = &quot;&quot;</span>
+<span class="s2">        FOREACH(element in synonyms|</span>
+<span class="s2">            FOREACH(synonym in element._children|</span>
+<span class="s2">                SET p.Synonyms = replace(p.Synonyms, synonym._text + &quot;,&quot;, &quot;&quot;)</span>
+<span class="s2">                SET p.Synonyms = synonym._text + &quot;,&quot; + p.Synonyms</span>
+<span class="s2">            )</span>
+<span class="s2">        )</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="build_from_file"><a class="viewcode-back" href="../../../CanGraph.GraphifyDrugBank.html#CanGraph.GraphifyDrugBank.build_database.build_from_file">[docs]</a><span class="k">def</span> <span class="nf">build_from_file</span><span class="p">(</span><span class="n">newfile</span><span class="p">,</span> <span class="n">driver</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A function able to build a portion of the DrugBank database in graph format, provided that one XML is supplied to it.</span>
+<span class="sd">    This can either be the ```full_database.xml``` file that you can get in DrugBank&#39;s website, or a splitted version of it,</span>
+<span class="sd">    with just one item per file (which is recommended due to memory limitations)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        newfile         (str): The path of the XML file to import</span>
+<span class="sd">        driver (neo4j.Driver): Neo4J&#39;s Bolt Driver currently in use</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        This function modifies the Neo4J Database as desired, but does not produce any particular return.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">add_drugs</span><span class="p">(</span><span class="n">newfile</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">add_general_references</span><span class="p">(</span><span class="n">newfile</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">add_taxonomy</span><span class="p">(</span><span class="n">newfile</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">add_products</span><span class="p">(</span><span class="n">newfile</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">add_mixtures</span><span class="p">(</span><span class="n">newfile</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">add_categories</span><span class="p">(</span><span class="n">newfile</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">add_manufacturers</span><span class="p">(</span><span class="n">newfile</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">add_packagers</span><span class="p">(</span><span class="n">newfile</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">add_dosages</span><span class="p">(</span><span class="n">newfile</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">add_atc_codes</span><span class="p">(</span><span class="n">newfile</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">add_drug_interactions</span><span class="p">(</span><span class="n">newfile</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">add_sequences</span><span class="p">(</span><span class="n">newfile</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">add_experimental_properties</span><span class="p">(</span><span class="n">newfile</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">add_external_identifiers</span><span class="p">(</span><span class="n">newfile</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">add_external_equivalents</span><span class="p">(</span><span class="n">newfile</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">add_pathways_and_relations</span><span class="p">(</span><span class="n">newfile</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;enzymes&quot;</span><span class="p">,</span> <span class="s2">&quot;carriers&quot;</span><span class="p">,</span> <span class="s2">&quot;transporters&quot;</span><span class="p">]:</span>
+        <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">add_targets_enzymes_carriers_and_transporters</span><span class="p">(</span><span class="n">newfile</span><span class="p">,</span> <span class="n">element</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span></div>
+</pre></div>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Pablo Marcos<br/>
+  
+      &copy; Copyright 2022, Pablo Marcos &lt;software@loreak.org&gt;.<br/>
+    Last updated on Dec 17, 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

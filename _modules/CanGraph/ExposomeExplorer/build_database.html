@@ -1,0 +1,1155 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CanGraph.ExposomeExplorer.build_database &#8212; CanGraph 1.0 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script src="../../../_static/design-tabs.js"></script>
+    <link rel="shortcut icon" href="../../../_static/cangraph-mini.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../../_static/cangraph-logo.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../index.html">
+                    Main Page
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../Downloads.html">
+   Downloads
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../Tutorials.html">
+   Tutorials
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../Other%20Reading%20Material.html">
+     Other Reading Material
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../Installing%20CanGraph.html">
+     Installing CanGraph
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../Running%20the%20Software.html">
+     Running the Software
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../Understanding%20its%20Outputs.html">
+     Understanding its Outputs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://www.pablomarcos.me/es/posts/master-en-biolog%c3%ada-computacional/tfm/">
+   Presentations
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../CanGraph.html">
+   CanGraph package
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../CanGraph.ExposomeExplorer.html">
+     CanGraph.ExposomeExplorer package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../CanGraph.GraphifyDrugBank.html">
+     CanGraph.GraphifyDrugBank package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../CanGraph.GraphifyHMDB.html">
+     CanGraph.GraphifyHMDB package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../CanGraph.GraphifySMPDB.html">
+     CanGraph.GraphifySMPDB package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../CanGraph.MeSHandMetaNetX.html">
+     CanGraph.MeSHandMetaNetX package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../CanGraph.QueryWikidata.html">
+     CanGraph.QueryWikidata package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../Install%20Apptainer.html">
+     Install Apptainer
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../ToDoList.html">
+   To-Do List
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Logo by <a href="https://www.instagram.com/danonino.caducado/"> Daniel Marcos </a> </br>
+                     Website by <a href="https://www.pablomarcos.me/"> Pablo Marcos </a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/OMB-IARC/CanGraph/"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/OMB-IARC/CanGraph//issues/new?title=Issue%20on%20page%20%2F_modules/CanGraph/ExposomeExplorer/build_database.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <h1>Source code for CanGraph.ExposomeExplorer.build_database</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="c1"># SPDX-FileCopyrightText: 2022 Pablo Marcos &lt;software@loreak.org&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: MIT</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A python module that provides the necessary functions to transition the Exposome Explorer database to graph format,</span>
+<span class="sd">either from scratch importing all the nodes (as showcased in :obj:`CanGraph.ExposomeExplorer.main`) or in a case-by-case basis,</span>
+<span class="sd">to annotate existing metabolites (as showcased in :obj:`CanGraph.main`).</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># Import external modules necessary for the script</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">shutil</span>               <span class="c1"># Vital modules to interact with the filesystem</span>
+
+<span class="c1"># Import subscripts for the program</span>
+<span class="c1"># This hack that allows us to de-duplicate the miscleaneous script in this less-used script</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;../&quot;</span><span class="p">)</span>
+<span class="c1"># .. NOTE::: Please beware that, if using this module by itself, you might need to copy &quot;miscelaneous.py&quot; into your path</span>
+<span class="c1"># This is not the most elegant, but simplifies code maintenance, and this script shouldnt be used much so...</span>
+<span class="kn">import</span> <span class="nn">miscelaneous</span> <span class="k">as</span> <span class="nn">misc</span>
+
+<span class="c1"># ********* First, we add some general functions to start the discovery or do it automatically ********* #</span>
+
+<div class="viewcode-block" id="import_csv"><a class="viewcode-back" href="../../../CanGraph.ExposomeExplorer.html#CanGraph.ExposomeExplorer.build_database.import_csv">[docs]</a><span class="k">def</span> <span class="nf">import_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Imports a given CSV into Neo4J. This CSV **must** be present in Neo4J&#39;s Import Path</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the CSV file that is being imported</span>
+<span class="sd">        label       (str): The label of the Neo4J nodes that will be imported, with the columns of the CSV being its properties.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.</span>
+
+<span class="sd">    .. NOTE:: For this to work, you HAVE TO have APOC availaible on your Neo4J installation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CALL apoc.import.csv([</span><span class="se">{{</span><span class="s2">fileName: &#39;file:/</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39;, labels: [apoc.text.capitalize(&#39;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&#39;)]</span><span class="se">}}</span><span class="s2">], [], </span><span class="se">{{}}</span><span class="s2">)</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="add_components"><a class="viewcode-back" href="../../../CanGraph.ExposomeExplorer.html#CanGraph.ExposomeExplorer.build_database.add_components">[docs]</a><span class="k">def</span> <span class="nf">add_components</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adds &quot;Metabolite&quot; nodes from Exposome-Explorer&#39;s components.csv</span>
+<span class="sd">    This is because this components are, in fact, metabolites, either from food or from human metabolism</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the CSV file that is being imported.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        LOAD CSV WITH HEADERS FROM (&#39;file:///</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39;) AS line</span>
+<span class="s2">            MERGE (c:Metabolite </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID:&quot;Component_&quot;+line[&quot;id&quot;] </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            SET c.Name = line.name, c.Description = line.description,</span>
+<span class="s2">                c.Alternative_Names = replace(line.alternative_names, &quot;;&quot;, &quot;,&quot;), c.Level = line.level,</span>
+<span class="s2">                c.CAS_Number = line.cas_number, c.PubChem_ID = line.pubchem_compound_id, c.ChEBI_ID = toInteger(line.chebi_id),</span>
+<span class="s2">                c.FooDB_Compound_ID = line.foodb_compound_id, c.HMDB_ID = line.hmdb_id,</span>
+<span class="s2">                c.FooDB_Food_ID = line.foodb_food_id,</span>
+<span class="s2">                c.SMILES = line.moldb_smiles, c.Formula = line.moldb_formula,</span>
+<span class="s2">                c.InChI = line.moldb_inchi, c.InChIKey = line.moldb_inchikey,</span>
+<span class="s2">                c.Average_Mass = line.moldb_average_mass,</span>
+<span class="s2">                c.Monisotopic_Molecular_Weight = line.moldb_mono_mass,</span>
+<span class="s2">                c.Displayed_Excretion_Concentration_Count = line.displayed_excretion_concentration_count,</span>
+<span class="s2">                c.Displayed_Correlated_Biomarker_Count = line.displayed_correlated_biomarker_count,</span>
+<span class="s2">                c.Displayed_Metabolomic_Associated_Biomarker_Count = line.displayed_metabolomic_associated_biomarker_count,</span>
+<span class="s2">                c.Displayed_Associated_Biomarker_Count = line.displayed_associated_biomarker_count,</span>
+<span class="s2">                c.Displayed_Reproducibility_Count = line.displayed_reproducibility_count,</span>
+<span class="s2">                c.Displayed_Cancer_Association_Count = line.displayed_cancer_association_count,</span>
+<span class="s2">                c.Displayed_Intake_Value_Count = line.displayed_intake_value_count,</span>
+<span class="s2">                c.Displayed_Intakes_Correlated_with_Excretion_Count = line.displayed_intakes_correlated_with_excretion_count,</span>
+<span class="s2">                c.Displayed_Excretions_Correlated_with_Intake_Count = line.displayed_excretions_correlated_with_intake_count,</span>
+<span class="s2">                c.Displayed_Excretions_Associated_with_Intake_Count = line.displayed_excretions_associated_with_intake_count,</span>
+<span class="s2">                c.Displayed_Intakes_Associated_with_Excretion_Count = line.displayed_intakes_associated_with_excretion_count,</span>
+<span class="s2">                c.Displayed_Publication_Count = line.displayed_publication_count,</span>
+<span class="s2">                c.Displayed_Microbial_Metabolite_Identification_count = line.displayed_microbial_metabolite_identification_count,</span>
+<span class="s2">                c.Displayed_Proof_2_Publications_Count = line.displayed_proof_2_publications_count,</span>
+<span class="s2">                c.Displayed_Proof_3_Publications_Count = line.displayed_proof_3_publications_count,</span>
+<span class="s2">                c.Displayed_Proof_4_Publications_Count = line.displayed_proof_4_publications_count,</span>
+<span class="s2">                c.Displayed_Nb_of_proofs = line.displayed_nb_of_proofs</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<span class="c1"># ********* Now, we build the &quot;scaffolding&quot; - the raw nodes which we will then annotate ********* #</span>
+
+<div class="viewcode-block" id="add_measurements_stuff"><a class="viewcode-back" href="../../../CanGraph.ExposomeExplorer.html#CanGraph.ExposomeExplorer.build_database.add_measurements_stuff">[docs]</a><span class="k">def</span> <span class="nf">add_measurements_stuff</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A massive and slow-running function that creates ALL the relations between the &#39;measurements&#39; table</span>
+<span class="sd">    and all other related tables:</span>
+
+<span class="sd">    - units: The units in which a given measurement is expressed</span>
+<span class="sd">    - components: The component which is being measured</span>
+<span class="sd">    - samples: The sample from which a measurement is taken</span>
+<span class="sd">    - experimental_methods: The method used to take a measurement</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the CSV file that is being imported.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        LOAD CSV WITH HEADERS FROM &#39;file:///</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39; AS line</span>
+<span class="s2">            MATCH (c:Metabolite </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID: &quot;Component_&quot;+line.component_id </span><span class="se">}}</span><span class="s2">)</span>
+
+<span class="s2">            MERGE (m:Measurement </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID: &quot;Measurement_&quot;+line.id </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            MERGE (s:Sample </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID: &quot;Sample_&quot;+line.sample_id </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            MERGE (me:ExperimentalMethod </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID: &quot;ExperimentalMethod_&quot;+line.experimental_method_id </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            MERGE (u:Unit </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID: &quot;Unit_&quot;+line.unit_id </span><span class="se">}}</span><span class="s2">)</span>
+
+<span class="s2">            MERGE (c)-[r1:MEASURED_AS]-&gt;(m)</span>
+<span class="s2">            MERGE (m)-[r2:TAKEN_FROM_SAMPLE]-&gt;(s)</span>
+<span class="s2">            MERGE (m)-[r3:USING_METHOD]-&gt;(me)</span>
+<span class="s2">            MERGE (m)-[r4:MEASURED_IN]-&gt;(u)</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="add_reproducibilities"><a class="viewcode-back" href="../../../CanGraph.ExposomeExplorer.html#CanGraph.ExposomeExplorer.build_database.add_reproducibilities">[docs]</a><span class="k">def</span> <span class="nf">add_reproducibilities</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates relations between the &quot;reproducibilities&quot; and the &quot;measurements&quot; table,</span>
+<span class="sd">    using &quot;initial_id&quot;, an old identifier, for the linkage</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the CSV file that is being imported.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        LOAD CSV WITH HEADERS FROM &#39;file:///</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39; AS line</span>
+<span class="s2">            MATCH (m:Measurement </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID: &quot;Measurement_&quot;+line.id </span><span class="se">}}</span><span class="s2">)</span>
+
+<span class="s2">            MERGE (re:Reproducibility </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID: &quot;Reproducibility_&quot;+line.id </span><span class="se">}}</span><span class="s2">)</span>
+
+<span class="s2">            MERGE (m)-[r:REPODUCIBILE_WITH_CONDITIONS]-&gt;(re)</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="add_samples"><a class="viewcode-back" href="../../../CanGraph.ExposomeExplorer.html#CanGraph.ExposomeExplorer.build_database.add_samples">[docs]</a><span class="k">def</span> <span class="nf">add_samples</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Imports the relations pertaining to the &quot;samples&quot; table. A sample will be taken from a given</span>
+<span class="sd">    subject and a given tissue (that is, a specimen, which will be blood, urine, etc)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the CSV file that is being imported.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        LOAD CSV WITH HEADERS FROM &#39;file:///</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39; AS line</span>
+<span class="s2">            MATCH (s:Sample </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID: &quot;Sample_&quot;+line.id </span><span class="se">}}</span><span class="s2">)</span>
+
+<span class="s2">            MERGE (sp:BioSpecimen </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID: &quot;Specimen_&quot;+line.specimen_id </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            MERGE (sb:Subject </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID: &quot;Subject_&quot;+line.subject_id </span><span class="se">}}</span><span class="s2">)</span>
+
+<span class="s2">            MERGE (s)-[r1:FOUND_IN]-&gt;(sp)</span>
+<span class="s2">            MERGE (s)-[r2:TAKEN_FROM_SUBJECT]-&gt;(sb)</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="add_subjects"><a class="viewcode-back" href="../../../CanGraph.ExposomeExplorer.html#CanGraph.ExposomeExplorer.build_database.add_subjects">[docs]</a><span class="k">def</span> <span class="nf">add_subjects</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Imports the relations pertaining to the &quot;subjects&quot; table. Basically, a subject can appear</span>
+<span class="sd">    in a given publication, and will be part of a cohort (i.e. a grop of subjects)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the CSV file that is being imported.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        LOAD CSV WITH HEADERS FROM &#39;file:///</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39; AS line</span>
+<span class="s2">            MATCH (s:Subject </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID: &quot;Subject_&quot;+line.id </span><span class="se">}}</span><span class="s2">)</span>
+
+<span class="s2">            MERGE (p:Publication </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID: &quot;Publication_&quot;+line.publication_id </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            MERGE (s)-[r2:CITED_IN]-&gt;(p)</span>
+
+<span class="s2">            FOREACH(ignoreMe IN CASE WHEN line.cohort_id IS NOT null THEN [1] ELSE [] END |</span>
+<span class="s2">                MERGE (c:Cohort </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID: &quot;Cohort_&quot;+line.cohort_id </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">                MERGE (s)-[r1:PART_OF_COHORT]-&gt;(c)</span>
+<span class="s2">            )</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="add_microbial_metabolite_identifications"><a class="viewcode-back" href="../../../CanGraph.ExposomeExplorer.html#CanGraph.ExposomeExplorer.build_database.add_microbial_metabolite_identifications">[docs]</a><span class="k">def</span> <span class="nf">add_microbial_metabolite_identifications</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Imports the relations pertaining to the &quot;microbial_metabolite_identifications&quot; table. A component</span>
+<span class="sd">    (i.e. a metabolite) can be identified as a Microbial Metabolite, which means it has an equivalent in</span>
+<span class="sd">    the microbiome. This can have a given reference and a tissue (BioSpecimen) in which it occurs.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the CSV file that is being imported.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        LOAD CSV WITH HEADERS FROM &#39;file:///</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39; AS line</span>
+<span class="s2">            MATCH (m:Metabolite </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID: &quot;Component_&quot;+line.component_id </span><span class="se">}}</span><span class="s2">)</span>
+
+<span class="s2">            SET m.MicobialMetabolite_ID = line.id</span>
+<span class="s2">            MERGE (p:Publication </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID: &quot;Publication_&quot;+line.publication_id </span><span class="se">}}</span><span class="s2">)</span>
+
+<span class="s2">            MERGE (m)-[r1:CITED_IN]-&gt;(p)</span>
+
+<span class="s2">            FOREACH(ignoreMe IN CASE WHEN line.specimen_id IS NOT null THEN [1] ELSE [] END |</span>
+<span class="s2">                MERGE (s:BioSpecimen </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID: &quot;Specimen_&quot;+line.specimen_id </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">                MERGE (m)-[r3:LOCATED_IN_BIOSPECIMEN]-&gt;(s)</span>
+<span class="s2">            )</span>
+
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="add_cancer_associations"><a class="viewcode-back" href="../../../CanGraph.ExposomeExplorer.html#CanGraph.ExposomeExplorer.build_database.add_cancer_associations">[docs]</a><span class="k">def</span> <span class="nf">add_cancer_associations</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Imports the &#39;cancer_associations&#39; database as a relation between a given Cancer and a Measurement</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the CSV file that is being imported.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        LOAD CSV WITH HEADERS FROM &#39;file:///</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39; AS line</span>
+<span class="s2">            MATCH (m:Measurement </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID: &quot;Measurement_&quot;+line.`excretion_id` </span><span class="se">}}</span><span class="s2">)</span>
+
+<span class="s2">            MERGE (c:Disease </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID: &quot;Cancer_&quot;+line.`cancer_id` </span><span class="se">}}</span><span class="s2">)</span>
+
+<span class="s2">            MERGE (m)-[r:ASSOCIATED_DISEASE_MEASUREMENT]-(c)</span>
+<span class="s2">            SET r.Exposome_Explorer_ID = &quot;CancerAssociation_&quot;+line.id</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="add_metabolomic_associations"><a class="viewcode-back" href="../../../CanGraph.ExposomeExplorer.html#CanGraph.ExposomeExplorer.build_database.add_metabolomic_associations">[docs]</a><span class="k">def</span> <span class="nf">add_metabolomic_associations</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Imports the &#39;metabolomic_associations&#39; database as a relation between to measurements:</span>
+<span class="sd">    the intake_id, a food taken by the organism and registered using dietary questionnaires</span>
+<span class="sd">    and the excretion_id, a chemical found in human biological samples, such that, when one</span>
+<span class="sd">    takes one component, one will excrete the other. Data comes from Metabolomics studies</span>
+<span class="sd">    seeking to identify putative dietary biomarkers.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the CSV file that is being imported.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        LOAD CSV WITH HEADERS FROM &#39;file:///</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39; AS line</span>
+<span class="s2">            MATCH (m:Measurement </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID: &quot;Measurement_&quot;+line.`intake_id` </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            MATCH (n:Measurement </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID: &quot;Measurement_&quot;+line.`excretion_id` </span><span class="se">}}</span><span class="s2">)</span>
+
+<span class="s2">            MERGE (m)-[r:ASSOCIATED_WITH_MEASUREMENT]-&gt;(n)</span>
+<span class="s2">            SET r.Exposome_Explorer_ID = &quot;MetabolomicAssociation_&quot;+line.id, r.Feature_Selection = line.feature_selection,</span>
+<span class="s2">            r.Author_Structural_Identification_Level = line.author_structural_identification_level,</span>
+<span class="s2">            r.Area_Under_Curve_Prefixe = line.area_under_curve_prefixe,</span>
+<span class="s2">            r.Area_Under_Curve = line.area_under_curve, r.sensitivity_prefixe = line.sensitivity_prefixe,</span>
+<span class="s2">            r.Sensitivity = line.sensitivity, r.specificity_prefixe = line.specificity_prefixe,</span>
+<span class="s2">            r.Specificity = line.specificity, r.plsda_vip = line.plsda_vip,</span>
+<span class="s2">            r.Beta_Coefficient = line.beta_coefficient,</span>
+<span class="s2">            r.Beta_Coefficient_p_value = line.beta_coefficient_p_value, r.anova_p_value = line.anova_p_value</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="add_correlations"><a class="viewcode-back" href="../../../CanGraph.ExposomeExplorer.html#CanGraph.ExposomeExplorer.build_database.add_correlations">[docs]</a><span class="k">def</span> <span class="nf">add_correlations</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Imports the &#39;correlations&#39; database as a relation between two measurements:</span>
+<span class="sd">    the intake_id, a food taken by the organism and registered using dietary questionnaires</span>
+<span class="sd">    and the excretion_id, a chemical found in human biological samples, such that, when one</span>
+<span class="sd">    takes one component, one will excrete the other. Data comes from epidemiological studies</span>
+<span class="sd">    where dietary questionnaires are administered, and biomarkers are measured in specimens</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the CSV file that is being imported.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        LOAD CSV WITH HEADERS FROM &#39;file:///</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39; AS line</span>
+<span class="s2">            MATCH (m:Measurement </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID: &quot;Measurement_&quot;+line.`intake_id` </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            MATCH (n:Measurement </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID: &quot;Measurement_&quot;+line.`excretion_id` </span><span class="se">}}</span><span class="s2">)</span>
+
+<span class="s2">            MERGE (m)-[r:ASSOCIATED_WITH_MEASUREMENT]-(n)</span>
+<span class="s2">            SET r.Exposome_Explorer_ID = &quot;Correlation_&quot;+line.id, r.Coefficient_Type = line.coefficient_type,</span>
+<span class="s2">            r.Coefficient_Value = line.coefficient_value, r.p_value = line.p_value,</span>
+<span class="s2">            r.p_value_prefixe = line.p_value_prefixe,</span>
+<span class="s2">            r.Confidence_Interval_95_Lower = line.confidence_interval_95_lower,</span>
+<span class="s2">            r.Confidence_Interval_95_Upper = line.confidence_interval_95_upper,</span>
+<span class="s2">            r.Is_Significant = line.is_significant, r.covariates = line.covariates,</span>
+<span class="s2">            r.Intake_ID = line.intake_id, r.Excretion_ID = line.excretion_id,</span>
+<span class="s2">            r.Measurement_Adjustment = line.measurement_adjustment,</span>
+<span class="s2">            r.Deattenuation = line.deattenuation, r.size = line.size</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<span class="c1"># ********* Finally, we can annotate the nodes created ********* #</span>
+
+<div class="viewcode-block" id="annotate_measurements"><a class="viewcode-back" href="../../../CanGraph.ExposomeExplorer.html#CanGraph.ExposomeExplorer.build_database.annotate_measurements">[docs]</a><span class="k">def</span> <span class="nf">annotate_measurements</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adds &quot;Measurement&quot; nodes from Exposome-Explorer&#39;s measurements.csv</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the CSV file that is being imported.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        LOAD CSV WITH HEADERS FROM (&#39;file:///</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39;) AS line</span>
+<span class="s2">            MATCH (m:Measurement </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID:&quot;Measurement_&quot;+line[&quot;id&quot;] </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            SET m.Concentration_Mean = line.concentration_mean,</span>
+<span class="s2">                m.Concentration_Median = line.concentration_median,</span>
+<span class="s2">                m.Concentration_Min = line.concentration_min,</span>
+<span class="s2">                m.Concentration_Max = line.concentration_max,</span>
+<span class="s2">                m.Concentration_Percentile_05 = line.concentration_percentile_05,</span>
+<span class="s2">                m.Concentration_Percentile_10 = line.concentration_percentile_10,</span>
+<span class="s2">                m.Concentration_Percentile_25 = line.concentration_percentile_25,</span>
+<span class="s2">                m.Concentration_Percentile_75 = line.concentration_percentile_75,</span>
+<span class="s2">                m.Concentration_Percentile_90 = line.concentration_percentile_90,</span>
+<span class="s2">                m.Concentration_Percentile_95 = line.concentration_percentile_95,</span>
+<span class="s2">                m.Concentration_InterQuartile_Range = line.concentration_interquartile_range,</span>
+<span class="s2">                m.Confidence_Interval_95_Lower = line.confidence_interval_95_lower,</span>
+<span class="s2">                m.Confidence_Interval_95_Upper = line.confidence_interval_95_upper,</span>
+<span class="s2">                m.Concentration_SD = line.Concentration_SD, m.Size = line.size,</span>
+<span class="s2">                m.Component_ID = line.component_id, m.Sample_ID = line.sample_id,</span>
+<span class="s2">                m.Experimental_Method_ID = line.experimental_method_id,</span>
+<span class="s2">                m.Ancestry = line.ancestry, m.Regressed_On = line.regressed_on,</span>
+<span class="s2">                m.Unit_ID = line.unit_id, m.Adjustment_Type = line.adjustment_type,</span>
+<span class="s2">                m.Adjusted_On = line.adjusted_on, m.Expressed_as_ID = line.expressed_as_id,</span>
+<span class="s2">                m.Supplement_Inclusion = line.supplement_inclusion,</span>
+<span class="s2">                m.Detected_Proportion = line.detected_proportion,</span>
+<span class="s2">                m.Detected_Size = line.detected_size, m.Food_Items = line.food_items,</span>
+<span class="s2">                m.Concentration_GeoMean = line.concentration_geomean,</span>
+<span class="s2">                m.Concentration_GeoSD = line.concentration_geosd,</span>
+<span class="s2">                m.Concentration_Detected_Min = line.concentration_detected_min,</span>
+<span class="s2">                m.Detected_Only = line.detected_only,</span>
+<span class="s2">                m.Confidence_Interval_95_Geo_Lower = line.confidence_interval_95_geo_lower,</span>
+<span class="s2">                m.Confidence_Interval_95_Geo_Upper = line.confidence_interval_95_geo_upper</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="annotate_samples"><a class="viewcode-back" href="../../../CanGraph.ExposomeExplorer.html#CanGraph.ExposomeExplorer.build_database.annotate_samples">[docs]</a><span class="k">def</span> <span class="nf">annotate_samples</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adds &quot;Sample&quot; nodes from Exposome-Explorer&#39;s samples.csv</span>
+<span class="sd">    From a Sample, one can take a series of measurements</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the CSV file that is being imported.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        LOAD CSV WITH HEADERS FROM (&#39;file:///</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39;) AS line</span>
+<span class="s2">            MATCH (s:Sample </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID:&quot;Sample_&quot;+line[&quot;id&quot;] </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            SET s.Subject_ID = line.subject_id, s.Ancestry = line.ancestry,</span>
+<span class="s2">                s.Repetitions = line.repetitions, s.Time = line.time, s.Specimen_ID = line.specimen_id,</span>
+<span class="s2">                s.Time_Definition = line.time_definition, s.Intake_Tool = line.intake_tool,</span>
+<span class="s2">                s.Intake_Food_Coverage = line.intake_food_coverage,</span>
+<span class="s2">                s.Intake_Time_Coverage = line.intake_time_coverage, s.Intervention_Dose = line.intervention_dose</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="annotate_experimental_methods"><a class="viewcode-back" href="../../../CanGraph.ExposomeExplorer.html#CanGraph.ExposomeExplorer.build_database.annotate_experimental_methods">[docs]</a><span class="k">def</span> <span class="nf">annotate_experimental_methods</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adds &quot;ExperimentalMethod&quot; nodes from Exposome-Explorer&#39;s experimental_methods.csv</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the CSV file that is being imported.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        LOAD CSV WITH HEADERS FROM (&#39;file:///</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39;) AS line</span>
+<span class="s2">            MATCH (em:ExperimentalMethod </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID:&quot;ExperimentalMethod_&quot;+line[&quot;id&quot;] </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            SET em.Name = line.name, em.Method_Type = line.method_type,</span>
+<span class="s2">                em.Alternative_Names = replace(line.alternative_names, &quot;;&quot;, &quot;,&quot;),</span>
+<span class="s2">                em.Displayed_Excretion_Concentration_Count = line.displayed_excretion_concentration_count,</span>
+<span class="s2">                em.Displayed_Biomarker_Count = line.displayed_biomarker_count,</span>
+<span class="s2">                em.Displayed_Publication_Count = line.displayed_publication_count,</span>
+<span class="s2">                em.Displayed_Reproducibility_Count = line.displayed_reproducibility_count,</span>
+<span class="s2">                em.Displayed_Excretions_Correlated_with_Intake_Count = line.displayed_excretions_correlated_with_intake_count,</span>
+<span class="s2">                em.Displayed_Cancer_Association_Count = line.displayed_cancer_association_count</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="annotate_units"><a class="viewcode-back" href="../../../CanGraph.ExposomeExplorer.html#CanGraph.ExposomeExplorer.build_database.annotate_units">[docs]</a><span class="k">def</span> <span class="nf">annotate_units</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adds &quot;Unit&quot; nodes from Exposome-Explorer&#39;s units.csv</span>
+<span class="sd">    A unit can be converted into other (for example, for normalization)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the CSV file that is being imported.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        LOAD CSV WITH HEADERS FROM (&#39;file:///</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39;) AS line</span>
+<span class="s2">            MATCH (u:Unit </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID:&quot;Unit_&quot;+line[&quot;id&quot;] </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            SET u.Name = line.name, u.Type = line.unit_type, u.Group = line.unit_group, u.Converted_to_ID = line.converted_to_id</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="annotate_auto_units"><a class="viewcode-back" href="../../../CanGraph.ExposomeExplorer.html#CanGraph.ExposomeExplorer.build_database.annotate_auto_units">[docs]</a><span class="k">def</span> <span class="nf">annotate_auto_units</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Shows the correlations between two units, converted using the rubygem &#39;https://github.com/masa16/phys-units&#39;</span>
+<span class="sd">    which standarizes units of measurement for our data</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the CSV file that is being imported.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        LOAD CSV WITH HEADERS FROM &#39;file:///</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39; AS line</span>
+<span class="s2">            MATCH</span>
+<span class="s2">                (u1:Unit </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID: &quot;Unit_&quot;+line.id </span><span class="se">}}</span><span class="s2">),</span>
+<span class="s2">                (u2:Unit </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID: &quot;Unit_&quot;+line.id </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            MERGE (u1)-[r:CONVERTED_INTO]-&gt;(u2)</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="annotate_cancers"><a class="viewcode-back" href="../../../CanGraph.ExposomeExplorer.html#CanGraph.ExposomeExplorer.build_database.annotate_cancers">[docs]</a><span class="k">def</span> <span class="nf">annotate_cancers</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adds &quot;Cancer&quot; nodes from Exposome-Explorer&#39;s cancers.csv</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the CSV file that is being imported.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        LOAD CSV WITH HEADERS FROM (&#39;file:///</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39;) AS line</span>
+<span class="s2">            MATCH (c:Disease </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID:&quot;Cancer_&quot;+line[&quot;id&quot;] </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            SET c.Name = line.name, c.Alternative_Names = replace(line.alternative_names, &quot;;&quot;, &quot;,&quot;),</span>
+<span class="s2">                c.Displayed_Publication_Count = line.displayed_publication_count,</span>
+<span class="s2">                c.Displayed_Cancer_Association_Count = line.displayed_cancer_association_count,</span>
+<span class="s2">                c.Displayed_Biomarker_Count = line.displayed_biomarker_count</span>
+
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="annotate_cohorts"><a class="viewcode-back" href="../../../CanGraph.ExposomeExplorer.html#CanGraph.ExposomeExplorer.build_database.annotate_cohorts">[docs]</a><span class="k">def</span> <span class="nf">annotate_cohorts</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adds &quot;Cohort&quot; nodes from Exposome-Explorer&#39;s cohorts.csv</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the CSV file that is being imported.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        LOAD CSV WITH HEADERS FROM (&#39;file:///</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39;) AS line</span>
+<span class="s2">            MATCH (c:Cohort </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID:&quot;Cohort_&quot;+line[&quot;id&quot;] </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            SET c.Name = line.name, c.Abbreviation = line.abbreviation,</span>
+<span class="s2">                c.Description = c.description, c.Citation = line.citation,</span>
+<span class="s2">                c.Displayed_Biomarker_Count = line.displayed_biomarker_count,</span>
+<span class="s2">                c.Displayed_Excretion_Concentration_Count = line.displayed_excretion_concentration_count,</span>
+<span class="s2">                c.Study_Design_Type = line.study_design_type, c.PubMed_ID = line.pmid,</span>
+<span class="s2">                c.URL = line.url, c.Country = line.country,</span>
+<span class="s2">                c.Displayed_Publication_Count = line.displayed_publication_count,</span>
+<span class="s2">                c.Displayed_Intake_Value_Count = line.displayed_intake_value_count,</span>
+<span class="s2">                c.Displayed_Correlation_Count = line.displayed_correlation_count,</span>
+<span class="s2">                c.Displayed_Metabolomic_Association_Count = line.displayed_metabolomic_association_count,</span>
+<span class="s2">                c.Displayed_Cancer_Association_Count = line.displayed_cancer_association_count</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="annotate_microbial_metabolite_info"><a class="viewcode-back" href="../../../CanGraph.ExposomeExplorer.html#CanGraph.ExposomeExplorer.build_database.annotate_microbial_metabolite_info">[docs]</a><span class="k">def</span> <span class="nf">annotate_microbial_metabolite_info</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adds &quot;Metabolite&quot; nodes from Exposome-Explorer&#39;s microbial_metabolite_identifications.csv</span>
+<span class="sd">    These represent all metabolites that have been re-identified as present, for instance, in the microbiome.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the CSV file that is being imported.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        LOAD CSV WITH HEADERS FROM (&#39;file:///</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39;) AS line</span>
+<span class="s2">            MATCH (mm:Metabolite </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID:&quot;Component_&quot;+line[&quot;component_id&quot;] </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            SET mm.Publication_ID = line.publication_id, mm.Component_ID = line.component_id, mm.Antibiotic = line.antibiotic,</span>
+<span class="s2">                mm.Identification_Method = line.identified_by, mm.Specimen_ID = line.specimen_id,</span>
+<span class="s2">                mm.Bacterial_Source = line.bacterial_source, mm.Substrate = line.substrate, mm.Organism = line.organism</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="annotate_publications"><a class="viewcode-back" href="../../../CanGraph.ExposomeExplorer.html#CanGraph.ExposomeExplorer.build_database.annotate_publications">[docs]</a><span class="k">def</span> <span class="nf">annotate_publications</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adds &quot;Publication&quot; nodes from Exposome-Explorer&#39;s publications.csv</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the CSV file that is being imported.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        LOAD CSV WITH HEADERS FROM (&#39;file:///</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39;) AS line</span>
+<span class="s2">            MATCH (p:Publication </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID:&quot;Publication_&quot;+line[&quot;id&quot;] </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            SET p.Title = line.title, p.First_Author = line.author_first, p.Date = line.year,</span>
+<span class="s2">            p.Publication = line.journal, p.Volume = line.volume, p.Issue = line.issue,</span>
+<span class="s2">                p.Pages = line.Pages, p.PubMed_ID = line.pmid, p.Authors = line.authors,</span>
+<span class="s2">                p.DOI = line.doi, p.Public = line.public, p.Metabolomics = line.metabolomics,</span>
+<span class="s2">                p.Intake_Count = line.intake_count, p.Intake_Value_Count = line.intake_value_count,</span>
+<span class="s2">                p.Excretion_Count = line.excretion_count, p.Excretion_Value_Count = line.excretion_value_count,</span>
+<span class="s2">                p.Correlation_Value_Count = line.correlation_value_count,</span>
+<span class="s2">                p.Reproducibility_Value_Count = line.reproducibility_value_count,</span>
+<span class="s2">                p.Metabolomic_Association_Count = line.metabolomic_association_count,</span>
+<span class="s2">                p.Study_Design_Type = line.study_design_type, p.Full_Annotation = line.full_annotation,</span>
+<span class="s2">                p.Cancer_Association_Count = line.cancer_association_count,</span>
+<span class="s2">                p.Displayed_Biomarker_Count = line.displayed_biomarker_count,</span>
+<span class="s2">                p.Microbial_Metabolite_Identification_Count = line.microbial_metabolite_identification_count</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="annotate_reproducibilities"><a class="viewcode-back" href="../../../CanGraph.ExposomeExplorer.html#CanGraph.ExposomeExplorer.build_database.annotate_reproducibilities">[docs]</a><span class="k">def</span> <span class="nf">annotate_reproducibilities</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adds &quot;Reproducibility&quot; nodes from Exposome-Explorer&#39;s reproducibilities.csv</span>
+<span class="sd">    These represent the conditions under which a given study/measurement was carried</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the CSV file that is being imported.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        LOAD CSV WITH HEADERS FROM (&#39;file:///</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39;) AS line</span>
+<span class="s2">            MATCH (r:Reproducibility </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID:&quot;Reproducibility_&quot;+line[&quot;id&quot;] </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            SET r.Initial_ID = line.initial_id, r.ICC = line.icc,</span>
+<span class="s2">                r.ICC_Confidence_Interval_95_Lower = line.icc_confidence_interval_95_lower,</span>
+<span class="s2">                r.ICC_Confidence_Interval_95_Upper = line.ICC_Confidence_Interval_95_Upper,</span>
+<span class="s2">                r.CV_Within = line.cv_within, r.CV_Between = line.cv_between,</span>
+<span class="s2">                r.Variance_Within = line.variance_within, r.Size = line.size</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="annotate_specimens"><a class="viewcode-back" href="../../../CanGraph.ExposomeExplorer.html#CanGraph.ExposomeExplorer.build_database.annotate_specimens">[docs]</a><span class="k">def</span> <span class="nf">annotate_specimens</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Annotates &quot;BioSpecimen&quot; nodes from Exposome-Explorer&#39;s specimens.csv whose ID is already present on the DB</span>
+<span class="sd">    A biospecimen is a type of tissue where a measurement can originate, such as orine, csf fluid, etc</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the CSV file that is being imported.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        LOAD CSV WITH HEADERS FROM (&#39;file:///</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39;) AS line</span>
+<span class="s2">            MATCH (s:BioSpecimen </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID:&quot;Specimen_&quot;+line[&quot;id&quot;] </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            SET s.Name = line.name, s.Specimen_Type = line.specimen_type,</span>
+<span class="s2">                s.Displayed_Excretion_Concentration_Count = line.displayed_excretion_concentration_count,</span>
+<span class="s2">                s.Displayed_Biomarker_Count = line.displayed_biomarker_count,</span>
+<span class="s2">                s.Displayed_Publication_Count = line.displayed_publication_count,</span>
+<span class="s2">                s.Displayed_Reproducibility_Count = line.displayed_reproducibility_count,</span>
+<span class="s2">                s.Displayed_Excretions_Correlated_with_Intake_Count = line.displayed_excretions_correlated_with_intake_count,</span>
+<span class="s2">                s.Displayed_Excretions_Associated_with_Intake_Count = line.displayed_excretions_associated_with_intake_count,</span>
+<span class="s2">                s.Displayed_Cancer_Association_Count = line.displayed_cancer_association_count</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="annotate_subjects"><a class="viewcode-back" href="../../../CanGraph.ExposomeExplorer.html#CanGraph.ExposomeExplorer.build_database.annotate_subjects">[docs]</a><span class="k">def</span> <span class="nf">annotate_subjects</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Annotates &quot;Subject&quot; nodes from Exposome-Explorer&#39;s subjects.csv whose ID is already present on the DB</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        filename    (str): The name of the CSV file that is being imported.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        LOAD CSV WITH HEADERS FROM (&#39;file:///subjects.csv&#39;) AS line</span>
+<span class="s2">            MATCH (su:Subject </span><span class="se">{{</span><span class="s2"> Exposome_Explorer_ID:&quot;Subject_&quot;+line[&quot;id&quot;] </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            SET su.Name = line.name, su.Description = line.description, su.Health_Condition = line.health_condition,</span>
+<span class="s2">                su.Country = line.country, su.Ethnicity = line.ethny,</span>
+<span class="s2">                su.Gender = line.gender, su.Female_Proportion = line.female_proportion, su.Size = line.size,</span>
+<span class="s2">                su.Age_Mean = line.age_mean, su.Age_Min = line.age_min,</span>
+<span class="s2">                su.Age_Max = line.age_max, su.Age_Median = line.age_median, su.Age_SD = line.age_sd,</span>
+<span class="s2">                su.Height_Mean = line.height_mean, su.Height_Min = line.height_min,</span>
+<span class="s2">                su.Height_Max = line.height_max, su.Height_Median = line.height_median,</span>
+<span class="s2">                su.Height_SD = line.height_sd, su.Weight_Mean = line.weight_mean, su.Weight_Min = line.weight_min,</span>
+<span class="s2">                su.Weight_Max = line.weight_max, su.Weight_Median = line.weight_median,</span>
+<span class="s2">                su.Weight_SD = line.weight_sd, su.BMI_Mean = line.bmi_mean, su.BMI_Min = line.bmi_min,</span>
+<span class="s2">                su.BMI_Max = line.bmi_max, su.BMI_Median = line.bmi_median, su.BMI_SD = line.bmi_sd,</span>
+<span class="s2">                su.Publication_ID = line.publication_id, su.Ancestry = line.ancestry,</span>
+<span class="s2">                su.Supplement_Exclusion = line.supplement_exclusion,</span>
+<span class="s2">                su.Smoker_Proportion = line.smoker_proportion, su.Cohort_ID = line.cohort_id,</span>
+<span class="s2">                su.Nb_of_Cases = line.nb_of_cases, su.Nb_of_Controls = line.nb_of_controls</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="remove_counts_and_displayeds"><a class="viewcode-back" href="../../../CanGraph.ExposomeExplorer.html#CanGraph.ExposomeExplorer.build_database.remove_counts_and_displayeds">[docs]</a><span class="k">def</span> <span class="nf">remove_counts_and_displayeds</span><span class="p">(</span><span class="n">inputfile</span><span class="p">,</span> <span class="n">outputfile</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Removes ```_count``` &amp;  ```displayed_``` text-strings from a given file, so that, when processing it with the other functions</span>
+<span class="sd">    present in this document, they ignore the columns containing said text-strings, which represent properties which are considered</span>
+<span class="sd">    not useful for our program. This is. of course, not the most elegant, but it works.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        inputfile    (str): The path to the file from which ```_count``` &amp;  ```displayed_`` text-strings are to be removed</span>
+<span class="sd">        outputfile   (str): The path of the file where the contents of the replaced file will be written.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The function does not have a return; instead, it transforms ```inputfile```` into ```outputfile```</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">inputfile</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span> <span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;_count&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;displayed_&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">outputfile</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="remove_cross_properties"><a class="viewcode-back" href="../../../CanGraph.ExposomeExplorer.html#CanGraph.ExposomeExplorer.build_database.remove_cross_properties">[docs]</a><span class="k">def</span> <span class="nf">remove_cross_properties</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Removes some properties that were added by the other functions present in this script, that are used to cross-reference</span>
+<span class="sd">    the different tables in the Relational Database EE comes from, and that, in a Graph Database, are no longer necessary.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx          (neo4j.Session): The session under which the driver is running</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it accordingly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        MATCH (n)</span>
+<span class="s2">        REMOVE n.Component_ID, n.Sample_ID, n.Experimental_Method_ID, n.Unit_ID, n.Subject_ID,</span>
+<span class="s2">               n.Converted_to_ID, n.Publication_ID, n.Component_ID, n.Specimen_ID, n.Initial_ID, n.Cohort_ID</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="build_from_file"><a class="viewcode-back" href="../../../CanGraph.ExposomeExplorer.html#CanGraph.ExposomeExplorer.build_database.build_from_file">[docs]</a><span class="k">def</span> <span class="nf">build_from_file</span><span class="p">(</span><span class="n">databasepath</span><span class="p">,</span> <span class="n">Neo4JImportPath</span><span class="p">,</span> <span class="n">driver</span><span class="p">,</span> <span class="n">bar</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="n">do_all</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">keep_counts_and_displayeds</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">keep_cross_properties</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A function able to build a portion of the Exposome-Explorer database in graph format, provided that at least one &quot;Component&quot; (Metabolite)</span>
+<span class="sd">    node is present in said database. It works by using that node as an starting point from which to search in the rest of the Exposome_Explorer</span>
+<span class="sd">    database, finding related nodes there.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        databasepath (str): The path to the database where all Exposome-Explorer CSVs are stored</span>
+<span class="sd">        Neo4JImportPath (str): The path from which Neo4J is importing data</span>
+<span class="sd">        driver (neo4j.Driver): Neo4J&#39;s Bolt Driver currently in use</span>
+<span class="sd">        bar: The bar() object from alive_bar, in case we want the function to run with do_all=True</span>
+<span class="sd">        do_all (bool): True if importing the whole database; False if just importing a part of it</span>
+<span class="sd">        keep_counts_and_displayeds (bool): Whether to keep the properties ending with ```_count``` &amp;  ```displayed_``` that, although present</span>
+<span class="sd">                                           in the original DB, might be considered not useful for us.</span>
+<span class="sd">        keep_cross_properties (bool): Whether to keep the properties used to cross-reference in the original Neo4J database.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        This function modifies the Neo4J Database as desired, but does not produce any particular return.</span>
+
+<span class="sd">    .. NOTE:: This wont work if a &quot;Component&quot; (Metabolite) node is not already present; when building the database,</span>
+<span class="sd">        either full or by parts, you should import the respective Components first</span>
+<span class="sd">    .. WARNING:: Due to the script&#39;s design, only nodes which have a connection to nodes previously present</span>
+<span class="sd">        on the database will be imported. This is on purpose: unconnected nodes don&#39;t mean much in a Graph DataBase</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Set the databasepath to be an absolute path</span>
+    <span class="n">databasepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">databasepath</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">keep_counts_and_displayeds</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="n">remove_counts_and_displayeds</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">databasepath</span><span class="si">}</span><span class="s2">/measurements.csv&quot;</span><span class="p">,</span>
+                                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/measurements.csv&quot;</span><span class="p">)</span>
+        <span class="n">remove_counts_and_displayeds</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">databasepath</span><span class="si">}</span><span class="s2">/samples.csv&quot;</span><span class="p">,</span>
+                                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/samples.csv&quot;</span><span class="p">)</span>
+        <span class="n">remove_counts_and_displayeds</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">databasepath</span><span class="si">}</span><span class="s2">/experimental_methods.csv&quot;</span><span class="p">,</span>
+                                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/experimental_methods.csv&quot;</span><span class="p">)</span>
+        <span class="n">remove_counts_and_displayeds</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">databasepath</span><span class="si">}</span><span class="s2">/units.csv&quot;</span><span class="p">,</span>
+                                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/units.csv&quot;</span><span class="p">)</span>
+        <span class="n">remove_counts_and_displayeds</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">databasepath</span><span class="si">}</span><span class="s2">/reproducibilities.csv&quot;</span><span class="p">,</span>
+                                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/reproducibilities.csv&quot;</span><span class="p">)</span>
+        <span class="n">remove_counts_and_displayeds</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">databasepath</span><span class="si">}</span><span class="s2">/subjects.csv&quot;</span><span class="p">,</span>
+                                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/subjects.csv&quot;</span><span class="p">)</span>
+        <span class="n">remove_counts_and_displayeds</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">databasepath</span><span class="si">}</span><span class="s2">/microbial_metabolite_identifications.csv&quot;</span><span class="p">,</span>
+                                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/microbial_metabolites.csv&quot;</span><span class="p">)</span>
+        <span class="n">remove_counts_and_displayeds</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">databasepath</span><span class="si">}</span><span class="s2">/cancer_associations.csv&quot;</span><span class="p">,</span>
+                                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/cancer_associations.csv&quot;</span><span class="p">)</span>
+        <span class="n">remove_counts_and_displayeds</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">databasepath</span><span class="si">}</span><span class="s2">/metabolomic_associations.csv&quot;</span><span class="p">,</span>
+                                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/metabolomic_associations.csv&quot;</span><span class="p">)</span>
+        <span class="n">remove_counts_and_displayeds</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">databasepath</span><span class="si">}</span><span class="s2">/correlations.csv&quot;</span><span class="p">,</span>
+                                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/correlations.csv&quot;</span><span class="p">)</span>
+        <span class="n">remove_counts_and_displayeds</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">databasepath</span><span class="si">}</span><span class="s2">/cancers.csv&quot;</span><span class="p">,</span>
+                                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/cancers.csv&quot;</span><span class="p">)</span>
+        <span class="n">remove_counts_and_displayeds</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">databasepath</span><span class="si">}</span><span class="s2">/cohorts.csv&quot;</span><span class="p">,</span>
+                                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/cohorts.csv&quot;</span><span class="p">)</span>
+        <span class="n">remove_counts_and_displayeds</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">databasepath</span><span class="si">}</span><span class="s2">/publications.csv&quot;</span><span class="p">,</span>
+                                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/publications.csv&quot;</span><span class="p">)</span>
+        <span class="n">remove_counts_and_displayeds</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">databasepath</span><span class="si">}</span><span class="s2">/specimens.csv&quot;</span><span class="p">,</span>
+                                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/specimens.csv&quot;</span><span class="p">)</span>
+        <span class="n">remove_counts_and_displayeds</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">databasepath</span><span class="si">}</span><span class="s2">/subjects.csv&quot;</span><span class="p">,</span>
+                                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/subjects.csv&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">databasepath</span><span class="si">}</span><span class="s2">/measurements.csv&quot;</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/measurements.csv&quot;</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">databasepath</span><span class="si">}</span><span class="s2">/samples.csv&quot;</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/samples.csv&quot;</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">databasepath</span><span class="si">}</span><span class="s2">/experimental_methods.csv&quot;</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/experimental_methods.csv&quot;</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">databasepath</span><span class="si">}</span><span class="s2">/units.csv&quot;</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/units.csv&quot;</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">databasepath</span><span class="si">}</span><span class="s2">/reproducibilities.csv&quot;</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/reproducibilities.csv&quot;</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">databasepath</span><span class="si">}</span><span class="s2">/subjects.csv&quot;</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/subjects.csv&quot;</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">databasepath</span><span class="si">}</span><span class="s2">/microbial_metabolite_identifications.csv&quot;</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/microbial_metabolites.csv&quot;</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">databasepath</span><span class="si">}</span><span class="s2">/cancer_associations.csv&quot;</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/cancer_associations.csv&quot;</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">databasepath</span><span class="si">}</span><span class="s2">/metabolomic_associations.csv&quot;</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/metabolomic_associations.csv&quot;</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">databasepath</span><span class="si">}</span><span class="s2">/correlations.csv&quot;</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/correlations.csv&quot;</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">databasepath</span><span class="si">}</span><span class="s2">/cancers.csv&quot;</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/cancers.csv&quot;</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">databasepath</span><span class="si">}</span><span class="s2">/cohorts.csv&quot;</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/cohorts.csv&quot;</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">databasepath</span><span class="si">}</span><span class="s2">/publications.csv&quot;</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/publications.csv&quot;</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">databasepath</span><span class="si">}</span><span class="s2">/specimens.csv&quot;</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/specimens.csv&quot;</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">databasepath</span><span class="si">}</span><span class="s2">/subjects.csv&quot;</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/subjects.csv&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Fist, we build the &quot;scaffolding&quot; - the nodes we will annotate later on</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">add_measurements_stuff</span><span class="p">(</span><span class="s2">&quot;measurements.csv&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">do_all</span><span class="p">:</span> <span class="n">bar</span><span class="p">()</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">add_reproducibilities</span><span class="p">(</span><span class="s2">&quot;reproducibilities.csv&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">do_all</span><span class="p">:</span> <span class="n">bar</span><span class="p">()</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">add_samples</span><span class="p">(</span><span class="s2">&quot;samples.csv&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">do_all</span><span class="p">:</span> <span class="n">bar</span><span class="p">()</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">add_subjects</span><span class="p">(</span><span class="s2">&quot;subjects.csv&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">do_all</span><span class="p">:</span> <span class="n">bar</span><span class="p">()</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">add_microbial_metabolite_identifications</span><span class="p">(</span>
+                            <span class="s2">&quot;microbial_metabolites.csv&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">do_all</span><span class="p">:</span> <span class="n">bar</span><span class="p">()</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">add_cancer_associations</span><span class="p">(</span><span class="s2">&quot;cancer_associations.csv&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">do_all</span><span class="p">:</span> <span class="n">bar</span><span class="p">()</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">add_metabolomic_associations</span><span class="p">(</span>
+                            <span class="s2">&quot;metabolomic_associations.csv&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">do_all</span><span class="p">:</span> <span class="n">bar</span><span class="p">()</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">add_correlations</span><span class="p">(</span><span class="s2">&quot;correlations.csv&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">do_all</span><span class="p">:</span> <span class="n">bar</span><span class="p">()</span>
+
+    <span class="c1"># Now, we annotate those metabolites</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">annotate_measurements</span><span class="p">(</span><span class="s2">&quot;measurements.csv&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">do_all</span><span class="p">:</span> <span class="n">bar</span><span class="p">()</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">annotate_samples</span><span class="p">(</span><span class="s2">&quot;samples.csv&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">do_all</span><span class="p">:</span> <span class="n">bar</span><span class="p">()</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">annotate_experimental_methods</span><span class="p">(</span>
+                            <span class="s2">&quot;experimental_methods.csv&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">do_all</span><span class="p">:</span> <span class="n">bar</span><span class="p">()</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">annotate_units</span><span class="p">(</span><span class="s2">&quot;units.csv&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">do_all</span><span class="p">:</span> <span class="n">bar</span><span class="p">()</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">annotate_auto_units</span><span class="p">(</span><span class="s2">&quot;units.csv&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">do_all</span><span class="p">:</span> <span class="n">bar</span><span class="p">()</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">annotate_cancers</span><span class="p">(</span><span class="s2">&quot;cancers.csv&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">do_all</span><span class="p">:</span> <span class="n">bar</span><span class="p">()</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">annotate_cohorts</span><span class="p">(</span><span class="s2">&quot;cohorts.csv&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">do_all</span><span class="p">:</span> <span class="n">bar</span><span class="p">()</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">annotate_microbial_metabolite_info</span><span class="p">(</span>
+                            <span class="s2">&quot;microbial_metabolites.csv&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">do_all</span><span class="p">:</span> <span class="n">bar</span><span class="p">()</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">annotate_publications</span><span class="p">(</span><span class="s2">&quot;publications.csv&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">do_all</span><span class="p">:</span> <span class="n">bar</span><span class="p">()</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">annotate_reproducibilities</span><span class="p">(</span><span class="s2">&quot;reproducibilities.csv&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">do_all</span><span class="p">:</span> <span class="n">bar</span><span class="p">()</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">annotate_specimens</span><span class="p">(</span><span class="s2">&quot;specimens.csv&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">do_all</span><span class="p">:</span> <span class="n">bar</span><span class="p">()</span>
+    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">annotate_subjects</span><span class="p">(</span><span class="s2">&quot;subjects.csv&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">do_all</span><span class="p">:</span> <span class="n">bar</span><span class="p">()</span>
+
+    <span class="c1"># Finally, we remove the cross-properties that are of no use anymore (this is optional, of course)</span>
+    <span class="k">if</span> <span class="n">keep_cross_properties</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">remove_cross_properties</span><span class="p">(),</span> <span class="n">driver</span><span class="p">)</span>
+
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/measurements.csv&quot;</span><span class="p">);</span>               <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/samples.csv&quot;</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/experimental_methods.csv&quot;</span><span class="p">);</span>       <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/units.csv&quot;</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/reproducibilities.csv&quot;</span><span class="p">);</span>          <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/subjects.csv&quot;</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/microbial_metabolites.csv&quot;</span><span class="p">);</span>      <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/cancer_associations.csv&quot;</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/metabolomic_associations.csv&quot;</span><span class="p">);</span>   <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/correlations.csv&quot;</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/cancers.csv&quot;</span><span class="p">);</span>                    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/cohorts.csv&quot;</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/publications.csv&quot;</span><span class="p">);</span>               <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/specimens.csv&quot;</span><span class="p">)</span></div>
+</pre></div>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Pablo Marcos<br/>
+  
+      &copy; Copyright 2022, Pablo Marcos &lt;software@loreak.org&gt;.<br/>
+    Last updated on Dec 17, 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

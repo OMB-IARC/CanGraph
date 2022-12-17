@@ -1,0 +1,1158 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CanGraph.main &#8212; CanGraph 1.0 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <link rel="shortcut icon" href="../../_static/cangraph-mini.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/cangraph-logo.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../index.html">
+                    Main Page
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../Downloads.html">
+   Downloads
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../Tutorials.html">
+   Tutorials
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../Other%20Reading%20Material.html">
+     Other Reading Material
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../Installing%20CanGraph.html">
+     Installing CanGraph
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../Running%20the%20Software.html">
+     Running the Software
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../Understanding%20its%20Outputs.html">
+     Understanding its Outputs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://www.pablomarcos.me/es/posts/master-en-biolog%c3%ada-computacional/tfm/">
+   Presentations
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../CanGraph.html">
+   CanGraph package
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../CanGraph.ExposomeExplorer.html">
+     CanGraph.ExposomeExplorer package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../CanGraph.GraphifyDrugBank.html">
+     CanGraph.GraphifyDrugBank package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../CanGraph.GraphifyHMDB.html">
+     CanGraph.GraphifyHMDB package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../CanGraph.GraphifySMPDB.html">
+     CanGraph.GraphifySMPDB package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../CanGraph.MeSHandMetaNetX.html">
+     CanGraph.MeSHandMetaNetX package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../CanGraph.QueryWikidata.html">
+     CanGraph.QueryWikidata package
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../Install%20Apptainer.html">
+     Install Apptainer
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../ToDoList.html">
+   To-Do List
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Logo by <a href="https://www.instagram.com/danonino.caducado/"> Daniel Marcos </a> </br>
+                     Website by <a href="https://www.pablomarcos.me/"> Pablo Marcos </a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/OMB-IARC/CanGraph/"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/OMB-IARC/CanGraph//issues/new?title=Issue%20on%20page%20%2F_modules/CanGraph/main.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <h1>Source code for CanGraph.main</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="c1"># SPDX-FileCopyrightText: 2022 Pablo Marcos &lt;software@loreak.org&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: MIT</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A python module that leverages the functions present in the :obj:`~CanGraph.miscelaneous`</span>
+<span class="sd">module and all other subpackages to annotate metabolites using a graph format and Neo4J,</span>
+<span class="sd">and then provides an GraphML export file.</span>
+
+<span class="sd">CanGraph.main Usage</span>
+<span class="sd">---------------------</span>
+
+<span class="sd">To use this module:</span>
+
+<span class="sd">.. argparse::</span>
+<span class="sd">   :module: CanGraph.main</span>
+<span class="sd">   :func: args_parser</span>
+<span class="sd">   :prog: python3 main.py</span>
+<span class="sd">   :nodefault:</span>
+
+<span class="sd">You may find more info in the package&#39;s README.</span>
+
+<span class="sd">.. NOTE:: For this program to work, the Git environment **has to be set up first**.</span>
+<span class="sd">    You can ensure this by using: :obj:`CanGraph.setup.setup_git`</span>
+
+<span class="sd">CanGraph.main Functions</span>
+<span class="sd">-------------------------</span>
+
+<span class="sd">This module is comprised of:</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># Import external modules necessary for the script</span>
+<span class="kn">from</span> <span class="nn">alive_progress</span> <span class="kn">import</span> <span class="n">alive_bar</span> <span class="c1"># A cute progress bar that shows the script is still running</span>
+<span class="kn">import</span> <span class="nn">rdkit</span>                         <span class="c1"># Cheminformatics and ML package</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>                  <span class="c1"># Analysis of tabular data</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">shutil</span>               <span class="c1"># Vital modules to interact with the filesystem</span>
+<span class="kn">import</span> <span class="nn">rdkit</span>                         <span class="c1"># Cheminformatics and ML package</span>
+<span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="kn">import</span> <span class="n">MACCSkeys</span>     <span class="c1"># MACCS fingerprint calculation</span>
+<span class="kn">from</span> <span class="nn">Bio</span> <span class="kn">import</span> <span class="n">SeqIO</span>                <span class="c1"># Bioinformatics package</span>
+<span class="kn">import</span> <span class="nn">re</span>                            <span class="c1"># Regular expression search</span>
+<span class="kn">import</span> <span class="nn">argparse</span>                      <span class="c1"># Arguments pàrser for Python</span>
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">redirect_stdout</span> <span class="c1"># Redirect stdout, to not show things on the stdout</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>            <span class="c1"># Do deep copies of python objects</span>
+<span class="kn">import</span> <span class="nn">bioservices</span>                   <span class="c1"># Query web bio-databases from python</span>
+<span class="kn">import</span> <span class="nn">ijson</span>                         <span class="c1"># Read JSON files from Python in an iterative way</span>
+<span class="kn">import</span> <span class="nn">logging</span>                       <span class="c1"># Make ``verbose`` messages easier to show</span>
+
+<span class="c1"># Import internal modules for the program</span>
+<span class="kn">import</span> <span class="nn">miscelaneous</span> <span class="k">as</span> <span class="nn">misc</span>
+<span class="kn">from</span> <span class="nn">GraphifyDrugBank</span> <span class="kn">import</span> <span class="n">build_database</span> <span class="k">as</span> <span class="n">DrugBankDataBase</span>
+<span class="kn">from</span> <span class="nn">GraphifyHMDB</span> <span class="kn">import</span> <span class="n">build_database</span> <span class="k">as</span> <span class="n">HumanMetabolomeDataBase</span>
+<span class="kn">from</span> <span class="nn">GraphifySMPDB</span> <span class="kn">import</span> <span class="n">build_database</span> <span class="k">as</span> <span class="n">SmallMoleculePathWayDataBase</span>
+<span class="kn">from</span> <span class="nn">ExposomeExplorer</span> <span class="kn">import</span> <span class="n">build_database</span> <span class="k">as</span> <span class="n">ExposomeExplorerDataBase</span>
+<span class="kn">from</span> <span class="nn">QueryWikidata</span> <span class="kn">import</span> <span class="n">build_database</span> <span class="k">as</span> <span class="n">WikiDataBase</span>
+<span class="kn">from</span> <span class="nn">MeSHandMetaNetX</span> <span class="kn">import</span> <span class="n">build_database</span> <span class="k">as</span> <span class="n">MeSHandMetaNetXDataBases</span>
+
+<div class="viewcode-block" id="args_parser"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.main.args_parser">[docs]</a><span class="k">def</span> <span class="nf">args_parser</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parses the command line arguments into a more usable form, providing help and more</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        argparse.ArgumentParser:</span>
+<span class="sd">            A dictionary of the different possible options for the program as keys, specifying their set value.</span>
+<span class="sd">            If no command-line arguments are provided, the help message is shown and the program exits.</span>
+
+<span class="sd">    .. NOTE:: Note that, in Google Docstrings, if you want a multi-line ``Returns`` comment,</span>
+<span class="sd">        you have to start it in a different line :(</span>
+<span class="sd">    .. NOTE:: The return **must** be of type :obj:`argparse.ArgumentParser` for the ``argparse``</span>
+<span class="sd">        directive to work and auto-gen docs</span>
+<span class="sd">    .. NOTE:: By using :obj:`argparse.const` instead of :obj:`argparse.default`, the check_file function will check &quot;&quot;</span>
+<span class="sd">        (the current dir, always exists) if the arg is not provided, not breaking the function; if it is, it checks it.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;A python utility to study and analyse cancer-associated metabolites &quot;</span>
+                      <span class="s2">&quot;using knowledge graphs &quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-c&quot;</span><span class="p">,</span> <span class="s2">&quot;--check_args&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Checks if the rest of the arguments are OK, then exits&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-n&quot;</span><span class="p">,</span> <span class="s2">&quot;--noindex&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Runs the program checking each file one-by-one, instead of using a JSON index&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-s&quot;</span><span class="p">,</span> <span class="s2">&quot;--similarity&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Deactivates the import of information based on Structural Similarity.&quot;</span>
+                             <span class="s2">&quot;This might dramatically increase processing time; default is True.&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-w&quot;</span><span class="p">,</span> <span class="s2">&quot;--webdbs&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Activates import of information based on web databases.&quot;</span>
+                             <span class="s2">&quot;This might dramatically increase processing time; default is True.&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-i&quot;</span><span class="p">,</span> <span class="s2">&quot;--interactive&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">help</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;tells the script if it wants interaction from the user &quot;</span>
+                            <span class="s2">&quot;and more information shown to them; similar to --verbose&quot;</span><span class="p">))</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--query&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">misc</span><span class="o">.</span><span class="n">check_file</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The location of the CSV file in which the program will search for metabolites&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--dbfolder&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">misc</span><span class="o">.</span><span class="n">check_file</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;DataBases&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The folder indicated to ```setup.py``` as the one where your databases will be stored; &quot;</span>
+                             <span class="s2">&quot;default is ``./DataBases``&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--results&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;Results&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The folder where the resulting GraphML exports will be stored; &quot;</span>
+                             <span class="s2">&quot;default is ``./Results``&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--adress&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;the URL of the database, in neo4j:// or bolt:// format&quot;</span><span class="p">,</span>
+                        <span class="nb">type</span><span class="o">=</span><span class="n">misc</span><span class="o">.</span><span class="n">check_neo4j_protocol</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;bolt://localhost:7687&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--username&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;the username of the neo4j database in use&quot;</span><span class="p">,</span>
+                        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;neo4j&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--password&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;the password for the neo4j database in use. NOTE: &quot;</span>
+                                         <span class="s2">&quot;Since passed through bash, you may need to escape some chars&quot;</span><span class="p">,</span>
+                        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;neo4j&quot;</span><span class="p">)</span>
+
+    <span class="c1"># If no args are provided, show the help message</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">print_help</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="s2">&quot;--check_args&quot;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">:</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">parser</span></div>
+
+<div class="viewcode-block" id="improve_search_terms_with_metanetx"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.main.improve_search_terms_with_metanetx">[docs]</a><span class="k">def</span> <span class="nf">improve_search_terms_with_metanetx</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">query_type</span><span class="p">,</span>
+                                       <span class="n">driver</span><span class="p">,</span> <span class="n">chebi_ids</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">hmdb_ids</span><span class="p">,</span> <span class="n">inchis</span><span class="p">,</span> <span class="n">mesh_ids</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Improves the search terms already provided to the CanGraph programme</span>
+<span class="sd">    by using the MetaNetX web service to find synonyms in IDs</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        query (str): The term we are currently querying for</span>
+<span class="sd">        query_type (str): The kind of query to search; one of [&quot;ChEBI_ID&quot;, &quot;HMDB_ID&quot;, &quot;Name&quot;, &quot;InChI&quot;, &quot;MeSH_ID&quot;]</span>
+<span class="sd">        driver (neo4j.Driver): Neo4J&#39;s Bolt Driver currently in use</span>
+<span class="sd">        chebi_ids (str): A string of &quot;;&quot; separated values of all the ChEBI_ID representing the current metabolite</span>
+<span class="sd">        names (list): A string of &quot;;&quot; separated values of all the Name representing the current metabolite</span>
+<span class="sd">        hmdb_ids (list): A string of &quot;;&quot; separated values of all the HMDB_ID representing the current metabolite</span>
+<span class="sd">        inchis (list): A string of &quot;;&quot; separated values of all the InChI representing the current metabolite</span>
+<span class="sd">        mesh_ids (list): A string of &quot;;&quot; separated values of all the MeSH_ID representing the current metabolite</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: A list containing [ chebi_ids, names, hmdb_ids, inchis, mesh_ids ], with all their synonyms</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># First in MetaNetX</span>
+    <span class="k">with</span> <span class="n">driver</span><span class="o">.</span><span class="n">session</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+        <span class="c1"># For MeSH, we cannot search for synonyms in MetaNetX (it doesn&#39;t index them), so we instead</span>
+        <span class="c1"># look for related metabolites in MeSH itself, so that the import makes more sense</span>
+        <span class="k">if</span> <span class="n">query_type</span> <span class="o">==</span> <span class="s2">&quot;MeSH_ID&quot;</span><span class="p">:</span>
+            <span class="n">graph_response</span> <span class="o">=</span> <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span>
+                <span class="n">MeSHandMetaNetXDataBases</span><span class="o">.</span><span class="n">find_metabolites_related_to_mesh</span><span class="p">(</span><span class="n">query</span><span class="p">),</span> <span class="n">driver</span> <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">graph_response</span> <span class="o">=</span> <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span>
+                <span class="n">MeSHandMetaNetXDataBases</span><span class="o">.</span><span class="n">read_synonyms_in_metanetx</span><span class="p">(</span><span class="n">query_type</span><span class="p">,</span> <span class="n">query</span><span class="p">),</span> <span class="n">driver</span> <span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">graph_response</span><span class="p">:</span>
+        <span class="n">element</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">element</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">element</span> <span class="k">if</span> <span class="n">element</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">!=</span> <span class="kc">None</span> <span class="p">}</span>
+        <span class="c1"># With .get, the lookup does not fail, even if query_type == &quot;MeSH_ID&quot;</span>
+        <span class="k">if</span> <span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;databasename&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;hmdb&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">element</span><span class="p">[</span><span class="s2">&quot;databaseid&quot;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hmdb_ids</span><span class="p">:</span> <span class="n">hmdb_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;databaseid&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;databasename&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;chebi&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">element</span><span class="p">[</span><span class="s2">&quot;databaseid&quot;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">chebi_ids</span><span class="p">:</span> <span class="n">chebi_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;databaseid&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;InChI&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">inchis</span><span class="p">:</span> <span class="n">inchis</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;InChI&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span> <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="p">[</span> <span class="n">chebi_ids</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">hmdb_ids</span><span class="p">,</span> <span class="n">inchis</span><span class="p">,</span> <span class="n">mesh_ids</span> <span class="p">]</span></div>
+
+<div class="viewcode-block" id="improve_search_terms_with_cts"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.main.improve_search_terms_with_cts">[docs]</a><span class="k">def</span> <span class="nf">improve_search_terms_with_cts</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">query_type</span><span class="p">,</span>
+                                  <span class="n">chebi_ids</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">hmdb_ids</span><span class="p">,</span> <span class="n">inchis</span><span class="p">,</span> <span class="n">mesh_ids</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Improves the search terms already provided to the CanGraph programme</span>
+<span class="sd">    by using The Chemical Translation Service to find synonyms in IDs</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        query (str): The term we are currently querying for</span>
+<span class="sd">        query_type (str): The kind of query to search; one of [&quot;ChEBI_ID&quot;, &quot;HMDB_ID&quot;, &quot;Name&quot;, &quot;InChI&quot;, &quot;MeSH_ID&quot;]</span>
+<span class="sd">        driver (neo4j.Driver): Neo4J&#39;s Bolt Driver currently in use</span>
+<span class="sd">        chebi_ids (str): A string of &quot;;&quot; separated values of all the ChEBI_ID representing the current metabolite</span>
+<span class="sd">        names (list): A string of &quot;;&quot; separated values of all the Name representing the current metabolite</span>
+<span class="sd">        hmdb_ids (list): A string of &quot;;&quot; separated values of all the HMDB_ID representing the current metabolite</span>
+<span class="sd">        inchis (list): A string of &quot;;&quot; separated values of all the InChI representing the current metabolite</span>
+<span class="sd">        mesh_ids (list): A string of &quot;;&quot; separated values of all the MeSH_ID representing the current metabolite</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: A list containing [ chebi_ids, names, hmdb_ids, inchis, mesh_ids ], with all their synonyms</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># We get the correct names for the identifiers we want to turn into:</span>
+    <span class="n">query_dict_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ChEBI_ID&quot;</span><span class="p">,</span> <span class="s2">&quot;HMDB_ID&quot;</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="p">,</span> <span class="s2">&quot;InChI&quot;</span><span class="p">,</span> <span class="s2">&quot;MeSH_ID&quot;</span><span class="p">]</span>
+    <span class="n">oldIdentifier</span> <span class="o">=</span> <span class="p">[</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">query_dict_keys</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="n">query_type</span><span class="p">,</span> <span class="s2">&quot;MeSH_ID&quot;</span><span class="p">]</span> <span class="p">]</span>
+
+    <span class="n">replace_keys</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ChEBI_ID&quot;</span><span class="p">:</span><span class="s2">&quot;ChEBI&quot;</span><span class="p">,</span> <span class="s2">&quot;HMDB_ID&quot;</span><span class="p">:</span><span class="s2">&quot;Human Metabolome Database&quot;</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="p">:</span><span class="s2">&quot;Chemical Name&quot;</span><span class="p">,</span> <span class="s2">&quot;InChI&quot;</span><span class="p">:</span><span class="s2">&quot;InChIKey&quot;</span><span class="p">}</span>
+    <span class="n">toIdentifierList</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">replace_keys</span><span class="o">.</span><span class="n">get</span><span class="p">,</span> <span class="n">oldIdentifier</span><span class="p">,</span> <span class="n">oldIdentifier</span><span class="p">))</span>
+    <span class="n">fromIdentifier</span> <span class="o">=</span> <span class="n">replace_keys</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">query_type</span><span class="p">,</span> <span class="n">query_type</span><span class="p">)</span>
+
+    <span class="c1"># Convert the InChI to InChIKeys (required by CTS)</span>
+    <span class="k">if</span> <span class="n">query_type</span> <span class="o">==</span> <span class="s2">&quot;InChI&quot;</span><span class="p">:</span>
+        <span class="n">rdkit_mol</span> <span class="o">=</span> <span class="n">rdkit</span><span class="o">.</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolFromInchi</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+        <span class="n">searchTerm</span> <span class="o">=</span> <span class="n">rdkit</span><span class="o">.</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolToInchiKey</span><span class="p">(</span><span class="n">rdkit_mol</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">searchTerm</span> <span class="o">=</span> <span class="n">query</span>
+
+    <span class="c1"># And run the CTS search:</span>
+    <span class="k">for</span> <span class="n">toIdentifier</span> <span class="ow">in</span> <span class="n">toIdentifierList</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">MeSHandMetaNetXDataBases</span><span class="o">.</span><span class="n">find_synonyms_in_cts</span><span class="p">(</span><span class="n">fromIdentifier</span><span class="p">,</span> <span class="n">toIdentifier</span><span class="p">,</span> <span class="n">searchTerm</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span> <span class="c1"># And append its results to the correct list</span>
+            <span class="k">if</span> <span class="n">toIdentifier</span> <span class="o">==</span> <span class="s2">&quot;Human Metabolome Database&quot;</span> <span class="ow">and</span> <span class="n">element</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hmdb_ids</span><span class="p">:</span>
+                <span class="n">hmdb_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">toIdentifier</span> <span class="o">==</span> <span class="s2">&quot;ChEBI&quot;</span> <span class="ow">and</span> <span class="n">element</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;CHEBI:&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">chebi_ids</span><span class="p">:</span>
+                <span class="n">chebi_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;CHEBI:&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">toIdentifier</span> <span class="o">==</span> <span class="s2">&quot;Chemical Name&quot;</span> <span class="ow">and</span> <span class="n">element</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+                <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">toIdentifier</span> <span class="o">==</span> <span class="s2">&quot;InChIKey&quot;</span><span class="p">:</span> <span class="c1"># Convert key to InChI</span>
+                <span class="n">unichem</span> <span class="o">=</span> <span class="n">bioservices</span><span class="o">.</span><span class="n">UniChem</span><span class="p">()</span>
+                <span class="n">inchis_from_unichem</span> <span class="o">=</span> <span class="n">unichem</span><span class="o">.</span><span class="n">get_inchi_from_inchikey</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+                <span class="n">inchis</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inchis_from_unichem</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;standardinchi&quot;</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="p">[</span> <span class="n">chebi_ids</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">hmdb_ids</span><span class="p">,</span> <span class="n">inchis</span><span class="p">,</span> <span class="n">mesh_ids</span> <span class="p">]</span></div>
+
+<div class="viewcode-block" id="improve_search_terms"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.main.improve_search_terms">[docs]</a><span class="k">def</span> <span class="nf">improve_search_terms</span><span class="p">(</span><span class="n">driver</span><span class="p">,</span> <span class="n">chebi_ids</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">hmdb_ids</span><span class="p">,</span> <span class="n">inchis</span><span class="p">,</span> <span class="n">mesh_ids</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Improves the search terms already provided to the CanGraph programme by processing the</span>
+<span class="sd">    text stings and finding synonyms in various platforms</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        driver (neo4j.Driver): Neo4J&#39;s Bolt Driver currently in use</span>
+<span class="sd">        chebi_ids (str): A string of &quot;;&quot; separated values of all the ChEBI_ID representing the current metabolite</span>
+<span class="sd">        names (list): A string of &quot;;&quot; separated values of all the Name representing the current metabolite</span>
+<span class="sd">        hmdb_ids (list): A string of &quot;;&quot; separated values of all the HMDB_ID representing the current metabolite</span>
+<span class="sd">        inchis (list): A string of &quot;;&quot; separated values of all the InChI representing the current metabolite</span>
+<span class="sd">        mesh_ids (list): A string of &quot;;&quot; separated values of all the MeSH_ID representing the current metabolite</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: A list containing [ chebi_ids, names, hmdb_ids, inchis, mesh_ids ], with all their synonyms</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># First, we convert the strings we have received from the function call into lists, by splitting for &quot;;&quot;:</span>
+    <span class="n">replace_chebis</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="s1">&#39;ChEBI:&#39;</span><span class="p">),</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">);</span>
+    <span class="n">replace_meshes</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="s1">&#39;MeSH:&#39;</span><span class="p">),</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+
+    <span class="n">chebi_ids</span> <span class="o">=</span> <span class="n">replace_chebis</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">chebi_ids</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
+    <span class="n">mesh_ids</span> <span class="o">=</span> <span class="n">replace_meshes</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">mesh_ids</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
+    <span class="n">names</span> <span class="o">=</span> <span class="n">names</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">);</span>    <span class="n">hmdb_ids</span> <span class="o">=</span> <span class="n">hmdb_ids</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">);</span>     <span class="n">inchis</span> <span class="o">=</span> <span class="n">inchis</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Then, we may search for synonyms for each field using MetaNetX</span>
+    <span class="c1"># To do this, we organize a dict so that we can iterate more easily</span>
+    <span class="n">query_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ChEBI_ID&quot;</span><span class="p">:</span> <span class="n">chebi_ids</span><span class="p">,</span> <span class="s2">&quot;HMDB_ID&quot;</span><span class="p">:</span> <span class="n">hmdb_ids</span><span class="p">,</span> <span class="s2">&quot;InChI&quot;</span><span class="p">:</span> <span class="n">inchis</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="p">:</span> <span class="n">names</span><span class="p">,</span> <span class="s2">&quot;MeSH_ID&quot;</span><span class="p">:</span> <span class="n">mesh_ids</span><span class="p">}</span>
+    <span class="n">query_dict</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">query_dict</span><span class="p">)</span> <span class="c1"># Make a deepcopy of the dict so that it doesn&#39;t update while on the loop</span>
+
+    <span class="c1"># And then, proceed to search for synonyms and append the appropriate results if they are not already there</span>
+    <span class="k">with</span> <span class="n">alive_bar</span><span class="p">(</span> <span class="nb">sum</span><span class="p">(</span> <span class="p">[</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">query_dict</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="p">]</span> <span class="p">)</span> <span class="o">+</span> <span class="mi">4</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Finding Synonyms...&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">bar</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">query_type</span><span class="p">,</span> <span class="n">query_list</span> <span class="ow">in</span> <span class="n">query_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">query_list</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">query</span><span class="o">.</span><span class="n">isspace</span><span class="p">()</span> <span class="ow">and</span> <span class="n">query</span><span class="p">:</span>
+                    <span class="n">chebi_ids</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">hmdb_ids</span><span class="p">,</span> <span class="n">inchis</span><span class="p">,</span> <span class="n">mesh_ids</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">improve_search_terms_with_metanetx</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">query_type</span><span class="p">,</span> <span class="n">driver</span><span class="p">,</span>
+                                                    <span class="n">chebi_ids</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">hmdb_ids</span><span class="p">,</span> <span class="n">inchis</span><span class="p">,</span> <span class="n">mesh_ids</span><span class="p">))</span>
+
+                <span class="n">bar</span><span class="p">()</span>
+
+        <span class="c1"># Once we have all the synonyms that we could find on MeSHandMetaNetX, we remove all duplicates</span>
+        <span class="n">chebi_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="nb">set</span><span class="p">(</span><span class="n">chebi_ids</span><span class="p">)));</span>   <span class="n">names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="nb">set</span><span class="p">(</span><span class="n">names</span><span class="p">)));</span>
+        <span class="n">inchis</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="nb">set</span><span class="p">(</span><span class="n">inchis</span><span class="p">)));</span>         <span class="n">mesh_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="nb">set</span><span class="p">(</span><span class="n">mesh_ids</span><span class="p">)))</span>
+        <span class="n">hmdb_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="nb">set</span><span class="p">(</span><span class="n">hmdb_ids</span><span class="p">)))</span>
+
+        <span class="c1"># And re-generate the query_dict</span>
+        <span class="n">query_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ChEBI_ID&quot;</span><span class="p">:</span> <span class="n">chebi_ids</span><span class="p">,</span> <span class="s2">&quot;HMDB_ID&quot;</span><span class="p">:</span> <span class="n">hmdb_ids</span><span class="p">,</span> <span class="s2">&quot;InChI&quot;</span><span class="p">:</span> <span class="n">inchis</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="p">:</span> <span class="n">names</span><span class="p">,</span> <span class="s2">&quot;MeSH_ID&quot;</span><span class="p">:</span> <span class="n">mesh_ids</span><span class="p">}</span>
+        <span class="n">query_dict</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">query_dict</span><span class="p">)</span> <span class="c1"># Make a deepcopy of the dict so that it doesn&#39;t update while on the loop</span>
+
+        <span class="c1"># And search for even more synonyms on CTS, the Chemical Translation Service!</span>
+        <span class="c1"># This is done separately because, while MeSHandMetaNetX do not overlap, they do overlap with CTS</span>
+        <span class="k">for</span> <span class="n">query_type</span><span class="p">,</span> <span class="n">query_list</span> <span class="ow">in</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">query_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+                                    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">query_dict</span> <span class="k">if</span> <span class="n">key</span> <span class="o">!=</span> <span class="s1">&#39;MeSH_ID&#39;</span>
+                                                            <span class="ow">and</span> <span class="nb">any</span><span class="p">(</span><span class="n">query_dict</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>  <span class="p">}</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">query_list</span><span class="p">:</span>
+                <span class="n">chebi_ids</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">hmdb_ids</span><span class="p">,</span> <span class="n">inchis</span><span class="p">,</span> <span class="n">mesh_ids</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">improve_search_terms_with_cts</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">query_type</span><span class="p">,</span>
+                                            <span class="n">chebi_ids</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">hmdb_ids</span><span class="p">,</span> <span class="n">inchis</span><span class="p">,</span> <span class="n">mesh_ids</span><span class="p">))</span>
+
+            <span class="n">bar</span><span class="p">()</span>
+
+        <span class="c1"># Finally, we remove outdated HMDB IDs</span>
+        <span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^HMDB\d\d\d\d\d$&#39;</span><span class="p">)</span>
+        <span class="n">hmdb_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">hmdb_ids</span> <span class="k">if</span> <span class="n">regex</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))]</span>
+
+    <span class="c1"># And return the simplified versions of the lists</span>
+    <span class="k">return</span> <span class="p">[</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="nb">set</span><span class="p">(</span><span class="n">chebi_ids</span><span class="p">))),</span>    <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="nb">set</span><span class="p">(</span><span class="n">names</span><span class="p">))),</span>
+             <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="nb">set</span><span class="p">(</span><span class="n">hmdb_ids</span><span class="p">))),</span>     <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="nb">set</span><span class="p">(</span><span class="n">inchis</span><span class="p">))),</span>
+             <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="nb">set</span><span class="p">(</span><span class="n">mesh_ids</span><span class="p">)))</span> <span class="p">]</span></div>
+
+<div class="viewcode-block" id="find_reasons_to_import_inchi"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.main.find_reasons_to_import_inchi">[docs]</a><span class="k">def</span> <span class="nf">find_reasons_to_import_inchi</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">subject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Takes two chains of text and finds if the ``query`` is present in the ``subject``,</span>
+<span class="sd">    or if there are molecules common between them with at least 95% similarity</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        query (str or list): A string or list of strings describing valid InChI(s)</span>
+<span class="sd">        subject (str): A valid InChI</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: A dict with each query as a key and the reason to import it as value, if there is one.</span>
+
+<span class="sd">    .. seealso:: This approach was taken from `Chemistry StackExchange #82144</span>
+<span class="sd">        &lt;https://chemistry.stackexchange.com/questions/82144/what-is-the-correct-regular-expression-for-inchi&gt;`_</span>
+
+<span class="sd">    .. NOTE:: Since this is a one-to-one comparison, subject and query can be used interchangeably; however,</span>
+<span class="sd">        bear in mind that only the query can be provided as a list</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">reasons_to_import_inchi</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">queries</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">MolSubject</span> <span class="o">=</span> <span class="n">rdkit</span><span class="o">.</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolFromInchi</span><span class="p">(</span><span class="n">subject</span><span class="p">)</span>
+        <span class="n">MACCSSubject</span> <span class="o">=</span> <span class="n">MACCSkeys</span><span class="o">.</span><span class="n">GenMACCSKeys</span><span class="p">(</span><span class="n">MolSubject</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="k">for</span> <span class="n">each_query</span> <span class="ow">in</span> <span class="n">queries</span><span class="p">:</span>
+        <span class="n">found_error</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">Query</span> <span class="o">=</span> <span class="n">rdkit</span><span class="o">.</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolFromInchi</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">each_query</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">MACCSQuery</span> <span class="o">=</span> <span class="n">MACCSkeys</span><span class="o">.</span><span class="n">GenMACCSKeys</span><span class="p">(</span><span class="n">Query</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="n">found_error</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">pass</span>
+
+        <span class="k">if</span> <span class="n">found_error</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">DICE_MACCS</span> <span class="o">=</span> <span class="n">rdkit</span><span class="o">.</span><span class="n">DataStructs</span><span class="o">.</span><span class="n">DiceSimilarity</span><span class="p">(</span><span class="n">MACCSQuery</span><span class="p">,</span> <span class="n">MACCSSubject</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">DICE_MACCS</span> <span class="o">&gt;</span> <span class="mf">0.95</span><span class="p">:</span>
+                <span class="n">dice_maccs_import</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;DICE-MACCS </span><span class="si">{</span><span class="mi">100</span><span class="o">*</span><span class="nb">round</span><span class="p">(</span><span class="n">DICE_MACCS</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span><span class="si">}</span><span class="s2"> % similarity&quot;</span>
+                <span class="n">reasons_to_import_inchi</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">each_query</span><span class="p">,</span> <span class="n">dice_maccs_import</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">reasons_to_import_inchi</span></div>
+
+<div class="viewcode-block" id="find_reasons_to_import_all_files"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.main.find_reasons_to_import_all_files">[docs]</a><span class="k">def</span> <span class="nf">find_reasons_to_import_all_files</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">similarity</span><span class="p">,</span> <span class="n">chebi_ids</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">hmdb_ids</span><span class="p">,</span> <span class="n">inchis</span><span class="p">,</span> <span class="n">mesh_ids</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Finds reasons to import a metabolite given a candidate filepath **with one metabolite per file**</span>
+<span class="sd">    and a series of lists containing all synonyms of the values considered reasons for import</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filepath (str): The path to the file in which we will search for reasons to import</span>
+<span class="sd">        similarity (bool): Whether to use similarity as a measure to import or not</span>
+<span class="sd">        chebi_ids (list): A list of all the ChEBI_ID which are considered a reason to import</span>
+<span class="sd">        names (list): A list of all the Name which are considered a reason to import</span>
+<span class="sd">        hmdb_ids (list): A list of all the HMDB_ID which are considered a reason to import</span>
+<span class="sd">        inchis (list): A list of all the InChI which are considered a reason to import</span>
+<span class="sd">        mesh_ids (list): A list of all the MeSH_ID which are considered a reason to import</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: A list of the methods that turned out to be valid for import, such as Name, ChEBI_ID...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">import_based_on</span> <span class="o">=</span> <span class="p">[];</span> <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">importing_ids</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+    <span class="c1"># We try to find exact InChI matches:</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">((</span><span class="n">match</span><span class="o">:=</span> <span class="n">inchi</span><span class="p">)</span> <span class="ow">in</span> <span class="n">text</span> <span class="k">for</span> <span class="n">inchi</span> <span class="ow">in</span> <span class="n">inchis</span><span class="p">):</span>
+        <span class="n">import_based_on</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Exact InChI&quot;</span><span class="p">)</span>
+        <span class="n">importing_ids</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;InChI&quot;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">match</span><span class="p">)</span>
+    <span class="c1"># If none if found, we use the &quot;Similarity Evaluator&quot; metric</span>
+    <span class="k">elif</span> <span class="s2">&quot;InChI=&quot;</span> <span class="ow">in</span> <span class="n">text</span> <span class="ow">and</span> <span class="nb">any</span><span class="p">(</span><span class="n">inchis</span><span class="p">)</span> <span class="ow">and</span> <span class="n">similarity</span><span class="p">:</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;InChI\=1S?\/[A-Za-z0-9\.]+(\+[0-9]+)?(\/[cnpqbtmsih][A-Za-z0-9\-\+\(\)\,\/\?\;\.]+)*(</span><span class="se">\&quot;</span><span class="s2">|\&lt;)&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">results</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&lt;&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">reason_to_import</span> <span class="o">=</span> <span class="n">find_reasons_to_import_inchi</span><span class="p">(</span><span class="n">inchis</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">reason_to_import</span><span class="p">:</span>
+                <span class="n">import_based_on</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">reason_to_import</span><span class="o">.</span><span class="n">values</span><span class="p">())))</span>
+                <span class="n">importing_ids</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;InChI&quot;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">match</span><span class="p">)</span>
+
+    <span class="c1"># For CHEBI, if we are using E-E or SMPDB, and since they dont have a prefix</span>
+    <span class="c1"># (i.e. they are only a number) we have to process the files.</span>
+    <span class="k">if</span> <span class="s2">&quot;ExposomeExplorer/components&quot;</span> <span class="ow">in</span> <span class="n">filepath</span> <span class="ow">or</span> <span class="s2">&quot;SMPDB/smpdb_metabolites&quot;</span> <span class="ow">in</span> <span class="n">filepath</span><span class="p">:</span>
+        <span class="n">component</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">filepath</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="nb">str</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;ExposomeExplorer/components&quot;</span> <span class="ow">in</span> <span class="n">filepath</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">component</span><span class="p">[</span><span class="s2">&quot;chebi_id&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">!=</span> <span class="s2">&quot;nan&quot;</span><span class="p">:</span> <span class="n">chebi_query</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">component</span><span class="p">[</span><span class="s2">&quot;chebi_id&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span> <span class="n">chebi_query</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">elif</span> <span class="s2">&quot;SMPDB/smpdb_metabolites&quot;</span> <span class="ow">in</span> <span class="n">filepath</span><span class="p">:</span> <span class="n">chebi_query</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">component</span><span class="p">[</span><span class="s2">&quot;ChEBI ID&quot;</span><span class="p">])</span>
+
+        <span class="c1"># NOTE: Here, we remove the optional CHEBI: prefix</span>
+        <span class="n">chebi_subject</span> <span class="o">=</span> <span class="p">[</span><span class="n">chebi_id</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;CHEBI:&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;chebi:&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">chebi_id</span> <span class="ow">in</span> <span class="n">chebi_ids</span><span class="p">]</span>
+
+        <span class="c1"># And we check the two lists against each other</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">((</span><span class="n">match</span><span class="o">:=</span> <span class="n">item</span><span class="p">)</span> <span class="ow">in</span> <span class="n">chebi_query</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">chebi_subject</span><span class="p">)</span> <span class="ow">and</span> <span class="n">chebi_query</span><span class="p">:</span>
+            <span class="n">import_based_on</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;ChEBI_ID&quot;</span><span class="p">)</span>
+            <span class="n">importing_ids</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;ChEBI_ID&quot;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">match</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># And, even if its not E-E, we still need to add the tag before for things to match</span>
+        <span class="k">for</span> <span class="n">chebi_query</span> <span class="ow">in</span> <span class="n">chebi_ids</span><span class="p">:</span>
+            <span class="n">replace_tag_exp</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="s1">&#39;ChEBI:&#39;</span><span class="p">),</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+            <span class="k">if</span> <span class="sa">f</span><span class="s2">&quot;&lt;chebi_id&gt;</span><span class="si">{</span><span class="n">replace_tag_exp</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">chebi_query</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+                <span class="n">import_based_on</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;ChEBI_ID&quot;</span><span class="p">)</span>
+                <span class="n">importing_ids</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;ChEBI_ID&quot;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">match</span><span class="p">)</span>
+
+    <span class="c1"># For MeSH, we just check for the tags</span>
+    <span class="k">for</span> <span class="n">mesh_id</span> <span class="ow">in</span> <span class="n">mesh_ids</span><span class="p">:</span>
+        <span class="n">replace_tag_exp</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="s1">&#39;MeSH:&#39;</span><span class="p">),</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+        <span class="k">if</span> <span class="sa">f</span><span class="s2">&quot;&lt;mesh-id&gt;</span><span class="si">{</span><span class="n">replace_tag_exp</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">mesh_id</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+            <span class="n">import_based_on</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;MeSH_ID&quot;</span><span class="p">)</span>
+            <span class="n">importing_ids</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;MeSH_ID&quot;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">match</span><span class="p">)</span>
+
+    <span class="c1"># For the rest of the databases, we simply search for exact matches in our list and the texts:</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">((</span><span class="n">match</span><span class="o">:=</span> <span class="n">hmdb</span><span class="p">)</span> <span class="ow">in</span> <span class="n">text</span> <span class="k">for</span> <span class="n">hmdb</span> <span class="ow">in</span> <span class="n">hmdb_ids</span><span class="p">):</span>
+        <span class="n">import_based_on</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;HMDB_ID&quot;</span><span class="p">)</span>
+        <span class="n">importing_ids</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;HMDB_ID&quot;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">match</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">((</span><span class="n">match</span><span class="o">:=</span> <span class="n">name</span><span class="p">)</span> <span class="ow">in</span> <span class="n">text</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
+        <span class="n">import_based_on</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Name&quot;</span><span class="p">)</span>
+        <span class="n">importing_ids</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;Name&quot;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">match</span><span class="p">)</span>
+
+    <span class="c1"># We return a list of a dict from keys to remove duplicates from the &quot;reasons to import&quot; list</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">import_based_on</span><span class="p">)),</span> <span class="n">importing_ids</span></div>
+
+<div class="viewcode-block" id="build_from_file"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.main.build_from_file">[docs]</a><span class="k">def</span> <span class="nf">build_from_file</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">Neo4JImportPath</span><span class="p">,</span> <span class="n">driver</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Imports a given metabolite from a sigle-metabolite containing file by checking its type</span>
+<span class="sd">    and calling the appropriate import functions.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filepath (str): The path to the file in which will be imported</span>
+<span class="sd">        Neo4JImportPath (str): The path which Neo4J will use to import data</span>
+<span class="sd">        driver (neo4j.Driver): Neo4J&#39;s Bolt Driver currently in use</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        This function does not provide a particular return, but rather imports the requested file</span>
+
+<span class="sd">    .. NOTE:: The ``filepath`` may be absolute or relative, but it is transformed to a relative ``relpath``</span>
+<span class="sd">        in order to remove possible influence of higher-name folders in the import type selection. This is</span>
+<span class="sd">        also why the condition is stated as a big &quot;if/elif/else&quot; instead of a series of &quot;ifs&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">relpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">)</span>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+    <span class="n">fixedpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
+    <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">fixedpath</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="s2">&quot;DrugBank&quot;</span> <span class="ow">in</span> <span class="n">relpath</span><span class="p">:</span>
+        <span class="n">DrugBankDataBase</span><span class="o">.</span><span class="n">build_from_file</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fixedpath</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">driver</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fixedpath</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="s2">&quot;HMDB&quot;</span> <span class="ow">in</span> <span class="n">relpath</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;protein&quot;</span> <span class="ow">in</span> <span class="n">relpath</span><span class="p">:</span>
+            <span class="n">HumanMetabolomeDataBase</span><span class="o">.</span><span class="n">build_from_protein_file</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fixedpath</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">driver</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s2">&quot;metabolite&quot;</span> <span class="ow">in</span> <span class="n">relpath</span><span class="p">:</span>
+            <span class="n">HumanMetabolomeDataBase</span><span class="o">.</span><span class="n">build_from_metabolite_file</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fixedpath</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">driver</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fixedpath</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="s2">&quot;SMPDB&quot;</span> <span class="ow">in</span> <span class="n">relpath</span><span class="p">:</span>
+        <span class="c1"># NOTE: Since this adds a ton of low-resolution nodes, maybe have this db run first?</span>
+        <span class="c1"># We will ignore the smpdb_pathways file because it doesnt have &quot;real&quot; identifiers</span>
+        <span class="k">if</span> <span class="s2">&quot;proteins&quot;</span> <span class="ow">in</span> <span class="n">relpath</span><span class="p">:</span>
+            <span class="n">SmallMoleculePathWayDataBase</span><span class="o">.</span><span class="n">build_from_file</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">Neo4JImportPath</span><span class="p">,</span> <span class="n">driver</span><span class="p">,</span> <span class="s2">&quot;Protein&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;metabolites&quot;</span> <span class="ow">in</span> <span class="n">relpath</span><span class="p">:</span>
+            <span class="n">SmallMoleculePathWayDataBase</span><span class="o">.</span><span class="n">build_from_file</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">Neo4JImportPath</span><span class="p">,</span> <span class="n">driver</span><span class="p">,</span> <span class="s2">&quot;Metabolite&quot;</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="s2">&quot;ExposomeExplorer/components&quot;</span> <span class="ow">in</span> <span class="n">relpath</span><span class="p">:</span>
+            <span class="c1"># NOTE: Since only &quot;components&quot; can result in a match based on our current criteria,</span>
+            <span class="c1">#   we will build the DB starting with the components only.</span>
+            <span class="c1"># Here, instead of using shutil.copyfile, we will use pandas to purge the _count columns when copying</span>
+            <span class="n">original_file</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filepath</span><span class="p">)[[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+                                                <span class="k">if</span> <span class="ow">not</span> <span class="n">x</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;_count&#39;</span><span class="p">)]]</span>
+            <span class="n">original_file</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">with</span> <span class="n">driver</span><span class="o">.</span><span class="n">session</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+                    <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">ExposomeExplorerDataBase</span><span class="o">.</span><span class="n">add_components</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filepath</span><span class="p">)),</span> <span class="n">driver</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="n">ExposomeExplorerDataBase</span><span class="o">.</span><span class="n">build_from_file</span><span class="p">(</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">filepath</span><span class="p">),</span>
+                                                      <span class="n">Neo4JImportPath</span><span class="p">,</span> <span class="n">driver</span><span class="p">,</span> <span class="n">keep_counts_and_displayeds</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="import_based_on_all_files"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.main.import_based_on_all_files">[docs]</a><span class="k">def</span> <span class="nf">import_based_on_all_files</span><span class="p">(</span><span class="n">all_files</span><span class="p">,</span> <span class="n">Neo4JImportPath</span><span class="p">,</span> <span class="n">driver</span><span class="p">,</span> <span class="n">similarity</span><span class="p">,</span> <span class="n">chebi_ids</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">hmdb_ids</span><span class="p">,</span> <span class="n">inchis</span><span class="p">,</span> <span class="n">mesh_ids</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A function that searches inside a series of lists, provided as arguments, and imports</span>
+<span class="sd">    the metabolites matching those present in them iterating over a list of files which</span>
+<span class="sd">    may contain relevant information to be imported</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        all_files(list): A list of all the posible files where we want to look for info</span>
+<span class="sd">        Neo4JImportPath (str): The path which Neo4J will use to import data</span>
+<span class="sd">        driver (neo4j.Driver): Neo4J&#39;s Bolt Driver currently in use</span>
+<span class="sd">        similarity (bool): Whether to use similarity as a measure to import or not</span>
+<span class="sd">        chebi_ids (list): A list of all the ChEBI_ID which are considered a reason to import</span>
+<span class="sd">        names (list): A list of all the Name which are considered a reason to import</span>
+<span class="sd">        hmdb_ids (list): A list of all the HMDB_ID which are considered a reason to import</span>
+<span class="sd">        inchis (list): A list of all the InChI which are considered a reason to import</span>
+<span class="sd">        mesh_ids (list): A list of all the MeSH_ID which are considered a reason to import</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Set up the progress bar</span>
+    <span class="k">with</span> <span class="n">alive_bar</span><span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_files</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Scanning all files for matches...&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">bar</span><span class="p">:</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># Initialize counter for verbose messages on slurn</span>
+        <span class="c1"># And search for them in the all_files list we created earlier on based on a series of criteria:</span>
+        <span class="k">for</span> <span class="n">filepath</span> <span class="ow">in</span> <span class="n">all_files</span><span class="p">:</span>
+            <span class="n">import_based_on</span><span class="p">,</span> <span class="n">importing_ids</span> <span class="o">=</span> <span class="n">find_reasons_to_import_all_files</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span>
+                                                <span class="n">similarity</span><span class="p">,</span> <span class="n">chebi_ids</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">hmdb_ids</span><span class="p">,</span> <span class="n">inchis</span><span class="p">,</span> <span class="n">mesh_ids</span><span class="p">)</span>
+
+            <span class="c1"># Once we know the reasons to import (this is done so that it only cycles one</span>
+            <span class="c1"># time through the code), we import the files themselves</span>
+            <span class="k">if</span> <span class="n">import_based_on</span><span class="p">:</span>
+                <span class="n">build_from_file</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">Neo4JImportPath</span><span class="p">,</span> <span class="n">driver</span><span class="p">)</span>
+
+                <span class="k">for</span> <span class="n">item_type</span><span class="p">,</span> <span class="n">items</span> <span class="ow">in</span> <span class="n">importing_ids</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+                        <span class="c1"># We add the OriginalMetabolite label here; this will necessarily create duplicates,</span>
+                        <span class="c1"># but this will be handled later on when the DB gets purged</span>
+                        <span class="k">with</span> <span class="n">driver</span><span class="o">.</span><span class="n">session</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+                            <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">link_to_original_data</span><span class="p">(</span><span class="n">item_type</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">import_based_on</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">15000</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Scanned file: </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> / </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">all_files</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">bar</span><span class="p">()</span> <span class="c1"># And advance, of course</span></div>
+
+<div class="viewcode-block" id="import_based_on_index"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.main.import_based_on_index">[docs]</a><span class="k">def</span> <span class="nf">import_based_on_index</span><span class="p">(</span><span class="n">databasefolder</span><span class="p">,</span> <span class="n">Neo4JImportPath</span><span class="p">,</span> <span class="n">driver</span><span class="p">,</span> <span class="n">similarity</span><span class="p">,</span> <span class="n">chebi_ids</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">hmdb_ids</span><span class="p">,</span> <span class="n">inchis</span><span class="p">,</span> <span class="n">mesh_ids</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A function that searches inside a series of lists, provided as arguments, and imports</span>
+<span class="sd">    the metabolites matching those present in them using a JSON file to map the bits of the databases where</span>
+<span class="sd">    the relevant information lies</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        databasefolder (str): The main folder where all the databases we will be using are to be found</span>
+<span class="sd">            There *must* be an index.json file located in ``databasefolder``/index.json</span>
+<span class="sd">        Neo4JImportPath (str): The path which Neo4J will use to import data</span>
+<span class="sd">        driver (neo4j.Driver): Neo4J&#39;s Bolt Driver currently in use</span>
+<span class="sd">        similarity (bool): Whether to use similarity as a measure to import or not</span>
+<span class="sd">        chebi_ids (list): A list of all the ChEBI_ID which are considered a reason to import</span>
+<span class="sd">        names (list): A list of all the Name which are considered a reason to import</span>
+<span class="sd">        hmdb_ids (list): A list of all the HMDB_ID which are considered a reason to import</span>
+<span class="sd">        inchis (list): A list of all the InChI which are considered a reason to import</span>
+<span class="sd">        mesh_ids (list): A list of all the MeSH_ID which are considered a reason to import</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Set the databasefolder to be an absolute path</span>
+    <span class="n">databasefolder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">databasefolder</span><span class="p">)</span>
+
+    <span class="c1"># We assume there is an index at the ``databasefolder``</span>
+    <span class="n">index_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">databasefolder</span><span class="si">}</span><span class="s2">/index.json&quot;</span>
+
+    <span class="c1"># Define the function we will use for deciding on importing a given file</span>
+    <span class="k">def</span> <span class="nf">find_reasons_to_import_from_index</span><span class="p">(</span><span class="n">item_list</span><span class="p">,</span> <span class="n">item_type</span><span class="p">,</span> <span class="n">previous_files</span><span class="p">,</span> <span class="n">driver</span><span class="p">):</span>
+        <span class="c1"># We use ijson to prevent collapse when reading the huge index file</span>
+        <span class="n">index_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">index_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">ijson</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">index_file</span><span class="p">,</span> <span class="n">item_type</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">item_list</span><span class="p">:</span>
+                <span class="c1"># We initialize the list of reasons to import this specific ID</span>
+                <span class="n">import_based_on</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="c1"># And get the files to import based on exact matches of the ID on index</span>
+                <span class="n">files_to_import</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">each_file</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)):</span>
+                    <span class="k">if</span> <span class="n">each_file</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">previous_files</span><span class="p">:</span>
+                        <span class="n">previous_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">each_file</span><span class="p">)</span>
+                        <span class="n">import_based_on</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item_type</span><span class="p">)</span>
+
+                <span class="c1"># Only if exact inchi search fails, it makes sense to do similarity search</span>
+                <span class="k">if</span> <span class="n">item_type</span> <span class="o">==</span> <span class="s2">&quot;InChI&quot;</span> <span class="ow">and</span> <span class="s2">&quot;InChI&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">import_based_on</span> <span class="ow">and</span> <span class="n">similarity</span><span class="p">:</span>
+                    <span class="n">all_inchis_on_index</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+
+                    <span class="n">reason_to_import</span> <span class="o">=</span> <span class="n">find_reasons_to_import_inchi</span><span class="p">(</span><span class="n">all_inchis_on_index</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">reason_to_import</span><span class="p">:</span>
+                        <span class="n">import_based_on</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">reason_to_import</span><span class="o">.</span><span class="n">values</span><span class="p">())))</span>
+                        <span class="k">for</span> <span class="n">each_file</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)):</span>
+                            <span class="k">if</span> <span class="n">each_file</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">previous_files</span><span class="p">:</span>
+                                <span class="n">previous_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">each_file</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">import_based_on</span><span class="p">:</span>
+                    <span class="c1"># We add the OriginalMetabolite label here; this will necessarily create duplicates,</span>
+                    <span class="c1"># but this will be handled later on when the DB gets purged</span>
+                    <span class="k">with</span> <span class="n">driver</span><span class="o">.</span><span class="n">session</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+                        <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">link_to_original_data</span><span class="p">(</span><span class="n">item_type</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">import_based_on</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+
+        <span class="n">index_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">previous_files</span>
+
+    <span class="n">all_files</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># Calculate the files that we will need to import</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Finding Reasons to Import...&quot;</span><span class="p">)</span>
+    <span class="n">all_files</span> <span class="o">=</span> <span class="n">find_reasons_to_import_from_index</span><span class="p">(</span><span class="n">chebi_ids</span><span class="p">,</span> <span class="s2">&quot;ChEBI_ID&quot;</span><span class="p">,</span> <span class="n">all_files</span><span class="p">,</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="n">all_files</span> <span class="o">=</span> <span class="n">find_reasons_to_import_from_index</span><span class="p">(</span><span class="n">hmdb_ids</span><span class="p">,</span> <span class="s2">&quot;HMDB_ID&quot;</span><span class="p">,</span> <span class="n">all_files</span><span class="p">,</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="n">all_files</span> <span class="o">=</span> <span class="n">find_reasons_to_import_from_index</span><span class="p">(</span><span class="n">mesh_ids</span><span class="p">,</span> <span class="s2">&quot;MeSH_ID&quot;</span><span class="p">,</span> <span class="n">all_files</span><span class="p">,</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="n">all_files</span> <span class="o">=</span> <span class="n">find_reasons_to_import_from_index</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="p">,</span> <span class="n">all_files</span><span class="p">,</span> <span class="n">driver</span><span class="p">)</span>
+    <span class="n">all_files</span> <span class="o">=</span> <span class="n">find_reasons_to_import_from_index</span><span class="p">(</span><span class="n">inchis</span><span class="p">,</span> <span class="s2">&quot;InChI&quot;</span><span class="p">,</span> <span class="n">all_files</span><span class="p">,</span> <span class="n">driver</span><span class="p">)</span>
+
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># And import them</span>
+    <span class="k">with</span> <span class="n">alive_bar</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">all_files</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Importing Selected Files...&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">bar</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">each_file</span> <span class="ow">in</span> <span class="n">all_files</span><span class="p">:</span>
+            <span class="n">filepath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">databasefolder</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">each_file</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="c1"># We can only import a file if it exists, of course; files may not actually</span>
+            <span class="c1"># exist if using an index generated with a different number of DBs / DB version</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+                <span class="n">build_from_file</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">Neo4JImportPath</span><span class="p">,</span> <span class="n">driver</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">150</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Importing file: </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> / </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">all_files</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">bar</span><span class="p">()</span> <span class="c1"># And advance, of course</span></div>
+
+<div class="viewcode-block" id="link_to_original_data"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.main.link_to_original_data">[docs]</a><span class="k">def</span> <span class="nf">link_to_original_data</span><span class="p">(</span><span class="n">item_type</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">import_based_on</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Links a recently-imported metabolite to the original data (that which caused it to be imported) by creating an</span>
+<span class="sd">    ``ÒriginalMetabolite`` node that is ``(n)-[r:ORIGINALLY_IDENTIFIED_AS]-&gt;(a)`` related to the imported data</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tx (neo4j.Session): The session under which the driver is running</span>
+<span class="sd">        item_type (str): The property to match in the Neo4J DataBase</span>
+<span class="sd">        item (dict): The value of property ```item_type```</span>
+<span class="sd">        import_based_on (list): A list of the methods that turned out to be valid for import, such as Name, ChEBI_ID...</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        neo4j.Result: A Neo4J connexion to the database that modifies it according to the CYPHER statement contained in the function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                    MERGE (n </span><span class="se">{{</span><span class="s2"> </span><span class="si">{</span><span class="n">item_type</span><span class="si">}</span><span class="s2">:&quot;</span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="s2">&quot; </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">                        SET n:OriginalMetabolite</span>
+<span class="s2">                        SET n.Reasons_To_Import =  &quot;</span><span class="si">{</span><span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">import_based_on</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="s2">                    &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="annotate_using_wikidata"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.main.annotate_using_wikidata">[docs]</a><span class="k">def</span> <span class="nf">annotate_using_wikidata</span><span class="p">(</span><span class="n">driver</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Once we finish the search, we annotate the nodes added to the database using WikiData</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">         driver (neo4j.Driver): Neo4J&#39;s Bolt Driver currently in use</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        This function modifies the Neo4J Database as desired, but does not produce any particular return.</span>
+
+<span class="sd">    .. TODO:: When fixing queries, fix the main subscript also</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">driver</span><span class="o">.</span><span class="n">session</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">,</span> <span class="n">alive_bar</span><span class="p">(</span> <span class="mi">53</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Querying WikiData...&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">bar</span><span class="p">:</span>
+        <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">WikiDataBase</span><span class="o">.</span><span class="n">add_wikidata_and_mesh_by_name</span><span class="p">(),</span> <span class="n">driver</span><span class="p">);</span> <span class="n">bar</span><span class="p">()</span>
+        <span class="c1"># The ``query`` param is, remember, so as to remove the wikidata_id search which is by default</span>
+        <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">WikiDataBase</span><span class="o">.</span><span class="n">add_metabolite_info</span><span class="p">(</span><span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;ChEBI_ID&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">);</span> <span class="n">bar</span><span class="p">()</span>
+        <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">WikiDataBase</span><span class="o">.</span><span class="n">add_drug_external_ids</span><span class="p">(</span><span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;DrugBank_ID&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">);</span> <span class="n">bar</span><span class="p">()</span>
+        <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">WikiDataBase</span><span class="o">.</span><span class="n">add_more_drug_info</span><span class="p">(</span><span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;DrugBank_ID&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">);</span> <span class="n">bar</span><span class="p">()</span>
+
+        <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">WikiDataBase</span><span class="o">.</span><span class="n">find_subclass_of_disease</span><span class="p">(),</span> <span class="n">driver</span><span class="p">);</span> <span class="n">bar</span><span class="p">()</span>
+        <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">WikiDataBase</span><span class="o">.</span><span class="n">find_subclass_of_disease</span><span class="p">(),</span> <span class="n">driver</span><span class="p">);</span> <span class="n">bar</span><span class="p">()</span>
+        <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">WikiDataBase</span><span class="o">.</span><span class="n">find_subclass_of_disease</span><span class="p">(),</span> <span class="n">driver</span><span class="p">);</span> <span class="n">bar</span><span class="p">()</span>
+        <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">WikiDataBase</span><span class="o">.</span><span class="n">find_instance_of_disease</span><span class="p">(),</span> <span class="n">driver</span><span class="p">);</span> <span class="n">bar</span><span class="p">()</span>
+
+        <span class="c1"># For each of the 10 numbers a wikidata_id may have as ending</span>
+        <span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+            <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">WikiDataBase</span><span class="o">.</span><span class="n">add_disease_info</span><span class="p">(</span><span class="n">number</span><span class="o">=</span><span class="n">number</span><span class="p">),</span> <span class="n">driver</span><span class="p">);</span> <span class="n">bar</span><span class="p">()</span>
+            <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">WikiDataBase</span><span class="o">.</span><span class="n">add_drugs</span><span class="p">(</span><span class="n">number</span><span class="o">=</span><span class="n">number</span><span class="p">),</span> <span class="n">driver</span><span class="p">);</span> <span class="n">bar</span><span class="p">()</span>
+            <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">WikiDataBase</span><span class="o">.</span><span class="n">add_causes</span><span class="p">(</span><span class="n">number</span><span class="o">=</span><span class="n">number</span><span class="p">),</span> <span class="n">driver</span><span class="p">);</span> <span class="n">bar</span><span class="p">()</span>
+            <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">WikiDataBase</span><span class="o">.</span><span class="n">add_genes</span><span class="p">(</span><span class="n">number</span><span class="o">=</span><span class="n">number</span><span class="p">),</span> <span class="n">driver</span><span class="p">);</span> <span class="n">bar</span><span class="p">()</span>
+
+        <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">WikiDataBase</span><span class="o">.</span><span class="n">add_drug_external_ids</span><span class="p">(),</span> <span class="n">driver</span><span class="p">);</span> <span class="n">bar</span><span class="p">()</span>
+        <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">WikiDataBase</span><span class="o">.</span><span class="n">add_more_drug_info</span><span class="p">(),</span> <span class="n">driver</span><span class="p">);</span> <span class="n">bar</span><span class="p">()</span>
+        <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">WikiDataBase</span><span class="o">.</span><span class="n">add_yet_more_drug_info</span><span class="p">(),</span> <span class="n">driver</span><span class="p">);</span> <span class="n">bar</span><span class="p">()</span>
+        <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">WikiDataBase</span><span class="o">.</span><span class="n">add_gene_info</span><span class="p">(),</span> <span class="n">driver</span><span class="p">);</span> <span class="n">bar</span><span class="p">()</span>
+        <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">WikiDataBase</span><span class="o">.</span><span class="n">add_metabolite_info</span><span class="p">(),</span> <span class="n">driver</span><span class="p">);</span> <span class="n">bar</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="add_mesh_and_metanetx"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.main.add_mesh_and_metanetx">[docs]</a><span class="k">def</span> <span class="nf">add_mesh_and_metanetx</span><span class="p">(</span><span class="n">driver</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Add MeSH Term IDs, Synonym relations and Protein interactions to existing nodes using MeSH and MetaNetX</span>
+<span class="sd">    Also, adds Kegg Pathway IDs</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">         driver (neo4j.Driver): Neo4J&#39;s Bolt Driver currently in use</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        This function modifies the Neo4J Database as desired, but does not produce any particular return.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">driver</span><span class="o">.</span><span class="n">session</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">,</span> <span class="n">alive_bar</span><span class="p">(</span> <span class="mi">10</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Querying MeSH and MetaNetX...&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">bar</span><span class="p">:</span>
+    <span class="c1"># We will also add MeSH terms to all nodes:</span>
+        <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">MeSHandMetaNetXDataBases</span><span class="o">.</span><span class="n">add_mesh_by_name</span><span class="p">(),</span> <span class="n">driver</span><span class="p">);</span> <span class="n">bar</span><span class="p">()</span>
+    <span class="c1"># We also add synonyms:</span>
+        <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">MeSHandMetaNetXDataBases</span><span class="o">.</span><span class="n">write_synonyms_in_metanetx</span><span class="p">(</span><span class="s2">&quot;Name&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">);</span> <span class="n">bar</span><span class="p">()</span>
+        <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">MeSHandMetaNetXDataBases</span><span class="o">.</span><span class="n">write_synonyms_in_metanetx</span><span class="p">(</span><span class="s2">&quot;KEGG_ID&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">);</span> <span class="n">bar</span><span class="p">()</span>
+        <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">MeSHandMetaNetXDataBases</span><span class="o">.</span><span class="n">write_synonyms_in_metanetx</span><span class="p">(</span><span class="s2">&quot;ChEBI_ID&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">);</span> <span class="n">bar</span><span class="p">()</span>
+        <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">MeSHandMetaNetXDataBases</span><span class="o">.</span><span class="n">write_synonyms_in_metanetx</span><span class="p">(</span><span class="s2">&quot;HMDB_ID&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">);</span> <span class="n">bar</span><span class="p">()</span>
+        <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">MeSHandMetaNetXDataBases</span><span class="o">.</span><span class="n">write_synonyms_in_metanetx</span><span class="p">(</span><span class="s2">&quot;InChI&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">);</span> <span class="n">bar</span><span class="p">()</span>
+        <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">MeSHandMetaNetXDataBases</span><span class="o">.</span><span class="n">write_synonyms_in_metanetx</span><span class="p">(</span><span class="s2">&quot;InChIKey&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">);</span> <span class="n">bar</span><span class="p">()</span>
+
+    <span class="c1"># And some protein interactions, together with their pathways, too:</span>
+        <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">MeSHandMetaNetXDataBases</span><span class="o">.</span><span class="n">find_protein_data_in_metanetx</span><span class="p">(),</span> <span class="n">driver</span><span class="p">);</span> <span class="n">bar</span><span class="p">()</span>
+        <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">MeSHandMetaNetXDataBases</span><span class="o">.</span><span class="n">find_protein_interactions_in_metanetx</span><span class="p">(),</span> <span class="n">driver</span><span class="p">);</span> <span class="n">bar</span><span class="p">()</span>
+        <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">MeSHandMetaNetXDataBases</span><span class="o">.</span><span class="n">get_kegg_pathways_for_metabolites</span><span class="p">(),</span> <span class="n">driver</span><span class="p">);</span> <span class="n">bar</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../CanGraph.html#CanGraph.main.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The function that executes the code</span>
+
+<span class="sd">    .. NOTE:: This function disables rdkit&#39;s log messages, since rdkit seems to dislike the way</span>
+<span class="sd">        some of the InChI strings it is getting from the databases are formatted</span>
+
+<span class="sd">    .. TODO:: CAMBIAR NOMBRE A LOS MESH PARA INDICAR EL TIPO. AÑADIR NAME A LOS WIKIDATA</span>
+<span class="sd">    .. TODO:: FIX THE REPEAT TRANSACTION FUNCTION</span>
+<span class="sd">    .. TODO:: Match partial InChI based on DICE-MACCS</span>
+<span class="sd">    .. TODO:: QUE FUNCIONE -&gt; ACTUALMENTE ESTA SECCION RALENTIZA MAZO</span>
+<span class="sd">    .. TODO:: CHECK APOC IS INSTALLED</span>
+<span class="sd">    .. TODO:: FIX MAIN</span>
+<span class="sd">    .. TODO:: MERGE BY INCHI, METANETX ID</span>
+<span class="sd">    .. TODO:: Fix find_protein_interactions_in_metanetx</span>
+<span class="sd">    .. TODO:: Mover esa funcion de setup a misc</span>
+<span class="sd">    .. TODO:: EDIT conf.py</span>
+
+<span class="sd">    .. TODO:: Document the following Schema Changes:</span>
+<span class="sd">        * For Subject, we have a composite PK: Exposome_Explorer_ID, Age, Gender e Information</span>
+<span class="sd">        * Now, more diseases will have a WikiData_ID and a related MeSH. This will help with networking. And, this diseases dont even need to be a part of a cancer!</span>
+<span class="sd">        * The Gene nodes no longer exist in the full db? -&gt; They do</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Parse the command line arguments</span>
+    <span class="c1"># Done first in order to show errors if bad commands are issued</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">args_parser</span><span class="p">();</span> <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="c1"># If the session is set to be interactive, display the logging messages</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">interactive</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+
+    <span class="c1"># We may also disable rdkit&#39;s log messages</span>
+    <span class="n">rdkit</span><span class="o">.</span><span class="n">RDLogger</span><span class="o">.</span><span class="n">DisableLog</span><span class="p">(</span><span class="s1">&#39;rdApp.*&#39;</span><span class="p">)</span>
+
+    <span class="c1"># And we read the query file</span>
+    <span class="n">raw_database</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">query</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># And connect to the Neo4J database</span>
+    <span class="n">driver</span> <span class="o">=</span> <span class="n">misc</span><span class="o">.</span><span class="n">connect_to_neo4j</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">adress</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">username</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">password</span><span class="p">)</span>
+
+    <span class="n">Neo4JImportPath</span> <span class="o">=</span> <span class="n">misc</span><span class="o">.</span><span class="n">get_import_path</span><span class="p">(</span><span class="n">driver</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Connected to Neo4J&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">dbfolder</span><span class="p">)</span><span class="si">}</span><span class="s2">/index.json&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">noindex</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No index file was found. Switching to non-indexed mode...&quot;</span><span class="p">);</span> <span class="n">args</span><span class="o">.</span><span class="n">noindex</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="c1"># For each item in our &quot;query&quot; file, we will try to find matches:</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">raw_database</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+
+        <span class="c1"># We start by cleaning the database (important if this is not the first run)</span>
+        <span class="k">with</span> <span class="n">driver</span><span class="o">.</span><span class="n">session</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+            <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span> <span class="n">misc</span><span class="o">.</span><span class="n">clean_database</span><span class="p">(),</span> <span class="n">driver</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Cleaned DataBase&quot;</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Searching Synonyms for Metabolite </span><span class="si">{</span><span class="n">index</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">raw_database</span><span class="p">)</span><span class="si">}</span><span class="s2"> ...&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Then, we fill the empty values so that the program does not crash</span>
+        <span class="n">row</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># And prevent non-specified columns from crashing the program</span>
+        <span class="n">chebi_ids</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">ChEBI_ID</span> <span class="k">if</span> <span class="s2">&quot;ChEBI_ID&quot;</span> <span class="ow">in</span> <span class="n">raw_database</span><span class="o">.</span><span class="n">columns</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">names</span> <span class="o">=</span>     <span class="n">row</span><span class="o">.</span><span class="n">Name</span> <span class="k">if</span> <span class="s2">&quot;Name&quot;</span> <span class="ow">in</span> <span class="n">raw_database</span><span class="o">.</span><span class="n">columns</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">hmdb_ids</span> <span class="o">=</span>  <span class="n">row</span><span class="o">.</span><span class="n">HMDB_ID</span> <span class="k">if</span> <span class="s2">&quot;HMDB_ID&quot;</span> <span class="ow">in</span> <span class="n">raw_database</span><span class="o">.</span><span class="n">columns</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">inchis</span> <span class="o">=</span>    <span class="n">row</span><span class="o">.</span><span class="n">InChI</span> <span class="k">if</span> <span class="s2">&quot;InChI&quot;</span> <span class="ow">in</span> <span class="n">raw_database</span><span class="o">.</span><span class="n">columns</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">mesh_ids</span> <span class="o">=</span>  <span class="n">row</span><span class="o">.</span><span class="n">MeSH_ID</span> <span class="k">if</span> <span class="s2">&quot;MeSH_ID&quot;</span> <span class="ow">in</span> <span class="n">raw_database</span><span class="o">.</span><span class="n">columns</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="n">chebi_ids</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">hmdb_ids</span><span class="p">,</span> <span class="n">inchis</span><span class="p">,</span> <span class="n">mesh_ids</span> <span class="o">=</span> <span class="n">improve_search_terms</span><span class="p">(</span><span class="n">driver</span><span class="p">,</span> <span class="n">chebi_ids</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span>
+                                                                            <span class="n">hmdb_ids</span><span class="p">,</span> <span class="n">inchis</span><span class="p">,</span> <span class="n">mesh_ids</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Annotating Metabolite </span><span class="si">{</span><span class="n">index</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">raw_database</span><span class="p">)</span><span class="si">}</span><span class="s2"> using Built-In DataBases...&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">noindex</span><span class="p">:</span>
+            <span class="c1"># We prepare a scan of all the files available on our &quot;DataBases&quot; folder</span>
+            <span class="c1"># We will cycle through them to try and find matches</span>
+            <span class="n">all_files</span> <span class="o">=</span> <span class="n">misc</span><span class="o">.</span><span class="n">scan_folder</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">dbfolder</span><span class="p">)</span>
+            <span class="n">all_files</span> <span class="o">=</span> <span class="p">[</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">all_files</span> <span class="k">if</span> <span class="s2">&quot;index.json&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
+
+            <span class="n">import_based_on_all_files</span><span class="p">(</span><span class="n">all_files</span><span class="p">,</span> <span class="n">Neo4JImportPath</span><span class="p">,</span> <span class="n">driver</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">similarity</span><span class="p">,</span>
+                                      <span class="n">chebi_ids</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">hmdb_ids</span><span class="p">,</span> <span class="n">inchis</span><span class="p">,</span> <span class="n">mesh_ids</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">import_based_on_index</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">dbfolder</span><span class="p">,</span> <span class="n">Neo4JImportPath</span><span class="p">,</span> <span class="n">driver</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">similarity</span><span class="p">,</span>
+                                  <span class="n">chebi_ids</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">hmdb_ids</span><span class="p">,</span> <span class="n">inchis</span><span class="p">,</span> <span class="n">mesh_ids</span><span class="p">)</span>
+
+        <span class="c1"># We first purge the database by deleting useless noded that might overcharge the web queries</span>
+        <span class="n">misc</span><span class="o">.</span><span class="n">purge_database</span><span class="p">(</span><span class="n">driver</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;delete&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Finally, we apply some functions that, although they could be run each time,</span>
+        <span class="c1"># are so resource intensive that its better to just use once:</span>
+
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">webdbs</span><span class="p">:</span>
+            <span class="c1"># First, check if there are more than 10.000 nodes.</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="s2">&quot;MATCH (n) RETURN COUNT( &quot;</span>
+                                             <span class="s2">&quot;DISTINCT n ) AS nodes&quot;</span><span class="p">,</span> <span class="n">driver</span><span class="p">)</span>
+            <span class="n">number_of_nodes</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;nodes&quot;</span><span class="p">]</span>
+
+            <span class="c1"># If there are less than that, run the webdbs; else, skip</span>
+            <span class="c1"># This is because, with lots of nodes, neo4j is unable to call the webdbs</span>
+            <span class="k">if</span> <span class="n">number_of_nodes</span> <span class="o">&lt;</span> <span class="mi">10000</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Annotating Metabolite </span><span class="si">{</span><span class="n">index</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">raw_database</span><span class="p">)</span><span class="si">}</span><span class="s2"> using Web DataBases...&quot;</span><span class="p">)</span>
+                <span class="c1"># We annotate the existing nodes using WikiData</span>
+                <span class="n">annotate_using_wikidata</span><span class="p">(</span><span class="n">driver</span><span class="p">)</span>
+                <span class="c1"># Add their MeSH and MetaNetX IDs and synonyms</span>
+                <span class="n">add_mesh_and_metanetx</span><span class="p">(</span><span class="n">driver</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">number_of_nodes</span><span class="si">}</span><span class="s2"> nodes found on the database, which is too much to call the Web DBs&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;without risk of failure. Skipping Web DBs for this metabolite...&quot;</span><span class="p">)</span>
+
+        <span class="c1"># And purge any duplicates once again</span>
+        <span class="n">misc</span><span class="o">.</span><span class="n">purge_database</span><span class="p">(</span><span class="n">driver</span><span class="p">)</span>
+
+        <span class="c1"># And save it in GraphML format</span>
+        <span class="k">with</span> <span class="n">driver</span><span class="o">.</span><span class="n">session</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+            <span class="n">misc</span><span class="o">.</span><span class="n">manage_transaction</span><span class="p">(</span><span class="n">misc</span><span class="o">.</span><span class="n">export_graphml</span><span class="p">(</span>
+                                  <span class="sa">f</span><span class="s2">&quot;metabolite_</span><span class="si">{</span><span class="n">index</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">.graphml&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">results</span><span class="p">):</span> <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">results</span><span class="p">))</span>
+
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/metabolite_</span><span class="si">{</span><span class="n">index</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">.graphml&quot;</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">results</span><span class="p">)</span><span class="si">}</span><span class="s2">/metabolite_</span><span class="si">{</span><span class="n">index</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">.graphml&quot;</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Neo4JImportPath</span><span class="si">}</span><span class="s2">/metabolite_</span><span class="si">{</span><span class="n">index</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">.graphml&quot;</span><span class="p">)</span> <span class="c1"># Remove original to avoid errors</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Metabolite </span><span class="si">{</span><span class="n">index</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">raw_database</span><span class="p">)</span><span class="si">}</span><span class="s2"> processed. You can find &quot;</span>
+                     <span class="sa">f</span><span class="s2">&quot;a copy of the associated knowledge graph at &quot;</span>
+                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">results</span><span class="p">)</span><span class="si">}</span><span class="s2">/metabolite_</span><span class="si">{</span><span class="n">index</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">.graphml&quot;</span><span class="p">)</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Metabolite Processing has finished&quot;</span><span class="p">)</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Pablo Marcos<br/>
+  
+      &copy; Copyright 2022, Pablo Marcos &lt;software@loreak.org&gt;.<br/>
+    Last updated on Dec 17, 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
