@@ -23,8 +23,8 @@ project = 'CanGraph'
 author = "Pablo Marcos"
 copyright = '2022, Pablo Marcos <software@loreak.org>'
 
-version = '0.9'  # Short release number
-release = '0.9'  # Full release number
+version = '1.0'  # Short release number
+release = '1.0'  # Full release number
 
 
 # -- General configuration ---------------------------------------------------

@@ -36,7 +36,7 @@ As a graph-oriented software, CanGraph uses Neo4J as its underlying DataBase Man
 
 * ``python3 setup.py --neo4j neo4j --neo4j_username neo4j --neo4j_password neo4j ``
 
-For it to work propperly, please ensure that there are no neo4j sessions running before the command call. The program will then be installed alongside the main program, with its password being stored in a file called ``.neo4jpassword``. You can then start your very first neo4j server by running: ``./neo4j/bin/neo4j start``; its username will be ``ǹeo4j``, and its password can be seen by running: ``head -n 1 .neo4jpassword)``.
+For it to work propperly, please ensure that there are no neo4j sessions running before the command call. The program will then be installed alongside the main program, with its password being stored in a file called ``.neo4jpassword``. You can then start your very first neo4j server by running: ``./neo4j/bin/neo4j start``; its username will be ``neo4j``, and its password can be seen by running: ``head -n 1 .neo4jpassword)``.
 
 You can alternatively start your own server, either by using a previously installed version of neo4j or by running an online version of the database; the only difference being, that you will need to provide the username, bolt adress and password to main.py as arguments.
 

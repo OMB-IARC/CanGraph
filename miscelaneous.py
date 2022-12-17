@@ -45,7 +45,7 @@ def restart_neo4j(neo4j_home = "neo4j"):
 
 def get_import_path(driver):
     """
-    A function that runs :obj:`~CanGraph.miscelaneous.neo4j_import_path_query` to get Neo4J's Import Path
+    A function that runs an autocommit transaction to get Neo4J's Import Path
 
     .. NOTE:: By doing the Neo4JImportPath search this way (in two functions), we are able to run the query as
         a :obj: execute_read, which, unlike autocommit transactions, allows the query to be better controlled,
